@@ -102,7 +102,7 @@ local function Comperatores(Strg, Spell)
 end
 
 local function StringMath(Strg, Spell)
-	local OP, total = Strg:match('[%+%-%*/]'), 0
+	local OP, total = Strg:match('[/%*%+%-]'), 0
 	local tempT = NeP.string_split(Strg, OP)
 	for i=1, #tempT do
 		local Strg = DSL.Parse(tempT[i], Spell)
