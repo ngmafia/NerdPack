@@ -104,6 +104,11 @@ end
 local function StringMath(Strg, Spell)
 	local OP, total = Strg:match('[%+%-%*%/]'), 0
 	local tempT = NeP.string_split(Strg, OP)
+	if OP == '*' then
+		total=1
+	elseif OP == '/' then
+		total=1
+	end
 	for i=1, #tempT do
 		local Strg = DSL.Parse(tempT[i], Spell)
 		total = DoMath(total, Strg, OP)
@@ -167,11 +172,7 @@ local typesTable = {
 			return Comperatores(Strg, Spell)
 		elseif Strg:find('!=') then
 			return Comperatores(Strg, Spell)
-		elseif Strg:find("[%/]") then
-			return StringMath(Strg, Spell)
-		elseif Strg:find("[%*]") then
-			return StringMath(Strg, Spell)
-		elseif Strg:find("[%+%-]") then
+		elseif Strg:find("[%/%*%+%-]") then
 			return StringMath(Strg, Spell)
 		elseif OPs[Strg] then
 			return OPs[Strg](Strg, Spell)
