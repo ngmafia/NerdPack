@@ -167,7 +167,11 @@ local typesTable = {
 			return Comperatores(Strg, Spell)
 		elseif Strg:find('!=') then
 			return Comperatores(Strg, Spell)
-		elseif Strg:find("[%/%*%+%-]") then
+		elseif Strg:find("[%/]") then
+			return StringMath(Strg, Spell)
+		elseif Strg:find("[%*]") then
+			return StringMath(Strg, Spell)
+		elseif Strg:find("[%+%-]") then
 			return StringMath(Strg, Spell)
 		elseif OPs[Strg] then
 			return OPs[Strg](Strg, Spell)
