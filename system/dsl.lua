@@ -102,16 +102,15 @@ local function Comperatores(Strg, Spell)
 end
 
 local function StringMath(Strg, Spell)
-	local OP, total = Strg:match('[%+%-%*%/]'), 0
+	local OP, total = Strg:match('[%+%-%*/]'), 0
 	local tempT = NeP.string_split(Strg, OP)
-	if OP == '*' then
-		total=1
-	elseif OP == '/' then
-		total=1
-	end
 	for i=1, #tempT do
 		local Strg = DSL.Parse(tempT[i], Spell)
-		total = DoMath(total, Strg, OP)
+		if total == 0 then
+			total = Strg
+		else
+			total = DoMath(total, Strg, OP)
+		end
 	end
 	return total
 end
@@ -172,7 +171,7 @@ local typesTable = {
 			return Comperatores(Strg, Spell)
 		elseif Strg:find('!=') then
 			return Comperatores(Strg, Spell)
-		elseif Strg:find("[%/%*%+%-]") then
+		elseif Strg:find("[/%*%+%-]") then
 			return StringMath(Strg, Spell)
 		elseif OPs[Strg] then
 			return OPs[Strg](Strg, Spell)
