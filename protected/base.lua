@@ -1,6 +1,7 @@
 local _, NeP = ...
 
 NeP.Protected.Cast = function(spell, target)
+	print(spell)
 end
 
 NeP.Protected.CastGround = function(spell, target)
@@ -25,9 +26,7 @@ NeP.Protected.Distance = function (a, b)
 end
 
 NeP.Protected.Infront = function (a, b)
-end
-
-NeP.Protected.CastGround = function (spell, target)
+	return true
 end
 
 NeP.Protected.UnitCombatRange = function (unitA, unitB)
@@ -40,6 +39,7 @@ NeP.Protected.UnitAttackRange = function (unitA, unitB, rType)
 end
 
 NeP.Protected.LineOfSight = function (a, b)
+	return true
 end
 
 -- Name Plate stuff

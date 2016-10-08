@@ -20,6 +20,7 @@
 	<Include file="interface\files.xml" />
 	<Include file="conditions\files.xml" />
 	<Script file="system\actions.lua" />
+	<Script file="system\helpers.lua" />
 	<Script file="system\parser.lua" />
 	<Script file="system\fakeunits.lua" />
 	<Script file="listeners.lua" />

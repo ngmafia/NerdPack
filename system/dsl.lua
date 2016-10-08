@@ -17,6 +17,18 @@ local OPs = {
 	['false'] = function() return false end,
 }
 
+local function string_split(string, delimiter)
+	local result, from = {}, 1
+	local delim_from, delim_to = string.find(string, delimiter, from)
+	while delim_from do
+		table.insert( result, string.sub(string, from , delim_from-1))
+		from = delim_to + 1
+		delim_from, delim_to = string.find(string, delimiter, from)
+	end
+	table.insert(result, string.sub(string, from))
+	return result
+end
+
 function NeP.DSL:DoMath(arg1, arg2, token)
 	local arg1, arg2 = tonumber(arg1), tonumber(arg2)
 	if arg1 ~= nil and arg2 ~= nil then
@@ -92,14 +104,14 @@ function NeP.DSL:Comperatores(Strg, Spell)
 	local OP = ''
 	for Token in Strg:gmatch('[><=~]') do OP = OP..Token end
 	if Strg:find('!=') then OP = '!=' end
-	local arg1, arg2 = unpack(NeP.string_split(Strg, OP))
-	arg1, arg2 = self:Parse(arg1, Spell), DSL.Parse(arg2, Spell)
+	local arg1, arg2 = unpack(string_split(Strg, OP))
+	arg1, arg2 = self:Parse(arg1, Spell), self.Parse(arg2, Spell)
 	return self:DoMath(arg1, arg2, (fOps[OP] or OP))
 end
 
 function NeP.DSL:StringMath(Strg, Spell)
 	local OP, total = Strg:match('[/%*%+%-]'), 0
-	local tempT = NeP.string_split(Strg, OP)
+	local tempT = string_split(Strg, OP)
 	for i=1, #tempT do
 		local Strg = self:Parse(tempT[i], Spell)
 		if total == 0 then

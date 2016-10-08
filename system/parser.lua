@@ -2,14 +2,29 @@ local _, NeP = ...
 
 NeP.Parser = {}
 
-local function IsMountedCheck()
-	for i = 1, 40 do
-		local mountID = select(11, UnitBuff('player', i))
-		if mountID and NeP.ByPassMounts(mountID) then
-			return true
-		end
+local function checkTarget(eval)
+	eval.isGround = false
+	-- none defined (decide one)
+	if not eval.target then
+		eval.target = UnitExists('target') and 'target' or 'player'
+	else
+		-- fake units
+		eval.target = NeP.FakeUnits.Filter(eval.target)
+		if not eval.target then return end
 	end
-	return not IsMounted()
+	-- is it ground?
+	if eval.target:sub(-7) == '.ground' then
+		eval.isGround = true
+		eval.target = eval.target:sub(0,-8)
+	end
+	-- Sanity checks
+	if eval.isGround and eval.target == 'mouseover'
+	or UnitExists(eval.target) and UnitIsVisible(eval.target)
+	and NeP.Protected.LineOfSight('player', eval.target) then
+	
+	else
+		eval = nil
+	end
 end
 
 local function castingTime()
@@ -21,62 +36,85 @@ local function castingTime()
 	return 0
 end
 
-local fake_target = {
-	func = function()
-		return UnitExists('target') and 'target' or 'player'
-	end
-}
-
-function NeP.Parser:Target(eval)
-	-- This is so we dont generate garbage when using fake_target
-	eval = eval or fake_target
-	if eval.func then
-		eval.target = eval.func()
-	end
-	-- Check unit
-	if UnitExists(eval.target) and UnitIsVisible(eval.target) then
-		return true
-	end
-end
-
-function NeP.Parser:Spell(eval)
-	print(eval[1].spell)
-	if eval[1].token then
-		return NeP.Actions[eval[1].token](eval)
-	end
-	local skillType = GetSpellBookItemInfo(eval[1].spell)
-	local isUsable, notEnoughMana = IsUsableSpell(eval[1].spell)
-	if skillType ~= 'FUTURESPELL' and isUsable and not notEnoughMana then
-		local GCD = NeP.DSL:Get('gcd')()
-		if GetSpellCooldown(eval[1].spell) <= GCD then
-			eval.func = eval[3].ground and NeP.Protected.CastGround or NeP.Protected.Cast
+local function IsMountedCheck()
+	for i = 1, 40 do
+		local mountID = select(11, UnitBuff('player', i))
+		if mountID and NeP.ByPassMounts(mountID) then
 			return true
 		end
 	end
+	return not IsMounted()
 end
 
-function NeP.Parser:Parse(eval)
-	if not eval[1].spell then
-		if NeP.DSL:Parse(eval[2]) then
-			local r = self:Parse(eval[1])
-			if r then return true end
-		end
-	elseif eval[1].bypass or (castingTime('player') == 0) then
-		if self:Target(eval[3]) then
-			if spell.token == 'func' or self:Spell(eval) then
-				print(1)
-				if NeP.DSL:Parse(eval[2], eval[1].spell) then
-					if eval.breaks then
-						return true
-					end
-					if eval[1].interrupts then
-						SpellStopCasting()
-					end
-					eval.func(eval[1].spell, eval[3].target)
-					print(eval[1].spell)
-					return true
-				end
+local SpellSanity = NeP.Helpers.SpellSanity
+
+function NeP.Parser:Spell(eval)
+	local spell = eval.spell
+	NeP.Spells:Convert(spell)
+	if spell and SpellSanity(spell, eval.target) then
+		local skillType = GetSpellBookItemInfo(spell)
+		local isUsable, notEnoughMana = IsUsableSpell(spell)
+		if skillType ~= 'FUTURESPELL' and isUsable and not notEnoughMana then
+			local GCD = NeP.DSL:Get('gcd')()
+			if GetSpellCooldown(spell) <= GCD then
+				eval.ready = true
 			end
+		end
+	end
+end
+
+function NeP.Parser:FUNCTION(eval)
+	eval.func = eval.spell
+end
+
+function NeP.Parser:TABLE(eval)
+	if NeP.DSL:Parse(eval.conditions) then
+		for i=1, #eval.spell do
+			if NeP.Parser:Parse(unpack(eval.spell[i])) then
+				return true
+			end
+		end
+	end
+end
+
+function NeP.Parser:STRING(eval)
+	local pX = eval.spell:sub(1, 1)
+	if NeP.Actions[pX] then
+		NeP.Actions[pX](eval)
+	elseif eval.bypass or (castingTime('player') == 0) then
+		checkTarget(eval)
+		if not eval then return end
+		self:Spell(eval)
+		if eval.ready then
+			eval.icon = select(3, GetSpellInfo(eval.spell))
+			eval.func = eval.isGround and NeP.Protected.CastGround or NeP.Protected.Cast
+		end
+	end
+end
+
+function NeP.Parser:NIL()
+end
+
+function NeP.Parser:Parse(spell, conditions, target)
+	local eval = self[type(spell):upper()](self, {
+		spell = spell,
+		target = target,
+		conditions = conditions
+	})
+	if eval and NeP.DSL:Parse(eval.conditions, eval.spell) then
+		if eval.si then
+			SpellStopCasting()
+		end
+		if eval.breaks then
+			return true
+		elseif eval.func then
+			self.ForceTarget = nil
+			self.lastCast = eval.spell
+			self.lastTarget = eval.target
+			--NeP.ActionLog.insert('Engine_Parser', tostring(eval.spell), eval.icon, eval.target)
+			--NeP.Interface.UpdateToggleIcon('mastertoggle', eval.icon)
+			eval.func(self, eval.spell, eval.target)
+			return true
 		end
 	end
 end
@@ -85,10 +123,7 @@ C_Timer.NewTicker(0.1, (function()
 	if NeP.DSL:Get('toggle')(nil, 'mastertoggle') then
 		if not UnitIsDeadOrGhost('player') and IsMountedCheck() then
 			local table = NeP.CR.CR[InCombatLockdown()]
-			for i=1, #table do
-				local r = NeP.Parser:Parse(table[i])
-				if r then break end
-			end
+			NeP.Parser:Parse(table)
 		end
 	end
 end), nil)
