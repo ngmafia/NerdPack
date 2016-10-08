@@ -19,6 +19,7 @@
 	<Script file="system\config.lua" />
 	<Include file="interface\files.xml" />
 	<Include file="conditions\files.xml" />
+	<Script file="system\actions.lua" />
 	<Script file="system\parser.lua" />
 	<Script file="listeners.lua" />
 	<Include file="rotations\files.xml" />
