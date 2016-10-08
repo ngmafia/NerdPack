@@ -1,6 +1,9 @@
-NeP.Tooltip = {
-	frame = CreateFrame('GameTooltip', 'NeP_ScanningTooltip', UIParent, 'GameTooltipTemplate')
-}
+local _, NeP = ...
+
+NeP.Tooltip = {}
+NeP.Globals.Tooltip = NeP.Tooltip
+
+local frame = CreateFrame('GameTooltip', 'NeP_ScanningTooltip', UIParent, 'GameTooltipTemplate')
 
 local function pPattern(text, pattern)
 	if type(pattern) == 'string' then
@@ -16,8 +19,8 @@ end
 
 function NeP.Tooltip:Scan_Buff(target, pattern)
 	for i = 1, 40 do
-		self.frame:SetOwner(UIParent, 'ANCHOR_NONE')
-		self.frame:SetUnitBuff(target, i)
+		frame:SetOwner(UIParent, 'ANCHOR_NONE')
+		frame:SetUnitBuff(target, i)
 		local tooltipText = _G["NeP_ScanningTooltipTextLeft2"]:GetText()
 		return tooltipText and pPattern(tooltipText, pattern)
 	end
@@ -26,8 +29,8 @@ end
 
 function NeP.Tooltip:Scan_Debuff(target, pattern)
 	for i = 1, 40 do
-		self.frame:SetOwner(UIParent, 'ANCHOR_NONE')
-		self.frame:SetUnitDebuff(target, i)
+		frame:SetOwner(UIParent, 'ANCHOR_NONE')
+		frame:SetUnitDebuff(target, i)
 		local tooltipText = _G["NeP_ScanningTooltipTextLeft2"]:GetText()
 		return tooltipText and pPattern(tooltipText, pattern)
 	end
@@ -35,8 +38,16 @@ function NeP.Tooltip:Scan_Debuff(target, pattern)
 end
 
 function NeP.Tooltip:Unit(target, pattern)
-	self.frame:SetOwner(UIParent, 'ANCHOR_NONE')
-	self.frame:SetUnit(target)
+	frame:SetOwner(UIParent, 'ANCHOR_NONE')
+	frame:SetUnit(target)
 	local tooltipText = _G["NeP_ScanningTooltipTextLeft2"]:GetText()
 	return tooltipText and pPattern(tooltipText, pattern)
+end
+
+function NeP.Tooltip:Tick_Time(target)
+	frame:SetOwner(UIParent, 'ANCHOR_NONE')
+	frame:SetUnitBuff(target)
+	local tooltipText = _G["NeP_ScanningTooltipTextLeft2"]:GetText()
+	local match = text:lower():match("[0-9]+%.?[0-9]*")
+	return tonumber(match)
 end

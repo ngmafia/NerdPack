@@ -1,4 +1,8 @@
-NeP.buttonStyleSheet = {
+local _, NeP = ...
+
+NeP.UI = {}
+
+NeP.UI.buttonStyleSheet = {
 	['frame-color'] = {	
 		type			= 'texture',
 		layer			= 'BACKGROUND',								
@@ -42,7 +46,7 @@ NeP.buttonStyleSheet = {
 	},
 }
 
-NeP.spinnerStyleSheet = {
+NeP.UI.spinnerStyleSheet = {
 	['bar-background'] = {			
 		type			= 'texture',
 		layer			= 'BORDER',								
@@ -50,7 +54,7 @@ NeP.spinnerStyleSheet = {
 	},
 }
 
-NeP.createButtonStyle = {
+NeP.UI.createButtonStyle = {
 	type			= 'texture',
 	texFile		= 'DiesalGUIcons',
 	texCoord		= {1,6,16,256,128},
@@ -60,7 +64,7 @@ NeP.createButtonStyle = {
 	height		= 16,
 }
 
-NeP.deleteButtonStyle = {
+NeP.UI.deleteButtonStyle = {
 	type			= 'texture',
 	texFile		='DiesalGUIcons',
 	texCoord		= {2,6,16,256,128},
@@ -70,23 +74,23 @@ NeP.deleteButtonStyle = {
 	height		= 16,
 }
 
-NeP.ButtonNormal = {
+NeP.UI.ButtonNormal = {
 	type			= 'texture',
 	texColor		= 'ffffff',
 	alpha 		= .7,
 }
 
-NeP.ButtonOver = {
+NeP.UI.ButtonOver = {
 	type			= 'texture',
 	alpha 		= 1,
 }
 
-NeP.ButtonClicked = {
+NeP.UI.ButtonClicked = {
 	type			= 'texture',
 	alpha 		= .3,
 }
 
-NeP.statusBarStylesheet = {
+NeP.UI.statusBarStylesheet = {
 	['frame-texture'] = {
 		type		= 'texture',
 		layer		= 'BORDER',
@@ -97,3 +101,90 @@ NeP.statusBarStylesheet = {
 		offset		= 0,
 	}
 }
+
+local DiesalGUI = LibStub("DiesalGUI-1.0")
+local SharedMedia = LibStub("LibSharedMedia-3.0")
+
+DiesalGUI:RegisterObjectConstructor("FontString", function()
+	local self 		= DiesalGUI:CreateObjectBase(Type)
+	local frame		= CreateFrame('Frame',nil,UIParent)		
+	local fontString = frame:CreateFontString(nil, "OVERLAY", 'DiesalFontNormal')
+	self.frame		= frame
+	self.fontString = fontString
+	self.SetParent = function(self, parent)
+		self.frame:SetParent(parent)
+	end
+	self.OnRelease = function(self)		
+		self.fontString:SetText('')
+	end
+	self.OnAcquire = function(self)	
+		self:Show()		
+	end
+	self.type = "FontString"
+	return self
+end, 1)
+
+DiesalGUI:RegisterObjectConstructor("Rule", function()
+	local self 		= DiesalGUI:CreateObjectBase(Type)
+	local frame		= CreateFrame('Frame',nil,UIParent)
+	self.frame		= frame
+	frame:SetHeight(1)
+	frame.texture = frame:CreateTexture()
+	frame.texture:SetColorTexture(0,0,0,1)
+	frame.texture:SetAllPoints(frame)
+	self.SetParent = function(self, parent)
+		self.frame:SetParent(parent)
+	end
+	self.OnRelease = function(self)
+		self:Hide()
+	end
+	self.OnAcquire = function(self)	
+		self:Show()		
+	end
+	self.type = "Rule"
+	return self
+end, 1)
+
+DiesalGUI:RegisterObjectConstructor("StatusBar", function()
+	local self  = DiesalGUI:CreateObjectBase(Type)
+	local frame = CreateFrame('StatusBar',nil,UIParent)
+	self.frame  = frame
+
+	self:AddStyleSheet(NeP.UI.statusBarStylesheet)
+
+	frame.Left = frame:CreateFontString()
+	frame.Left:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 14)
+	frame.Left:SetShadowColor(0,0,0, 0)
+	frame.Left:SetShadowOffset(-1,-1)
+	frame.Left:SetPoint("LEFT", frame)
+
+	frame.Right = frame:CreateFontString()
+	frame.Right:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 14)
+	frame.Right:SetShadowColor(0,0,0, 0)
+	frame.Right:SetShadowOffset(-1,-1)
+	
+	frame:SetStatusBarTexture(1,1,1,0.8)
+	frame:GetStatusBarTexture():SetHorizTile(false)
+	frame:SetMinMaxValues(0, 100)
+	frame:SetHeight(16)
+	
+	self.SetValue = function(self, value)
+		self.frame:SetValue(value)
+	end
+	self.SetParent = function(self, parent)
+		self.parent = parent
+		self.frame:SetParent(parent)
+		self.frame:SetPoint("LEFT", parent, "LEFT")
+		self.frame:SetPoint("RIGHT", parent, "RIGHT")
+		self.frame.Right:SetPoint("RIGHT", self.frame, "RIGHT", -2, 2)
+		self.frame.Left:SetPoint("LEFT", self.frame, "LEFT", 2, 2)
+	end
+	self.OnRelease = function(self)
+		self:Hide()
+	end
+	self.OnAcquire = function(self)	
+		self:Show()		
+	end
+	self.type = "StatusBar"
+	return self
+end, 1)
