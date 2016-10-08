@@ -42,7 +42,8 @@ end
 function NeP.Parser:Spell(eval)
 	print(eval.spell)
 	if eval.token then
-		print('hit')
+		print(eval.token)
+		return NeP.Actions[eval.token](eval)
 	end
 	local skillType = GetSpellBookItemInfo(eval.spell)
 	local isUsable, notEnoughMana = IsUsableSpell(eval.spell)

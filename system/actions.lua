@@ -1,11 +1,10 @@
 local _, NeP = ...
 
-NeP.Engine.Actions = {}
-local Actions = NeP.Engine.Actions
+NeP.Actions = {}
 local LibDisp = LibStub('LibDispellable-1.0')
 
 -- Dispell all
-Actions['dispelall'] = function(eval, args)
+NeP.Actions['dispelall'] = function(eval, args)
 	for i=1,#NeP.OM['unitFriend'] do
 		local Obj = NeP.OM['unitFriend'][i]
 		for _,spellID, name, _,_,_, dispelType in LibDisp:IterateDispellableAuras(Obj.key) do
@@ -20,7 +19,7 @@ Actions['dispelall'] = function(eval, args)
 end
 
 -- Automated tauting
-Actions['taunt'] = function(eval, args)
+NeP.Actions['taunt'] = function(eval, args)
 	local spell = NeP.Engine:Spell(args)
 	if not spell then return end
 	for i=1,#NeP.OM['unitEnemie'] do
@@ -35,7 +34,7 @@ Actions['taunt'] = function(eval, args)
 end
 
 -- Ress all dead
-Actions['ressdead'] = function(eval, args)
+NeP.Actions['ressdead'] = function(eval, args)
 	local spell = NeP.Engine:Spell(args)
 	if not spell then return false end
 	for i=1,#NeP.OM['DeadUnits'] do
@@ -50,9 +49,10 @@ Actions['ressdead'] = function(eval, args)
 end
 
 -- Pause
-Actions['pause'] = function(eval)
+NeP.Actions['pause'] = function(eval)
 	eval.breaks = true
-	return eval
+	print('hit')
+	return true
 end
 
 local invItems = {
@@ -87,8 +87,7 @@ local invItems = {
 }
 
 -- Items
-Actions['#'] = function(eval)
-	item = eval.spell:sub(2)
+NeP.Actions['#'] = function(eval)
 	if invItems[item] then
 		local invItem = GetInventorySlotInfo(invItems[item])
 		item = GetInventoryItemID("player", invItem)
@@ -107,11 +106,10 @@ Actions['#'] = function(eval)
 end
 
 -- Lib
-Actions['@'] = function(eval)
+NeP.Actions['@'] = function(eval)
 	eval.conditions = NeP.DSL.Parse(eval.conditions)
 	if eval.conditions then
-		local lib = eval.spell:sub(2)
-		if NeP.library.parse(lib) then
+		if NeP.Library:Parse(eval.spell) then
 			eval.breaks = true
 			return eval
 		end
@@ -119,32 +117,16 @@ Actions['@'] = function(eval)
 end
 
 -- Macro
-Actions['/'] = function(eval)
+NeP.Actions['/'] = function(eval)
 	eval.func = NeP.Engine.Macro
 	return eval
 end
 
--- These are special Actions
-Actions['%'] = function(eval)
-	eval.spell = eval.spell:lower():sub(2)
+-- These are special NeP.Actions
+NeP.Actions['%'] = function(eval)
 	local arg1, args = eval.spell:match('(.+)%((.+)%)')
 	if args then eval.spell = arg1 end
-	if Actions[eval.spell] then
-		return Actions[eval.spell](eval, args)
+	if NeP.Actions[eval.spell] then
+		return NeP.Actions[eval.spell](eval, args)
 	end
-end
-
--- Interrupt and cast
-Actions['!'] = function(eval)
-	eval.spell = eval.spell:sub(2)
-	eval.bypass = true
-	eval.si = eval.spell ~= UnitCastingInfo('player')
-	return NeP.Engine:STRING(eval)
-end
-
--- Cast this along with current cast
-Actions['&'] = function(eval)
-	eval.spell = eval.spell:sub(2)
-	eval.bypass = true
-	return NeP.Engine:STRING(eval)
 end

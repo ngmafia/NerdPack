@@ -76,7 +76,7 @@ function NeP.DSL:ProcessCondition(Strg, Spell)
 	-- Condition arguments
 	local Args = Strg:match('%((.+)%)')
 	if Args then 
-		Args = NeP.Locale.Spells(Args) -- Translates the name to the correct locale
+		Args = NeP.Spells:Convert(Args) -- Translates the name to the correct locale
 		Strg = Strg:gsub('%((.+)%)', '')
 	else
 		Args = Spell
@@ -182,9 +182,8 @@ local typesTable = {
 }
 
 function NeP.DSL:Parse(dsl, Spell)
-	if typesTable[type(dsl)] then
-		return typesTable[type(dsl)](dsl, Spell)
-	end
+	print(dsl)
+	return typesTable[type(dsl)](dsl, Spell)
 end
 
 NeP.Globals.DSL.Parse = NeP.DSL.Parse

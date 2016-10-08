@@ -6,7 +6,8 @@ local spellTokens = {
 	{'actions', '^%%'},
 	{'along', '^&'},
 	{'lib', '^@'},
-	{'macro', '^/'}
+	{'macro', '^/'},
+  {'item', '^#'}
 }
 
 -- Takes a string a produces a table in its place
@@ -21,8 +22,8 @@ function NeP.Compiler:Spell(eval)
 	for i=1, #spellTokens do
 		local kind, patern = unpack(spellTokens[i])
 		if ref.spell:find(patern) then
+      ref.token = ref.spell:sub(1,1)
 			ref.spell = ref.spell:sub(2)
-			ref.token = kind
 		end
 	end
 	ref.spell = NeP.Spells:Convert(ref.spell)
