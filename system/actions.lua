@@ -51,7 +51,6 @@ end
 -- Pause
 NeP.Actions['pause'] = function(eval)
 	eval.breaks = true
-	print('hit')
 	return true
 end
 
@@ -88,6 +87,7 @@ local invItems = {
 
 -- Items
 NeP.Actions['#'] = function(eval)
+	local item = eval[1].spell
 	if invItems[item] then
 		local invItem = GetInventorySlotInfo(invItems[item])
 		item = GetInventoryItemID("player", invItem)
@@ -97,36 +97,32 @@ NeP.Actions['#'] = function(eval)
 		local isUsable, notEnoughMana = IsUsableItem(itemName)
 		local ready = select(2, GetItemCooldown(item)) == 0
 		if isUsable and ready and (GetItemCount(itemName) > 0) then
-			eval.spell = itemName
-			eval.icon = icon
 			eval.func = NeP.Engine.UseItem
-			return eval
+			return true
 		end
 	end
 end
 
 -- Lib
 NeP.Actions['@'] = function(eval)
-	eval.conditions = NeP.DSL.Parse(eval.conditions)
-	if eval.conditions then
-		if NeP.Library:Parse(eval.spell) then
+	eval.breaks = false
+	if NeP.DSL.Parse(eval[2]) then
+		if NeP.Library:Parse(eval[1].spell) then
 			eval.breaks = true
-			return eval
+			return true
 		end
 	end 
 end
 
 -- Macro
 NeP.Actions['/'] = function(eval)
-	eval.func = NeP.Engine.Macro
-	return eval
+	eval.func = NeP.Protected.Macro
+	return true
 end
 
 -- These are special NeP.Actions
 NeP.Actions['%'] = function(eval)
-	local arg1, args = eval.spell:match('(.+)%((.+)%)')
-	if args then eval.spell = arg1 end
-	if NeP.Actions[eval.spell] then
-		return NeP.Actions[eval.spell](eval, args)
+	if NeP.Actions[eval[1].spell] then
+		return NeP.Actions[eval[1].spell](eval, eval[1].args)
 	end
 end

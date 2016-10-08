@@ -182,7 +182,6 @@ local typesTable = {
 }
 
 function NeP.DSL:Parse(dsl, Spell)
-	print(dsl)
 	return typesTable[type(dsl)](dsl, Spell)
 end
 

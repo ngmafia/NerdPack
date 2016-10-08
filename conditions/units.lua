@@ -107,11 +107,11 @@ NeP.DSL:Register("alive", function(target)
 end)
 
 NeP.DSL:Register("behind", function(target)
-	return not NeP.Engine.Infront('player', target)
+	return not NeP.Protected:Infront('player', target)
 end)
 
 NeP.DSL:Register("infront", function(target)
-	return NeP.Engine.Infront('player', target)
+	return NeP.Protected:Infront('player', target)
 end)
 
 local movingCache = { }

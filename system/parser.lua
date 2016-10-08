@@ -40,16 +40,16 @@ function NeP.Parser:Target(eval)
 end
 
 function NeP.Parser:Spell(eval)
-	print(eval.spell)
-	if eval.token then
-		print(eval.token)
-		return NeP.Actions[eval.token](eval)
+	print(eval[1].spell)
+	if eval[1].token then
+		return NeP.Actions[eval[1].token](eval)
 	end
-	local skillType = GetSpellBookItemInfo(eval.spell)
-	local isUsable, notEnoughMana = IsUsableSpell(eval.spell)
+	local skillType = GetSpellBookItemInfo(eval[1].spell)
+	local isUsable, notEnoughMana = IsUsableSpell(eval[1].spell)
 	if skillType ~= 'FUTURESPELL' and isUsable and not notEnoughMana then
 		local GCD = NeP.DSL:Get('gcd')()
-		if GetSpellCooldown(eval.spell) <= GCD then
+		if GetSpellCooldown(eval[1].spell) <= GCD then
+			eval.func = eval[3].ground and NeP.Protected.CastGround or NeP.Protected.Cast
 			return true
 		end
 	end
@@ -61,16 +61,21 @@ function NeP.Parser:Parse(eval)
 			local r = self:Parse(eval[1])
 			if r then return true end
 		end
-	elseif eval[1].interrupts or eval[1].token or (castingTime('player') == 0) then
+	elseif eval[1].bypass or (castingTime('player') == 0) then
 		if self:Target(eval[3]) then
-			if self:Spell(eval[1]) and NeP.DSL:Parse(eval[2]) then
-				print('final')
-				-- Cancels the current cast
-				if eval[1].interrupts then
-					SpellStopCasting()
+			if spell.token == 'func' or self:Spell(eval) then
+				print(1)
+				if NeP.DSL:Parse(eval[2], eval[1].spell) then
+					if eval.breaks then
+						return true
+					end
+					if eval[1].interrupts then
+						SpellStopCasting()
+					end
+					eval.func(eval[1].spell, eval[3].target)
+					print(eval[1].spell)
+					return true
 				end
-				-- TODO, EXECUTE/CAST
-				return true
 			end
 		end
 	end
