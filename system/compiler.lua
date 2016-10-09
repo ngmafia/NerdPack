@@ -48,7 +48,6 @@ function NeP.Compiler.Target(eval)
 	if type(eval[3]) == 'string' then
 		ref.target = eval[3]
 	else
-		print('found a error')
 		ref = fakeUnit
 	end
 	if ref.target:find('.ground') then
@@ -60,20 +59,21 @@ end
 
 function NeP.Compiler.Compile(eval)
 	local spell, cond, target = eval[1], eval[2], eval[3]
-	-- Take care of target
-	NeP.Compiler.Target(eval)
 	-- Take care of spell
 	if type(spell) == 'table' then
 		for k=1, #spell do
 			NeP.Compiler.Compile(spell[k])
 		end
-	elseif type(spell) == 'string' then
-		NeP.Compiler.Spell(eval)
-	elseif type(spell) == 'function' then
-		spell = {
-			spell = spell,
-			token = 'func'
-		}
+	else
+		NeP.Compiler.Target(eval)
+		if type(spell) == 'string' then
+			NeP.Compiler.Spell(eval)
+		elseif type(spell) == 'function' then
+			spell = {
+				spell = spell,
+				token = 'func'
+			}
+		end
 	end
 end
 

@@ -31,7 +31,6 @@ function NeP.Parser.Target(eval)
 end
 
 function NeP.Parser.Spell(eval)
-	print(eval[1].spell)
 	if eval[1].token then
 		return NeP.Actions[eval[1].token](eval)
 	end
@@ -47,7 +46,7 @@ function NeP.Parser.Spell(eval)
 end
 
 function NeP.Parser.Table(spell, cond)
-	if NeP.DSL:Parse(cond) then
+	if NeP.DSL.Parse(cond) then
 		for i=1, #spell do
 			local r = NeP.Parser.Parse(spell[i])
 			if r then return true end
@@ -62,7 +61,8 @@ function NeP.Parser.Parse(eval)
 	elseif spell.bypass or (castingTime('player') == 0) then
 		if NeP.Parser.Target(target) then
 			if spell.token == 'func' or NeP.Parser.Spell(eval) then
-				if NeP.DSL:Parse(cond, spell.spell) then
+				if NeP.DSL.Parse(cond, spell.spell) then
+					print(eval[1].spell)
 					if eval.breaks then
 						return true
 					end
