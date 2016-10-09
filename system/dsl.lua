@@ -197,4 +197,8 @@ function NeP.DSL:Parse(dsl, Spell)
 	return typesTable[type(dsl)](dsl, Spell)
 end
 
-NeP.Globals.DSL.Parse = NeP.DSL.Parse
+NeP.Globals.DSL = {
+	Get = NeP.DSL.Get,
+	Register = NeP.DSL.Register,
+	Parse = NeP.DSL.Parse
+}

@@ -1,7 +1,6 @@
 local _, NeP = ...
 
 NeP.DSL = {}
-NeP.Globals.DSL = NeP.DSL
 
 local conditions = {}
 

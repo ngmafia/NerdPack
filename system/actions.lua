@@ -1,27 +1,57 @@
 local _, NeP = ...
 
 NeP.Actions = {}
-local Actions = NeP.Actions
 local LibDisp = LibStub('LibDispellable-1.0')
 
 -- Dispell all
-Actions['dispelall'] = function(eval, args)
-	
+NeP.Actions['dispelall'] = function(eval, args)
+	for i=1,#NeP.OM['unitFriend'] do
+		local Obj = NeP.OM['unitFriend'][i]
+		for _,spellID, name, _,_,_, dispelType in LibDisp:IterateDispellableAuras(Obj.key) do
+			local spell = GetSpellInfo(spellID)
+			if dispelType then
+				eval.spell = spell
+				eval.target = Obj.key
+				return NeP.Engine:STRING(eval)
+			end
+		end
+	end
 end
 
 -- Automated tauting
-Actions['taunt'] = function(eval, args)
-	
+NeP.Actions['taunt'] = function(eval, args)
+	local spell = NeP.Engine:Spell(args)
+	if not spell then return end
+	for i=1,#NeP.OM['unitEnemie'] do
+		local Obj = NeP.OM['unitEnemie'][i]
+		local Threat = UnitThreatSituation("player", Obj.key)
+		if Threat and Threat >= 0 and Threat < 3 and Obj.distance <= 30 then
+			eval.spell = spell
+			eval.target = Obj.key
+			return NeP.Engine:STRING(eval)
+		end
+	end
 end
 
 -- Ress all dead
-Actions['ressdead'] = function(eval, args)
-	
+NeP.Actions['ressdead'] = function(eval, args)
+	local spell = NeP.Engine:Spell(args)
+	if not spell then return false end
+	for i=1,#NeP.OM['DeadUnits'] do
+		local Obj = NeP.OM['DeadUnits'][i]
+		if spell and Obj.distance < 40 and UnitIsPlayer(Obj.Key)
+		and UnitIsDeadOrGhost(Obj.key) and UnitPlayerOrPetInParty(Obj.key) then
+			eval.spell = spell
+			eval.target = Obj.key
+			return NeP.Engine:STRING(eval)
+		end
+	end
 end
 
 -- Pause
-Actions['pause'] = function(eval)
+NeP.Actions['pause'] = function(eval)
 	eval.breaks = true
+	return true
 end
 
 local invItems = {
@@ -56,8 +86,8 @@ local invItems = {
 }
 
 -- Items
-Actions['#'] = function(eval)
-	local item = eval.spell:sub(2)
+NeP.Actions['#'] = function(eval)
+	local item = eval[1].spell
 	if invItems[item] then
 		local invItem = GetInventorySlotInfo(invItems[item])
 		item = GetInventoryItemID("player", invItem)
@@ -67,50 +97,32 @@ Actions['#'] = function(eval)
 		local isUsable, notEnoughMana = IsUsableItem(itemName)
 		local ready = select(2, GetItemCooldown(item)) == 0
 		if isUsable and ready and (GetItemCount(itemName) > 0) then
-			eval.spell = itemName
-			eval.icon = icon
-			eval.func = NeP.Protected.UseItem
+			eval.func = NeP.Engine.UseItem
+			return true
 		end
 	end
 end
 
 -- Lib
-Actions['@'] = function(eval)
-	eval.conditions = NeP.DSL:Parse(eval.conditions)
-	if eval.conditions then
-		local lib = eval.spell:sub(2)
-		if NeP.Library:Parse(lib) then
+NeP.Actions['@'] = function(eval)
+	eval.breaks = false
+	if NeP.DSL.Parse(eval[2]) then
+		if NeP.Library:Parse(eval[1].spell) then
 			eval.breaks = true
+			return true
 		end
 	end 
 end
 
 -- Macro
-Actions['/'] = function(eval)
+NeP.Actions['/'] = function(eval)
 	eval.func = NeP.Protected.Macro
+	return true
 end
 
--- These are special Actions
-Actions['%'] = function(eval)
-	eval.spell = eval.spell:lower():sub(2)
-	local arg1, args = eval.spell:match('(.+)%((.+)%)')
-	if args then eval.spell = arg1 end
-	if Actions[eval.spell] then
-		Actions[eval.spell](eval, args)
+-- These are special NeP.Actions
+NeP.Actions['%'] = function(eval)
+	if NeP.Actions[eval[1].spell] then
+		return NeP.Actions[eval[1].spell](eval, eval[1].args)
 	end
-end
-
--- Interrupt and cast
-Actions['!'] = function(eval)
-	eval.spell = eval.spell:sub(2)
-	eval.bypass = true
-	eval.si = eval.spell ~= UnitCastingInfo('player')
-	NeP.Parser:STRING(eval)
-end
-
--- Cast this along with current cast
-Actions['&'] = function(eval)
-	eval.spell = eval.spell:sub(2)
-	eval.bypass = true
-	NeP.Parser:STRING(eval)
 end
