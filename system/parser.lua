@@ -62,7 +62,6 @@ function NeP.Parser.Parse(eval)
 		if NeP.Parser.Target(target) then
 			if spell.token == 'func' or NeP.Parser.Spell(eval) then
 				if NeP.DSL.Parse(cond, spell.spell) then
-					print(eval[1].spell)
 					if eval.breaks then
 						return true
 					end
