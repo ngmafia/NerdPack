@@ -26,7 +26,6 @@ function NeP.CR:Add(SpecID, Name, InCombat, OutCombat, ExeOnLoad, GUI)
 		end
 
 		-- This compiles the CR
-		print(Name)
 		NeP.Compiler:Iterate(InCombat)
 		NeP.Compiler:Iterate(OutCombat)
 

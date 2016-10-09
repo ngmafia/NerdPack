@@ -9,7 +9,7 @@ local spellTokens = {
 }
 
 -- Takes a string a produces a table in its place
-function NeP.Compiler:Spell(eval)
+function NeP.Compiler.Spell(eval)
 	local ref = {
 		spell = eval[1]
 	}
@@ -36,10 +36,21 @@ function NeP.Compiler:Spell(eval)
 	eval[1] = ref
 end
 
-function NeP.Compiler:Target(eval)
-	local ref = {
-		target = eval[3]
-	}
+local fakeUnit = {
+	target = 'fake',
+	func = function()
+		return UnitExists('target') and 'target' or 'player'
+	end
+}
+
+function NeP.Compiler.Target(eval)
+	local ref = {}
+	if type(eval[3]) == 'string' then
+		ref.target = eval[3]
+	else
+		print('found a error')
+		ref = fakeUnit
+	end
 	if ref.target:find('.ground') then
 		ref.target = ref.target:sub(0,-8)
 		ref.ground = true
@@ -49,18 +60,15 @@ end
 
 function NeP.Compiler.Compile(eval)
 	local spell, cond, target = eval[1], eval[2], eval[3]
-	print(spell)
 	-- Take care of target
-	if type(target) == 'string' then
-		NeP.Compiler:Target(eval)
-	end
+	NeP.Compiler.Target(eval)
 	-- Take care of spell
 	if type(spell) == 'table' then
 		for k=1, #spell do
 			NeP.Compiler.Compile(spell[k])
 		end
 	elseif type(spell) == 'string' then
-		NeP.Compiler:Spell(eval)
+		NeP.Compiler.Spell(eval)
 	elseif type(spell) == 'function' then
 		spell = {
 			spell = spell,
@@ -70,7 +78,6 @@ function NeP.Compiler.Compile(eval)
 end
 
 function NeP.Compiler:Iterate(eval)
-	print('-------------------', #eval)
 	for i=1, #eval do
 		NeP.Compiler.Compile(eval[i])
 	end
