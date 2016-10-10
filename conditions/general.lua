@@ -63,10 +63,10 @@ end)
 
 NeP.DSL:Register('interruptAt', function (target, spell)
 	if UnitIsUnit('player', target) then return false end
-	if spell and NeP.DSL.Conditions['toggle'](nil, 'Interrupts') then
+	if spell and NeP.DSL:Get('toggle')(nil, 'Interrupts') then
 		local stopAt = tonumber(spell) or 35
 		local stopAt = stopAt + math.random(-5, 5)
-		local secondsLeft, castLength = NeP.DSL.Conditions['casting.delta'](target)
+		local secondsLeft, castLength = NeP.DSL:Get('casting.delta')(target)
 		if secondsLeft ~= 0 and 100 - (secondsLeft / castLength * 100) > stopAt then
 			return true
 		end

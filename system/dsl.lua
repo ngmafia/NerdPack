@@ -90,7 +90,9 @@ local function ProcessCondition(Strg, Spell)
 	-- Condition arguments
 	local Args = Strg:match('%((.+)%)')
 	if Args then 
-		Args = NeP.Spells:Convert(Args) -- Translates the name to the correct locale
+		if Args:find('^%a') then
+			Args = NeP.Spells:Convert(Args) -- Translates the name to the correct locale
+		end
 		Strg = Strg:gsub('%((.+)%)', '')
 	else
 		Args = Spell
