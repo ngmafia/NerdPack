@@ -200,7 +200,7 @@ NeP.DSL:Register("level", function(target)
 end)
 
 NeP.DSL:Register("combat", function(target)
-	return (UnitAffectingCombat(Obj.key) or NeP.DSL:Get('isdummy')(Obj.key))
+	return (UnitAffectingCombat(target) or NeP.DSL:Get('isdummy')(target))
 end)
 
 NeP.DSL:Register("role", function(target, role)
