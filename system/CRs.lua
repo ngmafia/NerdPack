@@ -26,8 +26,8 @@ function NeP.CR:Add(SpecID, Name, InCombat, OutCombat, ExeOnLoad, GUI)
 		end
 
 		-- This compiles the CR
-		NeP.Compiler:Iterate(InCombat)
-		NeP.Compiler:Iterate(OutCombat)
+		NeP.Compiler:Iterate(InCombat, Name)
+		NeP.Compiler:Iterate(OutCombat, Name)
 
 		--Create user GUI
 		if GUI then NeP.CR:AddGUI(Name, GUI) end

@@ -57,12 +57,12 @@ function NeP.Compiler.Target(eval)
 	eval[3] = ref
 end
 
-function NeP.Compiler.Compile(eval)
+function NeP.Compiler.Compile(eval, name)
 	local spell, cond, target = eval[1], eval[2], eval[3]
 	-- Take care of spell
 	if type(spell) == 'table' then
 		for k=1, #spell do
-			NeP.Compiler.Compile(spell[k])
+			NeP.Compiler.Compile(spell[k], name)
 		end
 	else
 		NeP.Compiler.Target(eval)
@@ -73,12 +73,14 @@ function NeP.Compiler.Compile(eval)
 				spell = spell,
 				token = 'func'
 			}
+		else
+			NeP.Core:Print('Found a issue compiling: '..name..' Spell cant be a '..type(spell))
 		end
 	end
 end
 
-function NeP.Compiler:Iterate(eval)
+function NeP.Compiler:Iterate(eval, name)
 	for i=1, #eval do
-		NeP.Compiler.Compile(eval[i])
+		NeP.Compiler.Compile(eval[i], name)
 	end
 end
