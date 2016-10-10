@@ -128,7 +128,7 @@ NeP.DSL:Register('spell.casttime', function(_, spell)
 end)
 
 NeP.DSL:Register('combat.time', function(target)
-	return NeP.CombatTracker.CombatTime(target)
+	return NeP.CombatTracker:CombatTime(target)
 end)
 
 NeP.DSL:Register('timeout', function(target, args)
