@@ -192,7 +192,7 @@ NeP.DSL:Register("distance", function(target)
 end)
 
 NeP.DSL:Register("range", function(target)
-	return NeP.DSL.Conditions["distance"](target)
+	return NeP.DSL:Get("distance")(target)
 end)
 
 NeP.DSL:Register("level", function(target)
@@ -337,7 +337,7 @@ end)
 NeP.DSL:Register("area.enemies", function(unit, distance)
 	local total = 0
 	if not UnitExists(unit) then return total end
-	for GUID, Obj NeP.OM.Enemy do
+	for GUID, Obj in pairs(NeP.OM:Get('Enemy')) do
 		if UnitExists(Obj.key) and (UnitAffectingCombat(Obj.key) or isDummy(Obj.key))
 		and NeP.Protected.Distance(unit, Obj.key) <= tonumber(distance) then
 			total = total +1

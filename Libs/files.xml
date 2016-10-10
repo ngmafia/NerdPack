@@ -8,7 +8,6 @@
 	<Script file="LibRangeCheck-2.0\LibRangeCheck-2.0.lua" />
 	<Script file="AceAddon-3.0\AceAddon-3.0.lua" />
 	<Script file="LibDispellable-1.0\LibDispellable-1.0.lua" />
-	<Script file="LibNameplateRegistry-1.0\LibNameplateRegistry-1.0.lua" />
 	<Script file="LibSharedMedia-3.0\LibSharedMedia-3.0.lua" />
 	<Include file="DiesalComm-1.0\DiesalComm-1.0.xml" />
 	<Script file="DiesalTools-1.0\DiesalTools-1.0.lua" />

@@ -2,6 +2,7 @@
 ..\FrameXML\UI.xsd">
 
 	<Script file="core.lua" />
+	<Script file="facerool.lua" />
 	<Script file="base.lua" />
 	
 </Ui>

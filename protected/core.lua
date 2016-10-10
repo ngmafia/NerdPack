@@ -13,7 +13,7 @@ function NeP.Protected:AddUnlocker(name, test, functions, extended)
 	}
 end
 
-C_Timer.NewTicker(1, (function()
+C_Timer.NewTicker(0.2, (function()
 	if NeP.unlocked then return end
 	for name, unlocker in pairs(unlockers) do
 		if unlocker.test() then

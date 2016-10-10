@@ -29,6 +29,13 @@ function NeP.Interface:ResetCRs()
 	DropMenu[2].menuList = {}
 end
 
+function NeP.Interface:SetCheckedCR(Name)
+	for _,v in pairs(DropMenu[2].menuList) do
+		v.checked = Name == v.text
+	end
+	NeP.Core:Print('Loaded: '..Name)
+end
+
 function NeP.Interface:AddCR_ST(Name)
 	table.insert(DropMenu[3].menuList, {
 		text = Name,
@@ -44,8 +51,8 @@ function NeP.Interface:AddCR(Spec, Name, checked)
 		text = Name,
 		checked = checked,
 		func = function()
+			NeP.Interface:SetCheckedCR(Name)
 			NeP.Interface:ResetToggles()
-			NeP.Core:Print('Loaded: '..Name)
 			NeP.CR:Set(Spec, Name)
 		end
 	})
