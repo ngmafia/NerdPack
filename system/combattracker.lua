@@ -64,23 +64,7 @@ function NeP.CombatTracker.LastCast(Unit)
 	return Data[GUID] and Data[GUID].lastcast
 end
 
-function NeP.CombatTracker.getDMG(UNIT)
-	local total, Hits = 0, 0
-	local GUID = UnitGUID(UNIT)
-	if Data[GUID] then
-		local time = GetTime()
-		local combatTime = NeP.CombatTracker.CombatTime(UNIT)
-		total = Data[GUID].dmgTaken / combatTime
-		Hits = Data[GUID].Hits
-		-- Remove a unit if it hasnt recived dmg for more then 5 sec
-		if (time-Data[GUID].lastHit) > 5 then
-			Data[GUID] = nil
-		end
-	end
-	return total, Hits
-end
-
-function NeP.CombatTracker.CombatTime(UNIT)
+function NeP.CombatTracker:CombatTime(UNIT)
 	local GUID = UnitGUID(UNIT)
 	if Data[GUID] then
 		local time = GetTime()
@@ -90,27 +74,43 @@ function NeP.CombatTracker.CombatTime(UNIT)
 	return 0
 end
 
-function NeP.CombatTracker.TimeToDie(unit)
-	local ttd = 8675309
+function NeP.CombatTracker:getDMG(UNIT)
+	local total, Hits = 0, 0
+	local GUID = UnitGUID(UNIT)
+	if Data[GUID] then
+		local time = GetTime()
+		local combatTime = NeP.CombatTracker:CombatTime(UNIT)
+		total = Data[GUID].dmgTaken / combatTime
+		Hits = Data[GUID].Hits
+		-- Remove a unit if it hasnt recived dmg for more then 5 sec
+		if (time-Data[GUID].lastHit) > 5 then
+			Data[GUID] = nil
+		end
+	end
+	return total or 0, Hits or 0
+end
+
+function NeP.CombatTracker:TimeToDie(unit)
+	local ttd = 0
 	if not isDummy(unit) then
-		local DMG, Hits = NeP.CombatTracker.getDMG(unit)
+		local DMG, Hits = NeP.CombatTracker:getDMG(unit)
 		if DMG >= 1 and Hits > 1 then
 			ttd = UnitHealth(unit) / DMG
 		end
 	end
-	return ttd
+	return ttd or 8675309
 end
 
 NeP.DSL:Register("incdmg", function(target, args)
-	if target and UnitExists(target) then
-		local pDMG = NeP.CombatTracker.getDMG(target)
-		return pDMG * tonumber(args or 1)
+	if args and UnitExists(target) then
+		local pDMG = NeP.CombatTracker:getDMG(target)
+		return pDMG * tonumber(args)
 	end
 	return 0
 end)
 
 NeP.Listener:Add('NeP_CombatTracker', 'COMBAT_LOG_EVENT_UNFILTERED', function(...)
-	local _, EVENT, _,_,_,_,_, GUID = select(1, ...)
+	local _, EVENT, _,_,_,_,_, GUID = ...
 	-- Add the unit to our data if we dont have it
 	addToData(GUID)
 	-- Update last  hit time
@@ -119,6 +119,6 @@ NeP.Listener:Add('NeP_CombatTracker', 'COMBAT_LOG_EVENT_UNFILTERED', function(..
 	if EVENTS[EVENT] then EVENTS[EVENT](...) end
 end)
 
-NeP.Listener:Add('NeP_CombatTracker', 'PLAYER_REGEN_ENABLED', function(...)
+NeP.Listener:Add('NeP_CombatTracker', 'PLAYER_REGEN_ENABLED', function()
 	wipe(Data)
 end)

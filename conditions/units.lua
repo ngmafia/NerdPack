@@ -287,11 +287,11 @@ NeP.DSL:Register("falling", function()
 end)
 
 NeP.DSL:Register("deathin", function(target)
-	return NeP.CombatTracker.TimeToDie(target)
+	return NeP.CombatTracker:TimeToDie(target)
 end)
 
 NeP.DSL:Register("ttd", function(target)
-	return NeP.DSL.Conditions["deathin"](target)
+	return NeP.DSL:Get("deathin")(target)
 end)
 
 NeP.DSL:Register("charmed", function(target)
