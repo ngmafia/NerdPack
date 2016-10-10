@@ -29,6 +29,7 @@
 	<Include file="rotations\files.xml" />
 	<Include file="protected\files.xml" />
 	<Script file="system\om.lua" />
+	<Script file="system\healing.lua" />
 	<Script file="commands.lua" />
 
 </Ui>
