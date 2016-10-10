@@ -5,47 +5,17 @@ local LibDisp = LibStub('LibDispellable-1.0')
 
 -- Dispell all
 NeP.Actions['dispelall'] = function(eval, args)
-	for i=1,#NeP.OM['unitFriend'] do
-		local Obj = NeP.OM['unitFriend'][i]
-		for _,spellID, name, _,_,_, dispelType in LibDisp:IterateDispellableAuras(Obj.key) do
-			local spell = GetSpellInfo(spellID)
-			if dispelType then
-				eval.spell = spell
-				eval.target = Obj.key
-				return NeP.Engine:STRING(eval)
-			end
-		end
-	end
+	--TODO
 end
 
 -- Automated tauting
 NeP.Actions['taunt'] = function(eval, args)
-	local spell = NeP.Engine:Spell(args)
-	if not spell then return end
-	for i=1,#NeP.OM['unitEnemie'] do
-		local Obj = NeP.OM['unitEnemie'][i]
-		local Threat = UnitThreatSituation("player", Obj.key)
-		if Threat and Threat >= 0 and Threat < 3 and Obj.distance <= 30 then
-			eval.spell = spell
-			eval.target = Obj.key
-			return NeP.Engine:STRING(eval)
-		end
-	end
+	--TODO
 end
 
 -- Ress all dead
 NeP.Actions['ressdead'] = function(eval, args)
-	local spell = NeP.Engine:Spell(args)
-	if not spell then return false end
-	for i=1,#NeP.OM['DeadUnits'] do
-		local Obj = NeP.OM['DeadUnits'][i]
-		if spell and Obj.distance < 40 and UnitIsPlayer(Obj.Key)
-		and UnitIsDeadOrGhost(Obj.key) and UnitPlayerOrPetInParty(Obj.key) then
-			eval.spell = spell
-			eval.target = Obj.key
-			return NeP.Engine:STRING(eval)
-		end
-	end
+	--TODO
 end
 
 -- Pause
@@ -97,7 +67,7 @@ NeP.Actions['#'] = function(eval)
 		local isUsable, notEnoughMana = IsUsableItem(itemName)
 		local ready = select(2, GetItemCooldown(item)) == 0
 		if isUsable and ready and (GetItemCount(itemName) > 0) then
-			eval.func = NeP.Engine.UseItem
+			eval.func = NeP.Protected.UseItem
 			return true
 		end
 	end

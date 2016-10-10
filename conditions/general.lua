@@ -168,7 +168,7 @@ NeP.DSL:Register('IsNear', function(target, args)
 		for i=1,#NeP.OM['unitEnemie'] do
 			local Obj = NeP.OM['unitEnemie'][i]
 			if Obj.id == targetID then
-				if NeP.Engine.Distance('player', target) <= distance then
+				if NeP.Protected.Distance('player', target) <= distance then
 					return true
 				end
 			end

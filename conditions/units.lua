@@ -188,7 +188,7 @@ NeP.DSL:Register("enemy", function(target)
 end)
 
 NeP.DSL:Register("distance", function(target)
-	return NeP.Engine.UnitCombatRange('player', target)
+	return NeP.Protected.UnitCombatRange('player', target)
 end)
 
 NeP.DSL:Register("range", function(target)
@@ -239,11 +239,11 @@ NeP.DSL:Register("class", function (target, expectedClass)
 end)
 
 NeP.DSL:Register("inMelee", function(target)
-	return NeP.Engine.UnitAttackRange('player', target, 'melee')
+	return NeP.Protected.UnitAttackRange('player', target, 'melee')
 end)
 
 NeP.DSL:Register("inRanged", function(target)
-	return NeP.Engine.UnitAttackRange('player', target, 'ranged')
+	return NeP.Protected.UnitAttackRange('player', target, 'ranged')
 end)
 
 NeP.DSL:Register("power.regen", function(target)
@@ -337,10 +337,9 @@ end)
 NeP.DSL:Register("area.enemies", function(unit, distance)
 	local total = 0
 	if not UnitExists(unit) then return total end
-	for i=1, #NeP.OM['unitEnemie'] do
-		local Obj = NeP.OM['unitEnemie'][i]
+	for GUID, Obj NeP.OM.Enemy do
 		if UnitExists(Obj.key) and (UnitAffectingCombat(Obj.key) or isDummy(Obj.key))
-		and NeP.Engine.Distance(unit, Obj.key) <= tonumber(distance) then
+		and NeP.Protected.Distance(unit, Obj.key) <= tonumber(distance) then
 			total = total +1
 		end
 	end
@@ -350,11 +349,6 @@ end)
 NeP.DSL:Register("area.friendly", function(unit, distance)
 	local total = 0
 	if not UnitExists(unit) then return total end
-	for i=1, #NeP.Healing.Units do
-		local Obj = NeP.Healing.Units[i]
-		if UnitExists(Obj.key) and NeP.Engine.Distance(unit, Obj.key) <= tonumber(distance) then
-			total = total +1
-		end
-	end
+	--TODO
 	return total
 end)

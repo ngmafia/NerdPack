@@ -38,7 +38,7 @@ end)
 
 NeP.DSL:Register('petrange', function(target)
 	if target then
-		return NeP.Engine.Distance('pet', target)
+		return NeP.Protected.Distance('pet', target)
 	end
 	return 0
 end)
