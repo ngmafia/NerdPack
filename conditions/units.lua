@@ -200,7 +200,7 @@ NeP.DSL:Register("level", function(target)
 end)
 
 NeP.DSL:Register("combat", function(target)
-	return UnitAffectingCombat(target)
+	return (UnitAffectingCombat(Obj.key) or NeP.DSL:Get('isdummy')(Obj.key))
 end)
 
 NeP.DSL:Register("role", function(target, role)
@@ -300,7 +300,9 @@ end)
 
 NeP.DSL:Register("talent", function(_, args)
 	local row, col = strsplit(",", args, 2)
-	return hasTalent(tonumber(row), tonumber(col))
+	local group = GetActiveSpecGroup()
+	local _,_,_, selected, active = GetTalentInfo(tonumber(row), tonumber(col), group)
+	return active and selected
 end)
 
 NeP.DSL:Register("glyph", function()
@@ -332,13 +334,19 @@ NeP.DSL:Register('onehand', function()
 	return IsEquippedItemType("One-Hand")
 end)
 
+NeP.DSL:Register('isdummy', function()
+	if not UnitExists(unit) then return end
+	if UnitName(unit):lower():find('dummy') then return true end
+	return NeP.Tooltip:Unit(unit, matchs)
+end)
+
 ------------------------------------------ OM CRAP ---------------------------------------
 ------------------------------------------------------------------------------------------
 NeP.DSL:Register("area.enemies", function(unit, distance)
 	local total = 0
 	if not UnitExists(unit) then return total end
 	for GUID, Obj in pairs(NeP.OM:Get('Enemy')) do
-		if UnitExists(Obj.key) and (UnitAffectingCombat(Obj.key) or isDummy(Obj.key))
+		if NeP.DSL:Get('combat')(Obj.key)
 		and NeP.Protected.Distance(unit, Obj.key) <= tonumber(distance) then
 			total = total +1
 		end

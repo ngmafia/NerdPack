@@ -92,11 +92,9 @@ end
 
 function NeP.CombatTracker:TimeToDie(unit)
 	local ttd = 0
-	if not isDummy(unit) then
-		local DMG, Hits = NeP.CombatTracker:getDMG(unit)
-		if DMG >= 1 and Hits > 1 then
-			ttd = UnitHealth(unit) / DMG
-		end
+	local DMG, Hits = NeP.CombatTracker:getDMG(unit)
+	if DMG >= 1 and Hits > 1 then
+		ttd = UnitHealth(unit) / DMG
 	end
 	return ttd or 8675309
 end
