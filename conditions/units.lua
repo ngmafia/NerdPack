@@ -298,13 +298,6 @@ NeP.DSL:Register("charmed", function(target)
 	return UnitIsCharmed(target)
 end)
 
-NeP.DSL:Register("talent", function(_, args)
-	local row, col = strsplit(",", args, 2)
-	local group = GetActiveSpecGroup()
-	local _,_,_, selected, active = GetTalentInfo(tonumber(row), tonumber(col), group)
-	return active and selected
-end)
-
 NeP.DSL:Register("glyph", function()
 	local spellId = tonumber(spell)
 	local glyphName, glyphId

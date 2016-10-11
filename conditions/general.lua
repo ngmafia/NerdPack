@@ -197,3 +197,11 @@ end)
 NeP.DSL:Register('haste', function(unit)
 	return UnitSpellHaste(unit)
 end)
+
+NeP.DSL:Register("talent", function(_, args)
+	local row, col = strsplit(",", args, 2)
+	row, col = tonumber(row), tonumber(col)
+	local group = GetActiveSpecGroup()
+	local _,_,_, selected, active = GetTalentInfo(row, col, group)
+	return active and selected
+end)
