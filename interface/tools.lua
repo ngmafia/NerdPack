@@ -431,30 +431,28 @@ function NeP.Interface:BuildGUI(eval)
 	parent:SetEventListener('OnDragStop', function(self, event, left, top)
 		NeP.Config:Write(eval.key, 'Location', {left, top})
 	end)
-	NeP.Config:WhenLoad(eval.key, function()
-		local left, top = unpack(NeP.Config:Read(eval.key, 'Location', {false, false}))
-		if left and top then
-			parent.settings.left = left
-			parent.settings.top = top
-			parent:UpdatePosition()
+	NeP.Core:WhenInGame(tostring(eval), function()
+		local left, top = unpack(NeP.Config:Read(eval.key, 'Location', {500, 500}))
+		parent.settings.left = left
+		parent.settings.top = top
+		parent:UpdatePosition()
+		if not eval.color then eval.color = NeP.Color end
+		if type(eval.color) == 'function' then eval.color = eval.color() end
+		NeP.UI.spinnerStyleSheet['bar-background']['color'] = eval.color
+		if eval.title then
+			parent:SetTitle("|cff"..eval.color..eval.title.."|r", eval.subtitle)
+		end
+		if eval.config then
+			local window = DiesalGUI:Create('ScrollFrame')
+			parent:AddChild(window)
+			window:SetParent(parent.content)
+			window:SetAllPoints(parent.content)
+			window.parent = parent
+			window.elements = { }
+			eval.window = window
+			self:BuildElements(eval, window)
 		end
 	end)
-	if not eval.color then eval.color = NeP.Color end
-	if type(eval.color) == 'function' then eval.color = eval.color() end
-	NeP.UI.spinnerStyleSheet['bar-background']['color'] = eval.color
-	if eval.title then
-		parent:SetTitle("|cff"..eval.color..eval.title.."|r", eval.subtitle)
-	end
-	if eval.config then
-		local window = DiesalGUI:Create('ScrollFrame')
-		parent:AddChild(window)
-		window:SetParent(parent.content)
-		window:SetAllPoints(parent.content)
-		window.parent = parent
-		window.elements = { }
-		eval.window = window
-		self:BuildElements(eval, window)
-	end
 	return parent
 end
 
