@@ -450,7 +450,7 @@ function NeP.Interface:BuildGUI(eval)
 			window.parent = parent
 			window.elements = { }
 			eval.window = window
-			self:BuildElements(eval, window)
+			NeP.Interface:BuildElements(eval, window)
 		end
 	end)
 	return parent
