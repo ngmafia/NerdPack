@@ -67,3 +67,5 @@ function NeP.Interface:Add(name, func)
 		notCheckable = 1
 	})
 end
+
+NeP.Globals.Interface.Add = NeP.Interface.Add
