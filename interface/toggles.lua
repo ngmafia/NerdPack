@@ -64,7 +64,7 @@ local function CreateToggle(eval)
 end
 
 function NeP.Interface:UpdateIcon(key, icon)
-	if not Toggles[key] then return end
+	if not icon or not Toggles[key] then return end
 	Toggles[key].texture:SetTexture(icon)
 end
 
