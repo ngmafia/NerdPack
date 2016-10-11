@@ -35,43 +35,29 @@ end
 
 NeP_AL.frame:SetScript('OnMouseWheel', function(self, mouse)
 	local top = #Data - log_items
-
-	if IsShiftKeyDown() then
-		if mouse == 1 then
-			delta = top
-		elseif mouse == -1 then
-			delta = 0
+	if mouse == 1 then
+		if delta < top then
+			delta = delta + mouse
 		end
-	else
-		if mouse == 1 then
-			if delta < top then
-				delta = delta + mouse
-			end
-		elseif mouse == -1 then
-			if delta > 0 then
-				delta = delta + mouse
-			end
+	elseif mouse == -1 then
+		if delta > 0 then
+			delta = delta + mouse
 		end
 	end
-
 	NeP.ActionLog:Update()
 end)
 
 local LogItem = { }
 
 for i = 1, (log_items) do
-
 	LogItem[i] = CreateFrame('Frame', nil, NeP_AL.frame)
 	LogItem[i]:SetFrameLevel(94)
 	local texture = LogItem[i]:CreateTexture(nil, 'BACKGROUND')
 	texture:SetAllPoints(LogItem[i])
-
 	LogItem[i].texture = texture
-
 	LogItem[i]:SetHeight(log_height)
 	LogItem[i]:SetPoint('LEFT', NeP_AL.frame, 'LEFT')
 	LogItem[i]:SetPoint('RIGHT', NeP_AL.frame, 'RIGHT')
-
 	for k=1, 3 do
 		LogItem[i][k] = LogItem[i]:CreateFontString('itemA')
 		LogItem[i][k]:SetFont('Fonts\\ARIALN.TTF', log_height-3)
@@ -79,7 +65,6 @@ for i = 1, (log_items) do
 		LogItem[i][k]:SetShadowOffset(-1,-1)
 		LogItem[i][k]:SetPoint(headers[k][1], LogItem[i], headers[k][3], 0)
 	end
-
 	local position = ((i * log_height) * -1)
 	LogItem[i]:SetPoint('TOPLEFT', NeP_AL.frame, 'TOPLEFT', 0, position)
 end
