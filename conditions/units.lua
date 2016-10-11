@@ -309,7 +309,7 @@ NeP.DSL:Register("glyph", function()
 					return true
 				end
 			else
-				glyphName = GetSpellName(glyphId)
+				glyphName = NeP.Core:GetSpellName(glyphId)
 				if glyphName:find(spell) then
 					return true
 				end
