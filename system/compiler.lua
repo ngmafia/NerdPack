@@ -33,6 +33,7 @@ function NeP.Compiler.Spell(eval)
 	local arg1, args = ref.spell:match('(.+)%((.+)%)')
 	if args then ref.spell = arg1 end
 	ref.args = args
+	ref.icon = select(3,GetSpellInfo(ref.spell))
 	eval[1] = ref
 end
 

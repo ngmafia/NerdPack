@@ -63,6 +63,11 @@ local function CreateToggle(eval)
 	temp:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 end
 
+function NeP.Interface:UpdateIcon(key, icon)
+	if not Toggles[key] then return end
+	Toggles[key].texture:SetTexture(icon)
+end
+
 function NeP.Interface:AddToggle(eval)
 	tcount = tcount + 1
 	if Toggles[eval.key] then

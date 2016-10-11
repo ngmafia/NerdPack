@@ -6,5 +6,6 @@
 	<Script file="toggles.lua" />
 	<Script file="default_toggles.lua" />
 	<Script file="om.lua" />
+	<Script file="actionlog.lua" />
 
 </Ui>
