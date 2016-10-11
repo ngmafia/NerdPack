@@ -21,7 +21,6 @@ function NeP.Core:ClassColor(unit, type)
 	end
 	return d_color[type:lower()]
 end
-NeP.Color = NeP.Core:ClassColor('player', 'hex')-- Fix this
 
 function NeP.Core:Round(num, idp)
 	local mult = 10^(idp or 0)
@@ -106,3 +105,20 @@ function NeP.Core:GetSpellBookIndex(spell)
 		end
 	end
 end
+
+local Run_Cache = {}
+function NeP.Core:WhenInGame(name, func)
+	if Run_Cache then
+		Run_Cache[name] = func
+	else
+		func()
+	end
+end
+
+NeP.Listener:Add("NeP_CR2", "PLAYER_LOGIN", function()
+	NeP.Color = NeP.Core:ClassColor('player', 'hex')
+	for _, func in pairs(Run_Cache) do
+		func()
+	end
+	Run_Cache = nil
+end)

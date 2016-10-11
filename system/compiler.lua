@@ -30,7 +30,10 @@ function NeP.Compiler.Spell(eval)
 			ref.spell = ref.spell:sub(2)
 		end
 	end
-	ref.spell = NeP.Spells:Convert(ref.spell)
+	-- Some APIs only work after we'r in-game, so we delay.
+	NeP.Core:WhenInGame('Load CR', function()
+		ref.spell = NeP.Spells:Convert(ref.spell)
+	end)
 	local arg1, args = ref.spell:match('(.+)%((.+)%)')
 	if args then ref.spell = arg1 end
 	ref.args = args
@@ -38,19 +41,20 @@ function NeP.Compiler.Spell(eval)
 	eval[1] = ref
 end
 
-local fakeUnit = {
-	target = 'fake',
-	func = function()
-		return UnitExists('target') and 'target' or 'player'
-	end
-}
-
 function NeP.Compiler.Target(eval)
 	local ref = {}
 	if type(eval[3]) == 'string' then
 		ref.target = eval[3]
 	else
-		ref = fakeUnit
+		-- IsHarmfulSpell only works after we login, so we delay
+		ref.target = 'temp'
+		NeP.Core:WhenInGame(tostring(eval), function()
+			if IsHarmfulSpell(eval[1].spell) then
+				ref.target = 'target'
+			else
+				ref.target = 'player'
+			end
+		end)
 	end
 	if ref.target:find('.ground') then
 		ref.target = ref.target:sub(0,-8)
@@ -67,7 +71,6 @@ function NeP.Compiler.Compile(eval, name)
 			NeP.Compiler.Compile(spell[k], name)
 		end
 	else
-		NeP.Compiler.Target(eval)
 		if type(spell) == 'string' then
 			NeP.Compiler.Spell(eval)
 		elseif type(spell) == 'function' then
@@ -78,6 +81,7 @@ function NeP.Compiler.Compile(eval, name)
 		else
 			NeP.Core:Print('Found a issue compiling: '..name..' Spell cant be a '..type(spell))
 		end
+		NeP.Compiler.Target(eval)
 	end
 end
 
