@@ -34,7 +34,7 @@ local Immune = {
 }
 
 NeP.DSL:Register('state.purge', function(target, spell)
-	spell = GetSpellID(GetSpellName(spell))
+	spell = NeP.Core:GetSpellID(spell)
 	return LibDispellable:CanDispelWith(target, spell)
 end)
 

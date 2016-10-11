@@ -45,7 +45,7 @@ NeP.DSL:Register('casting.delta', function(target, spell)
 
 NeP.DSL:Register('channeling', function (target, spell)
 	local name, startTime, endTime, notInterruptible = checkChanneling(target)
-	local spell = GetSpellName(spell)
+	local spell = NeP.Core:GetSpellName(spell)
 	if spell and (name == spell) then
 		return true
 	end
@@ -54,7 +54,7 @@ end)
 
 NeP.DSL:Register('casting', function(target, spell)
 	local name, startTime, endTime, notInterruptible = checkCasting(target)
-	local spell = GetSpellName(spell)
+	local spell = NeP.Core:GetSpellName(spell)
 	if spell and (name == spell) then
 		return true
 	end
