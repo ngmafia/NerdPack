@@ -2292,7 +2292,7 @@ end
 function NeP.Spells:Convert(spell)
 	if not spell then return end
 	if spell:find('%d') then
-		spell = GetSpellInfo(spell)
+		spell = GetSpellInfo(spell) or spell
 	end
 	if SpellsTable and SpellsTable[spell] then
 		spell = SpellsTable[spell]

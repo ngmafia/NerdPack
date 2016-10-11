@@ -5,7 +5,8 @@ NeP.Compiler = {}
 local spellTokens = {
 	{'actions', '^%%'},
 	{'lib', '^@'},
-	{'macro', '^/'}
+	{'macro', '^/'},
+	{'item', '^#'}
 }
 
 -- Takes a string a produces a table in its place
