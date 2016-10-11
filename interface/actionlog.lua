@@ -27,20 +27,17 @@ ActionLogHeader:SetHeight(log_height)
 ActionLogHeader:SetPoint('TOPLEFT', NeP_AL.frame, 'TOPLEFT')
 ActionLogHeader:SetPoint('TOPRIGHT', NeP_AL.frame, 'TOPRIGHT')
 
-ActionLogHeader.statusTextA = ActionLogHeader:CreateFontString('NeP_ALHeaderText')
-ActionLogHeader.statusTextA:SetFont('Fonts\\ARIALN.TTF', log_height-3)
-ActionLogHeader.statusTextA:SetPoint('LEFT', ActionLogHeader, 5, 0)
-ActionLogHeader.statusTextA:SetText('|cfffdcc00Action')
-
-ActionLogHeader.statusTextB = ActionLogHeader:CreateFontString('NeP_ALHeaderText')
-ActionLogHeader.statusTextB:SetFont('Fonts\\ARIALN.TTF', log_height-3)
-ActionLogHeader.statusTextB:SetPoint('LEFT', ActionLogHeader, 130, 0)
-ActionLogHeader.statusTextB:SetText('|cfffdcc00Description')
-
-ActionLogHeader.statusTextC = ActionLogHeader:CreateFontString('NeP_ALHeaderText')
-ActionLogHeader.statusTextC:SetFont('Fonts\\ARIALN.TTF', log_height-3)
-ActionLogHeader.statusTextC:SetPoint('RIGHT', ActionLogHeader, -25, 0)
-ActionLogHeader.statusTextC:SetText('|cfffdcc00Time')
+local headers = {
+	{'LEFT', 'Action', 5},
+	{'CENTER', 'Description', 0},
+	{'RIGHT', 'Time', -25}
+}
+for i=1, 3 do
+	ActionLogHeader.statusTextA = ActionLogHeader:CreateFontString('NeP_ALHeaderText')
+	ActionLogHeader.statusTextA:SetFont('Fonts\\ARIALN.TTF', log_height-3)
+	ActionLogHeader.statusTextA:SetPoint(headers[i][1], ActionLogHeader, headers[i][3], 0)
+	ActionLogHeader.statusTextA:SetText('|cff'..NeP.Color..headers[i][2])
+end
 
 NeP_AL.frame:SetScript('OnMouseWheel', function(self, mouse)
 	local top = #Data - log_items
@@ -63,7 +60,7 @@ NeP_AL.frame:SetScript('OnMouseWheel', function(self, mouse)
 		end
 	end
 
-	NeP.ActionLog.update()
+	NeP.ActionLog:Update()
 end)
 
 local LogItem = { }
