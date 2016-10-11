@@ -36,6 +36,9 @@ function NeP.CR:Add(SpecID, Name, InCombat, OutCombat, ExeOnLoad, GUI)
 		CRs[SpecID][Name].Exe = ExeOnLoad
 		CRs[SpecID][Name][true] = InCombat
 		CRs[SpecID][Name][false] = OutCombat
+	else
+		-- Unload every cr not needed
+		SpecID, Name, InCombat, OutCombat, ExeOnLoad, GUI = nil
 	end
 end
 
@@ -49,6 +52,8 @@ function NeP.CR:Set(Spec, Name)
 	end
 	self.CR = CRs[Spec][Name]
 	NeP.Config:Write('SELECTED', Spec, Name)
+	NeP.Interface:SetCheckedCR(Name)
+	NeP.Interface:ResetToggles()
 	if self.CR.Exe then
 		self.CR.Exe()
 	end
@@ -67,6 +72,35 @@ function NeP.CR:GetList(Spec)
 	end
 	return result
 end
+
+local function BuildCRs(Spec, Last)
+	local CrList = NeP.CR:GetList(Spec)
+	for i=1, #CrList do
+		local Name = CrList[i]
+		NeP.Interface:AddCR(Spec, Name, (Name == Last))
+	end
+end
+
+local function SetCR()
+	local Spec = GetSpecializationInfo(GetSpecialization())
+	local englishClass  = select(2, UnitClass('player'))
+	local a, b = englishClass:sub(1, 1):upper(), englishClass:sub(2):lower()
+	local classCR = '[NeP] '..a..b..' - Basic'
+	local last = NeP.Config:Read('SELECTED', Spec, classCR)
+	BuildCRs(Spec, last)
+	NeP.CR:Set(Spec, last)
+end
+
+NeP.Listener:Add("NeP_CR", "PLAYER_LOGIN", function()
+	SetCR()
+	NeP.Spells:Filter()
+end)
+
+NeP.Listener:Add("NeP_CR", "PLAYER_SPECIALIZATION_CHANGED", function(unitID)
+	if unitID ~= 'player' then return end
+	NeP.Interface:ResetCRs()
+	SetCR()
+end)
 
 --Globals
 NeP.Globals.CR = {

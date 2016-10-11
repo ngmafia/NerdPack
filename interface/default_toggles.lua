@@ -38,7 +38,3 @@ function NeP.Interface:DefaultToggles()
 		self:AddToggle(dToggles[i])
 	end
 end
-
-NeP.Listener:Add("NeP_TOGGLES", "PLAYER_LOGIN", function(...)
-	NeP.Interface:DefaultToggles()
-end)

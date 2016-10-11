@@ -51,8 +51,6 @@ function NeP.Interface:AddCR(Spec, Name, checked)
 		text = Name,
 		checked = checked,
 		func = function()
-			NeP.Interface:SetCheckedCR(Name)
-			NeP.Interface:ResetToggles()
 			NeP.CR:Set(Spec, Name)
 		end
 	})
