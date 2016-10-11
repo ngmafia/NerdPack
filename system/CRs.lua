@@ -33,6 +33,7 @@ function NeP.CR:Add(SpecID, Name, InCombat, OutCombat, ExeOnLoad, GUI)
 		if GUI then NeP.CR:AddGUI(Name, GUI) end
 
 		CRs[SpecID][Name] = {}
+		CRs[SpecID][Name].Name = Name
 		CRs[SpecID][Name].Exe = ExeOnLoad
 		CRs[SpecID][Name][true] = InCombat
 		CRs[SpecID][Name][false] = OutCombat

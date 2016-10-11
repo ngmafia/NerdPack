@@ -189,9 +189,9 @@ NeP.DSL:Register('gcd', function()
 	return math.floor((1.5 / ((GetHaste() / 100) + 1)) * 10^3 ) / 10^3
 end)
 
-NeP.DSL:Register('UI', function(_, key)
-	local SelectedCR = NeP.Interface.GetSelectedCR().Name
-	return NeP.Interface.fetchKey(SelectedCR, key)
+NeP.DSL:Register('UI', function(key, UI_key)
+	local UI_key = UI_key or NeP.CR.CR.Name
+	return NeP.Config:Read(UI_key, key)
 end)
 
 NeP.DSL:Register('haste', function(unit)
