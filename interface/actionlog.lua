@@ -23,7 +23,7 @@ NeP_AL:Hide()
 
 local headers = {
 	{'TOPLEFT', 'Action', 5},
-	{'TOP', 'Description', 0},
+	{'TOPLEFT', 'Description', 130},
 	{'TOPRIGHT', 'Time', -25}
 }
 for i=1, 3 do
@@ -32,7 +32,6 @@ for i=1, 3 do
 	NeP_AL.header:SetPoint(headers[i][1], NeP_AL.frame, headers[i][3], 0)
 	NeP_AL.header:SetText('|cff'..NeP.Color..headers[i][2])
 end
-headers = nil
 
 NeP_AL.frame:SetScript('OnMouseWheel', function(self, mouse)
 	local top = #Data - log_items
@@ -73,23 +72,13 @@ for i = 1, (log_items) do
 	LogItem[i]:SetPoint('LEFT', NeP_AL.frame, 'LEFT')
 	LogItem[i]:SetPoint('RIGHT', NeP_AL.frame, 'RIGHT')
 
-	LogItem[i].itemA = LogItem[i]:CreateFontString('itemA')
-	LogItem[i].itemA:SetFont('Fonts\\ARIALN.TTF', log_height-3)
-	LogItem[i].itemA:SetShadowColor(0,0,0, 0.8)
-	LogItem[i].itemA:SetShadowOffset(-1,-1)
-	LogItem[i].itemA:SetPoint('LEFT', LogItem[i], 5, 0)
-
-	LogItem[i].itemB = LogItem[i]:CreateFontString('itemA')
-	LogItem[i].itemB:SetFont('Fonts\\ARIALN.TTF', log_height-3)
-	LogItem[i].itemB:SetShadowColor(0,0,0, 0.8)
-	LogItem[i].itemB:SetShadowOffset(-1,-1)
-	LogItem[i].itemB:SetPoint('LEFT', LogItem[i], 130, 0)
-
-	LogItem[i].itemC = LogItem[i]:CreateFontString('itemA')
-	LogItem[i].itemC:SetFont('Fonts\\ARIALN.TTF', log_height-3)
-	LogItem[i].itemC:SetShadowColor(0,0,0, 0.8)
-	LogItem[i].itemC:SetShadowOffset(-1,-1)
-	LogItem[i].itemC:SetPoint('RIGHT', LogItem[i], -5, 0)
+	for k=1, 3 do
+		LogItem[i][k] = LogItem[i]:CreateFontString('itemA')
+		LogItem[i][k]:SetFont('Fonts\\ARIALN.TTF', log_height-3)
+		LogItem[i][k]:SetShadowColor(0,0,0, 0.8)
+		LogItem[i][k]:SetShadowOffset(-1,-1)
+		LogItem[i][k]:SetPoint(headers[k][1], LogItem[i], headers[k][3], 0)
+	end
 
 	local position = ((i * log_height) * -1)
 	LogItem[i]:SetPoint('TOPLEFT', NeP_AL.frame, 'TOPLEFT', 0, position)
@@ -122,9 +111,9 @@ function NeP.ActionLog:Add(type, spell, icon, target)
 end
 
 function NeP.ActionLog:UpdateRow(row, a, b, c)
-	LogItem[row].itemA:SetText(a)
-	LogItem[row].itemB:SetText(b)
-	LogItem[row].itemC:SetText(c)
+	LogItem[row][1]:SetText(a)
+	LogItem[row][2]:SetText(b)
+	LogItem[row][3]:SetText(c)
 end
 
 function NeP.ActionLog:Update()
