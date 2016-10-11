@@ -174,7 +174,7 @@ NeP.ClassTable = {
 	},
 	{ -- Monk
 		hex = '00ff96',
-		rgb = {r = 0,1,0.59},
+		rgb = {0,1,0.59},
 		[268] = {
 			range = 'melee',
 			name = 'Brewmaster',
