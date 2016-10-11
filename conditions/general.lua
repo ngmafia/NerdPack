@@ -97,10 +97,7 @@ NeP.DSL:Register('spell.usable', function(_, spell)
 end)
 
 NeP.DSL:Register('spell.exists', function(_, spell)
-	if GetSpellBookIndex(spell) then
-		return true
-	end
-	return false
+	return NeP.Core:GetSpellBookIndex(spell) ~= nil
 end)
 
 NeP.DSL:Register('spell.charges', function(_, spell)
@@ -116,7 +113,7 @@ NeP.DSL:Register('spell.count', function(_, spell)
 end)
 
 NeP.DSL:Register('spell.range', function(target, spell)
-	local spellIndex, spellBook = GetSpellBookIndex(spell)
+	local spellIndex, spellBook = NeP.Core:GetSpellBookIndex(spell)
 	if not spellIndex then return false end
 	return spellIndex and IsSpellInRange(spellIndex, spellBook, target)
 end)
