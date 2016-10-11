@@ -18,26 +18,21 @@ local NeP_AL = NeP.Interface:BuildGUI({
 	title = '',
 	subtitle = ''
 })
-NeP_AL:Hide()
 NeP.Interface:Add('ActionLog', function() NeP_AL:Show() end)
-
-local ActionLogHeader = CreateFrame('Frame', nil, NeP_AL.frame)
-ActionLogHeader:SetFrameLevel(92)
-ActionLogHeader:SetHeight(log_height)
-ActionLogHeader:SetPoint('TOPLEFT', NeP_AL.frame, 'TOPLEFT')
-ActionLogHeader:SetPoint('TOPRIGHT', NeP_AL.frame, 'TOPRIGHT')
+NeP_AL:Hide()
 
 local headers = {
-	{'LEFT', 'Action', 5},
-	{'CENTER', 'Description', 0},
-	{'RIGHT', 'Time', -25}
+	{'TOPLEFT', 'Action', 5},
+	{'TOP', 'Description', 0},
+	{'TOPRIGHT', 'Time', -25}
 }
 for i=1, 3 do
-	ActionLogHeader.statusTextA = ActionLogHeader:CreateFontString('NeP_ALHeaderText')
-	ActionLogHeader.statusTextA:SetFont('Fonts\\ARIALN.TTF', log_height-3)
-	ActionLogHeader.statusTextA:SetPoint(headers[i][1], ActionLogHeader, headers[i][3], 0)
-	ActionLogHeader.statusTextA:SetText('|cff'..NeP.Color..headers[i][2])
+	NeP_AL.header = NeP_AL.content:CreateFontString('NeP_ALHeaderText')
+	NeP_AL.header:SetFont('Fonts\\ARIALN.TTF', log_height-3)
+	NeP_AL.header:SetPoint(headers[i][1], NeP_AL.frame, headers[i][3], 0)
+	NeP_AL.header:SetText('|cff'..NeP.Color..headers[i][2])
 end
+headers = nil
 
 NeP_AL.frame:SetScript('OnMouseWheel', function(self, mouse)
 	local top = #Data - log_items

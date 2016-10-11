@@ -38,8 +38,8 @@ local addAction = function(...)
 	if spellName then
 		-- Add to action Log
 		if sourceGUID == playerGUID then
-			--local icon = select(3, GetSpellInfo(spellName))
-			--NeP.ActionLog.insert('Spell Cast Succeed', spellName, icon, destName)
+			local icon = select(3, GetSpellInfo(spellName))
+			NeP.ActionLog:Add('Spell Cast Succeed', spellName, icon, destName)
 		end
 		addToData(sourceGUID)
 		Data[sourceGUID].lastcast = spellName
