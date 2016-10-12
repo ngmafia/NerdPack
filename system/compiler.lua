@@ -33,6 +33,8 @@ function NeP.Compiler.Spell(eval)
 	-- Some APIs only work after we'r in-game, so we delay.
 	NeP.Core:WhenInGame('Load CR', function()
 		ref.spell = NeP.Spells:Convert(ref.spell)
+		local bookid, _type = NeP.Core:GetSpellBookIndex(ref.spell)
+		ref.bookid, ref.type = bookid, _type
 	end)
 	local arg1, args = ref.spell:match('(.+)%((.+)%)')
 	if args then ref.spell = arg1 end
@@ -49,7 +51,7 @@ function NeP.Compiler.Target(eval)
 		-- IsHarmfulSpell only works after we login, so we delay
 		ref.target = 'temp'
 		NeP.Core:WhenInGame(tostring(eval), function()
-			if IsHarmfulSpell(eval[1].spell) ~= false then
+			if IsHarmfulSpell(eval.bookid, eval.type) then
 				ref.target = 'target'
 			else
 				ref.target = 'player'
