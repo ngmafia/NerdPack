@@ -73,7 +73,7 @@ function NeP.Parser.Parse(eval)
 						return true
 					end
 					if spell.interrupts then
-						if cname == spell.spell and (endtime > 0 and endtime < 1) then
+						if cname == spell.spell or (endtime > 0 and endtime < 1) then
 							return true
 						end
 						SpellStopCasting()
