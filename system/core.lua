@@ -28,11 +28,17 @@ function NeP.Core:Round(num, idp)
 end
 
 function NeP.Core:GetSpellID(spell)
-	if not spell or type(spell) == 'number' then return spell end
-	local spellID = GetSpellLink(spell):match("spell:(%d+)")
-	if spellID then
-		return tonumber(spellID)
+	local _type = type(spell)
+	if not spell then
+		return
+	elseif _type == 'string' and spell:find('^%d') then
+		return tonumber(spell)
 	end
+	local spellID = GetSpellLink(spell)
+	if spellID then
+		return tonumber(spellID:match("spell:(%d+)"))
+	end
+	return spell
 end
 
 function NeP.Core:GetSpellName(spell)
