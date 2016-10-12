@@ -33,11 +33,11 @@ function NeP.Compiler.Spell(eval)
 	-- Some APIs only work after we'r in-game, so we delay.
 	NeP.Core:WhenInGame(function()
 		ref.spell = NeP.Spells:Convert(ref.spell)
+		ref.icon = select(3,GetSpellInfo(ref.spell))
 	end)
 	local arg1, args = ref.spell:match('(.+)%((.+)%)')
 	if args then ref.spell = arg1 end
 	ref.args = args
-	ref.icon = select(3,GetSpellInfo(ref.spell))
 	eval[1] = ref
 end
 
