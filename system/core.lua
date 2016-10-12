@@ -107,9 +107,10 @@ function NeP.Core:GetSpellBookIndex(spell)
 end
 
 local Run_Cache = {}
-function NeP.Core:WhenInGame(name, func)
+function NeP.Core:WhenInGame(func)
 	if Run_Cache then
-		Run_Cache[name] = func
+		print(func)
+		Run_Cache[#Run_Cache+1] = func
 	else
 		func()
 	end
@@ -117,8 +118,8 @@ end
 
 NeP.Listener:Add("NeP_CR2", "PLAYER_LOGIN", function()
 	NeP.Color = NeP.Core:ClassColor('player', 'hex')
-	for _, func in pairs(Run_Cache) do
-		func()
+	for i=1, #Run_Cache do
+		Run_Cache[i]()
 	end
 	Run_Cache = nil
 end)

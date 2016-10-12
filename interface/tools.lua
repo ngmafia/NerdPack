@@ -431,7 +431,7 @@ function NeP.Interface:BuildGUI(eval)
 	parent:SetEventListener('OnDragStop', function(self, event, left, top)
 		NeP.Config:Write(eval.key, 'Location', {left, top})
 	end)
-	NeP.Core:WhenInGame(tostring(eval), function()
+	NeP.Core:WhenInGame(function()
 		local left, top = unpack(NeP.Config:Read(eval.key, 'Location', {500, 500}))
 		parent.settings.left = left
 		parent.settings.top = top

@@ -31,10 +31,8 @@ function NeP.Compiler.Spell(eval)
 		end
 	end
 	-- Some APIs only work after we'r in-game, so we delay.
-	NeP.Core:WhenInGame('Load CR', function()
+	NeP.Core:WhenInGame(function()
 		ref.spell = NeP.Spells:Convert(ref.spell)
-		local bookid, _type = NeP.Core:GetSpellBookIndex(ref.spell)
-		ref.bookid, ref.type = bookid, _type
 	end)
 	local arg1, args = ref.spell:match('(.+)%((.+)%)')
 	if args then ref.spell = arg1 end

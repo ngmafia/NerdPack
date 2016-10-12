@@ -76,7 +76,6 @@ function NeP.Parser.Parse(eval)
 						if cname == spell.spell and (endtime > 0 and endtime < 1) then
 							return true
 						end
-						print(cname, spell.spell)
 						SpellStopCasting()
 					end
 					eval.func(spell.spell, target.target)
