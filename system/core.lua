@@ -109,7 +109,6 @@ end
 local Run_Cache = {}
 function NeP.Core:WhenInGame(func)
 	if Run_Cache then
-		print(func)
 		Run_Cache[#Run_Cache+1] = func
 	else
 		func()
