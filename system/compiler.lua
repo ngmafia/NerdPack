@@ -43,20 +43,19 @@ function NeP.Compiler.Spell(eval)
 	eval[1] = ref
 end
 
+local fake_unit = {
+	target = 'fake',
+	func = function()
+		return UnitExists('target') and 'target' or 'player'
+	end
+}
+
 function NeP.Compiler.Target(eval)
 	local ref = {}
 	if type(eval[3]) == 'string' then
 		ref.target = eval[3]
 	else
-		-- IsHarmfulSpell only works after we login, so we delay
-		ref.target = 'temp'
-		NeP.Core:WhenInGame(tostring(eval), function()
-			if IsHarmfulSpell(eval[1].bookid, eval[1].type) then
-				ref.target = 'target'
-			else
-				ref.target = 'player'
-			end
-		end)
+		ref = fake_unit
 	end
 	if ref.target:find('.ground') then
 		ref.target = ref.target:sub(0,-8)
