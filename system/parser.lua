@@ -29,7 +29,8 @@ function NeP.Parser.Target(eval)
 	if eval.func then
 		eval.target = eval.func()
 	end
-	if UnitExists(eval.target) and UnitIsVisible(eval.target) then
+	local unit = NeP.FakeUnits:Filter(eval.target)
+	if UnitExists(unit) and UnitIsVisible(unit) then
 		return true
 	end
 end

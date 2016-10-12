@@ -82,7 +82,7 @@ local function ProcessCondition(Strg, Spell)
 	-- Process Unit Stuff
 	local unitID, rest = strsplit('.', Strg, 2)
 	local target =  'player' -- default target
-	unitID =  NeP.FakeUnits.Filter(unitID)
+	unitID =  NeP.FakeUnits:Filter(unitID)
 	if unitID and UnitExists(unitID) then
 		target = unitID
 		Strg = rest

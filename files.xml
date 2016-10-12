@@ -30,5 +30,6 @@
 	<Script file="system\om.lua" />
 	<Script file="system\healing.lua" />
 	<Script file="commands.lua" />
+	<Script file="fakeunits.lua" />
 
 </Ui>
