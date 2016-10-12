@@ -58,7 +58,10 @@ function NeP.OM:Add(Obj)
 	end
 end
 
-C_Timer.NewTicker(1, NeP.OM.Garbage, nil)
+C_Timer.NewTicker(1, (function()
+	NeP.OM.Maker()
+	NeP.OM.Garbage()
+end), nil)
 
 -- Gobals
 NeP.Globals.OM = {

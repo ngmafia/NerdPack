@@ -26,8 +26,8 @@
 	<Script file="system\parser.lua" />
 	<Script file="system\fakeunits.lua" />
 	<Include file="rotations\files.xml" />
-	<Include file="protected\files.xml" />
 	<Script file="system\om.lua" />
+	<Include file="protected\files.xml" />
 	<Script file="system\healing.lua" />
 	<Script file="commands.lua" />
 	<Script file="fakeunits.lua" />

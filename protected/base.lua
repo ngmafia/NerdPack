@@ -37,19 +37,17 @@ NeP.Protected.LineOfSight = function (a, b)
 end
 
 local ValidUnits = {'player', 'mouseover', 'target', 'arena1', 'arena2'}
-C_Timer.NewTicker(1, (function()
-	-- If in Group scan frames...
+NeP.OM.Maker = function()
+		-- If in Group scan frames...
 	if IsInGroup() or IsInRaid() then
 		local prefix = (IsInRaid() and 'raid') or 'party'
 		for i = 1, GetNumGroupMembers() do
 			-- Unit
 			local friendly = prefix..i
-			if GenericFilter(friendly) then
-				NeP.OM:Add(friendly)
-				-- Unit's Target
-				local target = friendly..'target'
-				NeP.OM:Add(target)
-			end
+			NeP.OM:Add(friendly)
+			-- Unit's Target
+			local target = friendly..'target'
+			NeP.OM:Add(target)
 		end
 	end
 	-- Valid Units
@@ -57,4 +55,4 @@ C_Timer.NewTicker(1, (function()
 		local object = ValidUnits[i]
 		NeP.OM:Add(object)
 	end
-end), nil)
+end
