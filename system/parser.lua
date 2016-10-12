@@ -68,7 +68,10 @@ function NeP.Parser.Parse(eval)
 						return true
 					end
 					if spell.interrupts then
-						SpellStopCasting()
+						local name, _,_,_,_, endTime = UnitChannelInfo('player')
+						if name ~= spell.spell and endTime > 1 then
+							SpellStopCasting()
+						end
 					end
 					eval.func(spell.spell, target.target)
 					NeP.ActionLog:Add('Parser', spell.spell, spell.icon, target.target)
