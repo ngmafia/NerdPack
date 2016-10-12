@@ -14,10 +14,14 @@ end
 
 local function castingTime()
 	local time = GetTime()
-	local a_endTime = select(6,UnitCastingInfo("player"))
-	if a_endTime then return (a_endTime/1000 )-time end
-	local b_endTime = select(6,UnitChannelInfo("player"))
-	if b_endTime then return (b_endTime/1000)-time end
+	local name, _,_,_,_, endTime = UnitCastingInfo("player")
+	if endTime then
+		return (endTime/1000)-time, name
+	end
+	local name, _,_,_,_, endTime = UnitChannelInfo("player")
+	if endTime then
+		return (endTime/1000)-time, name
+	end
 	return 0
 end
 
@@ -56,9 +60,10 @@ end
 
 function NeP.Parser.Parse(eval)
 	local spell, cond, target = eval[1], eval[2], eval[3]
+	local endtime, cname = castingTime()
 	if not spell.spell then
 		NeP.Parser.Table(spell, cond)
-	elseif spell.bypass or (castingTime('player') == 0) then
+	elseif spell.bypass or endtime == 0 then
 		--print('start', spell.spell)
 		if NeP.Parser.Target(target) then
 			if spell.token == 'func' or NeP.Parser.Spell(eval) then
@@ -68,10 +73,11 @@ function NeP.Parser.Parse(eval)
 						return true
 					end
 					if spell.interrupts then
-						local name, _,_,_,_, endTime = UnitChannelInfo('player')
-						if name and name ~= spell.spell and endTime > 1 then
-							SpellStopCasting()
+						if cname == spell.spell and (endtime > 0 and endtime < 1) then
+							return true
 						end
+						print(cname, spell.spell)
+						SpellStopCasting()
 					end
 					eval.func(spell.spell, target.target)
 					NeP.ActionLog:Add('Parser', spell.spell, spell.icon, target.target)
