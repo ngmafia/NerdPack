@@ -64,11 +64,9 @@ function NeP.Parser.Parse(eval)
 	if not spell.spell then
 		NeP.Parser.Table(spell, cond)
 	elseif spell.bypass or endtime == 0 then
-		--print('start', spell.spell)
 		if NeP.Parser.Target(target) then
 			if spell.token == 'func' or NeP.Parser.Spell(eval) then
 				if NeP.DSL.Parse(cond, spell.spell) then
-					--print('final', spell.spell)
 					if eval.breaks then
 						return true
 					end
@@ -94,7 +92,6 @@ C_Timer.NewTicker(0.1, (function()
 		if not UnitIsDeadOrGhost('player') and IsMountedCheck() then
 			local table = NeP.CR.CR[InCombatLockdown()]
 			for i=1, #table do
-				--print('--------------------- ', i)
 				if NeP.Parser.Parse(table[i]) then break end
 			end
 		end
