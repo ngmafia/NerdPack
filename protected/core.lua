@@ -21,7 +21,7 @@ C_Timer.NewTicker(0.2, (function()
 			-- Extras
 			if unlocker.extended then
 				for name, func in pairs(unlocker.extended) do
-					NeP.Protected[name] = fn
+					NeP.Protected[name] = func
 				end
 			end
 			-- Basic here
