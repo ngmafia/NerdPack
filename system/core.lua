@@ -29,7 +29,7 @@ end
 
 function NeP.Core:GetSpellID(spell)
 	if not spell or type(spell) == 'number' then return spell end
-	local spellID = self:GetSpellLink(spell):match("spell:(%d+)")
+	local spellID = GetSpellLink(spell):match("spell:(%d+)")
 	if spellID then
 		return tonumber(spellID)
 	end
