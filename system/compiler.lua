@@ -5,7 +5,6 @@ NeP.Compiler = {}
 local spellTokens = {
 	{'actions', '^%%'},
 	{'lib', '^@'},
-	{'macro', '^/'},
 	{'item', '^#'}
 }
 
@@ -22,6 +21,9 @@ function NeP.Compiler.Spell(eval)
 	if ref.spell:find('^&') then
 		ref.bypass = true
 		ref.spell = ref.spell:sub(2)
+	end
+	if ref.spell:find('^/') then
+		ref.token = ref.spell:sub(1,1)
 	end
 	for i=1, #spellTokens do
 		local kind, patern = unpack(spellTokens[i])
