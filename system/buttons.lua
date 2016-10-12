@@ -1,3 +1,5 @@
+local _, NeP = ...
+
 NeP.Buttons = {}
 
 local nBars = {
@@ -26,10 +28,10 @@ local function UpdateButtons()
 	end
 end
 
-NeP.Listener.register('PLAYER_ENTERING_WORLD', function ()
+NeP.Listener:Add('NeP_Buttons','PLAYER_ENTERING_WORLD', function ()
 	UpdateButtons()
 end)
 
-NeP.Listener.register('ACTIONBAR_SLOT_CHANGED', function ()
+NeP.Listener:Add('NeP_Buttons','ACTIONBAR_SLOT_CHANGED', function ()
 	UpdateButtons()
 end)

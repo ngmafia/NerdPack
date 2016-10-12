@@ -1,8 +1,18 @@
-NeP.DSL = {
-	Conditions = {}
-}
+local _, NeP = ...
 
 local DSL = NeP.DSL
+
+local function string_split(string, delimiter)
+	local result, from = {}, 1
+	local delim_from, delim_to = string.find(string, delimiter, from)
+	while delim_from do
+		table.insert( result, string.sub(string, from , delim_from-1))
+		from = delim_to + 1
+		delim_from, delim_to = string.find(string, delimiter, from)
+	end
+	table.insert(result, string.sub(string, from))
+	return result
+end
 
 local OPs = {
 	['>='] = function(arg1, arg2) return arg1 >= arg2 end,
@@ -72,7 +82,7 @@ local function ProcessCondition(Strg, Spell)
 	-- Process Unit Stuff
 	local unitID, rest = strsplit('.', Strg, 2)
 	local target =  'player' -- default target
-	unitID =  NeP.FakeUnits.Filter(unitID)
+	unitID =  NeP.FakeUnits:Filter(unitID)
 	if unitID and UnitExists(unitID) then
 		target = unitID
 		Strg = rest
@@ -80,14 +90,16 @@ local function ProcessCondition(Strg, Spell)
 	-- Condition arguments
 	local Args = Strg:match('%((.+)%)')
 	if Args then 
-		Args = NeP.Locale.Spells(Args) -- Translates the name to the correct locale
+		if Args:find('^%a') then
+			Args = NeP.Spells:Convert(Args) -- Translates the name to the correct locale
+		end
 		Strg = Strg:gsub('%((.+)%)', '')
 	else
 		Args = Spell
 	end
 	Strg = Strg:gsub('%s', '')
 	-- Process the Condition itself
-	local Condition = DSL.Get(Strg)
+	local Condition = DSL:Get(Strg)
 	if Condition then return Condition(target, Args) end
 end
 
@@ -96,14 +108,14 @@ local function Comperatores(Strg, Spell)
 	local OP = ''
 	for Token in Strg:gmatch('[><=~]') do OP = OP..Token end
 	if Strg:find('!=') then OP = '!=' end
-	local arg1, arg2 = unpack(NeP.string_split(Strg, OP))
+	local arg1, arg2 = unpack(string_split(Strg, OP))
 	arg1, arg2 = DSL.Parse(arg1, Spell), DSL.Parse(arg2, Spell)
 	return DoMath(arg1, arg2, (fOps[OP] or OP))
 end
 
 local function StringMath(Strg, Spell)
 	local OP, total = Strg:match('[/%*%+%-]'), 0
-	local tempT = NeP.string_split(Strg, OP)
+	local tempT = string_split(Strg, OP)
 	for i=1, #tempT do
 		local Strg = DSL.Parse(tempT[i], Spell)
 		if total == 0 then
@@ -185,40 +197,12 @@ local typesTable = {
 	['boolean']	 = function(dsl, Spell) return dsl end,
 }
 
-local Deprecated_Warn = {}
-local function Deprecated(Strg)
-	if Deprecated_Warn[Strg] then
-		NeP.Core.Print(Strg..' Was deprecated, use: '..Deprecated_Warn[Strg].replace..'instead.')
-		Deprecated_Warn[Strg] = nil
-	end
+function NeP.DSL.Parse(dsl, Spell)
+	return typesTable[type(dsl)](dsl, Spell)
 end
 
-function DSL.Get(Strg)
-	Strg = Strg:lower()
-	if DSL.Conditions[Strg] then
-		Deprecated(Strg)
-		return DSL.Conditions[Strg]
-	end
-end
-
-function DSL.RegisterConditon(name, condition, overwrite)
-	local name = name:lower()
-	if not DSL.Conditions[name] or overwrite then
-		DSL.Conditions[name] = condition
-	end
-end
-
-function DSL.RegisterConditon_Deprecated(name, replace, condition, overwrite)
-	name = name:lower()
-	DSL.RegisterConditon(name, condition, overwrite)
-	if not Deprecated_Warn[name] then
-		Deprecated_Warn[name] = {}
-		Deprecated_Warn[name].replace = replace
-	end
-end
-
-function DSL.Parse(dsl, Spell)
-	if typesTable[type(dsl)] then
-		return typesTable[type(dsl)](dsl, Spell)
-	end
-end
+NeP.Globals.DSL = {
+	Get = NeP.DSL.Get,
+	Register = NeP.DSL.Register,
+	Parse = NeP.DSL.Parse
+}

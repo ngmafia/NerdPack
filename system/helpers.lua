@@ -1,3 +1,5 @@
+local _, NeP = ...
+
 NeP.Helpers = {}
 
 local spellHasFailed = {}
@@ -53,9 +55,9 @@ function NeP.Helpers.SpellSanity(spell, target)
 	return true
 end
 
-NeP.Listener.register("UI_ERROR_MESSAGE", function(error)
+NeP.Listener:Add("NeP_Helpers", "UI_ERROR_MESSAGE", function(error)
 	if not UI_Erros[error] then return end
-	local unit, spell = NeP.Engine.lastTarget, NeP.Engine.lastCast
+	local unit, spell = NeP.Parser.lastTarget, NeP.Parser.lastCast
 	if unit and spell then
 		local GUID = UnitGUID(unit)
 		if GUID then
