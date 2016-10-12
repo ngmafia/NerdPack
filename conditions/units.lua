@@ -107,11 +107,11 @@ NeP.DSL:Register("alive", function(target)
 end)
 
 NeP.DSL:Register("behind", function(target)
-	return not NeP.Protected:Infront('player', target)
+	return not NeP.Protected.Infront('player', target)
 end)
 
 NeP.DSL:Register("infront", function(target)
-	return NeP.Protected:Infront('player', target)
+	return NeP.Protected.Infront('player', target)
 end)
 
 local movingCache = { }
@@ -239,11 +239,11 @@ NeP.DSL:Register("class", function (target, expectedClass)
 end)
 
 NeP.DSL:Register("inMelee", function(target)
-	return NeP.Protected.UnitAttackRange('player', target, 'melee')
+	return NeP.Protected.UnitCombatRange('player', target) <= 1.5
 end)
 
 NeP.DSL:Register("inRanged", function(target)
-	return NeP.Protected.UnitAttackRange('player', target, 'ranged')
+	return NeP.Protected.UnitCombatRange('player', target) <= 40
 end)
 
 NeP.DSL:Register("power.regen", function(target)

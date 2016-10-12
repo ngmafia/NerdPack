@@ -25,7 +25,7 @@ end
 function NeP.OM:Filter(ref, GUID)
 	if not OM_c[ref][GUID] then return end
 	local key = OM_c[ref][GUID].key
-	local distance = NeP.Protected:Distance('player', Obj)
+	local distance = NeP.Protected.Distance('player', Obj)
 	OM_c[ref][GUID].distance = distance
 	return true
 end
@@ -34,7 +34,7 @@ function NeP.OM:Insert(ref, Obj)
 	local GUID = UnitGUID(Obj) or '0'
 	if self:Filter(ref, GUID) then return end
 	local ObjID = select(6, strsplit('-', GUID))
-	local distance = NeP.Protected:Distance('player', Obj)
+	local distance = NeP.Protected.Distance('player', Obj)
 	OM_c[ref][GUID] = {
 		key = Obj,
 		name = UnitName(Obj),
