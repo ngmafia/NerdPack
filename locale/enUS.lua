@@ -12,11 +12,14 @@ NeP.Locale.enUS = {
 		Cooldowns = 'Toggle Cooldowns ON or OFF',
 		AoE = 'Toggle AoE ON or OFF',
 		Settings = 'Settings',
-		HideNeP = 'Hide NerdPack',
-		OM = 'Units List',
-		AL = 'Action Log',
 		ChangeCR = 'Changed Combat Routine To:',
 		Donate = 'Donate To The Project',
 		Forum = 'Visit our forum'
 	},
+	OM = {
+		Option = 'Units List',
+	},
+	AL = {
+		Option = 'Action Log',
+	}
 }

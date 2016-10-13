@@ -13,10 +13,14 @@ NeP.Locale.ptBR = {
 		AoE = 'Alternar AoE ON ou OFF',
 		Settings = 'Configurações',
 		HideNeP = 'Esconder NerdPack',
-		OM = 'Lista de Unidades',
-		AL = 'Log de Ação',
 		ChangeCR = 'Mudou a rotina de combate a:',
 		Donate = 'Doar Para o Projecto',
 		Forum = 'Visite o nosso forum'
 	},
+	OM = {
+		Option = 'Lista de Unidades',
+	},
+	AL = {
+		Option = 'Log de Ação',
+	}
 }

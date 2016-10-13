@@ -2,6 +2,7 @@ local _, NeP = ...
 
 local Round = NeP.Core.Round
 local DiesalGUI = LibStub('DiesalGUI-1.0')
+local L = NeP.Locale
 
 local statusBars = {}
 local statusBarsUsed = {}
@@ -13,7 +14,7 @@ local parent = NeP.Interface:BuildGUI({
 	title = 'ObjectManager GUI'
 })
 parent:Hide()
-NeP.Interface:Add('ObjectManager', function() parent:Show() end)
+NeP.Interface:Add(L:TA('OM', 'Option'), function() parent:Show() end)
 
 local dOM = 'Enemy'
 local bt = {

@@ -34,7 +34,7 @@ function NeP.Interface:SetCheckedCR(Name)
 	for _,v in pairs(DropMenu[2].menuList) do
 		v.checked = Name == v.text
 	end
-	NeP.Core:Print('Loaded: '..Name)
+	NeP.Core:Print(L:TA('mainframe', 'ChangeCR')..' '..Name)
 end
 
 function NeP.Interface:AddCR_ST(Name)
