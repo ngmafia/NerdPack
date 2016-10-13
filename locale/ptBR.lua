@@ -26,6 +26,9 @@ NeP.Locale.ptBR = {
 		Dead = 'Mortos'
 	},
 	AL = {
-		Option = 'Log de Ação'
+		Option = 'Log de Ação',
+		Action = 'Ação',
+		Description = 'Descrição',
+		Time = 'Tempo'
 	}
 }

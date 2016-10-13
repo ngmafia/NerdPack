@@ -25,6 +25,9 @@ NeP.Locale.enUS = {
 		Dead = 'Dead'
 	},
 	AL = {
-		Option = 'Action Log'
+		Option = 'Action Log',
+		Action = 'Action',
+		Description = 'Description',
+		Time = 'Time'
 	}
 }

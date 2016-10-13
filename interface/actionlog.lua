@@ -3,6 +3,7 @@ local n_name, NeP = ...
 NeP.ActionLog = {}
 
 local Data = {}
+local L = NeP.Locale
 
 local log_height = 16
 local log_items = 10
@@ -15,10 +16,8 @@ local NeP_AL = NeP.Interface:BuildGUI({
 	key = 'NeP_ALFrame',
 	width = 460,
 	height = abs_height,
-	title = '',
-	subtitle = ''
 })
-NeP.Interface:Add('ActionLog', function() NeP_AL:Show() end)
+NeP.Interface:Add(L:TA('AL', 'Option'), function() NeP_AL:Show() end)
 NeP_AL:Hide()
 
 local headers = {
@@ -30,7 +29,7 @@ for i=1, 3 do
 	NeP_AL.header = NeP_AL.content:CreateFontString('NeP_ALHeaderText')
 	NeP_AL.header:SetFont('Fonts\\ARIALN.TTF', log_height-3)
 	NeP_AL.header:SetPoint(headers[i][1], NeP_AL.frame, headers[i][3], 0)
-	NeP_AL.header:SetText('|cff'..NeP.Color..headers[i][2])
+	NeP_AL.header:SetText('|cff'..NeP.Color..L:TA('AL', headers[i][2]))
 end
 
 NeP_AL.frame:SetScript('OnMouseWheel', function(self, mouse)
