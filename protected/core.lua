@@ -31,7 +31,7 @@ function NeP.Protected.SetUnlocker(name, unlocker)
 end
 
 C_Timer.NewTicker(0.2, (function()
-	if NeP.Unlocked then return end
+	if NeP.Unlocked or not NeP.DSL:Get('toggle')(nil, 'mastertoggle') then return end
 	for name, unlocker in pairs(unlockers) do
 		if unlocker.test() then
 			NeP.Protected.SetUnlocker(name, unlocker)
