@@ -8,5 +8,6 @@
 	<Script file="class.lua" />
 	<Script file="states.lua" />
 	<Script file="deprecated.lua" />
+	<Script file="artifacts.lua" />
 	
 </Ui>
