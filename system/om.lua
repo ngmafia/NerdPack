@@ -13,6 +13,8 @@ function NeP.OM:Garbage()
 		for GUID, obj in pairs(OM_c[tb]) do
 			if not UnitExists(obj.key) then
 				OM_c[tb][GUID] = nil
+			elseif tb ~= 'Dead' and UnitIsDeadOrGhost(Obj.key) then
+				OM_c[tb][GUID] = nil
 			end
 		end 
 	end
@@ -25,7 +27,7 @@ end
 function NeP.OM:Filter(ref, GUID)
 	local obj = OM_c[ref][GUID]
 	if not obj or not UnitExists(obj.key) then return end
-	local distance = NeP.Protected.Distance('player', obj.key)
+	obj.distance = NeP.Protected.Distance('player', obj.key)
 	return true
 end
 
