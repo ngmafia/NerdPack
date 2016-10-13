@@ -328,7 +328,7 @@ NeP.DSL:Register('onehand', function()
 end)
 
 local matchs = {'dummy', 'training bag'}
-NeP.DSL:Register('isdummy', function()
+NeP.DSL:Register('isdummy', function(unit)
 	if not UnitExists(unit) then return end
 	if UnitName(unit):lower():find('dummy') then return true end
 	return NeP.Tooltip:Unit(unit, matchs)
