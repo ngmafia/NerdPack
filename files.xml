@@ -6,6 +6,7 @@
 	
 	<!-- Core -->
 	<Script file="NerdPack.lua" />
+	<include file="locale\files.xml" />
 	<include file="tables\files.xml" />
 	<include file="system\files.xml" />
 	<Include file="interface\files.xml" />
