@@ -14,7 +14,9 @@ NeP.Locale.enUS = {
 		Settings = 'Settings',
 		ChangeCR = 'Changed Combat Routine To:',
 		Donate = 'Donate To The Project',
-		Forum = 'Visit our forum'
+		Forum = 'Visit our forum',
+		CRS = 'Combat Routines',
+		CRS_ST = 'Combat Routines Settings'
 	},
 	OM = {
 		Option = 'Units List',

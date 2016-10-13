@@ -22,8 +22,8 @@ menuFrame:Hide()
 
 local DropMenu = {
 	{text = logo..'['..n_name..' |rv:'..NeP.Version..']', isTitle = 1, notCheckable = 1},
-	{text = "Combat Routines:", hasArrow = true, menuList = {}},
-	{text = "Combat Routines Settings:", hasArrow = true, menuList = {}}
+	{text = L:TA('mainframe', 'CRS'), hasArrow = true, menuList = {}},
+	{text = L:TA('mainframe', 'CRS_ST'), hasArrow = true, menuList = {}}
 }
 
 function NeP.Interface:ResetCRs()

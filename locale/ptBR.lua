@@ -15,7 +15,9 @@ NeP.Locale.ptBR = {
 		HideNeP = 'Esconder NerdPack',
 		ChangeCR = 'Mudou a rotina de combate a:',
 		Donate = 'Doar Para o Projecto',
-		Forum = 'Visite o nosso forum'
+		Forum = 'Visite o nosso forum',
+		CRS = 'Rotinas de combat',
+		CRS_ST = 'Configurações de routinas'
 	},
 	OM = {
 		Option = 'Lista de Unidades',
