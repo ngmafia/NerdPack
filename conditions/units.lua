@@ -340,6 +340,7 @@ NeP.DSL:Register("area.enemies", function(unit, distance)
 	if not UnitExists(unit) then return total end
 	for GUID, Obj in pairs(NeP.OM:Get('Enemy')) do
 		if NeP.DSL:Get('combat')(Obj.key)
+		and not UnitIsDeadOrGhost(Obj.key)
 		and NeP.Protected.Distance(unit, Obj.key) <= tonumber(distance) then
 			total = total +1
 		end

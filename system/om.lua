@@ -23,10 +23,9 @@ function NeP.OM:Get(ref)
 end
 
 function NeP.OM:Filter(ref, GUID)
-	if not OM_c[ref][GUID] then return end
-	local key = OM_c[ref][GUID].key
-	local distance = NeP.Protected.Distance('player', Obj)
-	OM_c[ref][GUID].distance = distance
+	local obj = OM_c[ref][GUID]
+	if not obj or not UnitExists(obj.key) then return end
+	local distance = NeP.Protected.Distance('player', obj.key)
 	return true
 end
 
