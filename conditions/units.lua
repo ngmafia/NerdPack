@@ -327,6 +327,7 @@ NeP.DSL:Register('onehand', function()
 	return IsEquippedItemType("One-Hand")
 end)
 
+local matchs = {'dummy', 'training bag'}
 NeP.DSL:Register('isdummy', function()
 	if not UnitExists(unit) then return end
 	if UnitName(unit):lower():find('dummy') then return true end
