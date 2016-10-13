@@ -24,13 +24,13 @@ NeP.DSL:Register('toggle', function(_, toggle)
 end)
 
 NeP.DSL:Register('casting.percent', function(target, spell)
-	local name, startTime, endTime, notInterruptible = checkCasting(target)
-	if name and not notInterruptible then
-		local castLength = (endTime - startTime) / 1000
-		local secondsLeft = endTime / 1000  - GetTime()
-		return ((secondsLeft/castLength)*100)
-	end
-	return 0
+    local name, startTime, endTime, notInterruptible = checkCasting(target)
+    if name and not notInterruptible then
+        local castLength = (endTime - startTime) / 1000
+        local secondsDone = GetTime() - (startTime / 1000)
+        return ((secondsDone/castLength)*100)
+    end
+    return 0
 end)
 
 NeP.DSL:Register('casting.delta', function(target, spell)
