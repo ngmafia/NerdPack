@@ -18,7 +18,7 @@
 	<Script file="parser.lua" />
 	<Script file="queuer.lua" />
 	<Script file="fakeunits.lua" />
-	<Script file="healing.lua" />
 	<Script file="om.lua" />
+	<Script file="healing.lua" />
 
 </Ui>

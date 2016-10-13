@@ -91,9 +91,10 @@ C_Timer.NewTicker(0.1, (function()
 	NeP.Faceroll:Hide()
 	if NeP.DSL:Get('toggle')(nil, 'mastertoggle') then
 		if not UnitIsDeadOrGhost('player') and IsMountedCheck() then
+			if NeP.Queuer:Execute() then return end
 			local table = NeP.CR.CR[InCombatLockdown()]
 			for i=1, #table do
-				if NeP.Parser.Parse(table[i]) then break end
+				if NeP.Parser.Parse(table[i]) then return end
 			end
 		end
 	end
