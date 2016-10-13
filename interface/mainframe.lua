@@ -13,7 +13,7 @@ NeP.Interface.MainFrame:SetEventListener('OnClose', function(self)
 	NeP.Core:Print(L:TA('Any', 'NeP_Show'))
 end)
 
-local menuFrame = CreateFrame("Frame", nil, NeP.Interface.MainFrame.frame, "UIDropDownMenuTemplate")
+local menuFrame = CreateFrame("Frame", 'NeP_DropDown', NeP.Interface.MainFrame.frame, "UIDropDownMenuTemplate")
 menuFrame:SetPoint("BOTTOMLEFT", NeP.Interface.MainFrame.frame, "BOTTOMLEFT", 0, 0)
 menuFrame:Hide()
 
