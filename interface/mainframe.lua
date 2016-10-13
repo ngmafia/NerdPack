@@ -13,10 +13,7 @@ NeP.Interface.MainFrame:SetEventListener('OnClose', function(self)
 	NeP.Core:Print(L:TA('Any', 'NeP_Show'))
 end)
 
-NeP.Globals.Show = function() NeP.Interface.MainFrame:Show() end
-NeP.Globals.Hide = function() NeP.Interface.MainFrame:Hide() end
-
-local menuFrame = CreateFrame("Frame", "ExampleMenuFrame", NeP.Interface.MainFrame.frame, "UIDropDownMenuTemplate")
+local menuFrame = CreateFrame("Frame", nil, NeP.Interface.MainFrame.frame, "UIDropDownMenuTemplate")
 menuFrame:SetPoint("BOTTOMLEFT", NeP.Interface.MainFrame.frame, "BOTTOMLEFT", 0, 0)
 menuFrame:Hide()
 
@@ -70,3 +67,5 @@ function NeP.Interface:Add(name, func)
 end
 
 NeP.Globals.Interface.Add = NeP.Interface.Add
+NeP.Globals.Show = function() NeP.Interface.MainFrame:Show() end
+NeP.Globals.Hide = function() NeP.Interface.MainFrame:Hide() end
