@@ -1,6 +1,7 @@
 local _, NeP = ...
 
 NeP.Listener = {}
+NeP.Globals.Listener = NeP.Listener
 
 local listeners = {}
 
