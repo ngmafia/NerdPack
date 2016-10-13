@@ -18,8 +18,11 @@ NeP.Locale.enUS = {
 	},
 	OM = {
 		Option = 'Units List',
+		Friendly = 'Friendly\'s',
+		Enemy = 'Enemies',
+		Dead = 'Dead'
 	},
 	AL = {
-		Option = 'Action Log',
+		Option = 'Action Log'
 	}
 }

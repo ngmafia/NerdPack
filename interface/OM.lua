@@ -30,7 +30,7 @@ for k,v in pairs(bt) do
 	bt[k].frame:SetSize(parent.content:GetWidth()/3, 30)
 	bt[k]:AddStyleSheet(NeP.UI.buttonStyleSheet)
 	bt[k]:SetEventListener("OnClick", function() dOM = v.b end)
-	bt[k]:SetText(v.b)
+	bt[k]:SetText(L:TA('OM', v.b))
 end
 
 local ListWindow = DiesalGUI:Create('ScrollFrame')

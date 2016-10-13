@@ -19,8 +19,11 @@ NeP.Locale.ptBR = {
 	},
 	OM = {
 		Option = 'Lista de Unidades',
+		Friendly = 'Amigáveis',
+		Enemy = 'Enemigos',
+		Dead = 'Mortos'
 	},
 	AL = {
-		Option = 'Log de Ação',
+		Option = 'Log de Ação'
 	}
 }
