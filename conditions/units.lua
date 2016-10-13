@@ -148,35 +148,28 @@ NeP.DSL:Register("lastmoved", function(target)
 end)
 
 NeP.DSL:Register("movingfor", function(target)
-	if target == 'player' then
-		if NeP.Listener.locals.moving then
-			return GetTime() - NeP.Listener.locals.movingTime
-		end
-		return false
-	else
-		if UnitExists(target) then
-			local guid = UnitGUID(target)
-			if movingCache[guid] then
-				local moving = (GetUnitSpeed(target) > 0)
-				if not movingCache[guid].moving then
-					movingCache[guid].last = GetTime()
-					movingCache[guid].moving = (GetUnitSpeed(target) > 0)
-					return false
-				elseif moving then
-					return GetTime() - movingCache[guid].last
-				elseif not moving then
-					movingCache[guid].moving = false
-					return false
-				end
-			else
-				movingCache[guid] = { }
+	if UnitExists(target) then
+		local guid = UnitGUID(target)
+		if movingCache[guid] then
+			local moving = (GetUnitSpeed(target) > 0)
+			if not movingCache[guid].moving then
 				movingCache[guid].last = GetTime()
 				movingCache[guid].moving = (GetUnitSpeed(target) > 0)
 				return false
+			elseif moving then
+				return GetTime() - movingCache[guid].last
+			elseif not moving then
+				movingCache[guid].moving = false
+				return false
 			end
+		else
+			movingCache[guid] = { }
+			movingCache[guid].last = GetTime()
+			movingCache[guid].moving = (GetUnitSpeed(target) > 0)
+			return false
 		end
-		return false
 	end
+	return false
 end)
 
 NeP.DSL:Register("friend", function(target)
