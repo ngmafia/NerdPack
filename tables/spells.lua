@@ -2280,7 +2280,7 @@ function NeP.Spells:Filter()
 		for spell_name_enus, spell_id in pairs(SpellID[class_id]) do
 			local localized_spell = GetSpellInfo(spell_id)
 			if localized_spell then
-				SpellsTable[spell_name_enus] = spell_id
+				SpellsTable[spell_name_enus] = localized_spell
 			end
 		end
 	else
