@@ -7,7 +7,7 @@ NeP.Locale.zhCN = {
         OFF = '禁用'
     },
     mainframe = {
-        MasterToggle = '鼠标左键：启用/禁用\n鼠标右键：查看设置\nControl + 鼠标右键：移动',
+        MasterToggle = '鼠标左键：启用/禁用\n鼠标右键：查看设置',
         Interrupts = '开启/关闭自动打断',
         Cooldowns = '开启/关闭自动使用CD技能',
         AoE = '开启/关闭AOE模式',
