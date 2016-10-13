@@ -1,5 +1,6 @@
 local _, NeP = ...
 local mainframe = NeP.Interface.MainFrame
+local L = NeP.Locale
 
 local ButtonsSize = 40
 local ButtonsPadding = 2
@@ -32,7 +33,7 @@ local function OnClick(self, func, button)
 end
 
 local function OnEnter(self, name, text)
-	local OnOff = self.actv and 'ON' or 'OFF'
+	local OnOff = self.actv and L:TA('Any', 'ON') or L:TA('Any', 'OFF')
 	GameTooltip:SetOwner(self, "ANCHOR_TOP")
 	GameTooltip:AddDoubleLine(name, OnOff)
 	if text then

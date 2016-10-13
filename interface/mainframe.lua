@@ -1,5 +1,6 @@
 local n_name, NeP = ...
 local logo = '|T'..NeP.Media..'logo.blp:10:10|t'
+local L = NeP.Locale
 
 NeP.Interface.MainFrame = NeP.Interface:BuildGUI({
 	key = 'NePMFrame',
@@ -9,7 +10,7 @@ NeP.Interface.MainFrame = NeP.Interface:BuildGUI({
 	subtitle = 'v:'..NeP.Version
 })
 NeP.Interface.MainFrame:SetEventListener('OnClose', function(self)
-	NeP.Core:Print('To show '..n_name..' again execute: /run NeP:Show()')
+	NeP.Core:Print(L:TA('Any', 'NeP_Show'))
 end)
 
 NeP.Globals.Show = function() NeP.Interface.MainFrame:Show() end

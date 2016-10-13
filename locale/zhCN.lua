@@ -2,7 +2,7 @@ local n_name, NeP = ...
 
 NeP.Locale.zhCN = {
     Any = {
-        NeP_Show = '输入以下命令显示 NerdPack：\n/nep show',
+        NeP_Show = '输入以下命令显示 '..n_name..'：\n/nep show',
         ON = '启用',
         OFF = '禁用'
     },

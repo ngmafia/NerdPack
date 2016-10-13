@@ -2,7 +2,7 @@ local n_name, NeP = ...
 
 NeP.Locale.enUS = {
 	Any = {
-		NeP_Show = 'To Display NerdPack Execute: \n/nep show',
+		NeP_Show = 'To Display '..n_name..' Execute: \n/nep show',
 		ON = 'ON',
 		OFF = 'OFF'
 	},

@@ -2,7 +2,7 @@ local n_name, NeP = ...
 
 NeP.Locale.ruRU = {
 	Any = {
-		NeP_Show = 'Для отображения окна введите: \n/nep show',
+		NeP_Show = 'Для отображения '..n_name..' введите: \n/nep show',
 		ON = 'ВКЛ',
 		OFF = 'ВЫКЛ'
 	},
