@@ -13,7 +13,7 @@ function NeP.OM:Garbage()
 		for GUID, obj in pairs(OM_c[tb]) do
 			if not UnitExists(obj.key) then
 				OM_c[tb][GUID] = nil
-			elseif tb ~= 'Dead' and UnitIsDeadOrGhost(Obj.key) then
+			elseif tb ~= 'Dead' and UnitIsDeadOrGhost(obj.key) then
 				OM_c[tb][GUID] = nil
 			end
 		end 
