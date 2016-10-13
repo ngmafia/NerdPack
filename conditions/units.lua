@@ -114,37 +114,31 @@ NeP.DSL:Register("infront", function(target)
 	return NeP.Protected.Infront('player', target)
 end)
 
-local movingCache = { }
+local movingCache = {}
+
 NeP.DSL:Register("lastmoved", function(target)
-	if target == 'player' then
-		if not NeP.Listener.locals.moving then
-			return GetTime() - NeP.Listener.locals.movingTime
-		end
-		return false
-	else
-		if UnitExists(target) then
-			local guid = UnitGUID(target)
-			if movingCache[guid] then
-				local moving = (GetUnitSpeed(target) > 0)
-				if not movingCache[guid].moving and moving then
-					movingCache[guid].last = GetTime()
-					movingCache[guid].moving = true
-					return false
-				elseif moving then
-					return false
-				elseif not moving then
-					movingCache[guid].moving = false
-					return GetTime() - movingCache[guid].last
-				end
-			else
-				movingCache[guid] = { }
+	if UnitExists(target) then
+		local guid = UnitGUID(target)
+		if movingCache[guid] then
+			local moving = (GetUnitSpeed(target) > 0)
+			if not movingCache[guid].moving and moving then
 				movingCache[guid].last = GetTime()
-				movingCache[guid].moving = (GetUnitSpeed(target) > 0)
+				movingCache[guid].moving = true
 				return false
+			elseif moving then
+				return false
+			elseif not moving then
+				movingCache[guid].moving = false
+				return GetTime() - movingCache[guid].last
 			end
+		else
+			movingCache[guid] = { }
+			movingCache[guid].last = GetTime()
+			movingCache[guid].moving = (GetUnitSpeed(target) > 0)
+			return false
 		end
-		return false
 	end
+	return false
 end)
 
 NeP.DSL:Register("movingfor", function(target)
