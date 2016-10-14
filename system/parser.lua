@@ -26,11 +26,13 @@ local function castingTime()
 end
 
 function NeP.Parser.Target(eval)
-	if eval.func then
-		eval.target = eval.func()
+	local target = eval[3]
+	if not target then return end
+	if target.func then
+		target.target = target.func()
 	end
-	local unit = NeP.FakeUnits:Filter(eval.target)
-	if UnitExists(unit) and UnitIsVisible(unit) then
+	eval.target = NeP.FakeUnits:Filter(target.target)
+	if UnitExists(eval.target) and UnitIsVisible(eval.target) then
 		return true
 	end
 end
@@ -65,7 +67,7 @@ function NeP.Parser.Parse(eval)
 	if not spell.spell then
 		NeP.Parser.Table(spell, cond)
 	elseif spell.bypass or endtime == 0 then
-		if NeP.Parser.Target(target) then
+		if NeP.Parser.Target(eval) then
 			if spell.token == 'func' or NeP.Parser.Spell(eval) then
 				if NeP.DSL.Parse(cond, spell.spell) then
 					if eval.breaks then
@@ -77,9 +79,9 @@ function NeP.Parser.Parse(eval)
 						end
 						SpellStopCasting()
 					end
-					eval.func(spell.spell, target.target)
+					eval.func(spell.spell, eval.target)
 					NeP.LastCast = spell.spell
-					NeP.ActionLog:Add('Parser', spell.spell, spell.icon, target.target)
+					NeP.ActionLog:Add('Parser', spell.spell, spell.icon, eval.target)
 					NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
 					return true
 				end
