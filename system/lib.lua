@@ -21,5 +21,5 @@ function NeP.Library:Parse(Strg)
 		return loadstring('return NeP.library.libs.'..Strg)()
 	end
 	local a, b = strsplit(".", Strg, 2)
-	return NeP.library.libs[a][b]()
+	return libs[a][b]()
 end
