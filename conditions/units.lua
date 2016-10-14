@@ -250,11 +250,10 @@ end)
 
 NeP.DSL:Register("lastcast", function(Unit, Spell)
 	spell = GetSpellInfo(Spell)
-	local lastcast = NeP.CombatTracker.LastCast(Unit)
 	if UnitIsUnit('player', Unit) then
 		return NeP.LastCast == spell
 	end
-	return lastcast == spell
+	return NeP.CombatTracker:LastCast(Unit) == spell
 end)
 
 NeP.DSL:Register("mounted", function()

@@ -59,7 +59,7 @@ local EVENTS = {
 	['SPELL_CAST_SUCCESS'] = function(...) addAction(...) end
 }
 
-function NeP.CombatTracker.LastCast(Unit)
+function NeP.CombatTracker:LastCast(Unit)
 	local GUID = UnitGUID(Unit)
 	return Data[GUID] and Data[GUID].lastcast
 end
