@@ -30,25 +30,21 @@ NeP.DSL:Register('boss', function (target)
 	local classification = UnitClassification(target)
 	if UnitClsf[classification] then
 		return UnitClsf[classification] >= 3
-	elseif LibBoss.BossIDs[UnitID(target)] then
-		return true
 	end
-	return false
+	return LibBoss.BossIDs[NeP.Core:UnitID(target)] ~= nil
 end)
 
 NeP.DSL:Register('elite', function (target)
 	local classification = UnitClassification(target)
 	if UnitClsf[classification] then
 		return UnitClsf[classification] >= 2
-	elseif LibBoss.BossIDs[UnitID(target)] then
-		return true
 	end
-	return false
+	return LibBoss.BossIDs[NeP.Core:UnitID(target)] ~= nil
 end)
 
 NeP.DSL:Register("id", function(target, id)
 	local expectedID = tonumber(id)
-	return expectedID and UnitID(target) == expectedID
+	return expectedID and NeP.Core:UnitID(target) == expectedID
 end)
 
 NeP.DSL:Register("threat", function(target)
