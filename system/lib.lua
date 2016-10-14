@@ -17,10 +17,9 @@ function NeP.Library:Fetch(name)
 end
 
 function NeP.Library:Parse(Strg)
-	if evaluation:sub(-1) == ')' then
-		return loadstring('return NeP.library.libs.'..evaluation)()
-	else
-		local a, b = strsplit(".", evaluation, 2)
-		return NeP.library.libs[a][b]()
+	if Strg:sub(-1) == ')' then
+		return loadstring('return NeP.library.libs.'..Strg)()
 	end
+	local a, b = strsplit(".", Strg, 2)
+	return NeP.library.libs[a][b]()
 end
