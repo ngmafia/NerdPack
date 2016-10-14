@@ -17,11 +17,10 @@ function NeP.Library:Fetch(name)
 end
 
 function NeP.Library:Parse(Strg)
-	local a, b = strsplit(".", Strg, 2)
-	if not libs[a] then return end
-	local args = b:match('%((.+)%)')
-	if args then 
-		b = b:gsub('%((.+)%)', '')
+	if evaluation:sub(-1) == ')' then
+		return loadstring('return NeP.library.libs.'..evaluation)()
+	else
+		local a, b = strsplit(".", evaluation, 2)
+		return NeP.library.libs[a][b]()
 	end
-	return libs[a][b](args)
 end
