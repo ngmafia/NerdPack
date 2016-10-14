@@ -249,8 +249,12 @@ NeP.DSL:Register('swimming', function ()
 end)
 
 NeP.DSL:Register("lastcast", function(Unit, Spell)
+	spell = GetSpellInfo(Spell)
 	local lastcast = NeP.CombatTracker.LastCast(Unit)
-	return lastcast == GetSpellInfo(Spell)
+	if UnitIsUnit('player', Unit) then
+		return NeP.LastCast == spell
+	end
+	return lastcast == spell
 end)
 
 NeP.DSL:Register("mounted", function()

@@ -36,12 +36,12 @@ local addAction = function(...)
 	local timestamp, _,_, sourceGUID, sourceName,_,_, destGUID, destName,_,_, spellId, spellName = ...
 	local playerGUID = UnitGUID('player')
 	if spellName then
+		addToData(sourceGUID)
 		-- Add to action Log
 		if sourceGUID == playerGUID then
 			local icon = select(3, GetSpellInfo(spellName))
 			NeP.ActionLog:Add('Spell Cast Succeed', spellName, icon, destName)
 		end
-		addToData(sourceGUID)
 		Data[sourceGUID].lastcast = spellName
 	end
 end
