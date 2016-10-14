@@ -8,7 +8,7 @@ local libs = {}
 
 function NeP.Library:Add(name, lib)
 	if not libs[name] then
-		libs[name] = setmetatable({}, {__index=lib})
+		libs[name] = lib
 	end
 end
 
@@ -18,5 +18,10 @@ end
 
 function NeP.Library:Parse(Strg)
 	local a, b = strsplit(".", Strg, 2)
-	return libs[a][b]()
+	if not libs[a] then return end
+	local args = b:match('%((.+)%)')
+	if args then 
+		b = b:gsub('%((.+)%)', '')
+	end
+	return libs[a][b](args)
 end
