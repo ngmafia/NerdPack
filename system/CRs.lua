@@ -18,6 +18,16 @@ function NeP.CR:AddGUI(key, eval)
 	NeP.Interface:AddCR_ST(key)
 end
 
+function NeP.CR:Wipe(eval)
+	for i=1,#eval do
+		if type(eval[i]) == 'table' then
+			self:Wipe(eval[i])
+		end
+		eval[i] = nil
+	end
+	eval = nil
+end
+
 function NeP.CR:Add(SpecID, Name, InCombat, OutCombat, ExeOnLoad, GUI)
 	local classIndex = select(3, UnitClass('player'))
 	if NeP.ClassTable[classIndex][SpecID] or classIndex == SpecID then
@@ -39,6 +49,8 @@ function NeP.CR:Add(SpecID, Name, InCombat, OutCombat, ExeOnLoad, GUI)
 		CRs[SpecID][Name][false] = OutCombat
 	else
 		-- Unload every cr not needed
+		NeP.CR:Wipe(InCombat)
+		NeP.CR:Wipe(OutCombat)
 		SpecID, Name, InCombat, OutCombat, ExeOnLoad, GUI = nil
 	end
 end
