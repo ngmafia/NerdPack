@@ -40,4 +40,4 @@ C_Timer.NewTicker(0.2, (function()
 	end
 end), nil)
 
-NeP.Globals.Protected = NeP.Protected
+NeP.Globals.AddUnlocker = NeP.Protected.AddUnlocker
