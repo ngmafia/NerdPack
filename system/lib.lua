@@ -16,10 +16,11 @@ function NeP.Library:Fetch(name)
 	return libs[name]
 end
 
-function NeP.Library:Parse(Strg)
-	if Strg:sub(-1) == ')' then
-		return loadstring('return NeP.library.libs.'..Strg)()
+function NeP.Library:Parse(strg, args)
+	args = NeP.Core:string_split(args, ',')
+	local a, b = strsplit(".", strg, 2)
+	if type(args) == 'table' then
+		return libs[a][b](unpack(args))
 	end
-	local a, b = strsplit(".", Strg, 2)
-	return libs[a][b]()
+	return libs[a][b](args)
 end

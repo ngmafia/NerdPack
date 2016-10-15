@@ -2,7 +2,7 @@ local _, NeP = ...
 
 local DSL = NeP.DSL
 
-local function string_split(string, delimiter)
+function NeP.Core:string_split(string, delimiter)
 	local result, from = {}, 1
 	local delim_from, delim_to = string.find(string, delimiter, from)
 	while delim_from do
@@ -12,6 +12,14 @@ local function string_split(string, delimiter)
 	end
 	table.insert(result, string.sub(string, from))
 	return result
+end
+
+local function pArgs(Strg)
+	local Args = Strg:match('%((.+)%)')
+	if Args then 
+		Strg = Strg:gsub('%((.+)%)', '')
+	end
+	return Strg, Args
 end
 
 local OPs = {
@@ -26,7 +34,7 @@ local OPs = {
 	['/'] = function(arg1, arg2) return arg1 / arg2 end,
 	['*'] = function(arg1, arg2) return arg1 * arg2 end,
 	['!'] = function(arg1, arg2) return not DSL.Parse(arg1, arg2) end,
-	['@'] = function(arg1, arg2) return NeP.Library:Parse(arg1) end,
+	['@'] = function(arg1, arg2) return NeP.Library:Parse(pArgs(arg1)) end,
 	['true'] = function() return true end,
 	['false'] = function() return false end,
 }
@@ -88,12 +96,11 @@ local function ProcessCondition(Strg, Spell)
 		Strg = rest
 	end
 	-- Condition arguments
-	local Args = Strg:match('%((.+)%)')
+	local Strg, Args = pArgs(Strg)
 	if Args then 
 		if Args:find('^%a') then
 			Args = NeP.Spells:Convert(Args) -- Translates the name to the correct locale
 		end
-		Strg = Strg:gsub('%((.+)%)', '')
 	else
 		Args = Spell
 	end
@@ -108,14 +115,14 @@ local function Comperatores(Strg, Spell)
 	local OP = ''
 	for Token in Strg:gmatch('[><=~]') do OP = OP..Token end
 	if Strg:find('!=') then OP = '!=' end
-	local arg1, arg2 = unpack(string_split(Strg, OP))
+	local arg1, arg2 = unpack(NeP.Core:string_split(Strg, OP))
 	arg1, arg2 = DSL.Parse(arg1, Spell), DSL.Parse(arg2, Spell)
 	return DoMath(arg1, arg2, (fOps[OP] or OP))
 end
 
 local function StringMath(Strg, Spell)
 	local OP, total = Strg:match('[/%*%+%-]'), 0
-	local tempT = string_split(Strg, OP)
+	local tempT = NeP.Core:string_split(Strg, OP)
 	for i=1, #tempT do
 		local Strg = DSL.Parse(tempT[i], Spell)
 		if total == 0 then

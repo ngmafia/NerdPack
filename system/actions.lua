@@ -77,7 +77,7 @@ end
 NeP.Actions['@'] = function(eval)
 	eval.breaks = false
 	if NeP.DSL.Parse(eval[2]) then
-		if NeP.Library:Parse(eval[1].spell) then
+		if NeP.Library:Parse(eval[1].spell, eval[1].args) then
 			eval.breaks = true
 			return true
 		end
