@@ -4,7 +4,7 @@ NeP.Core = {}
 NeP.Globals.Core = NeP.Core
 
 function NeP.Core:Print(...)
-	print('[|cff'..NeP.Color..'NeP|r]: ', ...)
+	print('[|cff'..NeP.Color..'NeP|r]', ...)
 end
 
 local d_color = {
