@@ -11,6 +11,7 @@ NeP.FakeUnits:Add('lowest', function(num, role)
 			}
 		end
 	end
+	table.sort( tempTable, function(a,b) return a.prio > b.prio end )
 	return tempTable[num] and tempTable[num].key
 end)
 
@@ -25,5 +26,6 @@ NeP.FakeUnits:Add('tank', function(num)
 			}
 		end
 	end
+	table.sort( tempTable, function(a,b) return a.prio > b.prio end )
 	return tempTable[num] and tempTable[num].key
 end)
