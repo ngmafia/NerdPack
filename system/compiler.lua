@@ -80,7 +80,7 @@ function NeP.Compiler.Compile(eval, name)
 			eval.func = spell
 			eval[1] = ref
 		else
-			NeP.Core:Print('Found a issue compiling: '..name..' Spell cant be a '..type(spell))
+			NeP.Core:Print('Found a issue compiling:', name, 'Spell cant be a', type(spell))
 		end
 		NeP.Compiler.Target(eval)
 	end
