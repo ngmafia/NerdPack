@@ -17,7 +17,9 @@ function NeP.Library:Fetch(name)
 end
 
 function NeP.Library:Parse(strg, args)
-	args = NeP.Core:string_split(args, ',')
+	if args then
+		args = NeP.Core:string_split(args, ',')
+	end
 	local a, b = strsplit(".", strg, 2)
 	if type(args) == 'table' then
 		return libs[a][b](unpack(args))
