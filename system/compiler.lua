@@ -73,10 +73,12 @@ function NeP.Compiler.Compile(eval, name)
 		if type(spell) == 'string' then
 			NeP.Compiler.Spell(eval)
 		elseif type(spell) == 'function' then
-			spell = {
-				spell = spell,
+			local ref = {
+				spell = 'fake',
 				token = 'func'
 			}
+			eval.func = spell
+			eval[1] = ref
 		else
 			NeP.Core:Print('Found a issue compiling: '..name..' Spell cant be a '..type(spell))
 		end
