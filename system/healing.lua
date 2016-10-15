@@ -23,6 +23,10 @@ function NeP.Healing:GetRawHealth(unit)
 	return (UnitHealth(unit)-UnitGetTotalHealAbsorbs(unit)) or 0
 end
 
+function NeP.Healing:GetPredictedHealth(unit)
+	return UnitHealth(unit)-(UnitGetTotalHealAbsorbs(unit) or 0)+UnitGetIncomingHeals(unit)
+end
+
 function NeP.Healing:Add(Obj)
 	local Role = UnitGroupRolesAssigned(Obj.key)
 	local healthRaw = self:GetRawHealth(Obj.key)
@@ -36,6 +40,7 @@ function NeP.Healing:Add(Obj)
 		health = healthPercent,
 		healthRaw = healthRaw,
 		healthMax = maxHealth,
+		healthPredict = self:GetPredictedHealth(Obj.key),
 		distance = Obj.distance,
 		role = Role
 	}
@@ -72,19 +77,25 @@ C_Timer.NewTicker(0.25, (function()
 end), nil)
 
 NeP.DSL:Register("health", function(target)
-	return math.floor((UnitHealth(target) / UnitHealthMax(target)) * 100)
+	local GUID = UnitGUID(target)
+	local Obj = Roster[GUID]
+	return Obj and Obj.health or math.floor((UnitHealth(target) / UnitHealthMax(target)) * 100)
 end)
 
 NeP.DSL:Register("health.actual", function(target)
-	return UnitHealth(target)
+	local GUID = UnitGUID(target)
+	local Obj = Roster[GUID]
+	return Obj and Obj.healthRaw or UnitHealth(target)
 end)
 
 NeP.DSL:Register("health.max", function(target)
-	return UnitHealthMax(target)
+	local GUID = UnitGUID(target)
+	local Obj = Roster[GUID]
+	return Obj and Obj.maxHealth or UnitHealthMax(target)
 end)
 
 NeP.DSL:Register("health.predicted", function(unit)
-	return UnitHealth(unit)-(UnitGetTotalHealAbsorbs(unit) or 0)+UnitGetIncomingHeals(unit)
+	return NeP.Healing:GetPredictedHealth(unit)
 end)
 
 NeP.Globals.OM.GetRoster = NeP.Healing.GetRoster
