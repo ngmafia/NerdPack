@@ -19,18 +19,18 @@ end
 
 local rangeCheck = LibStub("LibRangeCheck-2.0")
 NeP.Protected.Distance = function (a, b)
-	if UnitExists(b) then
-		local minRange, maxRange = rangeCheck:GetRange(b)
-		return maxRange or minRange
-	end
-	return 0
+	local minRange, maxRange = rangeCheck:GetRange(b)
+	return maxRange or minRange
 end
 
 NeP.Protected.Infront = function (a, b)
 	return true
 end
 
-NeP.Protected.UnitCombatRange = NeP.Protected.Distance
+NeP.Protected.UnitCombatRange = function (a, b)
+	local minRange, maxRange = rangeCheck:GetRange(b)
+	return minRange
+end
 
 NeP.Protected.LineOfSight = function (a, b)
 	return true
