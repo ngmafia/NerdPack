@@ -1,5 +1,5 @@
 local SpellID = {
-	{
+	{ -- Warrior
 		["Anger Management"] = 152278,
 		Attack = 88163,
 		Avatar = 107574,
@@ -180,7 +180,7 @@ local SpellID = {
 		["Wrecking Ball"] = 215569,
 		["Wrecking Crew"] = 198802
 	},
-	{
+	{ -- Padadin
 		Absolution = 212056,
 		["Aegis of Light"] = 204150,
 		["Ardent Defender"] = 31850,
@@ -385,7 +385,7 @@ local SpellID = {
 		["Wrath of the Ashbringer"] = 186945,
 		Zeal = 217020
 	},
-	{
+	{ -- Hunter
 		["A Murder of Crows"] = 206505,
 		["Aimed Shot"] = 19434,
 		["Ancient Zandalari Knowledge"] = 138430,
@@ -582,7 +582,7 @@ local SpellID = {
 		["Wing Clip"] = 195645,
 		["Wyvern Sting"] = 19386
 	},
-	{
+	{ -- Rouge
 		["Acrobatic Strikes"] = 196924,
 		["Adrenaline Rush"] = 13750,
 		["Agonizing Poison"] = 200802,
@@ -758,7 +758,7 @@ local SpellID = {
 		Weaponmaster = 193537,
 		["Wound Poison"] = 8679
 	},
-	{
+	{ -- Priest
 		Afterlife = 196707,
 		["Angelic Feather"] = 121536,
 		Apotheosis = 200183,
@@ -943,7 +943,7 @@ local SpellID = {
 		Voidform = 228264,
 		["Words of Healing"] = 196430
 	},
-	{
+	{ -- DeathKnight
 		["Abomination's Might"] = 207161,
 		["All Will Serve"] = 194916,
 		["All-Consuming Rot"] = 192464,
@@ -1145,7 +1145,7 @@ local SpellID = {
 		["Winter is Coming"] = 207170,
 		["Wraith Walk"] = 212552
 	},
-	{
+	{ -- Shamman
 		Aftershock = 210707,
 		["Alpha Wolf"] = 198434,
 		["Ancestral Guidance"] = 108281,
@@ -1329,7 +1329,7 @@ local SpellID = {
 		["Windfury Totem"] = 204332,
 		Windsong = 201898
 	},
-	{
+	{ -- Mage
 		["Aegwynn's Ascendance"] = 187680,
 		["Aegwynn's Fury"] = 187287,
 		["Aegwynn's Imperative"] = 187264,
@@ -1541,7 +1541,7 @@ local SpellID = {
 		["Words of Power"] = 205035,
 		["World in Flames"] = 203280
 	},
-	{
+	{ -- Warlock
 		["Absolute Corruption"] = 196103,
 		Agony = 980,
 		["Amplify Afflictions"] = 200290,
@@ -1706,7 +1706,7 @@ local SpellID = {
 		["Wreak Havoc"] = 196410,
 		["Writhe in Agony"] = 196102
 	},
-	{
+	{ -- Monk
 		Admonishment = 207025,
 		Afterlife = 116092,
 		["Ancient Mistweaver Arts"] = 209520,
@@ -1885,7 +1885,8 @@ local SpellID = {
 		["Zen Pilgrimage: Return"] = 126895,
 		["Zen Pulse"] = 124081
 	},
-	{
+	{ -- Druid
+		Trash = 106830,
 		Abundance = 207383,
 		["Adaptive Fur"] = 200850,
 		["Alpha Challenge"] = 207017,
@@ -2129,7 +2130,7 @@ local SpellID = {
 		Wildflesh = 200400,
 		["Ysera's Gift"] = 145108
 	},
-	{
+	{ -- Demon Hunter
 		["Abyssal Strike"] = 207550,
 		["Agonizing Flames"] = 207548,
 		["Aldrachi Design"] = 207343,
@@ -2303,7 +2304,7 @@ end
 
 local warned_spells = {}
 
-function NeP.Spells:Convert(spell)
+function NeP.Spells:Convert(spell, crname)
 	if not spell then return end
 	if spell:find('%d') then
 		spell = GetSpellInfo(spell) or spell
@@ -2312,7 +2313,7 @@ function NeP.Spells:Convert(spell)
 			spell = SpellsTable[spell]
 		elseif not warned_spells[spell] then
 			warned_spells[spell] = ''
-			NeP.Core:Print('Unale to convert:|cffff0000', spell, '|rMight be missing...')
+			NeP.Core:Print('Unale to convert:|cffff0000', spell, '|rMight be missing...\n|cffff0000-> In:|r', crname)
 		end
 	end
 	return spell

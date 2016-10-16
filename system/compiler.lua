@@ -35,7 +35,7 @@ function NeP.Compiler.Spell(eval, name)
 	-- Some APIs only work after we'r in-game, so we delay.
 	if not skip then
 		NeP.Core:WhenInGame(function()
-			ref.spell = NeP.Spells:Convert(ref.spell)
+			ref.spell = NeP.Spells:Convert(ref.spell, name)
 			ref.icon = select(3,GetSpellInfo(ref.spell))
 		end)
 	end
