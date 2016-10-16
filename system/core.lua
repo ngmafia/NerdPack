@@ -63,9 +63,9 @@ function NeP.Core:UnitID(unit)
 		local guid = UnitGUID(unit)
 		if guid then
 			local type, _, server_id,_,_, npc_id = strsplit("-", guid)
-			if type == "Player" then 
+			if type == "Player" then
 				return tonumber(server_id)
-			elseif npc_id then 
+			elseif npc_id then
 				return tonumber(npc_id)
 			end
 		end

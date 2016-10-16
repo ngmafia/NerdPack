@@ -1,5 +1,5 @@
 local inCombat = {
-	
+
 }
 
 local Keybinds = {

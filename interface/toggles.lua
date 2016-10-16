@@ -83,7 +83,7 @@ end
 function NeP.Interface:RefreshToggles()
 	mainframe.settings.width = tcount*(ButtonsSize+ButtonsPadding)-ButtonsPadding
 	mainframe.settings.height = ButtonsSize+18
-	
+
 	mainframe.settings.minHeight = mainframe.settings.height
 	mainframe.settings.minWidth = mainframe.settings.width
 	mainframe.settings.maxHeight = mainframe.settings.height

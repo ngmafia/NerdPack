@@ -5,7 +5,7 @@ local inCombat = {
 }
 
 local outCombat = {
-	
+
 }
 
 NeP.CR:Add(3, '[NeP] Hunter - Basic', inCombat, outCombat)

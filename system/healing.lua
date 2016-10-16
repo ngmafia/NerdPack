@@ -12,7 +12,7 @@ local Roles = {
 	['TANK'] = 2,
 	['HEALER'] = 1.5,
 	['DAMAGER'] = 1,
-	['NONE'] = 1	 
+	['NONE'] = 1
 }
 
 function NeP.Healing:GetRoster()

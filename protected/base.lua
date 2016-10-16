@@ -62,7 +62,7 @@ local version = GetBuildInfo()
 if not version:find('^7.0') then return end
 
 local lnr = LibStub("AceAddon-3.0"):NewAddon(n_name, "LibNameplateRegistry-1.0")
-	
+
 function lnr:OnEnable()
 	self:LNR_RegisterCallback("LNR_ON_NEW_PLATE")
 	self:LNR_RegisterCallback("LNR_ON_RECYCLE_PLATE")
