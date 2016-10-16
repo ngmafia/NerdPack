@@ -7,7 +7,7 @@ NeP.FakeUnits:Add('lowest', function(num, role)
 		if not role or (role and Obj.role == role:upper()) then
 			tempTable[#tempTable+1] = {
 				key = Obj.key,
-				prio = prio
+				prio = Obj.prio
 			}
 		end
 	end
@@ -22,7 +22,7 @@ NeP.FakeUnits:Add('tank', function(num)
 		if Obj.role == 'TANK' and not UnitIsUnit('player', Obj.key) then
 			tempTable[#tempTable+1] = {
 				key = Obj.key,
-				prio = prio
+				prio = Obj.prio
 			}
 		end
 	end
