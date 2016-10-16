@@ -55,8 +55,7 @@ end
 function NeP.Parser.Table(spell, cond)
 	if NeP.DSL.Parse(cond) then
 		for i=1, #spell do
-			local r = NeP.Parser.Parse(spell[i])
-			if r then return true end
+			if NeP.Parser.Parse(spell[i]) then return true end
 		end
 	end
 end
@@ -65,7 +64,7 @@ function NeP.Parser.Parse(eval)
 	local spell, cond, target = eval[1], eval[2], eval[3]
 	local endtime, cname = castingTime()
 	if not spell.spell then
-		NeP.Parser.Table(spell, cond)
+		if NeP.Parser.Table(spell, cond, eval) then return true end
 	elseif spell.bypass or endtime == 0 then
 		if NeP.Parser.Target(eval) then
 			if spell.token == 'func' or NeP.Parser.Spell(eval) then
