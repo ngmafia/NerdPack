@@ -44,11 +44,12 @@ end
 
 local function CreateToggle(eval)
 	local pos = (ButtonsSize*tcount)+(tcount*ButtonsPadding)-(ButtonsSize+ButtonsPadding)
+	eval.key = eval.key:lower()
 	Toggles[eval.key] = CreateFrame("CheckButton", eval.key, mainframe.content)
 	local temp = Toggles[eval.key]
 	temp:SetFrameStrata("high")
 	temp:SetFrameLevel(1)
-	temp.key = eval.key:lower()
+	temp.key = eval.key
 	temp:SetPoint("LEFT", mainframe.content, pos, 0)
 	temp:SetSize(ButtonsSize, ButtonsSize)
 	temp:SetFrameLevel(1)
