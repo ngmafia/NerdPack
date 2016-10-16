@@ -92,8 +92,8 @@ function NeP.Core:GetSpellBookIndex(spell)
 		if isKnown and numSlots > 0 then
 			for g = 1, numSlots do
 				local spellID, _, isKnownSpell = GetFlyoutSlotInfo(flyoutID, g)
-				local name = NeP.Core:GetSpellName(spellID):lower()
-				if name and isKnownSpell and name == spellName then
+				local name = NeP.Core:GetSpellName(spellID)
+				if name and isKnownSpell and name:lower() == spellName then
 					return spellID, nil
 				end
 			end
