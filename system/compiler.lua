@@ -10,10 +10,11 @@ local spellTokens = {
 }
 
 -- Takes a string a produces a table in its place
-function NeP.Compiler.Spell(eval)
+function NeP.Compiler.Spell(eval, name)
 	local ref = {
 		spell = eval[1]
 	}
+	local skip = false
 	if ref.spell:find('^!') then
 		ref.interrupts = true
 		ref.bypass = true
@@ -28,13 +29,16 @@ function NeP.Compiler.Spell(eval)
 		if ref.spell:find(patern) then
 			ref.token = ref.spell:sub(1,1)
 			ref.spell = ref.spell:sub(2)
+			skip = true
 		end
 	end
 	-- Some APIs only work after we'r in-game, so we delay.
-	NeP.Core:WhenInGame(function()
-		ref.spell = NeP.Spells:Convert(ref.spell)
-		ref.icon = select(3,GetSpellInfo(ref.spell))
-	end)
+	if not skip then
+		NeP.Core:WhenInGame(function()
+			ref.spell = NeP.Spells:Convert(ref.spell)
+			ref.icon = select(3,GetSpellInfo(ref.spell))
+		end)
+	end
 	local arg1, args = ref.spell:match('(.+)%((.+)%)')
 	if args then ref.spell = arg1 end
 	ref.args = args
@@ -71,7 +75,7 @@ function NeP.Compiler.Compile(eval, name)
 		end
 	else
 		if type(spell) == 'string' then
-			NeP.Compiler.Spell(eval)
+			NeP.Compiler.Spell(eval, name)
 		elseif type(spell) == 'function' then
 			local ref = {
 				spell = 'fake',

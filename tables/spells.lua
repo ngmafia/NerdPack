@@ -2293,9 +2293,10 @@ function NeP.Spells:Convert(spell)
 	if not spell then return end
 	if spell:find('%d') then
 		spell = GetSpellInfo(spell) or spell
-	end
-	if SpellsTable and SpellsTable[spell] then
-		spell = SpellsTable[spell]
+	elseif SpellsTable then
+		if SpellsTable[spell] then
+			spell = SpellsTable[spell]
+		else NeP.Core:Print('Unale to convert:|cffff0000', spell, '|rMight be missing...') end
 	end
 	return spell
 end
