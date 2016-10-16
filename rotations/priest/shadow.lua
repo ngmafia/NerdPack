@@ -1,44 +1,47 @@
 local Keybinds = {
-	{'%pause', 'keybind(alt)'}
+	{'%pause', 'keybind(alt)'},
+	{'Mass Dispell', 'keybind(lalt)', 'mouseover.ground'},
 }
 
 local StAI = {
 	{'!Void Eruption'},
 	{'!Mind Blast'},
-	{'!Shadow Word: Death'}
+	{'!Shadow Word: Death', 'player.insanity < 65'},
 }
 
 local CDs = {
 	{'Shadowfiend'},
 	{'Mindbender'},
 	{'Power Infusion'},
-	{'!Void Torrent', '!spell(Mind Blast).casting || !spell(Vampiric Touch).casting || !spell(Void Torrent).casting || !spell(Mind Sear).casting'},
+	{'!Void Torrent', '!player.casting(Mind Blast) & !player.casting(Vampiric Touch) & !player.casting(Void Eruption) & !player.channeling(Mind Sear) & !player.channeling(Void Torrent)'},
 	{'!Dispersion', 'spell(Mind Flay).casting & player.buff(Voidform).count > 50 & player.insanity < 10'},
 	{'!Dispersion', 'spell(Mind Flay).casting & player.buff(Voidform).count > 50 & player.insanity < 30 & player.health < 40'},
 }
 
 local AoE = {
 	{'Mind Bomb'},
-	{'Mind Sear'}
+	{'Mind Sear'},
 }
 
 local ST = {
 	{'Shadowform', '!player.buff&!player.buff(Voidform)'},
-	{StAI, '!spell(Mind Blast).casting || !spell(Vampiric Touch).casting || !spell(Void Torrent).casting || !spell(Mind Sear).casting'},
+	{StAI, '!player.casting(Mind Blast) & !player.casting(Vampiric Touch) & !player.casting(Void Eruption) & !player.channeling(Mind Sear) & !player.channeling(Void Torrent)'},
 	{'Shadow Word: Pain', 'target.debuff(Shadow Word: Pain).duration < 3'},
 	{'Vampiric Touch', 'target.debuff(Vampiric Touch).duration < 3'},
-	{'Mind Flay'},
-	{'Mind Spike'}
+	{'Mind Flay', nil, 'target'},
+	{'Mind Spike'},
 }
+
 
 local inCombat = {
 	{Keybinds},
-	{CDs},
-	{ST}
+	{CDs, 'toggle(cooldowns)'},
+	{AoE, 'keybind(lshift)'},
+	{ST},
 }
 
 local outCombat = {
-	{Keybinds}
+	{'Power Word: Shield', 'player.moving', 'player'},
 }
 
 NeP.CR:Add(258, '[NeP] Priest - Shadow', inCombat, outCombat)
