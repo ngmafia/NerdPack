@@ -2267,6 +2267,10 @@ local SpellID = {
 	}
 }
 
+local Racial_Spells = {
+	
+}
+
 local _, NeP = ...
 NeP.Spells = {}
 local GetLocale = GetLocale
@@ -2277,7 +2281,15 @@ local SpellsTable = {}
 function NeP.Spells:Filter()
 	local _, _, class_id = UnitClass("player")
 	if GetLocale() ~= "enUS" then
+		-- Peer class
 		for spell_name_enus, spell_id in pairs(SpellID[class_id]) do
+			local localized_spell = GetSpellInfo(spell_id)
+			if localized_spell then
+				SpellsTable[spell_name_enus] = localized_spell
+			end
+		end
+		-- Racials
+		for spell_name_enus, spell_id in pairs(Racial_Spells) do
 			local localized_spell = GetSpellInfo(spell_id)
 			if localized_spell then
 				SpellsTable[spell_name_enus] = localized_spell
@@ -2289,6 +2301,8 @@ function NeP.Spells:Filter()
 	SpellID = nil
 end
 
+local warned_spells = {}
+
 function NeP.Spells:Convert(spell)
 	if not spell then return end
 	if spell:find('%d') then
@@ -2296,7 +2310,10 @@ function NeP.Spells:Convert(spell)
 	elseif SpellsTable then
 		if SpellsTable[spell] then
 			spell = SpellsTable[spell]
-		else NeP.Core:Print('Unale to convert:|cffff0000', spell, '|rMight be missing...') end
+		elseif not warned_spells[spell] then
+			warned_spells[spell] = ''
+			NeP.Core:Print('Unale to convert:|cffff0000', spell, '|rMight be missing...')
+		end
 	end
 	return spell
 end
