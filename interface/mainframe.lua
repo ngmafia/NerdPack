@@ -67,5 +67,3 @@ function NeP.Interface:Add(name, func)
 end
 
 NeP.Globals.Interface.Add = NeP.Interface.Add
-NeP.Globals.Show = function() NeP.Interface.MainFrame:Show() end
-NeP.Globals.Hide = function() NeP.Interface.MainFrame:Hide() end

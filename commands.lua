@@ -7,9 +7,9 @@ local L = {
 	cooldowns      = function(state) T(self,'Cooldowns', state) end,
 	interrupts     = function(state) T(self,'Interrupts', state) end,
     version        = function() NeP.Core:Print(NeP.Version) end,
-    show = NeP.Show,
+    show 			= function() NeP.Interface.MainFrame:Show() end,
 	hide = function()
-		NeP:Hide()
+		NeP.Interface.MainFrame:Hide()
 		NeP.Core:Print('To Display NerdPack Execute: \n/nep show')
 	end,
 }
