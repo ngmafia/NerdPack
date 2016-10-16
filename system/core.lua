@@ -34,11 +34,9 @@ function NeP.Core:GetSpellID(spell)
 	elseif _type == 'string' and spell:find('^%d') then
 		return tonumber(spell)
 	end
-	local spellID = GetSpellLink(spell)
-	if spellID then
-		return tonumber(spellID:match("spell:(%d+)"))
-	end
-	return spell
+	local index, _type = NeP.Core:GetSpellBookIndex(spell)
+	local spellID = select(7, GetSpellInfo(index, _type))
+	return spellID or spell
 end
 
 function NeP.Core:GetSpellName(spell)
