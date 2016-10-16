@@ -3,28 +3,28 @@ local _, NeP = ...
 NeP.UI = {}
 
 NeP.UI.buttonStyleSheet = {
-	['frame-color'] = {	
+	['frame-color'] = {
 		type			= 'texture',
-		layer			= 'BACKGROUND',								
-		color			= '2f353b',			
-		offset		= 0,	
+		layer			= 'BACKGROUND',
+		color			= '2f353b',
+		offset		= 0,
 	},
 	['frame-highlight'] = {
 		type			= 'texture',
 		layer			= 'BORDER',
-		gradient	= 'VERTICAL',							
-		color			= 'FFFFFF',			
+		gradient	= 'VERTICAL',
+		color			= 'FFFFFF',
 		alpha 		= 0,
 		alphaEnd	= .1,
 		offset		= -1,
-	},	
-	['frame-outline'] = {		
+	},
+	['frame-outline'] = {
 		type			= 'outline',
-		layer			= 'BORDER',								
-		color			= '000000',		
-		offset		= 0,		
-	},	
-	['frame-inline'] = {		
+		layer			= 'BORDER',
+		color			= '000000',
+		offset		= 0,
+	},
+	['frame-inline'] = {
 		type			= 'outline',
 		layer			= 'BORDER',
 		gradient	= 'VERTICAL',
@@ -32,13 +32,13 @@ NeP.UI.buttonStyleSheet = {
 		alpha 		= .02,
 		alphaEnd	= .09,
 		offset		= -1,
-	},	
-	['frame-hover'] = {		
+	},
+	['frame-hover'] = {
 		type			= 'texture',
-		layer			= 'HIGHLIGHT',	
+		layer			= 'HIGHLIGHT',
 		color			= 'ffffff',
 		alpha			= .1,
-		offset		= 0,	
+		offset		= 0,
 	},
 	['text-color'] = {
 		type			= 'Font',
@@ -47,10 +47,10 @@ NeP.UI.buttonStyleSheet = {
 }
 
 NeP.UI.spinnerStyleSheet = {
-	['bar-background'] = {			
+	['bar-background'] = {
 		type			= 'texture',
-		layer			= 'BORDER',								
-		color			= 'ee2200',			
+		layer			= 'BORDER',
+		color			= 'ee2200',
 	},
 }
 
@@ -94,8 +94,8 @@ NeP.UI.statusBarStylesheet = {
 	['frame-texture'] = {
 		type		= 'texture',
 		layer		= 'BORDER',
-		gradient	= 'VERTICAL',							
-		color		= '000000',			
+		gradient	= 'VERTICAL',
+		color		= '000000',
 		alpha 		= 0.7,
 		alphaEnd	= 0.1,
 		offset		= 0,
@@ -107,18 +107,18 @@ local SharedMedia = LibStub("LibSharedMedia-3.0")
 
 DiesalGUI:RegisterObjectConstructor("FontString", function()
 	local self 		= DiesalGUI:CreateObjectBase(Type)
-	local frame		= CreateFrame('Frame',nil,UIParent)		
+	local frame		= CreateFrame('Frame',nil,UIParent)
 	local fontString = frame:CreateFontString(nil, "OVERLAY", 'DiesalFontNormal')
 	self.frame		= frame
 	self.fontString = fontString
 	self.SetParent = function(self, parent)
 		self.frame:SetParent(parent)
 	end
-	self.OnRelease = function(self)		
+	self.OnRelease = function(self)
 		self.fontString:SetText('')
 	end
-	self.OnAcquire = function(self)	
-		self:Show()		
+	self.OnAcquire = function(self)
+		self:Show()
 	end
 	self.type = "FontString"
 	return self
@@ -138,8 +138,8 @@ DiesalGUI:RegisterObjectConstructor("Rule", function()
 	self.OnRelease = function(self)
 		self:Hide()
 	end
-	self.OnAcquire = function(self)	
-		self:Show()		
+	self.OnAcquire = function(self)
+		self:Show()
 	end
 	self.type = "Rule"
 	return self
@@ -162,12 +162,12 @@ DiesalGUI:RegisterObjectConstructor("StatusBar", function()
 	frame.Right:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 14)
 	frame.Right:SetShadowColor(0,0,0, 0)
 	frame.Right:SetShadowOffset(-1,-1)
-	
+
 	frame:SetStatusBarTexture(1,1,1,0.8)
 	frame:GetStatusBarTexture():SetHorizTile(false)
 	frame:SetMinMaxValues(0, 100)
 	frame:SetHeight(16)
-	
+
 	self.SetValue = function(self, value)
 		self.frame:SetValue(value)
 	end
@@ -182,8 +182,8 @@ DiesalGUI:RegisterObjectConstructor("StatusBar", function()
 	self.OnRelease = function(self)
 		self:Hide()
 	end
-	self.OnAcquire = function(self)	
-		self:Show()		
+	self.OnAcquire = function(self)
+		self:Show()
 	end
 	self.type = "StatusBar"
 	return self

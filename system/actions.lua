@@ -81,7 +81,7 @@ NeP.Actions['@'] = function(eval)
 			eval.breaks = true
 			return true
 		end
-	end 
+	end
 end
 
 -- Macro

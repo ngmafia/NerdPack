@@ -1,5 +1,5 @@
 local InCombat = {
-	
+
 }
 
 local OutCombat = {

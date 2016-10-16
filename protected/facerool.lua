@@ -4,9 +4,9 @@ NeP.Faceroll = {}
 
 -- This to put an icon on top of the spell we want
 local activeFrame = CreateFrame('Frame', 'activeCastFrame', UIParent)
-activeFrame:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background", 
-	edgeFile = "Interface/Tooltips/UI-Tooltip-Border", 
-	tile = true, tileSize = 16, edgeSize = 16, 
+activeFrame:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+	edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+	tile = true, tileSize = 16, edgeSize = 16,
 	insets = { left = 4, right = 4, top = 4, bottom = 4 }
 });
 activeFrame:SetBackdropColor(0,0,0,1);
@@ -21,9 +21,9 @@ local display = CreateFrame('Frame', 'Faceroll_Info', activeFrame)
 display:SetClampedToScreen(true)
 display:SetSize(0, 0)
 display:SetPoint("TOP")
-display:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background", 
-	edgeFile = "Interface/Tooltips/UI-Tooltip-Border", 
-	tile = true, tileSize = 16, edgeSize = 16, 
+display:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+	edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+	tile = true, tileSize = 16, edgeSize = 16,
 	insets = { left = 4, right = 4, top = 4, bottom = 4 }
 });
 display:SetBackdropColor(0,0,0,1);

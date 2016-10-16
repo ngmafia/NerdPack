@@ -16,7 +16,7 @@ function NeP.OM:Garbage()
 			elseif tb ~= 'Dead' and UnitIsDeadOrGhost(obj.key) then
 				OM_c[tb][GUID] = nil
 			end
-		end 
+		end
 	end
 end
 

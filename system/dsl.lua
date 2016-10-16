@@ -16,7 +16,7 @@ end
 
 local function pArgs(Strg)
 	local Args = Strg:match('%((.+)%)')
-	if Args then 
+	if Args then
 		Strg = Strg:gsub('%((.+)%)', '')
 	end
 	return Strg, Args
@@ -97,7 +97,7 @@ local function ProcessCondition(Strg, Spell)
 	end
 	-- Condition arguments
 	local Strg, Args = pArgs(Strg)
-	if Args then 
+	if Args then
 		if Args:find('^%a') then
 			Args = NeP.Spells:Convert(Args) -- Translates the name to the correct locale
 		end

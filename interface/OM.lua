@@ -77,7 +77,7 @@ local function RefreshGUI()
 end
 
 C_Timer.NewTicker(0.1, (function()
-	if parent:IsShown() then 
+	if parent:IsShown() then
 		RefreshGUI()
 	end
 end), nil)

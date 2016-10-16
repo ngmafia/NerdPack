@@ -40,7 +40,7 @@ function NeP.Interface:Text(element, parent, offset, table)
 	tmp:SetWidth(parent.content:GetWidth()-10)
 	if not element.offset then
 		element.offset = tmp:GetStringHeight()
-	end	
+	end
 	if element.align then
 		tmp:SetJustifyH(strupper(element.align))
 	end
@@ -67,7 +67,7 @@ function NeP.Interface:Texture(element, parent, offset, table)
 		tmp:SetPoint('CENTER', parent.content, 'CENTER', (element.x or 0), offset-(element.y or 0))
 	else
 		tmp:SetPoint('TOPLEFT', parent.content, 'TOPLEFT', 5+(element.x or 0), offset-3+(element.y or 0))
-	end	
+	end
 	tmp:SetWidth(parent:GetWidth()-10)
 	tmp:SetHeight(element.height)
 	tmp:SetWidth(element.width)
@@ -303,7 +303,7 @@ function NeP.Interface:Button(element, parent, offset, table)
 		tmp_desc:SetWidth(parent.content:GetWidth()-10)
 		tmp_desc:SetJustifyH('LEFT')
 		push = tmp_desc:GetStringHeight() + 5
-	end	
+	end
 	if element.align then
 		tmp:SetJustifyH(strupper(element.align))
 	end
