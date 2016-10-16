@@ -6,7 +6,10 @@ local Queue = {}
 function NeP.Queuer:Add(spell, target)
 	spell = NeP.Spells:Convert(spell)
 	if not spell then return end
-	Queue[spell] = target or UnitExists('target') and 'target' or 'player'
+	Queue[spell] = {
+		time = GetTime()
+		target = target or UnitExists('target') and 'target' or 'player'
+	}
 end
 
 function NeP.Queuer:Spell(spell)
@@ -21,9 +24,11 @@ function NeP.Queuer:Spell(spell)
 end
 
 function NeP.Queuer:Execute()
-	for spell, target in pairs(Queue) do
-		if self:Spell(spell) then
-			NeP.Protected.Cast(spell, target)
+	for spell, v in pairs(Queue) do
+		if (GetTime() - v.time) > 5 then
+			Queue[spell] = nil
+		elseif self:Spell(spell) then
+			NeP.Protected.Cast(spell, v.target)
 			Queue[spell] = nil
 			return true
 		end
