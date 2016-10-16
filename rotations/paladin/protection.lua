@@ -75,7 +75,7 @@ local inCombat = {
 	{Survival, "player.health<100"},
 	{Interrupts, 'target.interruptAt(50)'},
 	{AoE, 'toggle(AoE)&player.area(8).enemies >= 3'},
-	{ST, 'target.infront'}
+	{ST, 'target.inmelee&target.infront'}
 }
 
 local outCombat = {
