@@ -21,6 +21,7 @@ local Cooldowns={
 	--actions+=/crusade,if=holy_power>=5
 	{'Crusade', 'player.holypower>=5'},
 	--actions+=/wake_of_ashes,if=holy_power>=0&time<2
+	{'Wake of Ashes', 'player.combat.time<2'},
 	--actions+=/execution_sentence,if=spell_targets.divine_storm<=3&(cooldown.judgment.remains<gcd*4.5|debuff.judgment.remains>gcd*4.67)&(!talent.crusade.enabled|cooldown.crusade.remains>gcd*2)
 	{'Execution Sentence', 'player.area(6).enemies <=3&{spell(Judgment).cooldown<gcd*4.5||target.debuff(judgment).duration>gcd*4.5}&{!talent(7,2)||spell(Crusade).cooldown>gcd*2}', 'target'},
 	--actions+=/blood_fury
@@ -61,7 +62,7 @@ local virtues_blade={
 		}, 'player.holypower>=3'},
 	}, 'target.debuff(Judgment)' },
 	--actions.VB+=/wake_of_ashes,if=holy_power=0|holy_power=1&cooldown.blade_of_justice.remains>gcd|holy_power=2&(cooldown.zeal.charges_fractional<=0.34|cooldown.crusader_strike.charges_fractional<=0.34)
-	{'Wake of Ashes', 'player.holypower == 0||player.holypower=1&spell(Blade of Justice).cooldown>gcd||player.holypower=2&{spell(Zeal).charges<=0.34||spell(Crusader Strike).charges<=0.34}'},
+	{'Wake of Ashes', 'player.holypower=0||player.holypower=1&spell(Blade of Justice).cooldown>gcd||player.holypower=2&{spell(Zeal).charges<=0.34||spell(Crusader Strike).charges<=0.34}'},
 	--actions.VB+=/zeal,if=charges=2&holy_power<=4
 	{'Zeal', 'spell.charges=2&player.holypower<=4'},
 	--actions.VB+=/crusader_strike,if=charges=2&holy_power<=4
