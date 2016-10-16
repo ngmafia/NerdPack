@@ -183,7 +183,7 @@ NeP.DSL:Register("level", function(target)
 end)
 
 NeP.DSL:Register("combat", function(target)
-	return (UnitAffectingCombat(target) or NeP.DSL:Get('isdummy')(target))
+	return UnitAffectingCombat(target) or NeP.DSL:Get('isdummy')(target)
 end)
 
 NeP.DSL:Register("role", function(target, role)
@@ -325,9 +325,9 @@ end)
 NeP.DSL:Register("area.enemies", function(unit, distance)
 	local total = 0
 	if not UnitExists(unit) then return total end
-	for GUID, Obj in pairs(NeP.OM:Get('Enemy')) do
-		if NeP.DSL:Get('combat')(Obj.key)
-		and NeP.Protected.Distance(unit, Obj.key) <= tonumber(distance) then
+	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
+		print(Obj.key)
+		if NeP.DSL:Get('combat')(Obj.key) and NeP.Protected.Distance(unit, Obj.key) <= tonumber(distance) then
 			total = total +1
 		end
 	end
@@ -337,6 +337,10 @@ end)
 NeP.DSL:Register("area.friendly", function(unit, distance)
 	local total = 0
 	if not UnitExists(unit) then return total end
-	--TODO
+	for _, Obj in pairs(NeP.OM:GetRoster()) do
+		if NeP.Protected.Distance(unit, Obj.key) <= tonumber(distance) then
+			total = total +1
+		end
+	end
 	return total
 end)
