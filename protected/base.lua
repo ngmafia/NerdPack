@@ -8,31 +8,31 @@ NeP.Protected.CastGround = function(spell, target)
 	NeP.Faceroll:Set(spell, target)
 end
 
-NeP.Protected.Macro = function(text)
+NeP.Protected.Macro = function()
 end
 
-NeP.Protected.UseItem = function(name, target)
+NeP.Protected.UseItem = function()
 end
 
-NeP.Protected.UseInvItem = function(name)
+NeP.Protected.UseInvItem = function()
 end
 
 local rangeCheck = LibStub("LibRangeCheck-2.0")
-NeP.Protected.Distance = function (a, b)
+NeP.Protected.Distance = function(_, b)
 	local minRange, maxRange = rangeCheck:GetRange(b)
 	return maxRange or minRange
 end
 
-NeP.Protected.Infront = function (a, b)
+NeP.Protected.Infront = function()
 	return true
 end
 
-NeP.Protected.UnitCombatRange = function (a, b)
-	local minRange, maxRange = rangeCheck:GetRange(b)
+NeP.Protected.UnitCombatRange = function(_, b)
+	local minRange = rangeCheck:GetRange(b)
 	return minRange
 end
 
-NeP.Protected.LineOfSight = function (a, b)
+NeP.Protected.LineOfSight = function()
 	return true
 end
 
