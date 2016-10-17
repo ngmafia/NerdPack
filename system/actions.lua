@@ -24,49 +24,14 @@ NeP.Actions['pause'] = function(eval)
 	return true
 end
 
-local invItems = {
-	['head']		= 'HeadSlot',
-	['helm']		= 'HeadSlot',
-	['neck']		= 'NeckSlot',
-	['shoulder']	= 'ShoulderSlot',
-	['shirt']		= 'ShirtSlot',
-	['chest']		= 'ChestSlot',
-	['belt']		= 'WaistSlot',
-	['waist']		= 'WaistSlot',
-	['legs']		= 'LegsSlot',
-	['pants']		= 'LegsSlot',
-	['feet']		= 'FeetSlot',
-	['boots']		= 'FeetSlot',
-	['wrist']		= 'WristSlot',
-	['bracers']		= 'WristSlot',
-	['gloves']		= 'HandsSlot',
-	['hands']		= 'HandsSlot',
-	['finger1']		= 'Finger0Slot',
-	['finger2']		= 'Finger1Slot',
-	['trinket1']	= 'Trinket0Slot',
-	['trinket2']	= 'Trinket1Slot',
-	['back']		= 'BackSlot',
-	['cloak']		= 'BackSlot',
-	['mainhand']	= 'MainHandSlot',
-	['offhand']		= 'SecondaryHandSlot',
-	['weapon']		= 'MainHandSlot',
-	['weapon1']		= 'MainHandSlot',
-	['weapon2']		= 'SecondaryHandSlot',
-	['ranged']		= 'RangedSlot'
-}
-
 -- Items
 NeP.Actions['#'] = function(eval)
-	local item = eval[1].spell
-	if invItems[item] then
-		local invItem = GetInventorySlotInfo(invItems[item])
-		item = GetInventoryItemID("player", invItem)
-	end
-	if item and GetItemSpell(item) then
-		local itemName, _,_,_,_,_,_,_,_,_ = GetItemInfo(item)
-		local isUsable = IsUsableItem(itemName)
-		local ready = select(2, GetItemCooldown(item)) == 0
-		if isUsable and ready and (GetItemCount(itemName) > 0) then
+	local item = eval[1]
+	if item and GetItemSpell(item.spell) then
+		local isUsable = IsUsableItem(item.spell)
+		local ready = select(2, GetItemCooldown(item.id)) == 0
+		if isUsable and ready and (GetItemCount(item.spell) > 0) then
+			--print(item.id, item.spell)
 			eval.func = NeP.Protected.UseItem
 			return true
 		end

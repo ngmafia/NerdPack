@@ -51,9 +51,7 @@ end
 function NeP.Core:GetItemID(item)
 	if item and type(item) == 'number' then return item end
 	local itemID = string.match(select(2, GetItemInfo(item)) or '', 'Hitem:(%d+):')
-	if itemID then
-		return tonumber(itemID)
-	end
+	return tonumber(itemID) or item
 end
 
 function NeP.Core:UnitID(unit)

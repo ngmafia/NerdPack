@@ -2,7 +2,38 @@ local _, NeP = ...
 
 NeP.Compiler = {}
 
-local spellTokens = {'^%%','^@','^#'}
+local spellTokens = {'^%%','^@'}
+
+local invItems = {
+	['head']		= 'HeadSlot',
+	['helm']		= 'HeadSlot',
+	['neck']		= 'NeckSlot',
+	['shoulder']	= 'ShoulderSlot',
+	['shirt']		= 'ShirtSlot',
+	['chest']		= 'ChestSlot',
+	['belt']		= 'WaistSlot',
+	['waist']		= 'WaistSlot',
+	['legs']		= 'LegsSlot',
+	['pants']		= 'LegsSlot',
+	['feet']		= 'FeetSlot',
+	['boots']		= 'FeetSlot',
+	['wrist']		= 'WristSlot',
+	['bracers']		= 'WristSlot',
+	['gloves']		= 'HandsSlot',
+	['hands']		= 'HandsSlot',
+	['finger1']		= 'Finger0Slot',
+	['finger2']		= 'Finger1Slot',
+	['trinket1']	= 'Trinket0Slot',
+	['trinket2']	= 'Trinket1Slot',
+	['back']		= 'BackSlot',
+	['cloak']		= 'BackSlot',
+	['mainhand']	= 'MainHandSlot',
+	['offhand']		= 'SecondaryHandSlot',
+	['weapon']		= 'MainHandSlot',
+	['weapon1']		= 'MainHandSlot',
+	['weapon2']		= 'SecondaryHandSlot',
+	['ranged']		= 'RangedSlot'
+}
 
 -- Takes a string a produces a table in its place
 function NeP.Compiler.Spell(eval, name)
@@ -21,6 +52,22 @@ function NeP.Compiler.Spell(eval, name)
 	end
 	if ref.spell:find('^/') then
 		ref.token = '/'
+		skip = true
+	end
+	if ref.spell:find('^#') then
+		ref.spell = ref.spell:sub(2)
+		--print(ref.spell)
+		ref.token = '#'
+		if invItems[ref.spell] then
+			local invItem = GetInventorySlotInfo(invItems[ref.spell])
+			ref.spell = GetInventoryItemID("player", invItem)
+			if not ref.spell then return end
+		end
+		--print('DONE',ref.spell)
+		local itemName, itemLink, _,_,_,_,_,_,_, texture = GetItemInfo(ref.spell)
+		ref.spell = itemName
+		ref.icon = texture
+		ref.id = NeP.Core:GetItemID(itemName)
 		skip = true
 	end
 	for i=1, #spellTokens do
