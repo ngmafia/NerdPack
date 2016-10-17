@@ -4,7 +4,7 @@ NeP.Commands = {}
 
 function NeP.Commands:Register(name, func, ...)
 	SlashCmdList[name] = func
-	local command = ''
+	local command
 	for i = 1, select('#', ...) do
 		command = select(i, ...)
 		if strsub(command, 1, 1) ~= '/' then

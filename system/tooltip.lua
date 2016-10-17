@@ -48,6 +48,6 @@ function NeP.Tooltip:Tick_Time(target)
 	frame:SetOwner(UIParent, 'ANCHOR_NONE')
 	frame:SetUnitBuff(target)
 	local tooltipText = _G["NeP_ScanningTooltipTextLeft2"]:GetText()
-	local match = text:lower():match("[0-9]+%.?[0-9]*")
+	local match = tooltipText:lower():match("[0-9]+%.?[0-9]*")
 	return tonumber(match)
 end

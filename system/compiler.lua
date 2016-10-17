@@ -25,7 +25,7 @@ function NeP.Compiler.Spell(eval, name)
 		ref.spell = ref.spell:sub(2)
 	end
 	for i=1, #spellTokens do
-		local kind, patern = unpack(spellTokens[i])
+		local _, patern = unpack(spellTokens[i])
 		if ref.spell:find(patern) then
 			ref.token = ref.spell:sub(1,1)
 			ref.spell = ref.spell:sub(2)
@@ -67,7 +67,7 @@ function NeP.Compiler.Target(eval)
 end
 
 function NeP.Compiler.Compile(eval, name)
-	local spell, cond, target = eval[1], eval[2], eval[3]
+	local spell = eval[1]
 	-- Take care of spell
 	if type(spell) == 'table' then
 		for k=1, #spell do

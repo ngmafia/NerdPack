@@ -8,7 +8,7 @@ local listeners = {}
 local frame = CreateFrame('Frame', 'NeP_Events')
 frame:SetScript('OnEvent', function(self, event, ...)
 	if not listeners[event] then return end
-	for k,v in pairs(listeners[event]) do
+	for k in pairs(listeners[event]) do
 		listeners[event][k](...)
 	end
 end)

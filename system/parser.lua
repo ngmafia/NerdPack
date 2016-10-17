@@ -18,7 +18,7 @@ local function castingTime()
 	if endTime then
 		return (endTime/1000)-time, name
 	end
-	local name, _,_,_,_, endTime = UnitChannelInfo("player")
+	name, _,_,_,_, endTime = UnitChannelInfo("player")
 	if endTime then
 		return (endTime/1000)-time, name
 	end
@@ -61,7 +61,7 @@ function NeP.Parser.Table(spell, cond)
 end
 
 function NeP.Parser.Parse(eval)
-	local spell, cond, target = eval[1], eval[2], eval[3]
+	local spell, cond = eval[1], eval[2]
 	local endtime, cname = castingTime()
 	if not spell.spell then
 		if NeP.Parser.Table(spell, cond, eval) then return true end

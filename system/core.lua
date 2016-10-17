@@ -34,8 +34,8 @@ function NeP.Core:GetSpellID(spell)
 	elseif _type == 'string' and spell:find('^%d') then
 		return tonumber(spell)
 	end
-	local index, _type = NeP.Core:GetSpellBookIndex(spell)
-	local spellID = select(7, GetSpellInfo(index, _type))
+	local index, stype = NeP.Core:GetSpellBookIndex(spell)
+	local spellID = select(7, GetSpellInfo(index, stype))
 	return spellID or spell
 end
 
@@ -77,9 +77,8 @@ function NeP.Core:GetSpellBookIndex(spell)
 
 	for t = 1, 2 do
 		local _, _, offset, numSpells = GetSpellTabInfo(t)
-		local i
 		for i = 1, (offset + numSpells) do
-			if string.lower(GetSpellBookItemName(i, BOOKTYPE_SPELL)) == spellName then
+			if GetSpellBookItemName(i, BOOKTYPE_SPELL):lower() == spellName then
 				return i, BOOKTYPE_SPELL
 			end
 		end

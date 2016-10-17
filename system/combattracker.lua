@@ -16,24 +16,24 @@ local function addToData(GUID)
 end
 
 local logDamage = function(...)
-	local Timestamp, _,_,_,_,_,_, GUID, _, UnitFlag, _,_,_,_, Amount = ...
+	local _, _,_,_,_,_,_, GUID, _,_,_,_,_,_, Amount = ...
 	Data[GUID].dmgTaken = Data[GUID].dmgTaken + Amount
 	Data[GUID].Hits = Data[GUID].Hits + 1
 end
 
 local logSwing = function(...)
-	local Timestamp, _,_,_,_,_,_, GUID, _, UnitFlag, _, Amount = ...
+	local _, _,_,_,_,_,_, GUID, _,_,_, Amount = ...
 	Data[GUID].dmgTaken = Data[GUID].dmgTaken + Amount
 	Data[GUID].Hits = Data[GUID].Hits + 1
 end
 
 local logHealing = function(...)
-	local Timestamp, _,_,_,_,_,_, GUID, _, UnitFlag, _,_,_,_, Amount = ...
+	local _,_,_,_,_,_,_, GUID, _,_,_,_,_,_, Amount = ...
 	Data[GUID].dmgTaken = Data[GUID].dmgTaken - Amount
 end
 
 local addAction = function(...)
-	local timestamp, _,_, sourceGUID, sourceName,_,_, destGUID, destName,_,_, spellId, spellName = ...
+	local _, _,_, sourceGUID, _,_,_,_, destName,_,_,_, spellName = ...
 	local playerGUID = UnitGUID('player')
 	if spellName then
 		addToData(sourceGUID)

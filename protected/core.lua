@@ -17,15 +17,15 @@ end
 function NeP.Protected.SetUnlocker(name, unlocker)
 	NeP.Core:Print('|cffff0000Found:|r ' .. name)
 	if unlocker.extended then
-		for name, func in pairs(unlocker.extended) do
-			NeP.Protected[name] = func
+		for uname, func in pairs(unlocker.extended) do
+			NeP.Protected[uname] = func
 		end
 	end
 	if unlocker.om then
 		NeP.OM.Maker = unlocker.om
 	end
-	for name, func in pairs(unlocker.functions) do
-		NeP.Protected[name] = func
+	for uname, func in pairs(unlocker.functions) do
+		NeP.Protected[uname] = func
 	end
 	NeP.Unlocked = true
 end

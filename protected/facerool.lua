@@ -40,9 +40,9 @@ function NeP.Faceroll:Set(spell, target)
 	activeFrame.texture:SetSize(activeFrame:GetWidth()-5,activeFrame:GetHeight()-5)
 	activeFrame:SetPoint("CENTER", spellButton, "CENTER")
 	display:SetPoint("TOP", spellButton, 0, display.text:GetStringHeight()+20)
-	local spell = '|cff'..NeP.Color.."Spell:|r "..spell
+	spell = '|cff'..NeP.Color.."Spell:|r "..spell
 	local isTargeting = '|cff'..NeP.Color..tostring(UnitIsUnit("target", target))
-	local target = '|cff'..NeP.Color.."\nTarget:|r"..(UnitName(target) or '')
+	target = '|cff'..NeP.Color.."\nTarget:|r"..(UnitName(target) or '')
 	display.text:SetText(spell..target.."("..isTargeting..")")
 	activeFrame:Show()
 end

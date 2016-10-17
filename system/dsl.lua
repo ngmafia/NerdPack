@@ -34,13 +34,13 @@ local OPs = {
 	['/'] = function(arg1, arg2) return arg1 / arg2 end,
 	['*'] = function(arg1, arg2) return arg1 * arg2 end,
 	['!'] = function(arg1, arg2) return not DSL.Parse(arg1, arg2) end,
-	['@'] = function(arg1, arg2) return NeP.Library:Parse(pArgs(arg1)) end,
+	['@'] = function(arg1) return NeP.Library:Parse(pArgs(arg1)) end,
 	['true'] = function() return true end,
 	['false'] = function() return false end,
 }
 
 local function DoMath(arg1, arg2, token)
-	local arg1, arg2 = tonumber(arg1), tonumber(arg2)
+	arg1, arg2 = tonumber(arg1), tonumber(arg2)
 	if arg1 ~= nil and arg2 ~= nil then
 		return OPs[token](arg1, arg2)
 	end
@@ -48,17 +48,17 @@ end
 
 local function _AND(Strg, Spell)
 	local Arg1, Arg2 = Strg:match('(.*)&(.*)')
-	local Arg1 = DSL.Parse(Arg1, Spell)
+	Arg1 = DSL.Parse(Arg1, Spell)
 	if not Arg1 then return false end -- Dont process anything in front sence we already failed
-	local Arg2 = DSL.Parse(Arg2, Spell)
+	Arg2 = DSL.Parse(Arg2, Spell)
 	return Arg1 and Arg2
 end
 
 local function _OR(Strg, Spell)
 	local Arg1, Arg2 = Strg:match('(.*)||(.*)')
-	local Arg1 = DSL.Parse(Arg1, Spell)
+	Arg1 = DSL.Parse(Arg1, Spell)
 	if Arg1 then return true end -- Dont process anything in front sence we already hit
-	local Arg2 = DSL.Parse(Arg2, Spell)
+	Arg2 = DSL.Parse(Arg2, Spell)
 	return Arg1 or Arg2
 end
 
@@ -96,7 +96,7 @@ local function ProcessCondition(Strg, Spell)
 		Strg = rest
 	end
 	-- Condition arguments
-	local Strg, Args = pArgs(Strg)
+	Strg, Args = pArgs(Strg)
 	if Args then
 		if Args:find('^%a') then
 			Args = NeP.Spells:Convert(Args) -- Translates the name to the correct locale
@@ -124,7 +124,7 @@ local function StringMath(Strg, Spell)
 	local OP, total = Strg:match('[/%*%+%-]'), 0
 	local tempT = NeP.Core:string_split(Strg, OP)
 	for i=1, #tempT do
-		local Strg = DSL.Parse(tempT[i], Spell)
+		Strg = DSL.Parse(tempT[i], Spell)
 		if total == 0 then
 			total = Strg
 		else
@@ -152,7 +152,7 @@ end
 
 -- Routes
 local typesTable = {
-	['function'] = function(dsl, Spell) return dsl() end,
+	['function'] = function(dsl) return dsl() end,
 	['table'] = function(dsl, spell)
 		local r_Tbl = {[1] = true}
 		for i=1, #dsl do
@@ -200,8 +200,8 @@ local typesTable = {
 			return Strg
 		end
 	end,
-	['nil'] = function(dsl, Spell) return true end,
-	['boolean']	 = function(dsl, Spell) return dsl end,
+	['nil'] = function() return true end,
+	['boolean']	 = function(dsl) return dsl end,
 }
 
 function NeP.DSL.Parse(dsl, Spell)

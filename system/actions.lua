@@ -1,22 +1,22 @@
 local _, NeP = ...
 
 NeP.Actions = {}
-local LibDisp = LibStub('LibDispellable-1.0')
+--local LibDisp = LibStub('LibDispellable-1.0')
 
 -- Dispell all
-NeP.Actions['dispelall'] = function(eval, args)
+--NeP.Actions['dispelall'] = function(eval, args)
 	--TODO
-end
+--end
 
 -- Automated tauting
-NeP.Actions['taunt'] = function(eval, args)
+--NeP.Actions['taunt'] = function(eval, args)
 	--TODO
-end
+--end
 
 -- Ress all dead
-NeP.Actions['ressdead'] = function(eval, args)
+--NeP.Actions['ressdead'] = function(eval, args)
 	--TODO
-end
+--end
 
 -- Pause
 NeP.Actions['pause'] = function(eval)
@@ -63,8 +63,8 @@ NeP.Actions['#'] = function(eval)
 		item = GetInventoryItemID("player", invItem)
 	end
 	if item and GetItemSpell(item) then
-		local itemName, _,_,_,_,_,_,_,_, icon = GetItemInfo(item)
-		local isUsable, notEnoughMana = IsUsableItem(itemName)
+		local itemName, _,_,_,_,_,_,_,_,_ = GetItemInfo(item)
+		local isUsable = IsUsableItem(itemName)
 		local ready = select(2, GetItemCooldown(item)) == 0
 		if isUsable and ready and (GetItemCount(itemName) > 0) then
 			eval.func = NeP.Protected.UseItem
