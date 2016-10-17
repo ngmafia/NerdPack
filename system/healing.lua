@@ -24,7 +24,7 @@ function NeP.Healing:GetRawHealth(unit)
 end
 
 function NeP.Healing:GetPredictedHealth(unit)
-	return UnitHealth(unit)-(UnitGetTotalHealAbsorbs(unit) or 0)+UnitGetIncomingHeals(unit)
+	return UnitHealth(unit)-(UnitGetTotalHealAbsorbs(unit) or 0)+(UnitGetIncomingHeals(unit) or 0)
 end
 
 function NeP.Healing:Add(Obj)
