@@ -14,7 +14,6 @@ NeP.DSL:Register('artifact.acquired_power', function(artifactID)
 end)
 
 NeP.DSL:Register('artifact.active_id', function()
-	local artifactID = LAD.GetActiveArtifactID(artifactID)
 	return LAD.GetActiveArtifactID()
 end)
 

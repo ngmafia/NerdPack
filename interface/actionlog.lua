@@ -1,4 +1,4 @@
-local n_name, NeP = ...
+local _, NeP = ...
 
 NeP.ActionLog = {}
 
@@ -9,8 +9,6 @@ local log_height = 16
 local log_items = 10
 local abs_height = log_height * log_items + log_height
 local delta = 0
-
-local DiesalGUI = LibStub('DiesalGUI-1.0')
 
 local NeP_AL = NeP.Interface:BuildGUI({
 	key = 'NeP_ALFrame',
@@ -68,7 +66,7 @@ for i = 1, (log_items) do
 	LogItem[i]:SetPoint('TOPLEFT', NeP_AL.frame, 'TOPLEFT', 0, position)
 end
 
-function NeP.ActionLog:Refresh(type, spell, spellIcon, target)
+function NeP.ActionLog:Refresh(type, spell, _, target)
 	if Data[1] and Data[1]['event'] == type
 	and Data[1]['description'] == spell
 	and Data[1]['target'] == target then
@@ -117,6 +115,6 @@ function NeP.ActionLog:Update()
 end
 
 -- wipe data when we enter combat
-NeP.Listener:Add('NeP_AL','PLAYER_REGEN_DISABLED', function(...)
+NeP.Listener:Add('NeP_AL','PLAYER_REGEN_DISABLED', function()
 	wipe(Data)
 end)

@@ -1,6 +1,5 @@
 local _, NeP = ...
 
-local Round = NeP.Core.Round
 local DiesalGUI = LibStub('DiesalGUI-1.0')
 local L = NeP.Locale
 
@@ -64,7 +63,7 @@ local function RefreshGUI()
 	local offset = -5
 	recycleStatusBars()
 	local temp = NeP.OM:Get(dOM)
-	for guid, Obj in pairs(temp) do
+	for _, Obj in pairs(temp) do
 		local Health = UnitHealth(Obj.key) and math.floor((UnitHealth(Obj.key) / UnitHealthMax(Obj.key)) * 100) or 100
 		local statusBar = getStatusBar()
 		statusBar.frame:SetPoint('TOP', ListWindow.content, 'TOP', 2, offset )

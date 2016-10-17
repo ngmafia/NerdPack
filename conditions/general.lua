@@ -8,11 +8,11 @@ end
 local function checkCasting(target)
 	local name, startTime, endTime, notInterruptible = checkChanneling(target)
 	if name then return name, startTime, endTime, notInterruptible end
-	local name, _,_,_, startTime, endTime, _,_, notInterruptible = UnitCastingInfo(target)
+	name, _,_,_, startTime, endTime, _,_, notInterruptible = UnitCastingInfo(target)
 	if name then return name, startTime, endTime, notInterruptible end
 end
 
-NeP.DSL:Register('timetomax', function(target, spell)
+NeP.DSL:Register('timetomax', function(target)
 	local max = UnitPowerMax(target)
 	local curr = UnitPower(target)
 	local regen = select(2, GetPowerRegen(target))
@@ -23,7 +23,7 @@ NeP.DSL:Register('toggle', function(_, toggle)
 	return NeP.Config:Read('TOGGLE_STATES', toggle:lower(), false)
 end)
 
-NeP.DSL:Register('casting.percent', function(target, spell)
+NeP.DSL:Register('casting.percent', function(target)
     local name, startTime, endTime, notInterruptible = checkCasting(target)
     if name and not notInterruptible then
         local castLength = (endTime - startTime) / 1000
@@ -33,7 +33,7 @@ NeP.DSL:Register('casting.percent', function(target, spell)
     return 0
 end)
 
-NeP.DSL:Register('casting.delta', function(target, spell)
+NeP.DSL:Register('casting.delta', function(target)
 	local name, startTime, endTime, notInterruptible = checkCasting(target)
 	if name and not notInterruptible then
 		local castLength = (endTime - startTime) / 1000
@@ -44,56 +44,40 @@ NeP.DSL:Register('casting.delta', function(target, spell)
  end)
 
 NeP.DSL:Register('channeling', function (target, spell)
-	local name, startTime, endTime, notInterruptible = checkChanneling(target)
-	local spell = NeP.Core:GetSpellName(spell)
-	if spell and (name == spell) then
-		return true
-	end
-	return false
+	local name = checkChanneling(target)
+	spell = NeP.Core:GetSpellName(spell)
+	return spell and (name == spell)
 end)
 
 NeP.DSL:Register('casting', function(target, spell)
-	local name, startTime, endTime, notInterruptible = checkCasting(target)
-	local spell = NeP.Core:GetSpellName(spell)
-	if spell and (name == spell) then
-		return true
-	end
-	return false
+	local name = checkCasting(target)
+	spell = NeP.Core:GetSpellName(spell)
+	return spell and (name == spell)
 end)
 
 NeP.DSL:Register('interruptAt', function (target, spell)
 	if UnitIsUnit('player', target) then return false end
 	if spell and NeP.DSL:Get('toggle')(nil, 'Interrupts') then
-		local stopAt = tonumber(spell) or 35
-		local stopAt = stopAt + math.random(-5, 5)
+		local stopAt = (tonumber(spell) or 35) + math.random(-5, 5)
 		local secondsLeft, castLength = NeP.DSL:Get('casting.delta')(target)
-		if secondsLeft ~= 0 and 100 - (secondsLeft / castLength * 100) > stopAt then
-			return true
-		end
+		return secondsLeft ~= 0 and (100 - (secondsLeft / castLength * 100)) > stopAt
 	end
-	return false
 end)
 
 NeP.DSL:Register('spell.cooldown', function(_, spell)
-	local start, duration, enabled = GetSpellCooldown(spell)
+	local start, duration = GetSpellCooldown(spell)
 	if not start then return 0 end
-	if start ~= 0 then
-		return (start + duration - GetTime())
-	end
-	return 0
+	return start ~= 0 and (start + duration - GetTime()) or 0
 end)
 
 NeP.DSL:Register('spell.recharge', function(_, spell)
-	local charges, maxCharges, start, duration = GetSpellCharges(spell)
+	local _, _, start, duration = GetSpellCharges(spell)
 	if not start then return false end
-	if start ~= 0 then
-		return (start + duration - GetTime())
-	end
-	return 0
+	return start ~= 0 and (start + duration - GetTime()) or 0
 end)
 
 NeP.DSL:Register('spell.usable', function(_, spell)
-	return (IsUsableSpell(spell) ~= nil)
+	return IsUsableSpell(spell) ~= nil
 end)
 
 NeP.DSL:Register('spell.exists', function(_, spell)
@@ -128,22 +112,21 @@ NeP.DSL:Register('combat.time', function(target)
 	return NeP.CombatTracker:CombatTime(target)
 end)
 
-NeP.DSL:Register('timeout', function(target, args)
+NeP.DSL:Register('timeout', function(_, args)
 	local name, time = strsplit(',', args, 2)
-	local time = tonumber(time)
+	time = tonumber(time)
 	if time then
 		if NeP.timeOut.check(name) then return false end
 		NeP.timeOut.set(name, time)
 		return true
 	end
-	return false
 end)
 
 local waitTable = {}
-NeP.DSL:Register('waitfor', function(target, args)
+NeP.DSL:Register('waitfor', function(_, args)
 	local name, time = strsplit(',', args, 2)
 	if time then
-		local time = tonumber(time)
+		time = tonumber(time)
 		local GetTime = GetTime()
 		local currentTime = GetTime % 60
 		if waitTable[name] then
@@ -155,22 +138,17 @@ NeP.DSL:Register('waitfor', function(target, args)
 			waitTable[name] = currentTime
 		end
 	end
-	return false
 end)
 
 NeP.DSL:Register('IsNear', function(target, args)
 	local targetID, distance = strsplit(',', args, 2)
-	local targetID = tonumber(targetID) or 0
-	local distance = tonumber(distance) or 60
-		for i=1,#NeP.OM['unitEnemie'] do
-			local Obj = NeP.OM['unitEnemie'][i]
-			if Obj.id == targetID then
-				if NeP.Protected.Distance('player', target) <= distance then
-					return true
-				end
-			end
+	targetID = tonumber(targetID) or 0
+	distance = tonumber(distance) or 60
+	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
+		if Obj.id == targetID then
+			return NeP.Protected.Distance('player', target) <= distance
 		end
-	return false
+	end
 end)
 
 NeP.DSL:Register('equipped', function(_, item)
@@ -187,7 +165,7 @@ NeP.DSL:Register('gcd', function()
 end)
 
 NeP.DSL:Register('UI', function(key, UI_key)
-	local UI_key = UI_key or NeP.CR.CR.Name
+	UI_key = UI_key or NeP.CR.CR.Name
 	return NeP.Config:Read(UI_key, key)
 end)
 

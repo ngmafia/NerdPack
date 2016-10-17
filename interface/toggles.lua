@@ -93,7 +93,7 @@ end
 
 function NeP.Interface:ResetToggles()
 	tcount = 0
-	for k,v in pairs(Toggles) do
+	for k in pairs(Toggles) do
 		Toggles[k]:Hide()
 	end
 	self:DefaultToggles()
