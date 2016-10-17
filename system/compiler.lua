@@ -2,11 +2,7 @@ local _, NeP = ...
 
 NeP.Compiler = {}
 
-local spellTokens = {
-	{'actions', '^%%'},
-	{'lib', '^@'},
-	{'item', '^#'}
-}
+local spellTokens = {'^%%','^@','^#'}
 
 -- Takes a string a produces a table in its place
 function NeP.Compiler.Spell(eval, name)
@@ -24,12 +20,11 @@ function NeP.Compiler.Spell(eval, name)
 		ref.spell = ref.spell:sub(2)
 	end
 	if ref.spell:find('^/') then
-		ref.token = ref.spell:sub(1,1)
+		ref.token = '/'
 		skip = true
 	end
 	for i=1, #spellTokens do
-		local _, patern = unpack(spellTokens[i])
-		if ref.spell:find(patern) then
+		if ref.spell:find(spellTokens[i]) then
 			ref.token = ref.spell:sub(1,1)
 			ref.spell = ref.spell:sub(2)
 			skip = true
