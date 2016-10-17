@@ -41,7 +41,8 @@ function NeP.OM:Insert(ref, Obj)
 		name = UnitName(Obj),
 		distance = distance,
 		id = tonumber(ObjID) or '0',
-		guid = GUID
+		guid = GUID,
+		isdummy = NeP.DSL:Get('isdummy')(Obj)
 	}
 end
 
