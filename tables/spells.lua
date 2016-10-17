@@ -2269,7 +2269,7 @@ local SpellID = {
 }
 
 local Racial_Spells = {
-	
+	-- Insert here
 }
 
 local _, NeP = ...
@@ -2311,7 +2311,7 @@ function NeP.Spells:Convert(spell, crname)
 	elseif SpellsTable then
 		if SpellsTable[spell] then
 			spell = SpellsTable[spell]
-		elseif not warned_spells[spell] and crname then
+		elseif not warned_spells[spell] and crname and not GetSpellInfo(spell) then
 			warned_spells[spell] = ''
 			NeP.Core:Print('Unale to convert:|cffff0000', spell, '|rMight be missing...\n|cffff0000-> In:|r', crname)
 		end
