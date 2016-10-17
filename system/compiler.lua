@@ -66,6 +66,7 @@ function NeP.Compiler.Spell(eval, name)
 			local itemName, itemLink, _,_,_,_,_,_,_, texture = GetItemInfo(ref.spell)
 			ref.spell = itemName
 			ref.icon = texture
+			ref.link = itemLink
 			ref.id = NeP.Core:GetItemID(itemName)
 		end)
 		skip = true

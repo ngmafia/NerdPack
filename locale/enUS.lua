@@ -29,5 +29,9 @@ NeP.Locale.enUS = {
 		Action = 'Action',
 		Description = 'Description',
 		Time = 'Time'
+	},
+	Dummies = {
+		Name = 'dummy', -- Moust commun name
+		Pattern = {'dummy', 'training bag'} -- These are the usual things to look for in the description in case name fails
 	}
 }

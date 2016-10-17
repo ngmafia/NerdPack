@@ -313,10 +313,11 @@ NeP.DSL:Register('onehand', function()
 	return IsEquippedItemType("One-Hand")
 end)
 
-local matchs = {'dummy', 'training bag'}
+local communName = NeP.Locale:TA('Dummies', 'Name')
+local matchs = NeP.Locale:TA('Dummies', 'Pattern')
 NeP.DSL:Register('isdummy', function(unit)
 	if not UnitExists(unit) then return end
-	if UnitName(unit):lower():find('dummy') then return true end
+	if UnitName(unit):lower():find(communName) then return true end
 	return NeP.Tooltip:Unit(unit, matchs)
 end)
 

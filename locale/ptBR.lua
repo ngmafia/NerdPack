@@ -30,5 +30,9 @@ NeP.Locale.ptBR = {
 		Action = 'Ação',
 		Description = 'Descrição',
 		Time = 'Tempo'
+	},
+	Dummies = {
+		Name = 'boneco de treinamento',
+		Pattern = {'boneco de treinamento'}
 	}
 }
