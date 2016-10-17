@@ -2286,14 +2286,14 @@ function NeP.Spells:Filter()
 		for spell_name_enus, spell_id in pairs(SpellID[class_id]) do
 			local localized_spell = GetSpellInfo(spell_id)
 			if localized_spell then
-				SpellsTable[spell_name_enus] = localized_spell
+				SpellsTable[spell_name_enus:lower()] = localized_spell
 			end
 		end
 		-- Racials
 		for spell_name_enus, spell_id in pairs(Racial_Spells) do
 			local localized_spell = GetSpellInfo(spell_id)
 			if localized_spell then
-				SpellsTable[spell_name_enus] = localized_spell
+				SpellsTable[spell_name_enus:lower()] = localized_spell
 			end
 		end
 	else
@@ -2309,6 +2309,7 @@ function NeP.Spells:Convert(spell, crname)
 	if spell:find('%d') then
 		spell = GetSpellInfo(spell) or spell
 	elseif SpellsTable then
+		local spell = spell:lower()
 		if SpellsTable[spell] then
 			spell = SpellsTable[spell]
 		elseif not warned_spells[spell] and crname and not GetSpellInfo(spell) then
