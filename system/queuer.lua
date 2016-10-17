@@ -7,7 +7,7 @@ function NeP.Queuer:Add(spell, target)
 	spell = NeP.Spells:Convert(spell)
 	if not spell then return end
 	Queue[spell] = {
-		time = GetTime()
+		time = GetTime(),
 		target = target or UnitExists('target') and 'target' or 'player'
 	}
 end
