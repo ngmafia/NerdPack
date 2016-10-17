@@ -56,18 +56,18 @@ function NeP.Compiler.Spell(eval, name)
 	end
 	if ref.spell:find('^#') then
 		ref.spell = ref.spell:sub(2)
-		--print(ref.spell)
 		ref.token = '#'
-		if invItems[ref.spell] then
-			local invItem = GetInventorySlotInfo(invItems[ref.spell])
-			ref.spell = GetInventoryItemID("player", invItem)
-			if not ref.spell then return end
-		end
-		--print('DONE',ref.spell)
-		local itemName, itemLink, _,_,_,_,_,_,_, texture = GetItemInfo(ref.spell)
-		ref.spell = itemName
-		ref.icon = texture
-		ref.id = NeP.Core:GetItemID(itemName)
+		NeP.Core:WhenInGame(function()
+			if invItems[ref.spell] then
+				local invItem = GetInventorySlotInfo(invItems[ref.spell])
+				ref.spell = GetInventoryItemID("player", invItem)
+				if not ref.spell then return end
+			end
+			local itemName, itemLink, _,_,_,_,_,_,_, texture = GetItemInfo(ref.spell)
+			ref.spell = itemName
+			ref.icon = texture
+			ref.id = NeP.Core:GetItemID(itemName)
+		end)
 		skip = true
 	end
 	for i=1, #spellTokens do
