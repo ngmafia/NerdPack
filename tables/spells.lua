@@ -2309,7 +2309,7 @@ function NeP.Spells:Convert(spell, crname)
 	if spell:find('%d') then
 		spell = GetSpellInfo(spell) or spell
 	elseif SpellsTable then
-		local spell = spell:lower()
+		spell = spell:lower()
 		if SpellsTable[spell] then
 			spell = SpellsTable[spell]
 		elseif not warned_spells[spell] and crname and not GetSpellInfo(spell) then
