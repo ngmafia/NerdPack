@@ -37,10 +37,7 @@ end)
 --------------------------------------------------------------------------------------------------------------
 
 NeP.DSL:Register('petrange', function(target)
-	if target then
-		return NeP.Protected.Distance('pet', target)
-	end
-	return 0
+	return target and NeP.Protected.Distance('pet', target) or 0
 end)
 
 NeP.DSL:Register('focus', function(target)
