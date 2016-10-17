@@ -61,8 +61,8 @@ function NeP.Compiler.Spell(eval, name)
 			if invItems[ref.spell] then
 				local invItem = GetInventorySlotInfo(invItems[ref.spell])
 				ref.spell = GetInventoryItemID("player", invItem)
-				if not ref.spell then return end
 			end
+			if not ref.spell then return end
 			local itemName, itemLink, _,_,_,_,_,_,_, texture = GetItemInfo(ref.spell)
 			ref.spell = itemName
 			ref.icon = texture
