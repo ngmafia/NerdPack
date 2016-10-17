@@ -45,6 +45,7 @@ NeP_AL.frame:SetScript('OnMouseWheel', function(self, mouse)
 end)
 
 local LogItem = { }
+ headers[3][3] = -3
 
 for i = 1, (log_items) do
 	LogItem[i] = CreateFrame('Frame', nil, NeP_AL.frame)
@@ -72,6 +73,7 @@ function NeP.ActionLog:Refresh(type, spell, _, target)
 	and Data[1]['target'] == target then
 		Data[1]['count'] = Data[1]['count'] + 1
 		Data[1]['time'] = date('%H:%M:%S')
+		self:Update()
 		return true
 	end
 end
