@@ -326,9 +326,9 @@ end)
 NeP.DSL:Register("area.enemies", function(unit, distance)
 	local total = 0
 	if not UnitExists(unit) then return total end
-	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
-		if (NeP.DSL:Get('combat')(Obj.key) or Obj.isdummy)
-		and NeP.Protected.Distance(unit, Obj.key) <= tonumber(distance) then
+	for GUID, Obj in pairs(NeP.OM:Get('Enemy')) do
+		local cdistance = NeP.Protected.Distance(unit, Obj.key) or 0
+		if NeP.DSL:Get('combat')(Obj.key) and cdistance <= tonumber(distance) then
 			total = total +1
 		end
 	end
@@ -338,8 +338,9 @@ end)
 NeP.DSL:Register("area.friendly", function(unit, distance)
 	local total = 0
 	if not UnitExists(unit) then return total end
-	for _, Obj in pairs(NeP.OM:GetRoster()) do
-		if NeP.Protected.Distance(unit, Obj.key) <= tonumber(distance) then
+	for GUID, Obj in pairs(NeP.OM:GetRoster()) do
+		local cdistance = NeP.Protected.Distance(unit, Obj.key) or 0
+		if cdistance <= tonumber(distance) then
 			total = total +1
 		end
 	end
