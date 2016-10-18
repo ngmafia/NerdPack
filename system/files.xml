@@ -20,5 +20,6 @@
 	<Script file="fakeunits.lua" />
 	<Script file="om.lua" />
 	<Script file="healing.lua" />
+	<Script file="keybinds.lua" />
 
 </Ui>

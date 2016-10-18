@@ -40,7 +40,7 @@ function NeP.Core:GetSpellID(spell)
 end
 
 function NeP.Core:GetSpellName(spell)
-	if spell and type(spell) == 'string' then return spell end
+	if not spell or type(spell) == 'string' then return spell end
 	local spellID = tonumber(spell)
 	if spellID then
 		return GetSpellInfo(spellID)
@@ -49,7 +49,7 @@ function NeP.Core:GetSpellName(spell)
 end
 
 function NeP.Core:GetItemID(item)
-	if item and type(item) == 'number' then return item end
+	if not item or type(item) == 'number' then return item end
 	local itemID = string.match(select(2, GetItemInfo(item)) or '', 'Hitem:(%d+):')
 	return tonumber(itemID) or item
 end
