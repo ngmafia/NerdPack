@@ -1,4 +1,4 @@
-local Keys = {}
+--[[local Keys = {}
 
 local bt = CreateFrame("CheckButton", 'NeP_KeyListener', UIParent)
 bt:EnableKeyboard(true)
@@ -19,4 +19,4 @@ bt:SetScript("OnKeyUp", function(self, key)
 	RunBinding(key)
 	Keys[key] = false
 	print(key)
-end)
+end)]]
