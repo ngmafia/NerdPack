@@ -32,7 +32,8 @@ function NeP.Parser.Target(eval)
 		target.target = target.func()
 	end
 	eval.target = NeP.FakeUnits:Filter(target.target)
-	if UnitExists(eval.target) and UnitIsVisible(eval.target) then
+	if UnitExists(eval.target) and UnitIsVisible(eval.target)
+	and NeP.Protected.LineOfSight('player', eval.target) then
 		return true
 	end
 end
@@ -45,7 +46,8 @@ function NeP.Parser.Spell(eval)
 	local isUsable, notEnoughMana = IsUsableSpell(eval[1].spell)
 	if skillType ~= 'FUTURESPELL' and isUsable and not notEnoughMana then
 		local GCD = NeP.DSL:Get('gcd')()
-		if GetSpellCooldown(eval[1].spell) <= GCD then
+		if GetSpellCooldown(eval[1].spell) <= GCD
+		and NeP.Helpers:Check(eval[1].spell, eval.target) then
 			return true
 		end
 	end
@@ -81,6 +83,7 @@ function NeP.Parser.Parse(eval)
 					end
 					NeP.Protected[eval.func](spell.spell, eval.target)
 					NeP.Parser.LastCast = spell.spell
+					NeP.Parser.LastTarget = eval.target
 					NeP.ActionLog:Add('Parser', spell.spell, spell.icon, eval.target)
 					NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
 					return true

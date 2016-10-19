@@ -27,44 +27,41 @@ local UI_Erros = {
 	-- SPELL_FAILED_OUT_OF_RANGE
 	[359] = function(GUID, spell)
 		addToData(GUID)
-		spellHasFailed[GUID][spell] = true
+		spellHasFailed[GUID][spell] = ''
 	end,
 	-- Cant while moving
 	[220] = function(GUID, spell)
 		addToData(GUID)
-		spellHasFailed[GUID][spell] = true
+		spellHasFailed[GUID][spell] = ''
 	end
 }
 
-function NeP.Helpers.infront(target)
+function NeP.Helpers:Infront(target)
 	if not target then return end
 	local GUID = UnitGUID(target)
 	if GUID and spellHasFailed[GUID] then
-		return (spellHasFailed[GUID].infront)
+		return spellHasFailed[GUID].infront
 	end
 	return true
 end
 
-function NeP.Helpers.SpellSanity(spell, target)
-	if target and spell then
-		local GUID = UnitGUID(target)
-		if GUID and spellHasFailed[GUID] then
-			return spellHasFailed[GUID][spell] == nil
-		end
+function NeP.Helpers:Check(spell, target)
+	if not target or not spell then return end
+	local GUID = UnitGUID(target)
+	if GUID and spellHasFailed[GUID] then
+		return spellHasFailed[GUID][spell] == nil
 	end
 	return true
 end
 
 NeP.Listener:Add("NeP_Helpers", "UI_ERROR_MESSAGE", function(error)
 	if not UI_Erros[error] then return end
-	local unit, spell = NeP.Parser.lastTarget, NeP.Parser.lastCast
-	if unit and spell then
-		local GUID = UnitGUID(unit)
-		if GUID then
-			UI_Erros[error](GUID, spell)
-			UIErrorsFrame:UnregisterEvent("UI_ERROR_MESSAGE")
-		end
-	end
+	local unit, spell = NeP.Parser.LastTarget, NeP.Parser.LastCast
+	if not unit or not spell then return end
+	local GUID = UnitGUID(unit)
+	if not GUID then return end
+	UI_Erros[error](GUID, spell)
+	UIErrorsFrame:UnregisterEvent("UI_ERROR_MESSAGE")
 end)
 
 C_Timer.NewTicker(1, (function()

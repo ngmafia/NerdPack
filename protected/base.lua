@@ -23,17 +23,17 @@ NeP.Protected.Distance = function(_, b)
 	return maxRange or minRange
 end
 
-NeP.Protected.Infront = function()
-	return true
+NeP.Protected.Infront = function(_,b)
+	return NeP.Helpers:Infront(b)
 end
 
-NeP.Protected.UnitCombatRange = function(_, b)
+NeP.Protected.UnitCombatRange = function(_,b)
 	local minRange = rangeCheck:GetRange(b)
 	return minRange
 end
 
-NeP.Protected.LineOfSight = function()
-	return true
+NeP.Protected.LineOfSight = function(_,b)
+	return NeP.Helpers:Infront(b)
 end
 
 local ValidUnits = {'player', 'mouseover', 'target', 'arena1', 'arena2'}
