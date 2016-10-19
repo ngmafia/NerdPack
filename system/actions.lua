@@ -62,7 +62,6 @@ NeP.Actions['#'] = function(eval)
 		local ready = select(2, GetItemCooldown(item.id)) == 0
 		if isUsable and ready and (GetItemCount(item.spell) > 0) then
 			--print(item.id, item.spell)
-			eval.func = NeP.Protected.UseItem
 			return true
 		end
 	end
@@ -80,8 +79,7 @@ NeP.Actions['@'] = function(eval)
 end
 
 -- Macro
-NeP.Actions['/'] = function(eval)
-	eval.func = NeP.Protected.Macro
+NeP.Actions['/'] = function()
 	return true
 end
 

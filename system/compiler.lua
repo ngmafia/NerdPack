@@ -2,8 +2,6 @@ local _, NeP = ...
 
 NeP.Compiler = {}
 
-local spellTokens = {'^%%','^@'}
-
 local invItems = {
 	['head']		= 'HeadSlot',
 	['helm']		= 'HeadSlot',
@@ -52,11 +50,22 @@ function NeP.Compiler.Spell(eval, name)
 	end
 	if ref.spell:find('^/') then
 		ref.token = '/'
+		eval.func = 'Macro'
+		skip = true
+	end
+	if ref.spell:find('^@') then
+		ref.bypass = true
+		ref.spell = ref.spell:sub(2)
+	end
+	if ref.spell:find('^%%') then
+		ref.token = ref.spell:sub(1,1)
+		ref.spell = ref.spell:sub(2)
 		skip = true
 	end
 	if ref.spell:find('^#') then
 		ref.spell = ref.spell:sub(2)
 		ref.token = '#'
+		eval.func = 'UseItem'
 		NeP.Core:WhenInGame(function()
 			if invItems[ref.spell] then
 				local invItem = GetInventorySlotInfo(invItems[ref.spell])
@@ -71,19 +80,15 @@ function NeP.Compiler.Spell(eval, name)
 		end)
 		skip = true
 	end
-	for i=1, #spellTokens do
-		if ref.spell:find(spellTokens[i]) then
-			ref.token = ref.spell:sub(1,1)
-			ref.spell = ref.spell:sub(2)
-			skip = true
-		end
-	end
 	-- Some APIs only work after we'r in-game, so we delay.
 	if not skip then
 		NeP.Core:WhenInGame(function()
 			ref.spell = NeP.Spells:Convert(ref.spell, name)
 			ref.icon = select(3,GetSpellInfo(ref.spell))
 		end)
+	end
+	if not eval.func then
+		eval.func = 'Cast'
 	end
 	local arg1, args = ref.spell:match('(.+)%((.+)%)')
 	if args then ref.spell = arg1 end
@@ -108,6 +113,7 @@ function NeP.Compiler.Target(eval)
 	if ref.target:find('.ground') then
 		ref.target = ref.target:sub(0,-8)
 		ref.ground = true
+		eval.func = 'CastGround'
 	end
 	eval[3] = ref
 end

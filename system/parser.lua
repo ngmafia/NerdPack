@@ -46,7 +46,6 @@ function NeP.Parser.Spell(eval)
 	if skillType ~= 'FUTURESPELL' and isUsable and not notEnoughMana then
 		local GCD = NeP.DSL:Get('gcd')()
 		if GetSpellCooldown(eval[1].spell) <= GCD then
-			eval.func = eval[3].ground and NeP.Protected.CastGround or NeP.Protected.Cast
 			return true
 		end
 	end
@@ -55,7 +54,9 @@ end
 function NeP.Parser.Table(spell, cond)
 	if NeP.DSL.Parse(cond) then
 		for i=1, #spell do
-			if NeP.Parser.Parse(spell[i]) then return true end
+			if NeP.Parser.Parse(spell[i]) then
+				return true
+			end
 		end
 	end
 end
@@ -78,7 +79,7 @@ function NeP.Parser.Parse(eval)
 						end
 						SpellStopCasting()
 					end
-					eval.func(spell.spell, eval.target)
+					NeP.Protected[eval.func](spell.spell, eval.target)
 					NeP.LastCast = spell.spell
 					NeP.ActionLog:Add('Parser', spell.spell, spell.icon, eval.target)
 					NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
