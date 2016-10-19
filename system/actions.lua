@@ -11,6 +11,7 @@ NeP.Actions['dispelall'] = function(eval, args)
 			if dispelType then
 				eval[1].spell = spell
 				eval[3].target = Obj.key
+				eval.func = NeP.Protected.Cast
 				return true
 			end
 		end
@@ -18,9 +19,19 @@ NeP.Actions['dispelall'] = function(eval, args)
 end
 
 -- Automated tauting
---NeP.Actions['taunt'] = function(eval, args)
-	--TODO
---end
+NeP.Actions['taunt'] = function(eval, args)
+	local spell = NeP.Spells:Convert(args)
+	if not spell then return end
+	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
+		local Threat = UnitThreatSituation("player", Obj.key)
+		if Threat and Threat >= 0 and Threat < 3 and Obj.distance <= 30 then
+			eval[1].spell = spell
+			eval[2].target = Obj.key
+			eval.func = NeP.Protected.Cast
+			return true
+		end
+	end
+end
 
 -- Ress all dead
 --NeP.Actions['ressdead'] = function(eval, args)
