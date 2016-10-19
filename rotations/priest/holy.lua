@@ -12,11 +12,11 @@ local Keybinds = {
 
 local Potions = {
     --Health Stone below 20% health. Active when NOT channeling Divine Hymn.
-    {'#Health Stone', {'player.health <= 20 & !player.channeling(Divine Hymn)'},
+    {'#Health Stone', 'player.health <= 20 & !player.channeling(Divine Hymn)'},
     --Ancient Healing Potion below 20% health. Active when NOT channeling Divine Hymn.
-    {'#Ancient Healing Potion', {'player.health <= 20 & !player.channeling(Divine Hymn)'},
+    {'#Ancient Healing Potion', 'player.health <= 20 & !player.channeling(Divine Hymn)'},
     --Ancient Mana Potion below 20% mana. Active when NOT channeling Divine Hymn.
-    {'#Ancient Mana Potion', {'player.mana < 10 & !player.channeling(Divine Hymn)'}
+    {'#Ancient Mana Potion', 'player.mana < 10 & !player.channeling(Divine Hymn)'}
 }
 
 local SpiritOfRedemption = {
