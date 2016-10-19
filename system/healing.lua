@@ -10,8 +10,8 @@ local UnitGetTotalHealAbsorbs = UnitGetTotalHealAbsorbs
 local UnitGetIncomingHeals = UnitGetIncomingHeals
 
 local Roles = {
-	['TANK'] = 1.5,
-	['HEALER'] = 1.2,
+	['TANK'] = 0.7,
+	['HEALER'] = 0.9,
 	['DAMAGER'] = 1,
 	['NONE'] = 1
 }
