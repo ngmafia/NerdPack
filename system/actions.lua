@@ -34,9 +34,19 @@ NeP.Actions['taunt'] = function(eval, args)
 end
 
 -- Ress all dead
---NeP.Actions['ressdead'] = function(eval, args)
-	--TODO
---end
+NeP.Actions['ressdead'] = function(eval, args)
+	local spell = NeP.Spells:Convert(args)
+	if not spell then return end
+	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
+		if Obj.distance < 40 and UnitIsPlayer(Obj.Key)
+		and UnitIsDeadOrGhost(Obj.key) and UnitPlayerOrPetInParty(Obj.key) then
+			eval[1].spell = spell
+			eval[2].target = Obj.key
+			eval.func = NeP.Protected.Cast
+			return true
+		end
+	end
+end
 
 -- Pause
 NeP.Actions['pause'] = function(eval)
