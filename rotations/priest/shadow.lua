@@ -10,7 +10,7 @@ local Interrupts = {
 	{'Arcane Torrent', 'target.range <= 8 & spell(Silence).cooldown > gcd & !prev_gcd(Silence)'},
 }
 
-local Survival =
+local Survival = {
 	--Healthstone at or below 20% health. Active when NOT channeling Void Torrent.
 	{'Healthstone', 'player.health <= 20 & !player.channeling(Void Torrent)'},
 	--Ancient Healing Potion at or below 20% health. Active when NOT channeling Void Torrent.
