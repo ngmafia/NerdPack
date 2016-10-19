@@ -108,13 +108,15 @@ NeP.DSL:Register("incdmg", function(target, args)
 end)
 
 NeP.Listener:Add('NeP_CombatTracker', 'COMBAT_LOG_EVENT_UNFILTERED', function(...)
-	local _, EVENT, _,_,_,_,_, GUID = ...
-	-- Add the unit to our data if we dont have it
-	addToData(GUID)
-	-- Update last  hit time
-	Data[GUID].lastHit = GetTime()
-	-- Add the amount of dmg/heak
-	if EVENTS[EVENT] then EVENTS[EVENT](...) end
+	if InCombatLockdown() then
+		local _, EVENT, _,_,_,_,_, GUID = ...
+		-- Add the unit to our data if we dont have it
+		addToData(GUID)
+		-- Update last  hit time
+		Data[GUID].lastHit = GetTime()
+		-- Add the amount of dmg/heak
+		if EVENTS[EVENT] then EVENTS[EVENT](...) end
+	end
 end)
 
 NeP.Listener:Add('NeP_CombatTracker', 'PLAYER_REGEN_ENABLED', function()
