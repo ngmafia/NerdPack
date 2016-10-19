@@ -9,13 +9,6 @@ local UnitHealthMax = UnitHealthMax
 local UnitGetTotalHealAbsorbs = UnitGetTotalHealAbsorbs
 local UnitGetIncomingHeals = UnitGetIncomingHeals
 
-local Roles = {
-	['TANK'] = 1,
-	['HEALER'] = 1,
-	['DAMAGER'] = 1,
-	['NONE'] = 1
-}
-
 function NeP.Healing:GetRoster()
 	return Roster
 end
@@ -31,7 +24,6 @@ function NeP.Healing:Add(Obj)
 	local healthPercent =  (healthRaw / maxHealth) * 100
 	Roster[Obj.guid] = {
 		key = Obj.key,
-		prio = Roles[Role]*healthPercent,
 		name = Obj.name,
 		id = Obj.id,
 		health = healthPercent,
@@ -50,8 +42,6 @@ function NeP.Healing:Refresh(GUID, Obj)
 	temp.health = healthPercent
 	temp.healthRaw = healthRaw
 	temp.distance = Obj.distance
-	temp.prio = Roles[temp.role]*healthPercent
-	print(UnitName(temp.key), temp.prio)
 end
 
 function NeP.Healing:Grabage()
