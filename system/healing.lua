@@ -10,8 +10,8 @@ local UnitGetTotalHealAbsorbs = UnitGetTotalHealAbsorbs
 local UnitGetIncomingHeals = UnitGetIncomingHeals
 
 local Roles = {
-	['TANK'] = 2,
-	['HEALER'] = 1.5,
+	['TANK'] = 1.5,
+	['HEALER'] = 1.2,
 	['DAMAGER'] = 1,
 	['NONE'] = 1
 }
@@ -50,6 +50,8 @@ function NeP.Healing:Refresh(GUID, Obj)
 	temp.health = healthPercent
 	temp.healthRaw = healthRaw
 	temp.distance = Obj.distance
+	temp.prio = Roles[temp.role]*healthPercent
+	print(UnitName(temp.key), temp.prio)
 end
 
 function NeP.Healing:Grabage()
