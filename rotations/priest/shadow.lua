@@ -12,9 +12,9 @@ local Interrupts = {
 
 local Survival = {
 	--Healthstone at or below 20% health. Active when NOT channeling Void Torrent.
-	{'Healthstone', 'player.health <= 20 & !player.channeling(Void Torrent)'},
+	{'#Healthstone', 'player.health <= 20 & !player.channeling(Void Torrent)'},
 	--Ancient Healing Potion at or below 20% health. Active when NOT channeling Void Torrent.
-	{'Ancient Healing Potion', 'player.health <= 20 & !player.channeling(Void Torrent)'},
+	{'#Ancient Healing Potion', 'player.health <= 20 & !player.channeling(Void Torrent)'},
 	--Gift of the Naaru at or below 40% health. Active when NOT channeling Void Torrent.
 	{'Gift of the Naaru', 'player.health <= 40 & !player.channeling(Void Torrent)'},
 	--Power Word: Shield at or below 40% health. Active when NOT in Surrender to Madness or channeling Void Torrent.
