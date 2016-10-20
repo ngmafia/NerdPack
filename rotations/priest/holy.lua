@@ -114,7 +114,10 @@ local Player = {
 	{'Prayer of Mending', '!player.buff(Prayer of Mending)', 'player'},
 	--Renew if player missing Renew.
 	{'Renew', '!player.buff(Renew)', 'player'},
-	--Prayer of Healing if... 
+	--Prayer of Healing if player and 4 or more others at 20yds are 65% health ore below.
+	{'Prayer of Healing', 'player.area(20, 65).heal >= 4 ', 'lowest'},
+	--Holy Nova if player and 4 or more others at 10yds are 90% health or below.
+	{'Holy Nova', 'player.area(10, 90).heal >= 4', 'player'},
 	
 }
 			
@@ -127,8 +130,8 @@ local Lowest = {
 	{'Holy Word: Serenity', 'lowest.health <= 60', 'lowest'},
 	--Flash Heal if lowest health is below or if 70%.			
 	{'Flash Heal', 'lowest.health <= 70', 'lowest'},
-	--Prayer of Healing if...
-	
+	--Prayer of Healing if lowest and 4 or more others are 65% health or below.
+	{'Prayer of Healing', 'lowest.area(20, 65).heal >= 4' , 'lowest'},
 	--Prayer of Mending if lowest health is missing Prayer of Mending.
 	{'Prayer of Mending', '!lowest.buff(Prayer of Mending)', 'lowest'},
 	--Renew if lowest health is missing Renew.
