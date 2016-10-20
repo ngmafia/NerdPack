@@ -5,7 +5,7 @@ local LibDisp = LibStub('LibDispellable-1.0')
 
 -- Dispell all
 NeP.Actions['dispelall'] = function(eval)
-	for _, Obj in pairs(NeP.OM:GetRoster()) do
+	for _, Obj in pairs(NeP.Healing:GetRoster()) do
 		for _,spellID, _,_,_,_, dispelType in LibDisp:IterateDispellableAuras(Obj.key) do
 			local spell = GetSpellInfo(spellID)
 			if dispelType then
