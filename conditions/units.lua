@@ -372,7 +372,7 @@ end)
 NeP.DSL:Register("area.friendly", function(unit, distance)
 	local total = 0
 	if not UnitExists(unit) then return total end
-	for GUID, Obj in pairs(NeP.OM:GetRoster()) do
+	for GUID, Obj in pairs(NeP.OM:Get('Friendly')) do
 		if UnitExists(Obj.key) then
 			local unit_dist = NeP.Protected.Distance(unit, Obj.key)
 			if unit_dist <= tonumber(distance) then
@@ -387,7 +387,7 @@ end)
 NeP.DSL:Register("area.friendly.infront", function(unit, distance)
 	local total = 0
 	if not UnitExists(unit) then return total end
-	for GUID, Obj in pairs(NeP.OM:GetRoster()) do
+	for GUID, Obj in pairs(NeP.OM:Get('Friendly')) do
 		if UnitExists(Obj.key) then
 			local unit_dist = NeP.Protected.Distance(unit, Obj.key)
 			if unit_dist <= tonumber(distance)
