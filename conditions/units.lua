@@ -335,13 +335,15 @@ end)
 
 ------------------------------------------ OM CRAP ---------------------------------------
 ------------------------------------------------------------------------------------------
+-- USAGE: UNIT.aoe(DISTANCE).enemies >= #
 NeP.DSL:Register("area.enemies", function(unit, distance)
 	local total = 0
 	if not UnitExists(unit) then return total end
 	for GUID, Obj in pairs(NeP.OM:Get('Enemy')) do
 		if UnitExists(Obj.key) then
-			local cdistance = NeP.Protected.Distance(unit, Obj.key) or 0
-			if (NeP.DSL:Get('combat')(Obj.key) or Obj.isdummy) and cdistance <= tonumber(distance) then
+			local unit_dist = NeP.Protected.Distance(unit, Obj.key)
+			if (NeP.DSL:Get('combat')(Obj.key) or Obj.isdummy)
+			and unit_dist <= tonumber(distance) then
 				total = total +1
 			end
 		end
@@ -349,13 +351,47 @@ NeP.DSL:Register("area.enemies", function(unit, distance)
 	return total
 end)
 
+-- USAGE: UNIT.aoe(DISTANCE).enemies.infront >= #
+NeP.DSL:Register("area.enemies.infront", function(unit, distance)
+	local total = 0
+	if not UnitExists(unit) then return total end
+	for GUID, Obj in pairs(NeP.OM:Get('Enemy')) do
+		if UnitExists(Obj.key) then
+			local unit_dist = NeP.Protected.Distance(unit, Obj.key)
+			if (NeP.DSL:Get('combat')(Obj.key) or Obj.isdummy)
+			and unit_dist <= tonumber(distance)
+			and NeP.Protected.Infront(unit, Obj.key) then
+				total = total +1
+			end
+		end
+	end
+	return total
+end)
+
+-- USAGE: UNIT.aoe(DISTANCE).friendly >= #
 NeP.DSL:Register("area.friendly", function(unit, distance)
 	local total = 0
 	if not UnitExists(unit) then return total end
 	for GUID, Obj in pairs(NeP.OM:GetRoster()) do
 		if UnitExists(Obj.key) then
-			local cdistance = NeP.Protected.Distance(unit, Obj.key) or 0
-			if cdistance <= tonumber(distance) then
+			local unit_dist = NeP.Protected.Distance(unit, Obj.key)
+			if unit_dist <= tonumber(distance) then
+				total = total +1
+			end
+		end
+	end
+	return total
+end)
+
+-- USAGE: UNIT.aoe(DISTANCE).friendly >= #
+NeP.DSL:Register("area.friendly.infront", function(unit, distance)
+	local total = 0
+	if not UnitExists(unit) then return total end
+	for GUID, Obj in pairs(NeP.OM:GetRoster()) do
+		if UnitExists(Obj.key) then
+			local unit_dist = NeP.Protected.Distance(unit, Obj.key)
+			if unit_dist <= tonumber(distance)
+			and NeP.Protected.Infront(unit, Obj.key) then
 				total = total +1
 			end
 		end
