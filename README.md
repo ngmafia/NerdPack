@@ -1,3 +1,4 @@
+<a href="http://goo.gl/yrctPO"><img src="http://nerdpackaddon.site/MTS/paypal.png" alt="Donate" width="100" height="50" align = "right" /></a>
 <a href="https://discordapp.com/invite/XtSZbjM"><img src="http://i.imgur.com/fzomMAr.png" alt="Join us on discord!" width="150" height="50" align = "right" /></a>
 <p align = "center"><h1>NerdPack</h1></p>
 
