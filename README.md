@@ -2,7 +2,8 @@
 <a href="https://discordapp.com/invite/XtSZbjM"><img src="http://i.imgur.com/fzomMAr.png" alt="Join us on discord!" width="150" height="50" align = "right" /></a>
 <p align = "center"><h1>NerdPack</h1></p>
 
-![](http://nerdpackaddon.site/MTS/NeP_Show.jpg)  
+![](http://nerdpackaddon.site/MTS/NeP_Show.jpg)!
+<img src="http://nerdpackaddon.site/MTS/NeP_Logo.png" width="400" height="250" align = "right" /></a>  
 
 ###Information:
 NerdPack is divided by 2 kind of modules: Core ("Legal") and Protected ("Ilegal").  
