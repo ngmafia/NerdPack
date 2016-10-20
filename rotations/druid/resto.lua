@@ -1,10 +1,10 @@
-local inCombat = {
-
-}
-
 local Keybinds = {
 	-- Pause
 	{'%pause', 'keybind(alt)'},
+}
+
+local inCombat = {
+
 }
 
 local outCombat = {
