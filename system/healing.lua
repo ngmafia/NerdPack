@@ -88,7 +88,7 @@ NeP.DSL:Register("health.predicted", function(unit)
 end)
 
 -- USAGE: UNIT.aoe(HEALTH, DISTANCE).heal >= #
-NeP.DSL:Register("aoe.heal", function(unit, args)
+NeP.DSL:Register("area.heal", function(unit, args)
 	local total = 0
 	if not UnitExists(unit) then return total end
 	local health, distance = strsplit(",", args, 2)
@@ -103,7 +103,7 @@ NeP.DSL:Register("aoe.heal", function(unit, args)
 end)
 
 -- USAGE: UNIT.aoe(HEALTH, DISTANCE).heal.infront >= #
-NeP.DSL:Register("aoe.heal.infront", function(unit, args)
+NeP.DSL:Register("area.heal.infront", function(unit, args)
 	local total = 0
 	if not UnitExists(unit) then return total end
 	local health, distance = strsplit(",", args, 2)
