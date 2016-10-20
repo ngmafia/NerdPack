@@ -123,7 +123,7 @@ local Player = {
 			
 local Lowest = {
 	--Flash Heal charge Dump if Surge of Light duration is less or equal to 3 seconds.
-	{'Flash Heal', 'buff(Surge of Light) & buff(Surge of Light).duration <= 3 & lowest.health < 100', 'lowest'},
+	{'Flash Heal', 'player.buff(Surge of Light) & player.buff(Surge of Light).duration <= 3 & lowest.health < 100', 'lowest'},
 	--Gift of the Naaru if lowest health is below or if 20% and has Guardian Spirit.
 	{'Gift of the Naaru', 'lowest.health <= 20 & lowest.buff(Guardian Spirit)', 'lowest'},
 	--Holy Word: Serenity if lowest health is below or if 60%.
@@ -146,11 +146,11 @@ local Moving = {
 	--Renew if lowest health is missing Renew and Lowest health below 100% and moving.
 	{'Renew', '!lowest.buff(Renew) & lowest.health < 100', 'lowest'},
 	--Flash Heal charge Dump if Surge of Light duration is less or equal to 3 seconds and moving
-	{'Flash Heal', 'buff(Surge of Light) & buff(Surge of Light).duration <= 3 & lowest.health < 100', 'lowest'},
+	{'Flash Heal', 'player.buff(Surge of Light) & player.buff(Surge of Light).duration <= 3 & lowest.health < 100', 'lowest'},
 	--Flash Heal when Surge of Light is active, Lowest Health is below 70% and moving.
-	{'Flash Heal', 'buff(Surge of Light) & lowest.health < 70', 'lowest'},
+	{'Flash Heal', 'player.buff(Surge of Light) & lowest.health < 70', 'lowest'},
 	--Angelic Feather if player is moving for 2 seconds or longer and Missing Angelic Feather and if UI enables it. WIP
-	{'Angelic Feather', 'player.movingfor >= 2 & !buff(Angelic Feather) & spell(Angelic Feather).charges >= 1', 'player.ground'} --UI enable
+	{'Angelic Feather', 'player.movingfor >= 2 & !player.buff(Angelic Feather) & spell(Angelic Feather).charges >= 1', 'player.ground'} --UI enable
 	
 }
 
@@ -161,7 +161,7 @@ local inCombat = {
 	{Trinkets},
 	{Keybinds},
 	{Potions},
-	{SpiritOfRedemption, 'buff(Spirit of Redemption)'},
+	{SpiritOfRedemption, 'player.buff(Spirit of Redemption)'},
 	{'%dispelall'},
 	{{
 		{FastHeals, 'lowest.health < 30'},
