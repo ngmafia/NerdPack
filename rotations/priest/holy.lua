@@ -1,23 +1,24 @@
 local GUI = {
-  
---------------------------------------------TRINKETS-----------------------------------------------------
+	
+	--------------------------------------------TRINKETS------------------------------------------------
 	----------------------------------------------------------------------------------------------------
 	{type = 'header', 	text = 'Trinkets', align = 'center'},
 	{type = 'text', 	text = 'Check to Enable Trinkets', align = 'center'},
 	{type = 'checkbox', text = 'Top Trinket enabled', key = 'trinket_1', default = false},
 	{type = 'checkbox', text = 'Bottom Trinket enabled', key = 'Trinket_2', default = false},
 	
---------------------------------------------KEYBINDS-----------------------------------------------------
+	--------------------------------------------KEYBINDS-----------------------------------------------------
 	---------------------------------------------------------------------------------------------------
 	
 	{type = 'header', 	text = 'Keybinds', align = 'center'},
-	{type = 'text', 	text = 'Left Shift: Holy Word: Sanctify | Left Ctrl: Mass Dispel  | Alt: Pause', align = 'center'},
+	{type = 'text', 	text = 'Left Shift: Holy Word: Sanctify | Left Ctrl: Mass Dispel	| Alt: Pause', align = 'center'},
 	{type = 'checkbox', text = 'Holy Word: Sanctify enabled', key = 'k_HWS', default = false},
 	{type = 'checkbox', text = 'Mass Dispel enabled', key = 'k_MD', default = false},
 	{type = 'checkbox', text = 'Pause enabled', key = 'k_P', default = false},
 
---------------------------------------------POTIONS-----------------------------------------------------
+	--------------------------------------------POTIONS-------------------------------------------------
 	----------------------------------------------------------------------------------------------------
+
 	{type = 'header', 	text = 'Potions', align = 'center'},
 	{type = 'text', 	text = 'Check to enable Potions', align = 'center'},
 	{type = 'checkbox', text = 'Health Stone', key = 'p_HS', default = false},
@@ -27,7 +28,7 @@ local GUI = {
 	{type = 'checkbox', text = 'Ancient Mana Potion', key = 'p_AMP', default = false},
 	{type = 'spinner', text = 'Ancient Mana Potion', key = 'sp_AMP', default = 10},
 	
---------------------------------------------DPS--------------------------------------------------------
+	--------------------------------------------DPS-----------------------------------------------------
 	----------------------------------------------------------------------------------------------------
 	{type = 'header', 	text = 'DPS mode', align = 'center'},
 	{type = 'text', 	text = 'Check to enable extra DPS', align = 'center'},
@@ -51,34 +52,34 @@ local Trinkets = {
 
 local Keybinds = {
 	--Mass Dispel on Mouseover target Left Control.
-	{'Mass Dispel', 'keybind(lctrl) & UI(k_MD)', 'mouseover.ground'},                       
+	{'Mass Dispel', 'keybind(lctrl) & UI(k_MD)', 'mouseover.ground'},											 
 	--Holy Word: Sanctify on Mouseover target left shift.
-	{'Holy Word: Sanctify', 'keybind(lshift) & UI(k_HWS)', 'mouseover.ground'},                         
+	{'Holy Word: Sanctify', 'keybind(lshift) & UI(k_HWS)', 'mouseover.ground'},												 
 	-- Pause on left alt.
-	{'%pause', 'keybind(lalt)& UI(k_P)'}                                                             
+	{'%pause', 'keybind(lalt)& UI(k_P)'}																														 
 }
 
 local Potions = {
-    --Health Stone below 20% health. Active when NOT channeling Divine Hymn.
-    {'#Health Stone', 'player.health <= UI(sp_HS) & UI(p_HS) & !player.channeling(Divine Hymn)'},
-    --Ancient Healing Potion below 20% health. Active when NOT channeling Divine Hymn.
-    {'#Ancient Healing Potion', 'player.health <= UI(sp_AHP) & UI(p_AHP) & !player.channeling(Divine Hymn)'},
-    --Ancient Mana Potion below 20% mana. Active when NOT channeling Divine Hymn.
-    {'#Ancient Mana Potion', 'player.mana <= UI(sp_AMP)& UI(p_AMP) & !player.channeling(Divine Hymn)'}
+	--Health Stone below 20% health. Active when NOT channeling Divine Hymn.
+	{'#Health Stone', 'player.health <= UI(sp_HS) & UI(p_HS) & !player.channeling(Divine Hymn)'},
+	--Ancient Healing Potion below 20% health. Active when NOT channeling Divine Hymn.
+	{'#Ancient Healing Potion', 'player.health <= UI(sp_AHP) & UI(p_AHP) & !player.channeling(Divine Hymn)'},
+	--Ancient Mana Potion below 20% mana. Active when NOT channeling Divine Hymn.
+	{'#Ancient Mana Potion', 'player.mana <= UI(sp_AMP)& UI(p_AMP) & !player.channeling(Divine Hymn)'}
 }
 
 local SpiritOfRedemption = {
-    --Holy Word: Serenity when lowest health is below 50%.
-    {'Holy Word: Serenity', 'lowest.health < 50', 'lowest'},
-    --Flash Heal when lowest health is below 100%.
-    {'Flash Heal', 'lowest.health < 100' , 'lowest'}
+	--Holy Word: Serenity when lowest health is below 50%.
+	{'Holy Word: Serenity', 'lowest.health < 50', 'lowest'},
+	--Flash Heal when lowest health is below 100%.
+	{'Flash Heal', 'lowest.health < 100' , 'lowest'}
 }
 			
 local DPS = {
 	--Holy Word: Chastise on cooldown if not healing .
-	{'Holy Word: Chastise', 'UI(d_HWC)' , 'target'},                                
+	{'Holy Word: Chastise', 'UI(d_HWC)' , 'target'},																
 	--Holy Fire on cooldown if not healing.
-	{'Holy Fire', 'UI(d_HF)' , 'target'},                                           
+	{'Holy Fire', 'UI(d_HF)' , 'target'},																					 
 	--Smite on cooldown if not healing.
 	{'Smite', nil, 'target'}
 }
@@ -138,7 +139,7 @@ local Lowest = {
 
 local Moving = {
 	--Holy Word: Serenity if lowest health below or if 60% and moving.
-  {'Holy Word: Serenity', 'lowest.health <= 60', 'lowest'},
+	{'Holy Word: Serenity', 'lowest.health <= 60', 'lowest'},
 	--Renew if lowest health is missing Renew and Lowest health below 100% and moving.
 	{'Renew', '!lowest.buff(Renew) & lowest.health < 100', 'lowest'},
 	--Flash Heal charge Dump if Surge of Light duration is less or equal to 3 seconds and moving
@@ -146,7 +147,7 @@ local Moving = {
 	--Flash Heal when Surge of Light is active, Lowest Health is below 70% and moving.
 	{'Flash Heal', 'buff(Surge of Light) & lowest.health < 70', 'lowest'},
 	--Angelic Feather if player is moving for 2 seconds or longer and Missing Angelic Feather and if UI enables it. WIP
-  {'Angelic Feather', 'player.movingfor >= 2 & !buff(Angelic Feather) & spell(Angelic Feather).charges >= 1', 'player.ground'} --UI enable
+	{'Angelic Feather', 'player.movingfor >= 2 & !buff(Angelic Feather) & spell(Angelic Feather).charges >= 1', 'player.ground'} --UI enable
 	
 }
 
@@ -154,17 +155,17 @@ local inCombat = {
 	--Fade when you get aggro.
 	{'fade', 'aggro'},
 	{Cooldowns, 'toggle(cooldowns)'},	
-	{Trinkets},                                                                    -- UI enabling 
+	{Trinkets},
 	{Keybinds},
 	{Potions},
 	{SpiritOfRedemption, 'buff(Spirit of Redemption)'},
-	{'%dispelAll'},
+	{'%dispelall'},
 	{{
-	{FastHeals, 'lowest.health < 30'},
-	{Tank, 'tank.health < 100'}, 
-	{Player, 'health < 100'}, 
-	{Lowest, 'lowest.health < 100'},
-	{DPS},
+		{FastHeals, 'lowest.health < 30'},
+		{Tank, 'tank.health < 100'},
+		{Player, 'health < 100'},
+		{Lowest, 'lowest.health < 100'},
+		{DPS},
 	}, '!moving'},
 	{Moving, 'moving'},
 	
