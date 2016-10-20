@@ -56,7 +56,7 @@ end
 function NeP.Parser.Table(spell, cond)
 	if NeP.DSL.Parse(cond) then
 		for i=1, #spell do
-			if NeP.Parser.Parse(spell[i]) then
+			if self.Parse(spell[i]) then
 				return true
 			end
 		end
@@ -67,10 +67,10 @@ function NeP.Parser.Parse(eval)
 	local spell, cond = eval[1], eval[2]
 	local endtime, cname = castingTime()
 	if not spell.spell then
-		if NeP.Parser.Table(spell, cond, eval) then return true end
+		if self.Table(spell, cond, eval) then return true end
 	elseif spell.bypass or endtime == 0 then
-		if NeP.Parser.Target(eval) then
-			if spell.token == 'func' or NeP.Parser.Spell(eval) then
+		if self.Target(eval) then
+			if spell.token == 'func' or self.Spell(eval) then
 				if NeP.DSL.Parse(cond, spell.spell) then
 					if eval.breaks then
 						return true
@@ -82,8 +82,9 @@ function NeP.Parser.Parse(eval)
 						SpellStopCasting()
 					end
 					NeP.Protected[eval.func](spell.spell, eval.target)
-					NeP.Parser.LastCast = spell.spell
-					NeP.Parser.LastTarget = eval.target
+					self.LastCast = spell.spell
+					self.LastGCD = (not eval.gcd and spell.spell) or self.LastGCD
+					self.LastTarget = eval.target
 					NeP.ActionLog:Add('Parser', spell.spell, spell.icon, eval.target)
 					NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
 					return true

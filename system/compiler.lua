@@ -46,15 +46,18 @@ function NeP.Compiler.Spell(eval, name)
 	end
 	if ref.spell:find('^&') then
 		ref.bypass = true
+		eval.nogcd = true
 		ref.spell = ref.spell:sub(2)
 	end
 	if ref.spell:find('^/') then
 		ref.token = '/'
+		eval.nogcd = true
 		eval.func = 'Macro'
 		skip = true
 	end
 	if ref.spell:find('^@') then
 		ref.bypass = true
+		eval.nogcd = true
 		ref.spell = ref.spell:sub(2)
 	end
 	if ref.spell:find('^%%') then
@@ -65,6 +68,7 @@ function NeP.Compiler.Spell(eval, name)
 	if ref.spell:find('^#') then
 		ref.spell = ref.spell:sub(2)
 		ref.token = '#'
+		eval.nogcd = true
 		eval.func = 'UseItem'
 		NeP.Core:WhenInGame(function()
 			if invItems[ref.spell] then
