@@ -7,10 +7,9 @@ local LibDisp = LibStub('LibDispellable-1.0')
 NeP.Actions['dispelall'] = function(eval)
 	for _, Obj in pairs(NeP.Healing:GetRoster()) do
 		for _,spellID, _,_,_,_, dispelType in LibDisp:IterateDispellableAuras(Obj.key) do
-			local spell = GetSpellInfo(spellID)
 			if dispelType then
-				eval[1].spell = spell
-				eval[3].target = Obj.key
+				eval.spell = GetSpellInfo(spellID)
+				eval.target = Obj.key
 				eval.func = 'Cast'
 				return true
 			end
@@ -25,8 +24,8 @@ NeP.Actions['taunt'] = function(eval, args)
 	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
 		local Threat = UnitThreatSituation("player", Obj.key)
 		if Threat and Threat >= 0 and Threat < 3 and Obj.distance <= 30 then
-			eval[1].spell = spell
-			eval[2].target = Obj.key
+			eval.spell = GetSpellInfo(spellID)
+			eval.target = Obj.key
 			eval.func = 'Cast'
 			return true
 		end
@@ -40,8 +39,8 @@ NeP.Actions['ressdead'] = function(eval, args)
 	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
 		if Obj.distance < 40 and UnitIsPlayer(Obj.Key)
 		and UnitIsDeadOrGhost(Obj.key) and UnitPlayerOrPetInParty(Obj.key) then
-			eval[1].spell = spell
-			eval[2].target = Obj.key
+			eval.spell = GetSpellInfo(spellID)
+			eval.target = Obj.key
 			eval.func = 'Cast'
 			return true
 		end
@@ -61,7 +60,6 @@ NeP.Actions['#'] = function(eval)
 		local isUsable = IsUsableItem(item.spell)
 		local ready = select(2, GetItemCooldown(item.id)) == 0
 		if isUsable and ready and (GetItemCount(item.spell) > 0) then
-			--print(item.id, item.spell)
 			return true
 		end
 	end
