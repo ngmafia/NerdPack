@@ -7,7 +7,7 @@ local Interrupts = {
 	--Silence selected target.
 	{'Silence'},
 	--Arcane Torrent Blood Elf racial if within 8 yard range of selected target when Silence is on cooldown. -- Credit to Xeer
-	{'Arcane Torrent', 'target.range <= 8 & spell(Silence).cooldown > gcd & !prev_gcd(Silence)'},
+	{'Arcane Torrent', 'target.range <= 8 & spell(Silence).cooldown > gcd & !lastgcd(Silence)'},
 }
 
 local Survival = {
@@ -22,7 +22,7 @@ local Survival = {
 	--Dispersion at or below 15% health. Last attempt at survival.
 	{'!Dispersion', 'player.health <= 15'},
 	--Power Word: Shield for Body and Soul to gain increased movement speed if moving. Active when NOT in Surrender to Madness or channeling Void Torrent.
-	{'Power Word: Shield', 'talent(2,2) & player.moving & !player.buff(Surrender to Madness) & !player.channeling(Void Torrent)'},
+	{'Power Word: Shield', 'talent(2,2) & player.moving & !player.buff(Surrender to Madness)'},
 }
 
 local AoE = {
@@ -33,14 +33,20 @@ local AoE = {
 }
 
 local CDs = {
-	--Berserking Troll racial. NOTE: Adjust count '90' to a lower value if you are dead before then.
-	{'Berserking', '!talent(7,3) & player.buff(Voidform).count >= 10 || player.buff(Voidform).count >= 90 & player.buff(Surrender to Madness)'},
-	--Shadowfiend. Active when NOT channeling Void Torrent.
-	{'Shadowfiend', '!player.channeling(Void Torrent)'},
+	--Berserking Troll racial. Conditions set for both Legacy of the Void/Mind Spike and Surrender to Madness.
+	--When in Surrender to Madness and buffed by Power Infusion, you want to use Berserking after 5 Voidform counts.
+	--NOTE: Adjust Voidform count '90' to a lower value if you are dead before then.
+	--IMPORTANT: Be sure to modify the last Power Infusion Voidform condition (player.buff(Voidform).count >= 85) count to -5 seconds of set value for Berserking.
+	{'Berserking', '!talent(7,3) & player.buff(Voidform).count >= 10 || player.buff(Voidform).count >= 90'},
+	--Power Infusion. Conditions set for both Legacy of the Void/Mind Spike and Surrender to Madness. Active when NOT in Dispersion or channeling Void Torrent.
+	--NOTE: Adjust Voidform count '85' to a lower value if you are dead before then.
+	--IMPORTANT: Be sure to modify the last Berserking Voidform condition (player.buff(Voidform).count >= 90) count to +5 seconds of set value for Power Infusion.
+	{'Power Infusion', '!talent(7,3) & player.buff(Voidform).count >= 15 & !player.buff(Dispersion) & !player.channeling(Void Torrent) || player.buff(Voidform).count >= 85 & !player.buff(Dispersion) & !player.channeling(Void Torrent)'},
+	--Shadowfiend. Conditions set for both Legacy of the Void/Mind Spike and Surrender to Madness. Active when NOT channeling Void Torrent.
+	--NOTE: When in Surrender to Madness and buffed by Power Infusion, you want to use Shadowfiend immediately after casting a Shadow Word: Death to ensure you have adequate insanity while on GCD.
+	{'Shadowfiend', '!talent(7,3) & player.buff(Voidform).count >= 10 & !player.channeling(Void Torrent) || lastgcd(Shadow Word: Death) & player.buff(Power Infusion) & !player.channeling(Void Torrent)'},
 	--Mindbender. Active when NOT channeling Void Torrent.
 	{'Mindbender', '!player.channeling(Void Torrent)'},
-	--Power Infusion. Active when NOT in Dispersion or channeling Void Torrent. NOTE: Adjust count '85' to a lower value if you are dead before then.
-	{'Power Infusion', '!talent(7,3) & player.buff(Voidform).count >= 10 & !player.buff(Dispersion) & !player.channeling(Void Torrent) || player.buff(Voidform).count >= 85 & player.buff(Surrender to Madness) & !player.buff(Dispersion) & !player.channeling(Void Torrent)'},
 	--Void Torrent will cancel/clip any current spell cast in favor of being used.
 	{'!Void Torrent', '!player.casting(Mind Blast) & !player.casting(Vampiric Touch) & !player.casting(Void Eruption) & !player.channeling(Mind Sear) & !player.channeling(Void Torrent)'},
 
@@ -69,7 +75,6 @@ local ST = {
 	--Mind Spike as a filler to build Insanity.
 	{'Mind Spike'},
 }
-
 
 local inCombat = {
 	{Keybinds},
