@@ -87,11 +87,11 @@ NeP.DSL:Register("health.predicted", function(unit)
 	return NeP.Healing:GetPredictedHealth(unit)
 end)
 
--- USAGE: UNIT.aoe(HEALTH, DISTANCE).heal >= #
+-- USAGE: UNIT.area(DISTANCE, HEALTH).heal >= #
 NeP.DSL:Register("area.heal", function(unit, args)
 	local total = 0
 	if not UnitExists(unit) then return total end
-	local health, distance = strsplit(",", args, 2)
+	local distance, health = strsplit(",", args, 2)
 	for _,Obj in pairs(Roster) do
 		local unit_dist = NeP.Protected.Distance(unit, Obj.key)
 		if unit_dist < (tonumber(distance) or 20)
@@ -102,11 +102,11 @@ NeP.DSL:Register("area.heal", function(unit, args)
 	return total
 end)
 
--- USAGE: UNIT.aoe(HEALTH, DISTANCE).heal.infront >= #
+-- USAGE: UNIT.area(DISTANCE, HEALTH).heal.infront >= #
 NeP.DSL:Register("area.heal.infront", function(unit, args)
 	local total = 0
 	if not UnitExists(unit) then return total end
-	local health, distance = strsplit(",", args, 2)
+	local distance, health = strsplit(",", args, 2)
 	for _,Obj in pairs(Roster) do
 		local unit_dist = NeP.Protected.Distance(unit, Obj.key)
 		if unit_dist < (tonumber(distance) or 20)
