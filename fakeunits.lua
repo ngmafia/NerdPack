@@ -30,10 +30,10 @@ NeP.FakeUnits:Add('tank', function(num)
 		if Obj.role == 'TANK' and not UnitIsUnit('player', Obj.key) then
 			tempTable[#tempTable+1] = {
 				key = Obj.key,
-				health = Obj.health
+				prio = Obj.healthMax
 			}
 		end
 	end
-	table.sort( tempTable, function(a,b) return a.health < b.health end )
+	table.sort( tempTable, function(a,b) return a.prio > b.prio end )
 	return tempTable[num] and tempTable[num].key
 end)
