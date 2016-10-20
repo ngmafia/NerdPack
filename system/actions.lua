@@ -11,7 +11,7 @@ NeP.Actions['dispelall'] = function(eval)
 			if dispelType then
 				eval[1].spell = spell
 				eval[3].target = Obj.key
-				eval.func = NeP.Protected.Cast
+				eval.func = 'Cast'
 				return true
 			end
 		end
@@ -27,7 +27,7 @@ NeP.Actions['taunt'] = function(eval, args)
 		if Threat and Threat >= 0 and Threat < 3 and Obj.distance <= 30 then
 			eval[1].spell = spell
 			eval[2].target = Obj.key
-			eval.func = NeP.Protected.Cast
+			eval.func = 'Cast'
 			return true
 		end
 	end
@@ -42,7 +42,7 @@ NeP.Actions['ressdead'] = function(eval, args)
 		and UnitIsDeadOrGhost(Obj.key) and UnitPlayerOrPetInParty(Obj.key) then
 			eval[1].spell = spell
 			eval[2].target = Obj.key
-			eval.func = NeP.Protected.Cast
+			eval.func = 'Cast'
 			return true
 		end
 	end
