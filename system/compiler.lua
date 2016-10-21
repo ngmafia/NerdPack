@@ -58,6 +58,7 @@ function NeP.Compiler.Spell(eval, name)
 	if ref.spell:find('^@') then
 		ref.bypass = true
 		eval.nogcd = true
+		ref.token = '@'
 		ref.spell = ref.spell:sub(2)
 	end
 	if ref.spell:find('^%%') then
