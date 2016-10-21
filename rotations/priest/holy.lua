@@ -228,4 +228,4 @@ local outCombat = {
 	{Moving, 'moving'},
 }
 
-NeP.CR:Add(257, '[NeP] Priest - Holy', inCombat, outCombat, GUI)
+NeP.CR:Add(257, '[NeP] Priest - Holy', inCombat, outCombat, nil, GUI)
