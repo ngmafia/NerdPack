@@ -2,6 +2,7 @@ local _, NeP = ...
 
 NeP.Actions = {}
 local LibDisp = LibStub('LibDispellable-1.0')
+local noop = function() end
 
 -- Dispell all
 NeP.Actions['dispelall'] = function(eval)
@@ -49,7 +50,6 @@ end
 
 -- Pause
 NeP.Actions['pause'] = function(eval)
-	eval.breaks = true
 	return true
 end
 

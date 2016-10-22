@@ -68,11 +68,11 @@ end
 
 function NeP.Parser.Parse(eval)
 	local spell, cond = eval[1], eval[2]
-	local isfunc = spell.token == 'func'
 	local endtime, cname = castingTime()
 	if not spell.spell then
 		return NeP.Parser.Table(spell, cond, eval)
 	elseif (spell.bypass or endtime == 0) and NeP.Parser.Target(eval) then
+		local isfunc = spell.token == 'func'
 		if isfunc or NeP.Parser.Spell(eval) then
 			local tspell = eval.spell or spell.spell
 			local result = false
@@ -81,7 +81,6 @@ function NeP.Parser.Parse(eval)
 				if isfunc then
 					result = eval.func()
 				else
-					if eval.breaks then return true end
 					-- (!spell) this clips the spell
 					if spell.interrupts then
 						if cname == tspell or (endtime > 0 and endtime < 1) then
