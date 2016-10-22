@@ -62,7 +62,7 @@ function NeP.Compiler.Spell(eval, name)
 		ref.spell = ref.spell:sub(2)
 		ref.token = 'func'
 		icon = 'Interface\\ICONS\\Inv_gizmo_02.png'
-		eval.func = function() return NeP.Library:Parse(ref.spell, ref.args) end
+		eval.exe = function() return NeP.Library:Parse(ref.spell, ref.args) end
 	end
 	if ref.spell:find('^%%') then
 		ref.token = ref.spell:sub(1,1)
@@ -141,7 +141,7 @@ function NeP.Compiler.Compile(eval, name)
 				token = 'func',
 				icon = 'Interface\\ICONS\\Inv_gizmo_02.png'
 			}
-			eval.func = spell
+			eval.exe = spell
 			eval[1] = ref
 		else
 			NeP.Core:Print('Found a issue compiling:', name, 'Spell cant be a', type(spell))

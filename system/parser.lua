@@ -71,33 +71,31 @@ function NeP.Parser.Parse(eval)
 	local endtime, cname = castingTime()
 	if not spell.spell then
 		return NeP.Parser.Table(spell, cond, eval)
-	elseif (spell.bypass or endtime == 0) and NeP.Parser.Target(eval) then
-		local isfunc = spell.token == 'func'
-		if isfunc or NeP.Parser.Spell(eval) then
-			local tspell = eval.spell or spell.spell
-			local result = false
-			if NeP.DSL.Parse(cond, tspell) then
-				-- Libs and functions in the spell place
-				if isfunc then
-					result = eval.func()
-				else
-					-- (!spell) this clips the spell
-					if spell.interrupts then
-						if cname == tspell or (endtime > 0 and endtime < 1) then
-							result = true
-						end
-						SpellStopCasting()
+	elseif (spell.bypass or endtime == 0) and NeP.Parser.Target(eval)
+	and (eval.exe or NeP.Parser.Spell(eval)) then
+		local result = false
+		local tspell = eval.spell or spell.spell
+		if NeP.DSL.Parse(cond, tspell) then
+			-- Libs and functions in the spell place
+			if eval.exe then
+				result = eval.exe()
+			else
+				-- (!spell) this clips the spell
+				if spell.interrupts then
+					if cname == tspell or (endtime > 0 and endtime < 1) then
+						result = true
 					end
-					NeP.Protected[eval.func](tspell, eval.target)
-					result = true
+					SpellStopCasting()
 				end
-				NeP.Parser.LastCast = tspell
-				NeP.Parser.LastGCD = (not eval.gcd and tspell) or NeP.Parser.LastGCD
-				NeP.Parser.LastTarget = eval.target
-				NeP.ActionLog:Add('Parser', tspell, spell.icon, eval.target)
-				NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
-				return result
+				NeP.Protected[eval.func](tspell, eval.target)
+				result = true
 			end
+			NeP.Parser.LastCast = tspell
+			NeP.Parser.LastGCD = (not eval.gcd and tspell) or NeP.Parser.LastGCD
+			NeP.Parser.LastTarget = eval.target
+			NeP.ActionLog:Add('Parser', tspell, spell.icon, eval.target)
+			NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
+			return result
 		end
 	end
 end
