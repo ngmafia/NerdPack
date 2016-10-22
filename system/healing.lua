@@ -46,7 +46,9 @@ end
 
 function NeP.Healing:Grabage()
 	for GUID, Obj in pairs(Roster) do
-		if not UnitExists(Obj.key) or Obj.distance > maxDistance then
+		if not UnitExists(Obj.key)
+		or Obj.distance > maxDistance
+		or UnitIsDeadOrGhost(Obj.key) then
 			Roster[GUID] = nil
 		end
 	end
