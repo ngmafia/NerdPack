@@ -62,7 +62,7 @@ function NeP.Compiler.Spell(eval, name)
 		ref.spell = ref.spell:sub(2)
 		ref.token = 'func'
 		icon = 'Interface\\ICONS\\Inv_gizmo_02.png'
-		eval.func = function() return NeP.Library:Parse(ref.args) end
+		eval.func = function() return NeP.Library:Parse(ref.spell, ref.args) end
 	end
 	if ref.spell:find('^%%') then
 		ref.token = ref.spell:sub(1,1)
