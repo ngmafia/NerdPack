@@ -82,7 +82,7 @@ function NeP.ActionLog:Add(type, spell, icon, target)
 	if not icon or self:Refresh(type, spell, icon, target) then return end
 	table.insert(Data, 1, {
 		event = type,
-		target = target,
+		target = UnitExists(target) and UnitName(target),
 		icon = icon,
 		description = spell,
 		count = 1,
