@@ -65,17 +65,6 @@ NeP.Actions['#'] = function(eval)
 	end
 end
 
--- Lib
-NeP.Actions['@'] = function(eval)
-	eval.breaks = false
-	if NeP.DSL.Parse(eval[2]) then
-		if NeP.Library:Parse(eval[1].spell, eval[1].args) then
-			eval.breaks = true
-			return true
-		end
-	end
-end
-
 -- Macro
 NeP.Actions['/'] = function()
 	return true
