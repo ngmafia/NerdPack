@@ -71,10 +71,11 @@ function NeP.Parser.Parse(eval)
 	local isfunc = spell.token == 'func'
 	local endtime, cname = castingTime()
 	if not spell.spell then
-		if NeP.Parser.Table(spell, cond, eval) then return true end
+		return NeP.Parser.Table(spell, cond, eval)
 	elseif (spell.bypass or endtime == 0) and NeP.Parser.Target(eval) then
 		if isfunc or NeP.Parser.Spell(eval) then
 			local tspell = eval.spell or spell.spell
+			local result = false
 			if NeP.DSL.Parse(cond, tspell) then
 				-- Libs and functions in the spell place
 				if isfunc then
@@ -85,18 +86,19 @@ function NeP.Parser.Parse(eval)
 					-- (!spell) this clips the spell
 					if spell.interrupts then
 						if cname == tspell or (endtime > 0 and endtime < 1) then
-							return true
+							result = true
 						end
 						SpellStopCasting()
 					end
 					NeP.Protected[eval.func](tspell, eval.target)
-					return true
+					result = true
 				end
 				NeP.Parser.LastCast = tspell
 				NeP.Parser.LastGCD = (not eval.gcd and tspell) or NeP.Parser.LastGCD
 				NeP.Parser.LastTarget = eval.target
 				NeP.ActionLog:Add('Parser', tspell, spell.icon, eval.target)
 				NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
+				return result
 			end
 		end
 	end
@@ -109,7 +111,7 @@ C_Timer.NewTicker(0.1, (function()
 			if NeP.Queuer:Execute() then return end
 			local table = NeP.CR.CR[InCombatLockdown()]
 			for i=1, #table do
-				if NeP.Parser.Parse(table[i]) then return end
+				if NeP.Parser.Parse(table[i]) then break end
 			end
 		end
 	end
