@@ -79,8 +79,7 @@ function NeP.Parser.Parse(eval)
 			if NeP.DSL.Parse(cond, tspell) then
 				-- Libs and functions in the spell place
 				if isfunc then
-					local result = eval.func()
-					if result then return true end
+					result = eval.func()
 				else
 					if eval.breaks then return true end
 					-- (!spell) this clips the spell
