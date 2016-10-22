@@ -3,7 +3,7 @@ local GUI = {
 	----------------------------------------------------------------------------------------------------
 	{type = 'header', 	text = 'Cooldowns when toggled on', align = 'center'},
 	{type = 'checkbox', text = 'Use Guardian Spirit', key = 'c_GS', default = false},
-	{type = 'spinner', text = '', key = 'sc_GS', default = 20},
+	{type = 'spinner', key = 'sc_GS', default = 20,  align = 'center'},
 	                      	{type = 'ruler'},{type = 'spacer'},
 	
 	--------------------------------------------TRINKETS------------------------------------------------
@@ -30,11 +30,11 @@ local GUI = {
 	{type = 'header', 	text = 'Potions', align = 'center'},
 	{type = 'text', 	text = 'Check to enable Potions', align = 'center'},
 	{type = 'checkbox', text = 'Health Stone', key = 'p_HS', default = false},
-	{type = 'spinner', text = 'Health Stone', key = 'sp_HS', default = 20},
+	{type = 'spinner', key = 'sp_HS', default = 20,  align = 'center'},
 	{type = 'checkbox', text = 'Ancient Healing Potion', key = 'p_AHP', default = false},
-	{type = 'spinner', text = 'Ancient Healing Potion', key = 'sp_AHP', default = 20},
+	{type = 'spinner', key = 'sp_AHP', default = 20,  align = 'center'},
 	{type = 'checkbox', text = 'Ancient Mana Potion', key = 'p_AMP', default = false},
-	{type = 'spinner', text = 'Ancient Mana Potion', key = 'sp_AMP', default = 10},
+	{type = 'spinner', key = 'sp_AMP', default = 10,  align = 'center'},
 	                         {type = 'ruler'},{type = 'spacer'},
 	
 	--------------------------------------------DPS-----------------------------------------------------
@@ -217,7 +217,7 @@ local inCombat = {
 		{Tank, 'tank.health < 100'},
 		{Player, 'health < 100'},
 		{Lowest, 'lowest.health < 100'},
-		{DPS},
+		{DPS, 'lowest.health > 90'},
 	}, '!moving'},
 	{Moving, 'moving'},
 	
