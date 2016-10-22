@@ -107,7 +107,7 @@ local Trinkets = {
 
 local Keybinds = {
 	--Mass Dispel on Mouseover target Left Control when checked in UI.
-	{'Mass Dispel', 'keybind(lctrl) & UI(k_MD)', 'mouseover.ground'},											 
+	{'Mass Dispel', 'keybind(lcontrol) & UI(k_MD)', 'mouseover.ground'},											 
 	--Holy Word: Sanctify on Mouseover target left shift when checked in UI.
 	{'Holy Word: Sanctify', 'keybind(lshift) & UI(k_HWS)', 'mouseover.ground'},												 
 	-- Pause on left alt when checked in UI.
