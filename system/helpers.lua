@@ -46,7 +46,7 @@ function NeP.Helpers:Infront(target)
 end
 
 function NeP.Helpers:Check(spell, target)
-	if not target or not spell then return end
+	if not target or not spell then return true end
 	local GUID = UnitGUID(target)
 	if GUID and spellHasFailed[GUID] then
 		return spellHasFailed[GUID][spell] == nil

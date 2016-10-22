@@ -30,6 +30,9 @@ function NeP.Parser.Target(eval)
 	if not target then return end
 	if target.func then
 		target.target = target.func()
+	-- This is to alow casting at the cursor location where no unit exists
+	elseif target.cursor then
+		return true
 	end
 	eval.target = NeP.FakeUnits:Filter(target.target)
 	if UnitExists(eval.target) and UnitIsVisible(eval.target)
