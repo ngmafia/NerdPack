@@ -39,6 +39,9 @@ function NeP.Compiler.Spell(eval, name)
 		spell = eval[1]
 	}
 	local skip = false
+	local arg1, args = ref.spell:match('(.+)%((.+)%)')
+	if args then ref.spell = arg1 end
+	ref.args = args
 	if ref.spell:find('^!') then
 		ref.interrupts = true
 		ref.bypass = true
@@ -56,10 +59,10 @@ function NeP.Compiler.Spell(eval, name)
 		skip = true
 	end
 	if ref.spell:find('^@') then
-		ref.bypass = true
-		eval.nogcd = true
-		ref.token = '@'
 		ref.spell = ref.spell:sub(2)
+		ref.token = 'func'
+		icon = 'Interface\\ICONS\\Inv_gizmo_02.png'
+		eval.func = function() return NeP.Library:Parse(ref.args) end
 	end
 	if ref.spell:find('^%%') then
 		ref.token = ref.spell:sub(1,1)
@@ -95,9 +98,6 @@ function NeP.Compiler.Spell(eval, name)
 	if not eval.func then
 		eval.func = 'Cast'
 	end
-	local arg1, args = ref.spell:match('(.+)%((.+)%)')
-	if args then ref.spell = arg1 end
-	ref.args = args
 	eval[1] = ref
 end
 
@@ -137,8 +137,9 @@ function NeP.Compiler.Compile(eval, name)
 			NeP.Compiler.Spell(eval, name)
 		elseif type(spell) == 'function' then
 			local ref = {
-				spell = 'fake',
-				token = 'func'
+				spell = tostring(spell),
+				token = 'func',
+				icon = 'Interface\\ICONS\\Inv_gizmo_02.png'
 			}
 			eval.func = spell
 			eval[1] = ref
