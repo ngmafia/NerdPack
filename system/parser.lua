@@ -82,9 +82,8 @@ function NeP.Parser.Parse(eval)
 			else
 				-- (!spell) this clips the spell
 				if spell.interrupts then
-					if cname == tspell or (endtime > 0 and endtime < 1) then
-						result = true
-					end
+					-- Dont interrupt if its to cast the same thing or the current is about to finish
+					if cname == tspell or (endtime > 0 and endtime < 1) then return true end
 					SpellStopCasting()
 				end
 				NeP.Protected[eval.func](tspell, eval.target)
