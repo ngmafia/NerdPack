@@ -151,7 +151,7 @@ function NeP.Compiler.Compile(eval, name)
 			eval.nogcd = true
 			eval[1] = ref
 		else
-			NeP.Core:Print('Found a issue compiling:', name, 'Spell cant be a', type(spell))
+			error('Found a issue compiling: '..name..'\n-> Spell cant be a'..type(spell))
 		end
 		NeP.Compiler.Target(eval)
 	end
