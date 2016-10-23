@@ -71,7 +71,7 @@ function NeP.Parser.Parse(eval)
 	local endtime, cname = castingTime()
 	if not spell.spell then
 		return NeP.Parser.Table(spell, cond, eval)
-	elseif (spell.bypass or endtime == 0) and NeP.Parser.Target(eval)
+	elseif (spell.bypass or endtime == 0) and (eval.exe or NeP.Parser.Target(eval))
 	and (eval.exe or NeP.Parser.Spell(eval)) then
 		local result = false
 		local tspell = eval.spell or spell.spell
