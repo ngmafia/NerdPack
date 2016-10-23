@@ -64,11 +64,12 @@ local function RefreshGUI()
 	recycleStatusBars()
 	local temp = NeP.OM:Get(dOM)
 	for _, Obj in pairs(temp) do
-		local Health = UnitHealth(Obj.key) and math.floor((UnitHealth(Obj.key) / UnitHealthMax(Obj.key)) * 100) or 100
+		local Health = math.floor(((UnitHealth(Obj.key) or 1) / (UnitHealthMax(Obj.key) or 1)) * 100)
 		local statusBar = getStatusBar()
+		local distance = NeP.Core:Round(Obj.distance or 0)
 		statusBar.frame:SetPoint('TOP', ListWindow.content, 'TOP', 2, offset )
 		statusBar.frame.Left:SetText('|cff'..NeP.Core:ClassColor(Obj.key, 'hex')..Obj.name)
-		statusBar.frame.Right:SetText('( |cffff0000ID|r: '..Obj.id..' / |cffff0000Health|r: '..Health..' / |cffff0000Dist|r: '..(Obj.distance or 0)..' )')
+		statusBar.frame.Right:SetText('( |cffff0000ID|r: '..Obj.id..' / |cffff0000Health|r: '..Health..' / |cffff0000Dist|r: '..distance..' )')
 		statusBar.frame:SetScript('OnMouseDown', function(self) TargetUnit(Obj.key) end)
 		statusBar:SetValue(Health)
 		offset = offset -18
