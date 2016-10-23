@@ -40,10 +40,9 @@ local OPs = {
 }
 
 local function DoMath(arg1, arg2, token)
-	arg1, arg2 = tonumber(arg1), tonumber(arg2)
-	if arg1 ~= nil and arg2 ~= nil then
-		return OPs[token](arg1, arg2)
-	end
+	if arg1:find('^%d') then arg1 = tonumber(arg1) end
+	if arg2:find('^%d') then arg2 = tonumber(arg2) end
+	return (arg1 and arg2) and OPs[token](arg1, arg2)
 end
 
 local function _AND(Strg, Spell)
