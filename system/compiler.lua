@@ -92,6 +92,7 @@ function NeP.Compiler.Spell(eval, name)
 		end)
 		skip = true
 	end
+
 	-- Some APIs only work after we'r in-game, so we delay.
 	if not skip then
 		NeP.Core:WhenInGame(function()
@@ -151,7 +152,7 @@ function NeP.Compiler.Compile(eval, name)
 			eval.nogcd = true
 			eval[1] = ref
 		else
-			error('Found a issue compiling: '..name..'\n-> Spell cant be a'..type(spell))
+			NeP.Core:Print('Found a issue compiling: ',name,'\n-> Spell cant be a',type(spell))
 		end
 		NeP.Compiler.Target(eval)
 	end

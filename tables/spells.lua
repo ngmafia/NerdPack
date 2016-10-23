@@ -2317,7 +2317,7 @@ function NeP.Spells:Convert(spell, crname)
 			-- do nothing
 		elseif not warned_spells[spell] and crname then
 			warned_spells[spell] = ''
-			error('Unale to convert:|cffff0000'..spell..'|rMight be missing...\n|cffff0000-> In:|r'..crname)
+			NeP.Core:Print('Unale to convert:|cffff0000',spell,'|rMight be missing...\n|cffff0000-> In:|r',crname)
 		end
 	end
 	return spell
