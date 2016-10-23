@@ -54,6 +54,7 @@ function NeP.Compiler.Spell(eval, name)
 	end
 	if ref.spell:find('^/') then
 		ref.token = '/'
+		eval.type = 'Macro'
 		eval.nogcd = true
 		eval.func = 'Macro'
 		skip = true
@@ -61,8 +62,10 @@ function NeP.Compiler.Spell(eval, name)
 	if ref.spell:find('^@') then
 		ref.spell = ref.spell:sub(2)
 		ref.token = 'func'
-		icon = 'Interface\\ICONS\\Inv_gizmo_02.png'
+		eval.type = 'Lib'
+		eval.nogcd = true
 		eval.exe = function() return NeP.Library:Parse(ref.spell, ref.args) end
+		skip = true
 	end
 	if ref.spell:find('^%%') then
 		ref.token = ref.spell:sub(1,1)
@@ -72,6 +75,7 @@ function NeP.Compiler.Spell(eval, name)
 	if ref.spell:find('^#') then
 		ref.spell = ref.spell:sub(2)
 		ref.token = '#'
+		eval.type = 'Item'
 		eval.nogcd = true
 		eval.func = 'UseItem'
 		NeP.Core:WhenInGame(function()
@@ -97,6 +101,9 @@ function NeP.Compiler.Spell(eval, name)
 	end
 	if not eval.func then
 		eval.func = 'Cast'
+	end
+	if not eval.type then
+		eval.type = 'Spell'
 	end
 	eval[1] = ref
 end
@@ -136,12 +143,12 @@ function NeP.Compiler.Compile(eval, name)
 		if type(spell) == 'string' then
 			NeP.Compiler.Spell(eval, name)
 		elseif type(spell) == 'function' then
-			local ref = {
-				spell = tostring(spell),
-				token = 'func',
-				icon = 'Interface\\ICONS\\Inv_gizmo_02.png'
-			}
+			local ref = {}
+			ref.spell = tostring(spell)
+			ref.token = 'func'
+			ref.type = 'Function'
 			eval.exe = spell
+			eval.nogcd = true
 			eval[1] = ref
 		else
 			NeP.Core:Print('Found a issue compiling:', name, 'Spell cant be a', type(spell))
