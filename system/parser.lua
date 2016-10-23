@@ -91,9 +91,9 @@ function NeP.Parser.Parse(eval)
 				result = true
 			end
 			NeP.Parser.LastCast = tspell
-			NeP.Parser.LastGCD = (not eval.gcd and tspell) or NeP.Parser.LastGCD
+			NeP.Parser.LastGCD = (not eval.nogcd and tspell) or NeP.Parser.LastGCD
 			NeP.Parser.LastTarget = eval.target
-			NeP.ActionLog:Add('Parser', tspell, spell.icon, eval.target)
+			NeP.ActionLog:Add(eval.type, tspell, spell.icon, eval.target)
 			NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
 			return result
 		end
