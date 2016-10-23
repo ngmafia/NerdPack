@@ -2312,9 +2312,12 @@ function NeP.Spells:Convert(spell, crname)
 		spell = spell:lower()
 		if SpellsTable[spell] then
 			spell = SpellsTable[spell]
-		elseif not warned_spells[spell] and crname and not GetSpellInfo(spell) then
+		-- To stop false positives in crs that are not english
+		elseif GetSpellInfo(spell) then
+			-- do nothing
+		elseif not warned_spells[spell] and crname then
 			warned_spells[spell] = ''
-			NeP.Core:Print('Unale to convert:|cffff0000', spell, '|rMight be missing...\n|cffff0000-> In:|r', crname)
+			error('Unale to convert:|cffff0000'..spell..'|rMight be missing...\n|cffff0000-> In:|r'..crname)
 		end
 	end
 	return spell
