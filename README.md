@@ -2,7 +2,7 @@
 <a href="https://discordapp.com/invite/XtSZbjM"><img src="http://i.imgur.com/fzomMAr.png" alt="Join us on discord!" width="150" height="50" align = "right" /></a>
 <p align = "center"><h1>NerdPack</h1></p>
 
-![](http://nerdpackaddon.site/MTS/NeP_Show.jpg)!
+![](http://nerdpackaddon.site/MTS/NeP_Show.jpg)
 <img src="http://nerdpackaddon.site/MTS/NeP_Logo.png" width="450" height="250" align = "right" /></a>  
 
 ###Information:
@@ -14,7 +14,7 @@ Protected modules will automate everything and therefore breaks WoW's TOS.
 
 ###Easy install:
 Download NerdPack's toolbox, this will install and update everything for you.  
-[Click Here](http://http://nerdpackaddon.site/MTS/NerdPack_ToolBox.zip) to download.
+[Click Here](http://nerdpackaddon.site/MTS/NerdPack_ToolBox.zip) to download.
 ![](http://nerdpackaddon.site/MTS/ToolBox_Show1.png)
 ![](http://nerdpackaddon.site/MTS/ToolBox_Show2.png)
 
