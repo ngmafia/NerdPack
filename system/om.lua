@@ -11,9 +11,8 @@ local OM_c = {
 function NeP.OM:Garbage()
 	for tb in pairs(OM_c) do
 		for GUID, obj in pairs(OM_c[tb]) do
-			if not UnitExists(obj.key) then
-				OM_c[tb][GUID] = nil
-			elseif tb ~= 'Dead' and UnitIsDeadOrGhost(obj.key) then
+			if not UnitExists(obj.key)
+			or tb ~= 'Dead' and UnitIsDeadOrGhost(obj.key) then
 				OM_c[tb][GUID] = nil
 			end
 		end
@@ -21,6 +20,7 @@ function NeP.OM:Garbage()
 end
 
 function NeP.OM:Get(ref)
+	self:Garbage()
 	return OM_c[ref]
 end
 
@@ -62,7 +62,6 @@ end
 
 C_Timer.NewTicker(1, (function()
 	NeP.OM.Maker()
-	NeP.OM.Garbage()
 end), nil)
 
 -- Gobals
