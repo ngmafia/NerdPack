@@ -146,7 +146,7 @@ function NeP.Compiler.Compile(eval, name)
 			local ref = {}
 			ref.spell = tostring(spell)
 			ref.token = 'func'
-			ref.type = 'Function'
+			eval.type = 'Function'
 			eval.exe = spell
 			eval.nogcd = true
 			eval[1] = ref
