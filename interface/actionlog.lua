@@ -67,8 +67,8 @@ for i = 1, (log_items) do
 	LogItem[i]:SetPoint('TOPLEFT', NeP_AL.frame, 'TOPLEFT', 0, position)
 end
 
-function NeP.ActionLog:Refresh(type, spell, _, target)
-	if Data[1] and Data[1]['event'] == type
+function NeP.ActionLog:Refresh(event, spell, target)
+	if Data[1] and Data[1]['event'] == event
 	and Data[1]['description'] == spell
 	and Data[1]['target'] == target then
 		Data[1]['count'] = Data[1]['count'] + 1
@@ -78,11 +78,14 @@ function NeP.ActionLog:Refresh(type, spell, _, target)
 	end
 end
 
-function NeP.ActionLog:Add(type, spell, icon, target)
-	if not icon or self:Refresh(type, spell, icon, target) then return end
+function NeP.ActionLog:Add(event, spell, icon, target)
+	target = UnitExists(target) and UnitName(target)
+	event = event or 'Unknown'
+	icon = icon or 'Interface\\ICONS\\Inv_gizmo_02.png'
+	if self:Refresh(event, spell, target) then return end
 	table.insert(Data, 1, {
-		event = type,
-		target = UnitExists(target) and UnitName(target),
+		event = event,
+		target = target,
 		icon = icon,
 		description = spell,
 		count = 1,
