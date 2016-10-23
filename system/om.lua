@@ -20,7 +20,7 @@ function NeP.OM:Garbage()
 end
 
 function NeP.OM:Get(ref)
-	self:Garbage()
+	NeP.OM:Garbage()
 	return OM_c[ref]
 end
 
