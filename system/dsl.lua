@@ -56,7 +56,8 @@ end
 local function _AND(Strg, Spell)
 	local Arg1, Arg2 = Strg:match('(.*)&(.*)')
 	Arg1 = DSL.Parse(Arg1, Spell)
-	if not Arg1 then return false end -- Dont process anything in front sence we already failed
+	-- Dont process anything in front sence we already failed
+	if not Arg1 then return false end
 	Arg2 = DSL.Parse(Arg2, Spell)
 	return Arg1 and Arg2
 end
@@ -64,7 +65,8 @@ end
 local function _OR(Strg, Spell)
 	local Arg1, Arg2 = Strg:match('(.*)||(.*)')
 	Arg1 = DSL.Parse(Arg1, Spell)
-	if Arg1 then return true end -- Dont process anything in front sence we already hit
+	-- Dont process anything in front sence we already hit
+	if Arg1 then return true end
 	Arg2 = DSL.Parse(Arg2, Spell)
 	return Arg1 or Arg2
 end
@@ -96,17 +98,19 @@ end
 local function ProcessCondition(Strg, Spell)
 	-- Process Unit Stuff
 	local unitID, rest = strsplit('.', Strg, 2)
-	local target =  'player' -- default target
+	-- default target
+	local target =  'player'
 	unitID =  NeP.FakeUnits:Filter(unitID)
 	if unitID and UnitExists(unitID) then
 		target = unitID
 		Strg = rest
 	end
 	-- Condition arguments
-	Strg, Args = pArgs(Strg)
+	local Strg, Args = pArgs(Strg)
 	if Args then
 		if Args:find('^%a') then
-			Args = NeP.Spells:Convert(Args) -- Translates the name to the correct locale
+			-- Translates the name to the correct locale
+			Args = NeP.Spells:Convert(Args)
 		end
 	else
 		Args = Spell
