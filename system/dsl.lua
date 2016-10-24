@@ -22,6 +22,15 @@ local function pArgs(Strg)
 	return Strg, Args
 end
 
+local function FilerNumber(str)
+	if type(str) ~= 'string' then
+		return str
+	elseif str:find('^%d') then
+		return tonumber(str)
+	end
+	return str
+end
+
 local OPs = {
 	['>='] = function(arg1, arg2) return arg1 >= arg2 end,
 	['<='] = function(arg1, arg2) return arg1 <= arg2 end,
@@ -40,8 +49,7 @@ local OPs = {
 }
 
 local function DoMath(arg1, arg2, token)
-	if arg1:find('^%d') then arg1 = tonumber(arg1) end
-	if arg2:find('^%d') then arg2 = tonumber(arg2) end
+	arg1, arg2 = FilerNumber(arg1), FilerNumber(arg2)
 	return (arg1 and arg2) and OPs[token](arg1, arg2)
 end
 
