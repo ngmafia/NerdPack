@@ -1,13 +1,21 @@
 local _, NeP = ...
 
-NeP.Healing = {}
-local Roster = {}
-local maxDistance = 40
-
+-- Local stuff for speed
+local UnitExists = UnitExists
 local UnitHealth = UnitHealth
+local UnitGUID = UnitGUID
 local UnitHealthMax = UnitHealthMax
 local UnitGetTotalHealAbsorbs = UnitGetTotalHealAbsorbs
 local UnitGetIncomingHeals = UnitGetIncomingHeals
+local UnitGroupRolesAssigned = UnitGroupRolesAssigned
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost
+local UnitPlayerOrPetInParty = UnitPlayerOrPetInParty
+local UnitIsUnit = UnitIsUnit
+local strsplit = strsplit
+
+NeP.Healing = {}
+local Roster = {}
+local maxDistance = 40
 
 function NeP.Healing:GetRoster()
 	return Roster
@@ -44,12 +52,18 @@ function NeP.Healing:Refresh(GUID, Obj)
 	temp.distance = Obj.distance
 end
 
+-- This cleans/updates the Roster
+-- Due to Generic OM, a unit can still exist (target) but no longer be the same unit,
+-- To counter this we compare GUID's.
 function NeP.Healing:Grabage()
 	for GUID, Obj in pairs(Roster) do
 		if not UnitExists(Obj.key)
 		or Obj.distance > maxDistance
 		or UnitIsDeadOrGhost(Obj.key) then
 			Roster[GUID] = nil
+		elseif GUID ~= UnitGUID(Obj.key) then
+			Roster[GUID] = nil
+			self:Add(Obj.key)
 		end
 	end
 end
