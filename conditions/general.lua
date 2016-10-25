@@ -1,6 +1,8 @@
 local _, NeP = ...
 local LibBoss = LibStub("LibBossIDs-1.0")
 
+-- Local stuff for faster performance
+-- This does increase memory usage but saves CPU time
 local UnitInParty = UnitInParty
 local UnitInRaid = UnitInRaid
 local GetNumGroupMembers = GetNumGroupMembers
@@ -21,6 +23,22 @@ local IsEquippedItemType = IsEquippedItemType
 local UnitName = UnitName
 local IsMounted = IsMounted
 local GetSpellInfo = GetSpellInfo
+local UnitPowerMax = UnitPowerMax
+local UnitChannelInfo = UnitChannelInfo
+local UnitCastingInfo = UnitCastingInfo
+local UnitPower = UnitPower
+local GetPowerRegen = GetPowerRegen
+local GetSpellCooldown = GetSpellCooldown
+local GetSpellCharges = GetSpellCharges
+local IsSpellInRange = IsSpellInRange
+local GetSpellCount = GetSpellCount
+local GetShapeshiftForm = GetShapeshiftForm
+local IsUsableSpell = IsUsableSpell
+local strsplit = strsplit
+local GetGlyphSocketInfo = GetGlyphSocketInfo
+local GetTotemInfo = GetTotemInfo
+local UnitPowerType = UnitPowerType
+local UnitClass = UnitClass
 
 ------------------------------------GENERAL------------------------------------------
 -------------------------------------------------------------------------------------
@@ -155,8 +173,7 @@ NeP.DSL:Register('waitfor', function(_, args)
 	local name, time = strsplit(',', args, 2)
 	if time then
 		time = tonumber(time)
-		local GetTime = GetTime()
-		local currentTime = GetTime % 60
+		local currentTime = GetTime() % 60
 		if waitTable[name] then
 			if waitTable[name] + time < currentTime then
 				waitTable[name] = nil
