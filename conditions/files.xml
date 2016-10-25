@@ -2,12 +2,9 @@
 ..\FrameXML\UI.xsd">
 
 	<Script file="general.lua" />
-	<Script file="units.lua" />
-	<Script file="buffs.lua" />
 	<Script file="keybinds.lua" />
-	<Script file="class.lua" />
 	<Script file="states.lua" />
 	<Script file="deprecated.lua" />
 	<Script file="artifacts.lua" />
-	
+
 </Ui>
