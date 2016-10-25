@@ -1,17 +1,17 @@
 local _, NeP = ...
 
 -- Local stuff for speed
-local UnitExists = UnitExists
-local UnitHealth = UnitHealth
-local UnitGUID = UnitGUID
-local UnitHealthMax = UnitHealthMax
+local UnitExists              = UnitExists
+local UnitHealth              = UnitHealth
+local UnitGUID                = UnitGUID
+local UnitHealthMax           = UnitHealthMax
 local UnitGetTotalHealAbsorbs = UnitGetTotalHealAbsorbs
-local UnitGetIncomingHeals = UnitGetIncomingHeals
-local UnitGroupRolesAssigned = UnitGroupRolesAssigned
-local UnitIsDeadOrGhost = UnitIsDeadOrGhost
-local UnitPlayerOrPetInParty = UnitPlayerOrPetInParty
-local UnitIsUnit = UnitIsUnit
-local strsplit = strsplit
+local UnitGetIncomingHeals    = UnitGetIncomingHeals
+local UnitGroupRolesAssigned  = UnitGroupRolesAssigned
+local UnitIsDeadOrGhost       = UnitIsDeadOrGhost
+local UnitPlayerOrPetInParty  = UnitPlayerOrPetInParty
+local UnitIsUnit              = UnitIsUnit
+local strsplit                = strsplit
 
 NeP.Healing = {}
 local Roster = {}
