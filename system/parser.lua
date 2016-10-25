@@ -1,5 +1,20 @@
 local _, NeP = ...
 
+-- Local stuff for speed
+local GetTime = GetTime
+local UnitBuff = UnitBuff
+local IsMounted = IsMounted
+local UnitCastingInfo = UnitCastingInfo
+local UnitChannelInfo = UnitChannelInfo
+local UnitExists = UnitExists
+local UnitIsVisible = UnitIsVisible
+local GetSpellBookItemInfo = GetSpellBookItemInfo
+local GetSpellCooldown = GetSpellCooldown
+local IsUsableSpell = IsUsableSpell
+local SpellStopCasting = SpellStopCasting
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost
+local InCombatLockdown = InCombatLockdown
+
 NeP.Parser = {}
 
 local function IsMountedCheck()
@@ -73,8 +88,7 @@ function NeP.Parser.Parse(eval)
 		return NeP.Parser.Table(spell, cond, eval)
 	elseif (spell.bypass or endtime == 0) and (eval.exe or NeP.Parser.Target(eval))
 	and (eval.exe or NeP.Parser.Spell(eval)) then
-		local result = false
-		local tspell = eval.spell or spell.spell
+		local tspell, result = eval.spell or spell.spell
 		if NeP.DSL.Parse(cond, tspell) then
 			-- Libs and functions in the spell place
 			if eval.exe then
