@@ -2313,7 +2313,7 @@ function NeP.Spells:Convert(spell, crname)
 		spell = spell:lower()
 		if SpellsTable[spell] then
 			spell = SpellsTable[spell]
-		elseif not GetSpellInfo(spell) or not warned_spells[spell] and crname then
+		elseif (not GetSpellInfo(spell) or not warned_spells[spell]) and crname then
 			warned_spells[spell] = ''
 			NeP.Core:Print('Unale to convert:|cffff0000',spell,'|rMight be missing...\n|cffff0000-> In:|r',crname)
 		end
