@@ -1,5 +1,17 @@
 local _, NeP = ...
 
+-- Local stuff for speed
+local UnitExists = UnitExists
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost
+local UnitCanAttack = UnitCanAttack
+local UnitIsFriend = UnitIsFriend
+local UnitGUID = UnitGUID
+local UnitName = UnitName
+local strsplit = strsplit
+local select = select
+local tonumber = tonumber
+local pairs = pairs
+
 NeP.OM = {}
 
 local OM_c = {
@@ -8,11 +20,13 @@ local OM_c = {
 	Dead = {}
 }
 
+-- This cleans/updates the tables
+-- Due to Generic OM, a unit can still exist (target) but no longer be the same unit,
+-- To counter this we compare GUID's.
 function NeP.OM:Garbage()
 	for tb in pairs(OM_c) do
-		for GUID, obj in pairs(OM_c[tb]) do
-			if not UnitExists(obj.key)
-			or tb ~= 'Dead' and UnitIsDeadOrGhost(obj.key) then
+		for GUID, Obj in pairs(OM_c[tb]) do
+			if not UnitExists(Obj.key) or GUID ~= UnitGUID(Obj.key) then
 				OM_c[tb][GUID] = nil
 			end
 		end
