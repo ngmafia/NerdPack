@@ -67,7 +67,7 @@ function NeP.Healing:Garbage()
 	end
 end
 
-C_Timer.NewTicker(0.25, (function()
+C_Timer.NewTicker(0.1, (function()
 	for GUID, Obj in pairs(NeP.OM:Get('Friendly')) do
 		if UnitPlayerOrPetInParty(Obj.key) or UnitIsUnit('player', Obj.key) then
 			if Roster[GUID] then
