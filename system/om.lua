@@ -26,8 +26,11 @@ local OM_c = {
 function NeP.OM:Garbage()
 	for tb in pairs(OM_c) do
 		for GUID, Obj in pairs(OM_c[tb]) do
-			if not UnitExists(Obj.key) or GUID ~= UnitGUID(Obj.key) then
+			if not UnitExists(Obj.key) then
 				OM_c[tb][GUID] = nil
+			elseif GUID ~= UnitGUID(Obj.key) then
+				OM_c[tb][GUID] = nil
+				self:Add(Obj.key)
 			end
 		end
 	end
