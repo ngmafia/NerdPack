@@ -1,5 +1,12 @@
 local _, NeP = ...
 
+local GetTime = GetTime
+local UnitGUID = UnitGUID
+local GetSpellInfo = GetSpellInfo
+local InCombatLockdown = InCombatLockdown
+local UnitHealth = UnitHealth
+local UnitExists = UnitExists
+
 NeP.CombatTracker = {}
 
 local Data = {}
@@ -27,9 +34,10 @@ local logSwing = function(...)
 	Data[GUID].Hits = Data[GUID].Hits + 1
 end
 
+-- Disabled for now
 local logHealing = function(...)
 	local _,_,_,_,_,_,_, GUID, _,_,_,_,_,_, Amount = ...
-	Data[GUID].dmgTaken = Data[GUID].dmgTaken - Amount
+	--Data[GUID].healDone = Data[GUID].healDone + Amount
 end
 
 local addAction = function(...)
@@ -79,7 +87,7 @@ function NeP.CombatTracker:getDMG(UNIT)
 	local GUID = UnitGUID(UNIT)
 	if Data[GUID] then
 		local time = GetTime()
-		local combatTime = NeP.CombatTracker:CombatTime(UNIT)
+		local combatTime = self:CombatTime(UNIT)
 		total = Data[GUID].dmgTaken / combatTime
 		Hits = Data[GUID].Hits
 		-- Remove a unit if it hasnt recived dmg for more then 5 sec
@@ -92,7 +100,7 @@ end
 
 function NeP.CombatTracker:TimeToDie(unit)
 	local ttd = 0
-	local DMG, Hits = NeP.CombatTracker:getDMG(unit)
+	local DMG, Hits = self:getDMG(unit)
 	if DMG >= 1 and Hits > 1 then
 		ttd = UnitHealth(unit) / DMG
 	end
