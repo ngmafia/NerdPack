@@ -39,6 +39,21 @@ local GetGlyphSocketInfo = GetGlyphSocketInfo
 local GetTotemInfo = GetTotemInfo
 local UnitPowerType = UnitPowerType
 local UnitClass = UnitClass
+local GetWeaponEnchantInfo = GetWeaponEnchantInfo
+
+local SPELL_POWER_INSANITY = SPELL_POWER_INSANITY
+local SPELL_POWER_FOCUS = SPELL_POWER_FOCUS
+local SPELL_POWER_RUNIC_POWER = SPELL_POWER_RUNIC_POWER
+local SPELL_POWER_MAELSTROM = SPELL_POWER_MAELSTROM
+local SPELL_POWER_SOUL_SHARDS = SPELL_POWER_SOUL_SHARDS
+local SPELL_POWER_CHI = SPELL_POWER_CHI
+local SPELL_POWER_LUNAR_POWER = SPELL_POWER_LUNAR_POWER
+local SPELL_POWER_HOLY_POWER = SPELL_POWER_HOLY_POWER
+local SPELL_POWER_RAGE = SPELL_POWER_RAGE
+local SPELL_POWER_FURY = SPELL_POWER_FURY
+local SPELL_POWER_PAIN = SPELL_POWER_PAIN
+local SPELL_POWER_ARCANE_CHARGES = SPELL_POWER_ARCANE_CHARGES
+local SPELL_POWER_COMBO_POINTS = SPELL_POWER_COMBO_POINTS
 
 ------------------------------------GENERAL------------------------------------------
 -------------------------------------------------------------------------------------
@@ -536,7 +551,7 @@ NeP.DSL:Register("charmed", function(target)
 	return UnitIsCharmed(target)
 end)
 
-NeP.DSL:Register("glyph", function()
+NeP.DSL:Register("glyph", function(_,spell)
 	local spellId = tonumber(spell)
 	local glyphName, glyphId
 	for i = 1, 6 do
@@ -653,7 +668,7 @@ local function oFilter(owner, spell, spellID, caster)
 	return true
 end
 
-local UnitBuff = function(target, spell, owner)
+local function UnitBuff(target, spell, owner)
 	local name, count, caster, expires, spellID
 	if tonumber(spell) then
 		local go, i = true, 0
@@ -669,7 +684,7 @@ local UnitBuff = function(target, spell, owner)
 	return name, count, expires, caster
 end
 
-local UnitDebuff = function(target, spell, owner)
+local function UnitDebuff(target, spell, owner)
 	local name, count, caster, expires, spellID, power
 	if tonumber(spell) then
 		local go, i = true, 0
