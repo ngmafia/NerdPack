@@ -40,6 +40,9 @@ local GetTotemInfo = GetTotemInfo
 local UnitPowerType = UnitPowerType
 local UnitClass = UnitClass
 local GetWeaponEnchantInfo = GetWeaponEnchantInfo
+local GetSpecialization = GetSpecialization
+local UnitMana = UnitMana
+local UnitManaMax = UnitManaMax
 
 local SPELL_POWER_INSANITY = SPELL_POWER_INSANITY
 local SPELL_POWER_FOCUS = SPELL_POWER_FOCUS
