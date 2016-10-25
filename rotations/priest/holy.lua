@@ -1,8 +1,7 @@
 local GUI = {
 	--Cooldowns
 	{type = 'header', text = 'Cooldowns when toggled on', align = 'center'},
-	{type = 'checkbox', text = 'Use Guardian Spirit', key = 'c_GS', default = false},
-	{type = 'spinner', text = 'Use Guardian Spirit', key = 'sc_GS', default = 20},
+	{type = 'checkspin', text = 'Use Guardian Spirit', key = 'c_GS', default_check = false, default_spin = 20},
 	{type = 'ruler'},{type = 'spacer'},
 
 	--TRINKETS
@@ -24,12 +23,9 @@ local GUI = {
 	--POTIONS
 	{type = 'header', text = 'Potions', align = 'center'},
 	{type = 'text', text = 'Check to enable Potions', align = 'center'},
-	{type = 'checkbox', text = 'Health Stone', key = 'p_HS', default = false},
-	{type = 'spinner', text = 'Health Stone', key = 'sp_HS', default = 20},
-	{type = 'checkbox', text = 'Ancient Healing Potion', key = 'p_AHP', default = false},
-	{type = 'spinner', text = 'Ancient Healing Potion', key = 'sp_AHP', default = 20},
-	{type = 'checkbox', text = 'Ancient Mana Potion', key = 'p_AMP', default = false},
-	{type = 'spinner', text = 'Ancient Mana Potion', key = 'sp_AMP', default = 10},
+	{type = 'checkspin', text = 'HealthStone', key = 'p_HS', default_check = false, default_spin = 20},
+	{type = 'checkspin', text = 'Ancient Healing Potion', key = 'p_AHP', default_check = false, default_spin = 20},
+	{type = 'checkspin', text = 'Ancient Mana Potion', key = 'p_AMP', default_check = false, default_spin = 10},
 	{type = 'ruler'},{type = 'spacer'},
 
 	--DPS
@@ -80,7 +76,7 @@ local GUI = {
 
 local Cooldowns = {
 	--Guardian Spirit if below or if lowest health is below or if UI value and checked.
-	{'!Guardian Spirit', 'lowest.health <= UI(sc_GS) & UI(c_GS)', 'lowest'}
+	{'!Guardian Spirit', 'UI(c_GS_check) & lowest.health <= UI(c_GS_spin)', 'lowest'}
 }
 
 local Trinkets = {
@@ -101,11 +97,11 @@ local Keybinds = {
 
 local Potions = {
 	--Health Stone below 20% health. Active when NOT channeling Divine Hymn.
-	{'#Health Stone', 'player.health <= UI(sp_HS) & UI(p_HS) & !player.channeling(Divine Hymn)'},
+	{'#Health Stone', 'UI(p_HS_check) & player.health <= UI(p_HS_spin) & !player.channeling(Divine Hymn)'},
 	--Ancient Healing Potion below 20% health. Active when NOT channeling Divine Hymn.
-	{'#Ancient Healing Potion', 'player.health <= UI(sp_AHP) & UI(p_AHP) & !player.channeling(Divine Hymn)'},
+	{'#Ancient Healing Potion', 'UI(p_AHP_check) & player.health <= UI(p_AHP_spin) & !player.channeling(Divine Hymn)'},
 	--Ancient Mana Potion below 20% mana. Active when NOT channeling Divine Hymn.
-	{'#Ancient Mana Potion', 'player.mana <= UI(sp_AMP)& UI(p_AMP) & !player.channeling(Divine Hymn)'}
+	{'#Ancient Mana Potion', 'UI(p_AMP_check) & player.mana <= UI(p_AMP_spin) & !player.channeling(Divine Hymn)'}
 }
 
 local SpiritOfRedemption = {
