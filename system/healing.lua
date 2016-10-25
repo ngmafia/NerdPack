@@ -18,6 +18,7 @@ local Roster = {}
 local maxDistance = 40
 
 function NeP.Healing:GetRoster()
+	NeP.Healing:Garbage()
 	return Roster
 end
 
@@ -55,15 +56,13 @@ end
 -- This cleans/updates the Roster
 -- Due to Generic OM, a unit can still exist (target) but no longer be the same unit,
 -- To counter this we compare GUID's.
-function NeP.Healing:Grabage()
+function NeP.Healing:Garbage()
 	for GUID, Obj in pairs(Roster) do
 		if not UnitExists(Obj.key)
+		or GUID ~= UnitGUID(Obj.key)
 		or Obj.distance > maxDistance
 		or UnitIsDeadOrGhost(Obj.key) then
 			Roster[GUID] = nil
-		elseif GUID ~= UnitGUID(Obj.key) then
-			Roster[GUID] = nil
-			self:Add(Obj.key)
 		end
 	end
 end
@@ -78,7 +77,6 @@ C_Timer.NewTicker(0.25, (function()
 			end
 		end
 	end
-	NeP.Healing:Grabage()
 end), nil)
 
 NeP.DSL:Register("health", function(target)
