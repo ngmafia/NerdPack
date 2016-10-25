@@ -35,5 +35,5 @@ end)
 
 NeP.DSL:Register("mouse", function(_, Arg)
 	Arg = tonumber(Arg:lower())
-	return KEYBINDS[Arg] and IsMouseButtonDown(Arg) and not GetCurrentKeyBoardFocus()
+	return IsMouseButtonDown(Arg) and not GetCurrentKeyBoardFocus()
 end)
