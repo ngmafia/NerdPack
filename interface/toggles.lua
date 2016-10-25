@@ -9,7 +9,7 @@ local Toggles = {}
 local tcount = 0
 
 local function SetTexture(parent, icon)
-	temp = parent:CreateTexture()
+	local temp = parent:CreateTexture()
 	if icon then
 		temp:SetTexture(icon)
 		temp:SetTexCoord(.08, .92, .08, .92)
