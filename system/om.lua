@@ -28,7 +28,8 @@ function NeP.OM:Garbage()
 		for GUID, Obj in pairs(OM_c[tb]) do
 			if not UnitExists(Obj.key) then
 				OM_c[tb][GUID] = nil
-			elseif GUID ~= UnitGUID(Obj.key) then
+			elseif GUID ~= UnitGUID(Obj.key)
+			or tb ~= 'Dead' and UnitIsDeadOrGhost(Obj.key) then
 				OM_c[tb][GUID] = nil
 				self:Add(Obj.key)
 			end
