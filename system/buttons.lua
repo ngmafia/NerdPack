@@ -1,5 +1,11 @@
 local _, NeP = ...
 
+-- Locals
+local GetActionInfo                = GetActionInfo
+local ActionButton_CalculateAction = ActionButton_CalculateAction
+local GetSpellInfo                 = GetSpellInfo
+local wipe                         = wipe
+
 NeP.Buttons = {}
 
 local nBars = {

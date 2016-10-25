@@ -1,12 +1,12 @@
 local _, NeP = ...
 
--- Local stuff for speed
-local GetTime = GetTime
-local UnitGUID = UnitGUID
-local GetSpellInfo = GetSpellInfo
+-- Locals
+local GetTime          = GetTime
+local UnitGUID         = UnitGUID
+local GetSpellInfo     = GetSpellInfo
 local InCombatLockdown = InCombatLockdown
-local UnitHealth = UnitHealth
-local UnitExists = UnitExists
+local UnitHealth       = UnitHealth
+local wipe             = wipe
 
 NeP.CombatTracker = {}
 local Data = {}

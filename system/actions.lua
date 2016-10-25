@@ -1,8 +1,18 @@
 local _, NeP = ...
 
+-- locals
+local LibDisp                = LibStub('LibDispellable-1.0')
+local GetSpellInfo           = GetSpellInfo
+local UnitThreatSituation    = UnitThreatSituation
+local UnitIsPlayer           = UnitIsPlayer
+local IsUsableItem           = IsUsableItem
+local UnitIsDeadOrGhost      = UnitIsDeadOrGhost
+local UnitPlayerOrPetInParty = UnitPlayerOrPetInParty
+local GetItemCooldown        = GetItemCooldown
+local GetItemSpell           = GetItemSpell
+local GetItemCount           = GetItemCount
+
 NeP.Actions = {}
-local LibDisp = LibStub('LibDispellable-1.0')
-local noop = function() end
 
 -- Dispell all
 NeP.Actions['dispelall'] = function(eval)
@@ -25,7 +35,7 @@ NeP.Actions['taunt'] = function(eval, args)
 	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
 		local Threat = UnitThreatSituation("player", Obj.key)
 		if Threat and Threat >= 0 and Threat < 3 and Obj.distance <= 30 then
-			eval.spell = GetSpellInfo(spellID)
+			eval.spell = spell
 			eval.target = Obj.key
 			eval.func = 'Cast'
 			return true
@@ -40,7 +50,7 @@ NeP.Actions['ressdead'] = function(eval, args)
 	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
 		if Obj.distance < 40 and UnitIsPlayer(Obj.Key)
 		and UnitIsDeadOrGhost(Obj.key) and UnitPlayerOrPetInParty(Obj.key) then
-			eval.spell = GetSpellInfo(spellID)
+			eval.spell = spell
 			eval.target = Obj.key
 			eval.func = 'Cast'
 			return true

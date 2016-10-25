@@ -1,5 +1,12 @@
 local _, NeP = ...
 
+-- Locals
+local GetInventorySlotInfo = GetInventorySlotInfo
+local GetInventoryItemID   = GetInventoryItemID
+local GetItemInfo          = GetItemInfo
+local GetSpellInfo         = GetSpellInfo
+local UnitExists           = UnitExists
+
 NeP.Compiler = {}
 
 local invItems = {
