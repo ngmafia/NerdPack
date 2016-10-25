@@ -43,6 +43,9 @@ local GetWeaponEnchantInfo = GetWeaponEnchantInfo
 local GetSpecialization = GetSpecialization
 local UnitMana = UnitMana
 local UnitManaMax = UnitManaMax
+local GetRuneCooldown = GetRuneCooldown
+local GetActiveSpecGroup = GetActiveSpecGroup
+local GetTalentInfo = GetTalentInfo
 
 local SPELL_POWER_INSANITY = SPELL_POWER_INSANITY
 local SPELL_POWER_FOCUS = SPELL_POWER_FOCUS
@@ -482,7 +485,7 @@ NeP.DSL:Register("incdmg", function(target, args)
 	return 0
 end)
 
-NeP.DSL:Register("incdmg_phys", function(target, args)
+NeP.DSL:Register("incdmg.phys", function(target, args)
 	if args and UnitExists(target) then
 		local pDMG = select(3, NeP.CombatTracker:getDMG(target))
 		return pDMG * tonumber(args)
@@ -490,7 +493,7 @@ NeP.DSL:Register("incdmg_phys", function(target, args)
 	return 0
 end)
 
-NeP.DSL:Register("incdmg_magic", function(target, args)
+NeP.DSL:Register("incdmg.magic", function(target, args)
 	if args and UnitExists(target) then
 		local mDMG = select(4, NeP.CombatTracker:getDMG(target))
 		return mDMG * tonumber(args)
