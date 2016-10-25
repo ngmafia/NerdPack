@@ -1,102 +1,87 @@
 local GUI = {
-	--------------------------------------------Cooldowns------------------------------------------------
-	----------------------------------------------------------------------------------------------------
-	{type = 'header', 	text = 'Cooldowns when toggled on', align = 'center'},
+	--Cooldowns
+	{type = 'header', text = 'Cooldowns when toggled on', align = 'center'},
 	{type = 'checkbox', text = 'Use Guardian Spirit', key = 'c_GS', default = false},
-	{type = 'spinner', key = 'sc_GS', default = 20,  align = 'center'},
-	                      	{type = 'ruler'},{type = 'spacer'},
-	
-	--------------------------------------------TRINKETS------------------------------------------------
-	----------------------------------------------------------------------------------------------------
-	{type = 'header', 	text = 'Trinkets', align = 'center'},
+	{type = 'spinner', text = 'Use Guardian Spirit', key = 'sc_GS', default = 20},
+	{type = 'ruler'},{type = 'spacer'},
+
+	--TRINKETS
+	{type = 'header', text = 'Trinkets', align = 'center'},
 	{type = 'checkbox', text = 'Use Trinkets', key = 'u_T', default = false},
-	{type = 'text', 	text = 'Check to Enable Trinkets', align = 'center'},
+	{type = 'text', text = 'Check to Enable Trinkets', align = 'center'},
 	{type = 'checkbox', text = 'Top Trinket enabled', key = 'trinket_1', default = false},
 	{type = 'checkbox', text = 'Bottom Trinket enabled', key = 'Trinket_2', default = false},
-	                      	{type = 'ruler'},{type = 'spacer'},
-	--------------------------------------------KEYBINDS-----------------------------------------------------
-	---------------------------------------------------------------------------------------------------
-	
-	{type = 'header', 	text = 'Keybinds', align = 'center'},
-	{type = 'text', 	text = 'Left Shift: Holy Word: Sanctify | Left Ctrl: Mass Dispel	| Alt: Pause', align = 'center'},
+	{type = 'ruler'},{type = 'spacer'},
+
+	--KEYBINDS
+	{type = 'header', text = 'Keybinds', align = 'center'},
+	{type = 'text', text = 'Left Shift: Holy Word: Sanctify | Left Ctrl: Mass Dispel	| Alt: Pause', align = 'center'},
 	{type = 'checkbox', text = 'Holy Word: Sanctify enabled', key = 'k_HWS', default = false},
 	{type = 'checkbox', text = 'Mass Dispel enabled', key = 'k_MD', default = false},
 	{type = 'checkbox', text = 'Pause enabled', key = 'k_P', default = false},
-	                        {type = 'ruler'},{type = 'spacer'},
+	{type = 'ruler'},{type = 'spacer'},
 
-	--------------------------------------------POTIONS-------------------------------------------------
-	----------------------------------------------------------------------------------------------------
-
-	{type = 'header', 	text = 'Potions', align = 'center'},
-	{type = 'text', 	text = 'Check to enable Potions', align = 'center'},
+	--POTIONS
+	{type = 'header', text = 'Potions', align = 'center'},
+	{type = 'text', text = 'Check to enable Potions', align = 'center'},
 	{type = 'checkbox', text = 'Health Stone', key = 'p_HS', default = false},
-	{type = 'spinner', key = 'sp_HS', default = 20,  align = 'center'},
+	{type = 'spinner', text = 'Health Stone', key = 'sp_HS', default = 20},
 	{type = 'checkbox', text = 'Ancient Healing Potion', key = 'p_AHP', default = false},
-	{type = 'spinner', key = 'sp_AHP', default = 20,  align = 'center'},
+	{type = 'spinner', text = 'Ancient Healing Potion', key = 'sp_AHP', default = 20},
 	{type = 'checkbox', text = 'Ancient Mana Potion', key = 'p_AMP', default = false},
-	{type = 'spinner', key = 'sp_AMP', default = 10,  align = 'center'},
-	                         {type = 'ruler'},{type = 'spacer'},
-	
-	--------------------------------------------DPS-----------------------------------------------------
-	----------------------------------------------------------------------------------------------------
-	{type = 'header', 	text = 'DPS mode', align = 'center'},
-	{type = 'text', 	text = 'Check to enable extra DPS', align = 'center'},
+	{type = 'spinner', text = 'Ancient Mana Potion', key = 'sp_AMP', default = 10},
+	{type = 'ruler'},{type = 'spacer'},
+
+	--DPS
+	{type = 'header', text = 'DPS mode', align = 'center'},
+	{type = 'text', text = 'Check to enable extra DPS', align = 'center'},
 	{type = 'checkbox', text = 'Holy Word: Chastise enabled', key = 'd_HWC', default = false},
 	{type = 'checkbox', text = 'Holy Fire enabled', key = 'd_HF', default = false},
-	                         {type = 'ruler'},{type = 'spacer'},
-	
-----------------------------------------------------TANK-------------------------------------------------
-	----------------------------------------------------------------------------------------------------
+	 {type = 'ruler'},{type = 'spacer'},
 
-	{type = 'header', 	text = 'Tank', align = 'center'},
-	{type = 'text', 	text = 'Tank health values', align = 'center'},
+	--TANK
+	{type = 'header', text = 'Tank', align = 'center'},
+	{type = 'text', text = 'Tank health values', align = 'center'},
 	{type = 'spinner', text = 'Holy Word: Serenity', key = 't_HWSE', default = 60},
 	{type = 'spinner', text = 'Flash Heal', key = 't_FH', default = 70},
 	{type = 'spinner', text = 'Prayer of Mending', key = 't_PoM', default = 100},
 	{type = 'spinner', text = 'Renew', key = 't_Ren', default = 100},
-	                         {type = 'ruler'},{type = 'spacer'},
+	{type = 'ruler'},{type = 'spacer'},
 
---------------------------------------------------PLAYER-----------------------------------------------------
-	----------------------------------------------------------------------------------------------------
-
-	{type = 'header', 	text = 'Player', align = 'center'},
-	{type = 'text', 	text = 'Player health values', align = 'center'},
+	--PLAYER
+	{type = 'header', text = 'Player', align = 'center'},
+	{type = 'text', text = 'Player health values', align = 'center'},
 	{type = 'spinner', text = 'Gift of the Naaru', key = 'p_Gift', default = 20},
 	{type = 'spinner', text = 'Holy Word: Serenity', key = 'p_HWSE', default = 60},
 	{type = 'spinner', text = 'Flash Heal', key = 'p_FH', default = 70},
 	{type = 'spinner', text = 'Prayer of Mending', key = 'p_PoM', default = 100},
 	{type = 'spinner', text = 'Renew', key = 'p_Ren', default = 100},
-	                         {type = 'ruler'},{type = 'spacer'},	
-	
---------------------------------------------------LOWEST-----------------------------------------------------
-	----------------------------------------------------------------------------------------------------
+	{type = 'ruler'},{type = 'spacer'},
 
-	{type = 'header', 	text = 'Lowest', align = 'center'},
-	{type = 'text', 	text = 'Lowest health values', align = 'center'},
+	--LOWEST
+	{type = 'header', text = 'Lowest', align = 'center'},
+	{type = 'text', text = 'Lowest health values', align = 'center'},
 	{type = 'spinner', text = 'Holy Word: Serenity', key = 'l_HWSE', default = 60},
 	{type = 'spinner', text = 'Flash Heal', key = 'l_FH', default = 70},
 	{type = 'spinner', text = 'Prayer of Mending', key = 'l_PoM', default = 100},
 	{type = 'spinner', text = 'Renew', key = 'l_Ren', default = 80},
 	{type = 'spinner', text = 'Heal', key = 'l_H', default = 90},
-	                         {type = 'ruler'},{type = 'spacer'},	
-	
-	-------------------------------------------MOVING-----------------------------------------------------
-	----------------------------------------------------------------------------------------------------
+	{type = 'ruler'},{type = 'spacer'},
 
-	{type = 'header', 	text = 'Moving', align = 'center'},
-	{type = 'text', 	text = 'Movement speed', align = 'center'},
+	--MOVING
+	{type = 'header', text = 'Moving', align = 'center'},
+	{type = 'text', text = 'Movement speed', align = 'center'},
 	{type = 'checkbox', text = 'Angelic Feather enabled', key = 'm_AF', default = false},
-	{type = 'text', 	text = 'Lowest health and moving values', align = 'center'},
+	{type = 'text', text = 'Lowest health and moving values', align = 'center'},
 	{type = 'spinner', text = 'Holy Word: Serenity', key = 'm_HWSE', default = 60},
 	{type = 'spinner', text = 'Flash Heal Surge of Light', key = 'm_FH', default = 70},
 	{type = 'spinner', text = 'Renew', key = 'm_Ren', default = 80},
-	                         {type = 'ruler'},{type = 'spacer'},	
 }
 
 local Cooldowns = {
 	--Guardian Spirit if below or if lowest health is below or if UI value and checked.
 	{'!Guardian Spirit', 'lowest.health <= UI(sc_GS) & UI(c_GS)', 'lowest'}
-}	
+}
 
 local Trinkets = {
 	--Top Trinket usage if UI enables it.
@@ -107,11 +92,11 @@ local Trinkets = {
 
 local Keybinds = {
 	--Mass Dispel on Mouseover target Left Control when checked in UI.
-	{'Mass Dispel', 'keybind(lcontrol) & UI(k_MD)', 'mouseover.ground'},											 
+	{'Mass Dispel', 'keybind(lcontrol) & UI(k_MD)', 'mouseover.ground'},
 	--Holy Word: Sanctify on Mouseover target left shift when checked in UI.
-	{'Holy Word: Sanctify', 'keybind(lshift) & UI(k_HWS)', 'mouseover.ground'},												 
+	{'Holy Word: Sanctify', 'keybind(lshift) & UI(k_HWS)', 'mouseover.ground'},
 	-- Pause on left alt when checked in UI.
-	{'%pause', 'keybind(lalt)& UI(k_P)'}																														 
+	{'%pause', 'keybind(lalt)& UI(k_P)'}
 }
 
 local Potions = {
@@ -129,12 +114,12 @@ local SpiritOfRedemption = {
 	--Flash Heal when lowest health is below 100%.
 	{'Flash Heal', 'lowest.health < 100' , 'lowest'}
 }
-			
+
 local DPS = {
 	--Holy Word: Chastise on cooldown if not healing when checked in UI.
-	{'Holy Word: Chastise', 'UI(d_HWC)' , 'target'},																
+	{'Holy Word: Chastise', 'UI(d_HWC)' , 'target'},
 	--Holy Fire on cooldown if not healing when checked in UI.
-	{'Holy Fire', 'UI(d_HF)' , 'target'},																					 
+	{'Holy Fire', 'UI(d_HF)' , 'target'},
 	--Smite on cooldown if not healing.
 	{'Smite', nil, 'target'}
 }
@@ -148,7 +133,7 @@ local Tank = {
 	{'Prayer of Mending', '!tank.buff(Prayer of Mending) & tank.health <= UI(t_PoM)', 'tank'},
 	--Renew if tank missing Renew and when tank health is below or if UI value.
 	{'Renew', '!tank.buff(Renew) & tank.health <= UI(t_Ren)', 'tank'}
-	
+
 }
 
 local Player = {
@@ -166,9 +151,9 @@ local Player = {
 	{'Prayer of Healing', 'player.area(20, 65).heal >= 4 ', 'lowest'},
 	--Holy Nova if player and 4 or more others at 10yds are below or if 90% health.
 	{'Holy Nova', 'player.area(10, 90).heal >= 4', 'player'},
-	
+
 }
-			
+
 local Lowest = {
 	--Flash Heal charge Dump if Surge of Light duration is less or equal to 3 seconds.
 	{'Flash Heal', 'player.buff(Surge of Light) & player.buff(Surge of Light).duration <= 3 & lowest.health < 100', 'lowest'},
@@ -176,7 +161,7 @@ local Lowest = {
 	{'Gift of the Naaru', 'lowest.health <= 20 & lowest.buff(Guardian Spirit)', 'lowest'},
 	--Holy Word: Serenity if lowest health is below or if UI value.
 	{'Holy Word: Serenity', 'lowest.health <= UI(l_HWSE)', 'lowest'},
-	--Flash Heal if lowest health is below or if UI value.		
+	--Flash Heal if lowest health is below or if UI value.
 	{'Flash Heal', 'lowest.health <= UI(l_FH)', 'lowest'},
 	--Prayer of Healing if lowest and 4 or more others are below or if 65% health
 	{'Prayer of Healing', 'lowest.area(20, 65).heal >= 4' , 'lowest'},
@@ -199,15 +184,15 @@ local Moving = {
 	{'Flash Heal', 'player.buff(Surge of Light) & player.buff(Surge of Light).duration <= 3 & lowest.health < 100', 'lowest'},
 	--Flash Heal when Surge of Light is active, Lowest Health  is below or if UI value.
 	{'Flash Heal', 'player.buff(Surge of Light) & lowest.health <= UI(m_FH)', 'lowest'},
-	--Angelic Feather if player is moving for 2 seconds or longer and Missing Angelic Feather and if UI enables it. 
-	{'Angelic Feather', 'player.movingfor >= 2 & !player.buff(Angelic Feather) & spell(Angelic Feather).charges >= 1 & UI(m_AF)', 'player.ground'} 
-	
+	--Angelic Feather if player is moving for 2 seconds or longer and Missing Angelic Feather and if UI enables it.
+	{'Angelic Feather', 'player.movingfor >= 2 & !player.buff(Angelic Feather) & spell(Angelic Feather).charges >= 1 & UI(m_AF)', 'player.ground'}
+
 }
 
 local inCombat = {
 	--Fade when you get aggro.
 	{'fade', 'aggro'},
-	{Cooldowns, 'toggle(cooldowns)'},	
+	{Cooldowns, 'toggle(cooldowns)'},
 	{Trinkets, 'UI(u_T)'},
 	{Keybinds},
 	{Potions},
@@ -220,8 +205,8 @@ local inCombat = {
 		{DPS, 'lowest.health > 90'},
 	}, '!moving'},
 	{Moving, 'moving'},
-	
-}			
+
+}
 
 local outCombat = {
 	{Keybinds},

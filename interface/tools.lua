@@ -2,7 +2,11 @@ local _, NeP = ...
 NeP.Interface = {}
 NeP.Globals.Interface = {}
 
-local DiesalGUI = LibStub("DiesalGUI-1.0")
+-- Locals
+local LibStub     = LibStub
+local strupper    = strupper
+local DiesalGUI   = LibStub("DiesalGUI-1.0")
+local DiesalTools = LibStub("DiesalTools-1.0")
 local SharedMedia = LibStub("LibSharedMedia-3.0")
 
 function NeP.Interface:Header(element, parent, offset, table)
@@ -106,7 +110,7 @@ function NeP.Interface:Checkbox(element, parent, offset, table)
 		tmp_desc:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 9)
 		tmp_desc:SetWidth(parent.content:GetWidth()-10)
 		tmp_desc:SetJustifyH('LEFT')
-		push = tmp_desc:GetStringHeight() + 5
+		element.push = tmp_desc:GetStringHeight() + 5
 	end
 	if element.key then
 		table.window.elements[element.key..'Text'] = tmp_text
@@ -163,7 +167,7 @@ function NeP.Interface:Spinner(element, parent, offset, table)
 		tmp_desc:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 9)
 		tmp_desc:SetWidth(parent.content:GetWidth()-10)
 		tmp_desc:SetJustifyH('LEFT')
-		push = tmp_desc:GetStringHeight() + 5
+		element.push = tmp_desc:GetStringHeight() + 5
 	end
 	if element.key then
 		table.window.elements[element.key..'Text'] = tmp_text
@@ -228,7 +232,7 @@ function NeP.Interface:Checkspin(element, parent, offset, table)
 		tmp_desc:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 9)
 		tmp_desc:SetWidth(parent.content:GetWidth()-10)
 		tmp_desc:SetJustifyH('LEFT')
-		push = tmp_desc:GetStringHeight() + 5
+		element.push = tmp_desc:GetStringHeight() + 5
 	end
 	if element.key then
 		table.window.elements[element.key..'Text'] = tmp_text
@@ -273,7 +277,7 @@ function NeP.Interface:Combo(element, parent, offset, table)
 		tmp_desc:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 9)
 		tmp_desc:SetWidth(parent.content:GetWidth()-10)
 		tmp_desc:SetJustifyH('LEFT')
-		push = tmp_desc:GetStringHeight() + 5
+		element.push = tmp_desc:GetStringHeight() + 5
 	end
 	if element.key then
 		table.window.elements[element.key..'Text'] = tmp_text
@@ -302,7 +306,7 @@ function NeP.Interface:Button(element, parent, offset, table)
 		tmp_desc:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 9)
 		tmp_desc:SetWidth(parent.content:GetWidth()-10)
 		tmp_desc:SetJustifyH('LEFT')
-		push = tmp_desc:GetStringHeight() + 5
+		element.push = tmp_desc:GetStringHeight() + 5
 	end
 	if element.align then
 		tmp:SetJustifyH(strupper(element.align))
@@ -343,7 +347,7 @@ function NeP.Interface:Input(element, parent, offset, table)
 		tmp_desc:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 9)
 		tmp_desc:SetWidth(parent.content:GetWidth()-10)
 		tmp_desc:SetJustifyH('LEFT')
-		push = tmp_desc:GetStringHeight() + 5
+		element.push = tmp_desc:GetStringHeight() + 5
 	end
 	if element.key then
 		table.window.elements[element.key..'Text'] = tmp_text
@@ -373,19 +377,19 @@ end
 function NeP.Interface:Noop() end
 
 local _Elements = {
-	header = 	{ func = 'Header', offset = -16 },
-	text = 		{ func = 'Text', offset = 0 },
-	rule = 		{ func = 'Rule', offset = -10 },
-	ruler = 	{ func = 'Rule', offset = -10 },
-	texture = 	{ func = 'Texture', offset = 0 },
-	checkbox = 	{ func = 'Checkbox', offset = -16 },
-	spinner = 	{ func = 'Spinner', offset = -19 },
+	header    = { func = 'Header', offset = -16 },
+	text      = { func = 'Text', offset = 0 },
+	rule      = { func = 'Rule', offset = -10 },
+	ruler     = { func = 'Rule', offset = -10 },
+	texture   = { func = 'Texture', offset = 0 },
+	checkbox  = { func = 'Checkbox', offset = -16 },
+	spinner   = { func = 'Spinner', offset = -19 },
 	checkspin = { func = 'Checkspin', offset = -19 },
-	combo = 	{ func = 'Combo', offset = -20 },
-	dropdown = 	{ func = 'Combo', offset = -20 },
-	button = 	{ func = 'Button', offset = -20 },
-	input = 	{ func = 'Input', offset = -16 },
-	spacer = 	{ func = 'Noop', offset = -10 },
+	combo     = { func = 'Combo', offset = -20 },
+	dropdown  = { func = 'Combo', offset = -20 },
+	button    = { func = 'Button', offset = -20 },
+	input     = { func = 'Input', offset = -16 },
+	spacer    = { func = 'Noop', offset = -10 },
 }
 
 function NeP.Interface:BuildElements(table, parent)
