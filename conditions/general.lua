@@ -46,6 +46,15 @@ local UnitManaMax                 = UnitManaMax
 local GetRuneCooldown             = GetRuneCooldown
 local GetActiveSpecGroup          = GetActiveSpecGroup
 local GetTalentInfo               = GetTalentInfo
+local IsEquippedItem              = IsEquippedItem
+local UnitSpellHaste              = UnitSpellHaste
+local GetHaste                    = GetHaste
+local UnitLevel                   = UnitLevel
+local UnitGroupRolesAssigned      = UnitGroupRolesAssigned
+local GetAverageItemLevel         = GetAverageItemLevel
+local UnitIsCharmed               = UnitIsCharmed
+local IsSwimming                  = IsSwimming
+local IsFalling                   = IsFalling
 
 local SPELL_POWER_INSANITY       = SPELL_POWER_INSANITY
 local SPELL_POWER_FOCUS          = SPELL_POWER_FOCUS
@@ -680,11 +689,11 @@ local function UnitBuff(target, spell, owner)
 		local go, i = true, 0
 		while i <= 40 and go do
 			i = i + 1
-			name,_,_,count,_,duration,expires,caster,_,_,spellID = _G['UnitBuff'](target, i)
+			name,_,_,count,_,_,expires,caster,_,_,spellID = _G['UnitBuff'](target, i)
 			go = oFilter(owner, spell, spellID, caster)
 		end
 	else
-		name,_,_,count,_,duration,expires,caster = _G['UnitBuff'](target, spell)
+		name,_,_,count,_,_,expires,caster = _G['UnitBuff'](target, spell)
 	end
 	-- This adds some random factor
 	return name, count, expires, caster
@@ -696,11 +705,11 @@ local function UnitDebuff(target, spell, owner)
 		local go, i = true, 0
 		while i <= 40 and go do
 			i = i + 1
-			name,_,_,count,_,duration,expires,caster,_,_,spellID,_,_,_,power = _G['UnitDebuff'](target, i)
+			name,_,_,count,_,_,expires,caster,_,_,spellID,_,_,_,power = _G['UnitDebuff'](target, i)
 			go = oFilter(owner, spell, spellID, caster)
 		end
 	else
-		name,_,_,count,_,duration,expires,caster = _G['UnitDebuff'](target, spell)
+		name,_,_,count,_,_,expires,caster = _G['UnitDebuff'](target, spell)
 	end
 	return name, count, expires, caster, power
 end
@@ -862,7 +871,7 @@ NeP.DSL:Register('totem.duration', function(_, totem)
 	for index = 1, 4 do
 		local _, totemName, startTime, duration = GetTotemInfo(index)
 		if totemName == NeP.Core:GetSpellName(totem) then
-			return floor(startTime + duration - GetTime())
+			return math.floor(startTime + duration - GetTime())
 		end
 	end
 	return 0
