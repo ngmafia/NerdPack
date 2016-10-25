@@ -1,5 +1,10 @@
 local _, NeP = ...
 
+-- Locals
+local UnitExists = UnitExists
+local date       = date
+local UnitName   = UnitName
+
 NeP.ActionLog = {}
 
 local Data = {}
