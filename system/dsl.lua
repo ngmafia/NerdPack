@@ -32,19 +32,19 @@ local function FilerNumber(str)
 end
 
 local OPs = {
-	['>='] = function(arg1, arg2) return arg1 >= arg2 end,
-	['<='] = function(arg1, arg2) return arg1 <= arg2 end,
-	['=='] = function(arg1, arg2) return arg1 == arg2 end,
-	['~='] = function(arg1, arg2) return arg1 ~= arg2 end,
-	['>'] = function(arg1, arg2) return arg1 > arg2 end,
-	['<'] = function(arg1, arg2) return arg1 < arg2 end,
-	['+'] = function(arg1, arg2) return arg1 + arg2 end,
-	['-'] = function(arg1, arg2) return arg1 - arg2 end,
-	['/'] = function(arg1, arg2) return arg1 / arg2 end,
-	['*'] = function(arg1, arg2) return arg1 * arg2 end,
-	['!'] = function(arg1, arg2) return not DSL.Parse(arg1, arg2) end,
-	['@'] = function(arg1) return NeP.Library:Parse(pArgs(arg1)) end,
-	['true'] = function() return true end,
+	['>=']    = function(arg1, arg2) return arg1 >= arg2 end,
+	['<=']    = function(arg1, arg2) return arg1 <= arg2 end,
+	['==']    = function(arg1, arg2) return arg1 == arg2 end,
+	['~=']    = function(arg1, arg2) return arg1 ~= arg2 end,
+	['>']     = function(arg1, arg2) return arg1 > arg2 end,
+	['<']     = function(arg1, arg2) return arg1 < arg2 end,
+	['+']     = function(arg1, arg2) return arg1 + arg2 end,
+	['-']     = function(arg1, arg2) return arg1 - arg2 end,
+	['/']     = function(arg1, arg2) return arg1 / arg2 end,
+	['*']     = function(arg1, arg2) return arg1 * arg2 end,
+	['!']     = function(arg1, arg2) return not DSL.Parse(arg1, arg2) end,
+	['@']     = function(arg1) return NeP.Library:Parse(pArgs(arg1)) end,
+	['true']  = function() return true end,
 	['false'] = function() return false end,
 }
 

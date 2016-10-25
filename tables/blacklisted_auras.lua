@@ -1,28 +1,30 @@
+local _, NeP = ...
+
 --[[
 	DESC: Checks if unit has a Blacklisted Debuff.
 	This will remove the unit from the OM cache.
 ---------------------------------------------------]]
 local BlacklistedAuras = {
 		-- CROWD CONTROL
-	[118] = '',        -- Polymorph
-	[1513] = '',       -- Scare Beast
-	[1776] = '',       -- Gouge
-	[2637] = '',       -- Hibernate
-	[3355] = '',       -- Freezing Trap
-	[6770] = '',       -- Sap
-	[9484] = '',       -- Shackle Undead
-	[19386] = '',      -- Wyvern Sting
-	[20066] = '',      -- Repentance
-	[28271] = '',      -- Polymorph (turtle)
-	[28272] = '',      -- Polymorph (pig)
-	[49203] = '',      -- Hungering Cold
-	[51514] = '',      -- Hex
-	[61305] = '',      -- Polymorph (black cat)
-	[61721] = '',      -- Polymorph (rabbit)
-	[61780] = '',      -- Polymorph (turkey)
-	[76780] = '',      -- Bind Elemental
-	[82676] = '',      -- Ring of Frost
-	[90337] = '',      -- Bad Manner (Monkey) -- FIXME: to check
+	[118]    = '',     -- Polymorph
+	[1513]   = '',     -- Scare Beast
+	[1776]   = '',     -- Gouge
+	[2637]   = '',     -- Hibernate
+	[3355]   = '',     -- Freezing Trap
+	[6770]   = '',     -- Sap
+	[9484]   = '',     -- Shackle Undead
+	[19386]  = '',     -- Wyvern Sting
+	[20066]  = '',     -- Repentance
+	[28271]  = '',     -- Polymorph (turtle)
+	[28272]  = '',     -- Polymorph (pig)
+	[49203]  = '',     -- Hungering Cold
+	[51514]  = '',     -- Hex
+	[61305]  = '',     -- Polymorph (black cat)
+	[61721]  = '',     -- Polymorph (rabbit)
+	[61780]  = '',     -- Polymorph (turkey)
+	[76780]  = '',     -- Bind Elemental
+	[82676]  = '',     -- Ring of Frost
+	[90337]  = '',     -- Bad Manner (Monkey) -- FIXME: to check
 	[115078] = '',     -- Paralysis
 	[115268] = '',     -- Mesmerize
 		-- MOP DUNGEONS/RAIDS/ELITES
@@ -46,7 +48,9 @@ local BlacklistedAuras = {
 	[184053] = '',     -- Fel Barrier (Socrethar)
 }
 
-local _, NeP = ...
+-- locals
+local UnitDebuff = UnitDebuff
+
 function NeP.BlacklistedDebuffs(unit)
 	for i = 1, 40 do
 		local ID = select(11, UnitDebuff(unit, i))

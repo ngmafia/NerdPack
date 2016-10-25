@@ -1,19 +1,19 @@
 local _, NeP = ...
 
 -- Local stuff for speed
-local GetTime = GetTime
-local UnitBuff = UnitBuff
-local IsMounted = IsMounted
-local UnitCastingInfo = UnitCastingInfo
-local UnitChannelInfo = UnitChannelInfo
-local UnitExists = UnitExists
-local UnitIsVisible = UnitIsVisible
+local GetTime              = GetTime
+local UnitBuff             = UnitBuff
+local IsMounted            = IsMounted
+local UnitCastingInfo      = UnitCastingInfo
+local UnitChannelInfo      = UnitChannelInfo
+local UnitExists           = UnitExists
+local UnitIsVisible        = UnitIsVisible
 local GetSpellBookItemInfo = GetSpellBookItemInfo
-local GetSpellCooldown = GetSpellCooldown
-local IsUsableSpell = IsUsableSpell
-local SpellStopCasting = SpellStopCasting
-local UnitIsDeadOrGhost = UnitIsDeadOrGhost
-local InCombatLockdown = InCombatLockdown
+local GetSpellCooldown     = GetSpellCooldown
+local IsUsableSpell        = IsUsableSpell
+local SpellStopCasting     = SpellStopCasting
+local UnitIsDeadOrGhost    = UnitIsDeadOrGhost
+local InCombatLockdown     = InCombatLockdown
 
 NeP.Parser = {}
 
