@@ -58,7 +58,10 @@ end
 -- To counter this we compare GUID's.
 function NeP.Healing:Garbage()
 	for GUID, Obj in pairs(Roster) do
-		if not UnitExists(Obj.key)
+		if GUID ~= UnitGUID(Obj.key) then
+			Roster[GUID] = nil
+			self:Add(Obj.key)
+		elseif not UnitExists(Obj.key)
 		or GUID ~= UnitGUID(Obj.key)
 		or Obj.distance > maxDistance
 		or UnitIsDeadOrGhost(Obj.key) then
