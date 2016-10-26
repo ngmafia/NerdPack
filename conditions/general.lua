@@ -608,12 +608,10 @@ NeP.DSL:Register("area.enemies", function(unit, distance)
 	local total = 0
 	if not UnitExists(unit) then return total end
 	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
-		if UnitExists(Obj.key) then
-			local unit_dist = NeP.Protected.Distance(unit, Obj.key)
-			if (NeP.DSL:Get('combat')(Obj.key) or Obj.isdummy)
-			and unit_dist <= tonumber(distance) then
-				total = total +1
-			end
+		local unit_dist = NeP.Protected.Distance(unit, Obj.key)
+		if (NeP.DSL:Get('combat')(Obj.key) or Obj.isdummy)
+		and unit_dist <= tonumber(distance) then
+			total = total +1
 		end
 	end
 	return total
@@ -624,13 +622,11 @@ NeP.DSL:Register("area.enemies.infront", function(unit, distance)
 	local total = 0
 	if not UnitExists(unit) then return total end
 	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
-		if UnitExists(Obj.key) then
-			local unit_dist = NeP.Protected.Distance(unit, Obj.key)
-			if (NeP.DSL:Get('combat')(Obj.key) or Obj.isdummy)
-			and unit_dist <= tonumber(distance)
-			and NeP.Protected.Infront(unit, Obj.key) then
-				total = total +1
-			end
+		local unit_dist = NeP.Protected.Distance(unit, Obj.key)
+		if (NeP.DSL:Get('combat')(Obj.key) or Obj.isdummy)
+		and unit_dist <= tonumber(distance)
+		and NeP.Protected.Infront(unit, Obj.key) then
+			total = total +1
 		end
 	end
 	return total
@@ -641,11 +637,9 @@ NeP.DSL:Register("area.friendly", function(unit, distance)
 	local total = 0
 	if not UnitExists(unit) then return total end
 	for _, Obj in pairs(NeP.OM:Get('Friendly')) do
-		if UnitExists(Obj.key) then
-			local unit_dist = NeP.Protected.Distance(unit, Obj.key)
-			if unit_dist <= tonumber(distance) then
-				total = total +1
-			end
+		local unit_dist = NeP.Protected.Distance(unit, Obj.key)
+		if unit_dist <= tonumber(distance) then
+			total = total +1
 		end
 	end
 	return total
@@ -656,12 +650,10 @@ NeP.DSL:Register("area.friendly.infront", function(unit, distance)
 	local total = 0
 	if not UnitExists(unit) then return total end
 	for _, Obj in pairs(NeP.OM:Get('Friendly')) do
-		if UnitExists(Obj.key) then
-			local unit_dist = NeP.Protected.Distance(unit, Obj.key)
-			if unit_dist <= tonumber(distance)
-			and NeP.Protected.Infront(unit, Obj.key) then
-				total = total +1
-			end
+		local unit_dist = NeP.Protected.Distance(unit, Obj.key)
+		if unit_dist <= tonumber(distance)
+		and NeP.Protected.Infront(unit, Obj.key) then
+			total = total +1
 		end
 	end
 	return total
