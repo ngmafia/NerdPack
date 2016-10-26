@@ -20,38 +20,28 @@ local OM_c = {
 	Dead = {}
 }
 
--- This cleans/updates the tables
+-- This cleans/updates the tables and then returns it
 -- Due to Generic OM, a unit can still exist (target) but no longer be the same unit,
 -- To counter this we compare GUID's.
-function NeP.OM:Garbage()
-	for tb in pairs(OM_c) do
-		for GUID, Obj in pairs(OM_c[tb]) do
-			if not UnitExists(Obj.key) then
-				OM_c[tb][GUID] = nil
-			elseif GUID ~= UnitGUID(Obj.key)
-			or tb ~= 'Dead' and UnitIsDeadOrGhost(Obj.key) then
-				self:Add(Obj.key)
-				OM_c[tb][GUID] = nil
-			end
+function NeP.OM:Get(ref)
+	local count = 0
+	for GUID, Obj in pairs(OM_c[ref]) do
+		if not UnitExists(Obj.key) then
+			OM_c[ref][GUID] = nil
+		elseif GUID ~= UnitGUID(Obj.key)
+		or ref ~= 'Dead' and UnitIsDeadOrGhost(Obj.key) then
+			self:Add(Obj.key)
+			OM_c[ref][GUID] = nil
+		else
+			count = count + 1
+			Obj.distance = NeP.Protected.Distance('player', Obj.key)
 		end
 	end
-end
-
-function NeP.OM:Get(ref)
-	NeP.OM:Garbage()
-	return OM_c[ref]
-end
-
-function NeP.OM:Filter(ref, GUID)
-	local obj = OM_c[ref][GUID]
-	if not obj or not UnitExists(obj.key) then return end
-	obj.distance = NeP.Protected.Distance('player', obj.key)
-	return true
+	return OM_c[ref], count
 end
 
 function NeP.OM:Insert(ref, Obj)
 	local GUID = UnitGUID(Obj) or '0'
-	if self:Filter(ref, GUID) then return end
 	local ObjID = select(6, strsplit('-', GUID))
 	local distance = NeP.Protected.Distance('player', Obj)
 	OM_c[ref][GUID] = {
