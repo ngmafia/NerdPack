@@ -1,16 +1,16 @@
 local _, NeP = ...
 
 -- Local stuff for speed
-local UnitExists = UnitExists
+local UnitExists        = UnitExists
 local UnitIsDeadOrGhost = UnitIsDeadOrGhost
-local UnitCanAttack = UnitCanAttack
-local UnitIsFriend = UnitIsFriend
-local UnitGUID = UnitGUID
-local UnitName = UnitName
-local strsplit = strsplit
-local select = select
-local tonumber = tonumber
-local pairs = pairs
+local UnitCanAttack     = UnitCanAttack
+local UnitIsFriend      = UnitIsFriend
+local UnitGUID          = UnitGUID
+local UnitName          = UnitName
+local strsplit          = strsplit
+local select            = select
+local tonumber          = tonumber
+local pairs             = pairs
 
 NeP.OM = {}
 
@@ -30,8 +30,8 @@ function NeP.OM:Garbage()
 				OM_c[tb][GUID] = nil
 			elseif GUID ~= UnitGUID(Obj.key)
 			or tb ~= 'Dead' and UnitIsDeadOrGhost(Obj.key) then
-				OM_c[tb][GUID] = nil
 				self:Add(Obj.key)
+				OM_c[tb][GUID] = nil
 			end
 		end
 	end
