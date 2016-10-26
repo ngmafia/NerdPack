@@ -24,20 +24,20 @@ local OM_c = {
 -- Due to Generic OM, a unit can still exist (target) but no longer be the same unit,
 -- To counter this we compare GUID's.
 function NeP.OM:Get(ref)
-	local count = 0
-	for GUID, Obj in pairs(OM_c[ref]) do
+	local tb, count = OM_c[ref], 0
+	for GUID, Obj in pairs(tb) do
 		if not UnitExists(Obj.key) then
-			OM_c[ref][GUID] = nil
+			tb[GUID] = nil
 		elseif GUID ~= UnitGUID(Obj.key)
 		or ref ~= 'Dead' and UnitIsDeadOrGhost(Obj.key) then
 			self:Add(Obj.key)
-			OM_c[ref][GUID] = nil
+			tb[GUID] = nil
 		else
 			count = count + 1
 			Obj.distance = NeP.Protected.Distance('player', Obj.key)
 		end
 	end
-	return OM_c[ref], count
+	return tb, count
 end
 
 function NeP.OM:Insert(ref, Obj)
