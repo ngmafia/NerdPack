@@ -1,6 +1,6 @@
 local GUI = {
 	{type = 'header', text = 'Keybinds:'},
-	{type = 'text', text = 'Alt: Pause\nControl: Death and Decay'},
+	{type = 'text', text = 'Alt: Pause'},
 }
 
 local exeOnLoad = function()
