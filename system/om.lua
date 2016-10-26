@@ -42,6 +42,8 @@ end
 
 function NeP.OM:Insert(ref, Obj)
 	local GUID = UnitGUID(Obj) or '0'
+	-- Dont add existing Objs
+	if OM_c[ref][GUID] then return end
 	local ObjID = select(6, strsplit('-', GUID))
 	local distance = NeP.Protected.Distance('player', Obj)
 	OM_c[ref][GUID] = {
