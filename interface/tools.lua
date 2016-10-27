@@ -396,6 +396,15 @@ function NeP.Interface:BuildElements(table, parent)
 	local offset = -5
 	for _, element in ipairs(table.config) do
 		local push, pull = 0, 0
+		-- Create defaults
+		if element.key and not NeP.Config:Read(table.key, element.key) then
+			if element.default then
+				NeP.Config:Write(table.key, element.key, element.default)
+			elseif element.default_check then
+				NeP.Config:Write(table.key, element.key, element.default_check)
+				NeP.Config:Write(table.key, element.key, element.default_Spin)
+			end
+		end
 		if _Elements[element.type] then
 			local func = _Elements[element.type].func
 			local _offset = _Elements[element.type].offset
