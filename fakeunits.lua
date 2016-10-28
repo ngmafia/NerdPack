@@ -1,5 +1,6 @@
 local _, NeP = ...
 
+local UnitIsUnit = UnitIsUnit
 --[[
 local Roles = {
 	['TANK'] = 1,
