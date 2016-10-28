@@ -470,12 +470,14 @@ NeP.DSL:Register("class", function (target, expectedClass)
 	end
 end)
 
-NeP.DSL:Register("inMelee", function(target)
-	return NeP.Protected.UnitCombatRange('player', target) <= 1.5
+NeP.DSL:Register("inmelee", function(target)
+	local range = NeP.Protected.UnitCombatRange('player', target)
+	return range <= 1.5, range
 end)
 
-NeP.DSL:Register("inRanged", function(target)
-	return NeP.Protected.UnitCombatRange('player', target) <= 40
+NeP.DSL:Register("inranged", function(target)
+	local range = NeP.Protected.UnitCombatRange('player', target)
+	return range <= 40, range
 end)
 
 NeP.DSL:Register("power.regen", function(target)

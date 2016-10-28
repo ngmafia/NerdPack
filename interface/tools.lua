@@ -289,7 +289,6 @@ function NeP.Interface:Button(element, parent, offset, table)
 	local tmp = DiesalGUI:Create("Button")
 	parent:AddChild(tmp)
 	tmp:SetParent(parent.content)
-	tmp:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset)
 	tmp:SetText(element.text)
 	tmp:SetWidth(element.width or 100)
 	tmp:SetHeight(element.height or 20)
@@ -309,7 +308,10 @@ function NeP.Interface:Button(element, parent, offset, table)
 		element.push = tmp_desc:GetStringHeight() + 5
 	end
 	if element.align then
-		tmp:SetJustifyH(strupper(element.align))
+		local loc = element.align
+		tmp:SetPoint(loc, parent.content, 0, offset)
+	else
+		tmp:SetPoint("TOPLEFT", parent.content, 0, offset)
 	end
 	if element.key then
 		table.window.elements[element.key] = tmp

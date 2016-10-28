@@ -30,13 +30,14 @@ local d_color = {
 }
 
 function NeP.Core:ClassColor(unit, type)
+	type = type and type:lower() or 'hex'
 	if UnitExists(unit) then
 		local classid  = select(3, UnitClass(unit))
 		if classid then
-			return NeP.ClassTable[classid][type:lower()]
+			return NeP.ClassTable[classid][type]
 		end
 	end
-	return d_color[type:lower()]
+	return d_color[type]
 end
 
 function NeP.Core:Round(num, idp)
