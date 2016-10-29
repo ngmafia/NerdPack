@@ -18,7 +18,16 @@ local Roster = {}
 local maxDistance = 40
 
 function NeP.Healing:GetRoster()
-	NeP.Healing:Garbage()
+	for GUID, Obj in pairs(Roster) do
+		if not  UnitExists(Obj.key)
+		or  Obj.distance > maxDistance
+		or UnitIsDeadOrGhost(Obj.key) then
+			Roster[GUID] = nil
+		elseif GUID ~= UnitGUID(Obj.key) then
+			self:Add(Obj.key)
+			Roster[GUID] = nil
+		end
+	end
 	return Roster
 end
 
@@ -47,31 +56,15 @@ end
 function NeP.Healing:Refresh(GUID, Obj)
 	local temp = Roster[GUID]
 	local healthRaw = UnitHealth(temp.key)
-	local healthPercent =  (healthRaw / temp.healthMax) * 100
-	temp.health = healthPercent
+	temp.health = (healthRaw / UnitHealthMax(temp.key)) * 100
 	temp.healthRaw = healthRaw
 	temp.distance = Obj.distance
 end
 
--- This cleans/updates the Roster
--- Due to Generic OM, a unit can still exist (target) but no longer be the same unit,
--- To counter this we compare GUID's.
-function NeP.Healing:Garbage()
-	for GUID, Obj in pairs(Roster) do
-		if not  UnitExists(Obj.key)
-		or  Obj.distance > maxDistance
-		or UnitIsDeadOrGhost(Obj.key) then
-			Roster[GUID] = nil
-		elseif GUID ~= UnitGUID(Obj.key) then
-			self:Add(Obj.key)
-			Roster[GUID] = nil
-		end
-	end
-end
-
 C_Timer.NewTicker(0.1, (function()
 	for GUID, Obj in pairs(NeP.OM:Get('Friendly')) do
-		if UnitPlayerOrPetInParty(Obj.key) or UnitIsUnit('player', Obj.key) then
+		if UnitPlayerOrPetInParty(Obj.key)
+		or UnitIsUnit('player', Obj.key) then
 			if Roster[GUID] then
 				NeP.Healing:Refresh(GUID, Obj)
 			elseif Obj.distance < maxDistance then
