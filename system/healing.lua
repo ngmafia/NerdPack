@@ -24,7 +24,7 @@ function NeP.Healing:GetRoster()
 		or UnitIsDeadOrGhost(Obj.key) then
 			Roster[GUID] = nil
 		elseif GUID ~= UnitGUID(Obj.key) then
-			self:Add(Obj.key)
+			self:Add(Obj)
 			Roster[GUID] = nil
 		end
 	end
