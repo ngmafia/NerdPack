@@ -59,7 +59,7 @@ function NeP.CR:Add(SpecID, ...)
 		CRs[SpecID][ev.name].load = ev.load or noop
 		CRs[SpecID][ev.name].unload = ev.unload or noop
 		CRs[SpecID][ev.name][true] = ev.ic or {}
-		CRs[SpecID][ev.name][false] = ev.occ or {}
+		CRs[SpecID][ev.name][false] = ev.ooc or {}
 	end
 end
 
