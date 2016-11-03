@@ -1,9 +1,5 @@
 local Keybinds = {
-	{'Charge', {
-		'keybind(shift)',
-		'target.range >= 8',
-		'target.range <= 25'
-	}, 'target'}
+	{'Charge', 'keybind(shift) & target.range >= 8 & target.range <= 25', 'target'}
 }
 
 local InCombat = {

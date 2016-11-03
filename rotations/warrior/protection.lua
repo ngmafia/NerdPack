@@ -82,7 +82,7 @@ local inCombat = {
 	-- Taunts
 	{'%taunt(Taunt)', 'toggle(taunt)'},
 	--actions+=/call_action_list,name=prot
-	{Prot, {'target.range < 8', 'target.infront'}}
+	{Prot, 'target.infront & target.range < 8'}
 }
 
 local outCombat = {
