@@ -12,13 +12,17 @@ NeP.Listener:Add("NeP_Config", "ADDON_LOADED", function(addon)
 	end
 end)
 
-function NeP.Config:Read(key1, key2, default)
-	return Data[key1] and Data[key1][key2] or default
+function NeP.Config:Read(a, b, default)
+	-- only return default if its nil in data
+	if Data[a] and Data[a][b] ~= nil then
+		return Data[a][b]
+	end
+	return default
 end
 
-function NeP.Config:Write(key1, key2, value)
-	if not Data[key1] then
-		Data[key1] = {}
+function NeP.Config:Write(a, b, value)
+	if not Data[a] then
+		Data[a] = {}
 	end
-	Data[key1][key2] = value
+	Data[a][b] = value
 end
