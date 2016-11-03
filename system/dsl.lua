@@ -151,16 +151,6 @@ local function ExeFunc(Strg)
 	return _G[Strg](Args)
 end
 
-local function RemoveSpaces(Strg)
-	if Strg:find('^%s') then
-		Strg = Strg:sub(2);
-	end
-	if Strg:find('$%s') then
-		Strg = Strg:sub(-2);
-	end
-	return Strg
-end
-
 -- Routes
 local typesTable = {
 	['function'] = function(dsl) return dsl() end,
@@ -183,7 +173,6 @@ local typesTable = {
 		return false
 	end,
 	['string'] = function(Strg, Spell)
-		Strg = RemoveSpaces(Strg)
 		local pX = Strg:sub(1, 1)
 		if Strg:find('{(.-)}') then
 			return Nest(Strg, Spell)

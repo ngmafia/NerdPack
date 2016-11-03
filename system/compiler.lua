@@ -115,7 +115,6 @@ function NeP.Compiler.Spell(eval, name)
 	end
 	eval[1] = ref
 end
-
 local fake_unit = {
 	target = 'fake',
 	func = function()
@@ -140,29 +139,45 @@ function NeP.Compiler.Target(eval)
 	eval[3] = ref
 end
 
+-- FIXME: more needs to be done for conditions like we do for the rest
+function NeP.Compiler.Conditons(eval)
+	-- remove whitespaces (_xspc_ needs to be unique so we dont end up replacing something we shouldn't)
+	eval[2] = eval[2]:gsub("%b()", function(s) return s:gsub(" ", "_xspc_") end):gsub("%s", ""):gsub("_xspc_", " ")
+end
+
 function NeP.Compiler.Compile(eval, name)
-	local spell = eval[1]
-	-- Take care of spell
-	if type(spell) == 'table' then
+	local spell, cond = eval[1], eval[2]
+	-- Spell
+	if type(spell) == 'string' then
+		NeP.Compiler.Spell(eval, name)
+	elseif type(spell) == 'table' then
 		for k=1, #spell do
 			NeP.Compiler.Compile(spell[k], name)
 		end
+	elseif type(spell) == 'function' then
+		local ref = {}
+		ref.spell = tostring(spell)
+		ref.token = 'func'
+		eval.type = 'Function'
+		eval.exe = spell
+		eval.nogcd = true
+		eval[1] = ref
 	else
-		if type(spell) == 'string' then
-			NeP.Compiler.Spell(eval, name)
-		elseif type(spell) == 'function' then
-			local ref = {}
-			ref.spell = tostring(spell)
-			ref.token = 'func'
-			eval.type = 'Function'
-			eval.exe = spell
-			eval.nogcd = true
-			eval[1] = ref
-		else
-			NeP.Core:Print('Found a issue compiling: ',name,'\n-> Spell cant be a',type(spell))
-		end
-		NeP.Compiler.Target(eval)
+		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Spell cant be a', type(spell))
+		eval[1] = {}
 	end
+	-- Conditions
+	if type(cond) == 'string' then
+		NeP.Compiler.Conditons(eval)
+	elseif type(cond) == 'table' then
+		for k=1, #cond do
+			NeP.Compiler.Conditons(cond[k])
+		end
+	elseif not cond then
+		eval[2] = true
+	end
+	-- Target
+	NeP.Compiler.Target(eval)
 end
 
 function NeP.Compiler:Iterate(eval, name)
