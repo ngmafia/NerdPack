@@ -52,15 +52,20 @@ local ST = {
 	{'Shred', nil, 'target'}
 }
 
-local inCombat = {
+local InCombat = {
 	{Keybinds},
 	{Cooldowns, 'toggle(cooldowns)'},
 	{AoE, 'target.area(8).enemies >= 3'},
 	{ST, 'target.inmelee'}
 }
 
-local outCombat = {
+local OutCombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(103, '[NeP] Druid - Feral', inCombat, outCombat, nil, GUI)
+NeP.CR:Add(103, {
+  name = '[NeP] Druid - Feral',
+  ic = InCombat,
+  ooc = OutCombat,
+	gui = GUI
+})
