@@ -139,24 +139,44 @@ function NeP.Compiler.Target(eval)
 	eval[3] = ref
 end
 
--- FIXME: more needs to be done for conditions like we do for the rest
+-- Remove whitespaces (_xspc_ needs to be unique so we dont end up replacing something we shouldn't)
+local function CondSpaces(cond)
+	return cond:gsub("%b()", function(s) return s:gsub(" ", "_xspc_") end):gsub("%s", ""):gsub("_xspc_", " ")
+end
+
+-- FIXME: more needs to be done for conditions like we do for the RangedSlot
 function NeP.Compiler.Conditions(eval)
-	-- remove whitespaces (_xspc_ needs to be unique so we dont end up replacing something we shouldn't)
-	eval[2] = eval[2]:gsub("%b()", function(s) return s:gsub(" ", "_xspc_") end):gsub("%s", ""):gsub("_xspc_", " ")
+
 end
 
 function NeP.Compiler.CondLegacy(cond)
+	local str = ''
 	if type(cond) == 'boolean' then
-		return tostring(cond):lower()
+		str = tostring(cond):lower()
 	elseif type(cond) == 'function' then
 		-- FIXME: this shouldnt go to globals we need a table with these
 		local name = tostring(cond)
 		_G[name] = cond
-		return name
+		str = 'func='..name
+	elseif type(cond) == 'table' then
+		-- convert everything into a string so we can then process it
+		str = '{'
+		for k=1, #cond do
+			local tmp = cond[k]
+			tmp = NeP.Compiler.CondLegacy(tmp)
+			if tmp:lower() == 'or' then
+				str = str .. '||' .. tmp
+			else
+				str = str .. '&' .. tmp
+			end
+			str = str..'}'
+		end
 	elseif not cond then
-		return 'true'
+		str = 'true'
+	else
+		str = cond
 	end
-	return cond
+	return CondSpaces(str)
 end
 
 function NeP.Compiler.Compile(eval, name)
@@ -182,23 +202,8 @@ function NeP.Compiler.Compile(eval, name)
 	end
 	-- Conditions
 	eval[2] = NeP.Compiler.CondLegacy(cond)
-	if type(cond) == 'string' then
-		NeP.Compiler.Conditions(eval)
-	elseif type(cond) == 'table' then
-		-- convert everything into a string so we can then process it
-		local str = '{'
-		for k=1, #cond do
-			local tmp = cond[k]
-			tmp = NeP.Compiler.CondLegacy(tmp)
-			if tmp:lower() == 'or' then
-				str = str .. '||' .. tmp
-			else
-				str = str .. '&' .. tmp
-			end
-			eval[2] = str..'}'
-			NeP.Compiler.Conditions(eval)
-		end
-	end
+	NeP.Compiler.Conditions(eval)
+
 	-- Target
 	NeP.Compiler.Target(eval)
 end
