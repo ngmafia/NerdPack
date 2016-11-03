@@ -145,6 +145,20 @@ function NeP.Compiler.Conditions(eval)
 	eval[2] = eval[2]:gsub("%b()", function(s) return s:gsub(" ", "_xspc_") end):gsub("%s", ""):gsub("_xspc_", " ")
 end
 
+function NeP.Compiler.CondLegacy(cond)
+	if type(cond) == 'boolean' then
+		return tostring(cond):lower()
+	elseif type(cond) == 'function' then
+		-- FIXME: this shouldnt go to globals we need a table with these
+		local name = tostring(cond)
+		_G[name] = cond
+		return name
+	elseif not cond then
+		return 'true'
+	end
+	return cond
+end
+
 function NeP.Compiler.Compile(eval, name)
 	local spell, cond = eval[1], eval[2]
 	-- Spell
@@ -167,12 +181,23 @@ function NeP.Compiler.Compile(eval, name)
 		eval[1] = {}
 	end
 	-- Conditions
+	eval[2] = NeP.Compiler.CondLegacy(cond)
 	if type(cond) == 'string' then
 		NeP.Compiler.Conditions(eval)
 	elseif type(cond) == 'table' then
-		-- FIXME: todo...
-	elseif not cond then
-		eval[2] = true
+		-- convert everything into a string so we can then process it
+		local str = '{'
+		for k=1, #cond do
+			local tmp = cond[k]
+			tmp = NeP.Compiler.CondLegacy(tmp)
+			if tmp:lower() == 'or' then
+				str = str .. '||' .. tmp
+			else
+				str = str .. '&' .. tmp
+			end
+			eval[2] = str..'}'
+			NeP.Compiler.Conditions(eval)
+		end
 	end
 	-- Target
 	NeP.Compiler.Target(eval)

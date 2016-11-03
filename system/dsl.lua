@@ -151,61 +151,33 @@ local function ExeFunc(Strg)
 	return _G[Strg](Args)
 end
 
--- Routes
-local typesTable = {
-	['function'] = function(dsl) return dsl() end,
-	['table'] = function(dsl, spell)
-		local r_Tbl = {[1] = true}
-		for i=1, #dsl do
-			local Strg = dsl[i]
-			if Strg == 'or' then
-				r_Tbl[#r_Tbl+1] = true
-			elseif r_Tbl[#r_Tbl] then
-				local eval = DSL.Parse(Strg, spell)
-				r_Tbl[#r_Tbl] = eval or false
-			end
-		end
-		for i = 1, #r_Tbl do
-			if r_Tbl[i] then
-				return true
-			end
-		end
-		return false
-	end,
-	['string'] = function(Strg, Spell)
-		local pX = Strg:sub(1, 1)
-		if Strg:find('{(.-)}') then
-			return Nest(Strg, Spell)
-		elseif Strg:find('||') then
-			return _OR(Strg, Spell)
-		elseif Strg:find('&') then
-			return _AND(Strg, Spell)
-		elseif OPs[pX] then
-			Strg = Strg:sub(2);
-			return OPs[pX](Strg, Spell)
-		elseif Strg:find("func=") then
-			Strg = Strg:sub(6);
-			return ExeFunc(Strg)
-		elseif Strg:find('[><=~]') then
-			return Comperatores(Strg, Spell)
-		elseif Strg:find('!=') then
-			return Comperatores(Strg, Spell)
-		elseif Strg:find("[/%*%+%-]") then
-			return StringMath(Strg, Spell)
-		elseif OPs[Strg] then
-			return OPs[Strg](Strg, Spell)
-		elseif Strg:find('%a') then
-			return ProcessCondition(Strg, Spell)
-		else
-			return Strg
-		end
-	end,
-	['nil'] = function() return true end,
-	['boolean']	 = function(dsl) return dsl end,
-}
-
-function NeP.DSL.Parse(dsl, Spell)
-	return typesTable[type(dsl)](dsl, Spell)
+function NeP.DSL.Parse(Strg, Spell)
+	local pX = Strg:sub(1, 1)
+	if Strg:find('{(.-)}') then
+		return Nest(Strg, Spell)
+	elseif Strg:find('||') then
+		return _OR(Strg, Spell)
+	elseif Strg:find('&') then
+		return _AND(Strg, Spell)
+	elseif OPs[pX] then
+		Strg = Strg:sub(2);
+		return OPs[pX](Strg, Spell)
+	elseif Strg:find("func=") then
+		Strg = Strg:sub(6);
+		return ExeFunc(Strg)
+	elseif Strg:find('[><=~]') then
+		return Comperatores(Strg, Spell)
+	elseif Strg:find('!=') then
+		return Comperatores(Strg, Spell)
+	elseif Strg:find("[/%*%+%-]") then
+		return StringMath(Strg, Spell)
+	elseif OPs[Strg] then
+		return OPs[Strg](Strg, Spell)
+	elseif Strg:find('%a') then
+		return ProcessCondition(Strg, Spell)
+	else
+		return Strg
+	end
 end
 
 NeP.Globals.DSL = {
