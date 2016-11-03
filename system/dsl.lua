@@ -175,9 +175,8 @@ function NeP.DSL.Parse(Strg, Spell)
 		return OPs[Strg](Strg, Spell)
 	elseif Strg:find('%a') then
 		return ProcessCondition(Strg, Spell)
-	else
-		return Strg
 	end
+	return Strg
 end
 
 NeP.Globals.DSL = {
