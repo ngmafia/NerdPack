@@ -170,9 +170,7 @@ function NeP.Compiler.Compile(eval, name)
 	if type(cond) == 'string' then
 		NeP.Compiler.Conditions(eval)
 	elseif type(cond) == 'table' then
-		for k=1, #cond do
-			NeP.Compiler.Conditions(cond[k])
-		end
+		-- FIXME: todo...
 	elseif not cond then
 		eval[2] = true
 	end
