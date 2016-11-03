@@ -1,10 +1,11 @@
-local _, NeP = ...
-
-NeP.CR = {}
-NeP.CR.CR = {}
-
-local CRs = {}
-local UnitClass = UnitClass
+local _, NeP                = ...
+NeP.CR                      = {}
+NeP.CR.CR                   = {}
+local CRs                   = {}
+local UnitClass             = UnitClass
+local GetSpecialization     = GetSpecialization
+local GetSpecializationInfo = GetSpecializationInfo
+local noop                  = function() end
 
 function NeP.CR:AddGUI(key, eval)
 	local temp = {
@@ -18,29 +19,56 @@ function NeP.CR:AddGUI(key, eval)
 	NeP.Interface:AddCR_ST(key)
 end
 
-function NeP.CR:Add(SpecID, Name, InCombat, OutCombat, ExeOnLoad, GUI)
+function NeP.CR:Add(SpecID, ...)
 	local classIndex = select(3, UnitClass('player'))
+	-- This only allows crs we can use to be registered
 	if NeP.ClassTable[classIndex][SpecID] or classIndex == SpecID then
+
+		-- if no table for the spec, create it
 		if not CRs[SpecID] then
 			CRs[SpecID] = {}
 		end
 
+		-- Legacy stuff
+		local ev, InCombat, OutCombat, ExeOnLoad, GUI = ...
+		if type(...) == 'string' then
+			ev = {
+				name = ev,
+				ic = InCombat,
+				ooc = OutCombat,
+				load = ExeOnLoad,
+				gui = GUI
+			}
+		else
+			ev = ...
+		end
+
+		-- do not load cr that dont have names
+		if not ev.name then error('Tried to load a CR whitout and name') end
+
 		-- This compiles the CR
-		NeP.Compiler:Iterate(InCombat, Name)
-		NeP.Compiler:Iterate(OutCombat, Name)
+		NeP.Compiler:Iterate(ev.ic, ev.name)
+		NeP.Compiler:Iterate(ev.ooc, ev.name)
 
 		--Create user GUI
-		if GUI then NeP.CR:AddGUI(Name, GUI) end
+		if ev.gui then NeP.CR:AddGUI(ev.name, ev.gui) end
 
-		CRs[SpecID][Name] = {}
-		CRs[SpecID][Name].Name = Name
-		CRs[SpecID][Name].Exe = ExeOnLoad
-		CRs[SpecID][Name][true] = InCombat
-		CRs[SpecID][Name][false] = OutCombat
+		-- store some ref to the crs
+		CRs[SpecID][ev.name] = {}
+		CRs[SpecID][ev.name].Name = ev.name
+		CRs[SpecID][ev.name].load = ev.load or noop
+		CRs[SpecID][ev.name].unload = ev.unload or noop
+		CRs[SpecID][ev.name][true] = ev.ic or {}
+		CRs[SpecID][ev.name][false] = ev.occ or {}
 	end
 end
 
 function NeP.CR:Set(Spec, Name)
+	-- execute the previous unload
+	if self.CR.unload then
+		self.CR.unload()
+	end
+
 	local _, englishClass, classIndex  = UnitClass('player')
 	local a, b = englishClass:sub(1, 1):upper(), englishClass:sub(2):lower()
 	local classCR = '[NeP] '..a..b..' - Basic'
@@ -52,9 +80,7 @@ function NeP.CR:Set(Spec, Name)
 	NeP.Config:Write('SELECTED', Spec, Name)
 	NeP.Interface:SetCheckedCR(Name)
 	NeP.Interface:ResetToggles()
-	if self.CR.Exe then
-		self.CR.Exe()
-	end
+	self.CR.load()
 end
 
 function NeP.CR:GetList(Spec)
