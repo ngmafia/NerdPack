@@ -13,7 +13,6 @@ local function ExeOnLoad()
 end
 
 local Keybinds = {
-	-- Pause
 	{'%pause', 'keybind(alt)'},
 }
 
@@ -49,7 +48,7 @@ local ST = {
 	{'Swipe', nil, 'target'},
 }
 
-local inCombat = {
+local InCombat = {
 	{Keybinds},
 	{Cooldowns, 'toggle(cooldowns)'},
 	--Growl Use to establish threat on targets not attacking you.
@@ -57,8 +56,14 @@ local inCombat = {
 	{ST, 'target.inmelee'}
 }
 
-local outCombat = {
+local OutCombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(104, '[NeP] Druid - Guardian', inCombat, outCombat, ExeOnLoad, GUI)
+NeP.CR:Add(104, {
+  name = '[NeP] Druid - Guardian',
+  ic = InCombat,
+  ooc = OutCombat,
+	gui = GUI,
+	load = ExeOnLoad
+})

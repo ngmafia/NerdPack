@@ -1,14 +1,17 @@
 local Keybinds = {
-	-- Pause
 	{'%pause', 'keybind(alt)'},
 }
 
-local inCombat = {
-
-}
-
-local outCombat = {
+local InCombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(105, '[NeP] Druid - Restoration', inCombat, outCombat)
+local OutCombat = {
+	{Keybinds},
+}
+
+NeP.CR:Add(105, {
+  name = '[NeP] Druid - Restoration',
+  ic = InCombat,
+  ooc = OutCombat,
+})
