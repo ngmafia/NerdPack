@@ -24,7 +24,7 @@ local function IsMountedCheck()
 			return true
 		end
 	end
-	return not IsMounted()
+	return (SecureCmdOptionParse("[overridebar][vehicleui][possessbar,@vehicle,exists][mounted]true")) ~= "true"
 end
 
 local function castingTime()
