@@ -140,7 +140,7 @@ function NeP.Compiler.Target(eval)
 end
 
 -- FIXME: more needs to be done for conditions like we do for the rest
-function NeP.Compiler.Conditons(eval)
+function NeP.Compiler.Conditions(eval)
 	-- remove whitespaces (_xspc_ needs to be unique so we dont end up replacing something we shouldn't)
 	eval[2] = eval[2]:gsub("%b()", function(s) return s:gsub(" ", "_xspc_") end):gsub("%s", ""):gsub("_xspc_", " ")
 end
@@ -168,10 +168,10 @@ function NeP.Compiler.Compile(eval, name)
 	end
 	-- Conditions
 	if type(cond) == 'string' then
-		NeP.Compiler.Conditons(eval)
+		NeP.Compiler.Conditions(eval)
 	elseif type(cond) == 'table' then
 		for k=1, #cond do
-			NeP.Compiler.Conditons(cond[k])
+			NeP.Compiler.Conditions(cond[k])
 		end
 	elseif not cond then
 		eval[2] = true
