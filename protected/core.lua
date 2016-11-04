@@ -1,4 +1,5 @@
-local _, NeP = ...
+local _, NeP  = ...
+local C_Timer = C_Timer
 
 NeP.Protected = {}
 

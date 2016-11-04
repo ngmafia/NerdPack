@@ -58,6 +58,7 @@ function NeP.OM:Insert(ref, Obj)
 end
 
 function NeP.OM:Add(Obj)
+	UnitExists = ObjectExists or UnitExists
 	if not UnitExists(Obj) then return end
 	-- Dead Units
 	if UnitIsDeadOrGhost(Obj) then
