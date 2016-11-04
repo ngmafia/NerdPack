@@ -146,7 +146,7 @@ end
 
 -- FIXME: more needs to be done for conditions like we do for the RangedSlot
 function NeP.Compiler.Conditions(eval)
-
+	eval[2] = CondSpaces(eval[2])
 end
 
 function NeP.Compiler.CondLegacy(cond)
@@ -166,8 +166,10 @@ function NeP.Compiler.CondLegacy(cond)
 			tmp = NeP.Compiler.CondLegacy(tmp)
 			if tmp:lower() == 'or' then
 				str = str .. '||' .. tmp
-			else
+			elseif k ~= 1 then
 				str = str .. '&' .. tmp
+			else
+				str = str .. tmp
 			end
 		end
 		str = str..'}'
@@ -176,7 +178,7 @@ function NeP.Compiler.CondLegacy(cond)
 	else
 		str = cond
 	end
-	return CondSpaces(str)
+	return str
 end
 
 function NeP.Compiler.Compile(eval, name)
