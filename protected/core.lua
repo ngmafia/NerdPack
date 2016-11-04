@@ -16,7 +16,7 @@ function NeP.Protected:AddUnlocker(name, test, functions, extended, om)
 end
 
 function NeP.Protected.SetUnlocker(name, unlocker)
-	NeP.Core:Print('|cffff0000Found:|r ' .. name)
+	NeP.Core:Print('|cffff0000Found:|r ' .. name, '\nRemember to /reload after attaching a unlocker!')
 	for uname, func in pairs(unlocker.functions) do
 		NeP.Protected[uname] = func
 	end
