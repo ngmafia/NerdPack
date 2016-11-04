@@ -5,13 +5,13 @@ NeP.Protected = {}
 local unlockers = {}
 
 function NeP.Protected:AddUnlocker(name, test, functions, extended, om)
-	unlockers[name] = {
+	table.insert(unlockers, {
 		name = name,
 		test = test,
 		functions = functions,
 		extended = extended,
 		om = om
-	}
+	})
 end
 
 function NeP.Protected.SetUnlocker(name, unlocker)
@@ -33,9 +33,10 @@ end
 C_Timer.After(5, function ()
 	C_Timer.NewTicker(0.2, (function()
 		if NeP.Unlocked or not NeP.DSL:Get('toggle')(nil, 'mastertoggle') then return end
-		for name, unlocker in pairs(unlockers) do
+		for i=1, #unlockers do
+			local unlocker = unlockers[i]
 			if unlocker.test() then
-				NeP.Protected.SetUnlocker(name, unlocker)
+				NeP.Protected.SetUnlocker(unlocker.name, unlocker)
 				break
 			end
 		end

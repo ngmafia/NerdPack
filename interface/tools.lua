@@ -418,14 +418,14 @@ function NeP.Interface:BuildElements(table, parent)
 		elseif element.type == "text" then
 			offset = offset + -(element.offset) - (element.size or 10)
 		end
-        if element.push then
-            push = push + element.push
-            offset = offset + -(push)
-        end
-        if element.pull then
-            pull = pull + element.pull
-            offset = offset + pull
-        end
+    if element.push then
+      push = push + element.push
+      offset = offset + -(push)
+    end
+    if element.pull then
+      pull = pull + element.pull
+      offset = offset + pull
+    end
 	end
 end
 
@@ -433,10 +433,12 @@ end
 local usedGUIs = {}
 
 function NeP.Interface:BuildGUI(eval)
+	-- This opens a existing GUI instead of creating another
 	if usedGUIs[eval] then
 		usedGUIs[eval]()
 		return
 	end
+	-- Create a new one
 	if not eval.key then return end
 	local parent = DiesalGUI:Create('Window')
 	usedGUIs[eval.key] = function() parent:Show() end
@@ -462,7 +464,6 @@ function NeP.Interface:BuildGUI(eval)
 			parent:AddChild(window)
 			window:SetParent(parent.content)
 			window:SetAllPoints(parent.content)
-			window.parent = parent
 			window.elements = { }
 			eval.window = window
 			NeP.Interface:BuildElements(eval, window)
