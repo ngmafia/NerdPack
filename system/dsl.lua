@@ -1,6 +1,6 @@
 local _, NeP     = ...
 local DSL        = NeP.DSL
-local UnitExists = NeP.Core.UnitExists
+local UnitExists = UnitExists
 
 function NeP.Core:string_split(string, delimiter)
 	local result, from = {}, 1

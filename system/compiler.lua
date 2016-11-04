@@ -5,7 +5,7 @@ local GetInventorySlotInfo = GetInventorySlotInfo
 local GetInventoryItemID   = GetInventoryItemID
 local GetItemInfo          = GetItemInfo
 local GetSpellInfo         = GetSpellInfo
-local UnitExists           = NeP.Core.UnitExists
+local UnitExists           = UnitExists
 
 NeP.Compiler = {}
 

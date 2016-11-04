@@ -1,7 +1,7 @@
 local _, NeP = ...
 
 -- Local stuff for speed
-local UnitExists        = NeP.Core.UnitExists
+local UnitExists        = UnitExists
 local UnitIsDeadOrGhost = UnitIsDeadOrGhost
 local UnitCanAttack     = UnitCanAttack
 local UnitIsFriend      = UnitIsFriend

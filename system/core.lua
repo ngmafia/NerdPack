@@ -1,7 +1,12 @@
-local _, NeP = ...
+local _, NeP     = ...
+NeP.Core         = {}
+NeP.Globals.Core = NeP.Core
+
+-- test
+NeP.Core.UnitExists        = ObjectExists or UnitExists
 
 -- Locals for speed
-local UnitExists           = UnitExists
+local UnitExists           = NeP.Core.UnitExists
 local UnitClass            = UnitClass
 local GetSpellInfo         = GetSpellInfo
 local GetItemInfo          = GetItemInfo
@@ -17,9 +22,6 @@ local HasPetSpells         = HasPetSpells
 local BOOKTYPE_SPELL       = BOOKTYPE_SPELL
 local BOOKTYPE_PET         = BOOKTYPE_PET
 
-NeP.Core = {}
-NeP.Globals.Core = NeP.Core
-
 function NeP.Core:Print(...)
 	print('[|cff'..NeP.Color..'NeP|r]', ...)
 end
@@ -28,11 +30,6 @@ local d_color = {
 	hex = 'FFFFFF',
 	rgb = {1,1,1}
 }
-
-function NeP.Core.UnitExists(unit)
-	UnitExists = ObjectExists or UnitExists
-	return UnitExists(unit)
-end
 
 function NeP.Core:ClassColor(unit, type)
 	type = type and type:lower() or 'hex'

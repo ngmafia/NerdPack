@@ -8,3 +8,6 @@ NeP.Color   = 'FFFFFF'
 -- This exports stuff into global space
 NeP.Globals = {}
 _G.NeP = NeP.Globals
+
+-- Hack UnitExists
+_G['UnitExists'] = ObjectExists or UnitExists
