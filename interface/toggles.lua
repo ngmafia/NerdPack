@@ -1,9 +1,17 @@
-local _, NeP = ...
+local n_name, NeP = ...
 local mainframe = NeP.Interface.MainFrame
 local L = NeP.Locale
+local GameTooltip = GameTooltip
 
-local ButtonsSize = 40
-local ButtonsPadding = 2
+NeP.ButtonsSize = 40
+NeP.ButtonsPadding = 2
+
+-- Load Saved sizes
+NeP.Core:WhenInGame(function()
+	NeP.ButtonsSize = NeP.Config:Read(n_name..'_Settings', 'bsize', 40)
+	NeP.ButtonsPadding = NeP.Config:Read(n_name..'_Settings', 'bpad', 2)
+	NeP.Interface:RefreshToggles()
+end)
 
 local Toggles = {}
 local tcount = 0
@@ -43,7 +51,7 @@ local function OnEnter(self, name, text)
 end
 
 local function CreateToggle(eval)
-	local pos = (ButtonsSize*tcount)+(tcount*ButtonsPadding)-(ButtonsSize+ButtonsPadding)
+	local pos = (NeP.ButtonsSize*tcount)+(tcount*NeP.ButtonsPadding)-(NeP.ButtonsSize+NeP.ButtonsPadding)
 	eval.key = eval.key:lower()
 	Toggles[eval.key] = CreateFrame("CheckButton", eval.key, mainframe.content)
 	local temp = Toggles[eval.key]
@@ -51,7 +59,7 @@ local function CreateToggle(eval)
 	temp:SetFrameLevel(1)
 	temp.key = eval.key
 	temp:SetPoint("LEFT", mainframe.content, pos, 0)
-	temp:SetSize(ButtonsSize, ButtonsSize)
+	temp:SetSize(NeP.ButtonsSize, NeP.ButtonsSize)
 	temp:SetFrameLevel(1)
 	temp:SetNormalFontObject("GameFontNormal")
 	temp.texture = SetTexture(temp, eval.icon)
@@ -62,7 +70,7 @@ local function CreateToggle(eval)
 	temp:RegisterForClicks("LeftButtonUp", "RightButtonUp")
 	temp:SetScript("OnClick", function(self, button) OnClick(self, eval.func, button) end)
 	temp:SetScript("OnEnter", function(self) OnEnter(self, eval.name, eval.text) end)
-	temp:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
+	temp:SetScript("OnLeave", function() GameTooltip:Hide() end)
 end
 
 function NeP.Interface:UpdateIcon(key, icon)
@@ -71,7 +79,6 @@ function NeP.Interface:UpdateIcon(key, icon)
 end
 
 function NeP.Interface:AddToggle(eval)
-	tcount = tcount + 1
 	if Toggles[eval.key] then
 		Toggles[eval.key]:Show()
 	else
@@ -81,8 +88,18 @@ function NeP.Interface:AddToggle(eval)
 end
 
 function NeP.Interface:RefreshToggles()
-	mainframe.settings.width = tcount*(ButtonsSize+ButtonsPadding)-ButtonsPadding
-	mainframe.settings.height = ButtonsSize+18
+	tcount = 0
+	for k in pairs(Toggles) do
+		if Toggles[k]:IsShown() then
+			tcount = tcount + 1
+			local pos = (NeP.ButtonsSize*tcount)+(tcount*NeP.ButtonsPadding)-(NeP.ButtonsSize+NeP.ButtonsPadding)
+			Toggles[k]:SetSize(NeP.ButtonsSize, NeP.ButtonsSize)
+			Toggles[k]:SetPoint("LEFT", mainframe.content, pos, 0)
+		end
+	end
+
+	mainframe.settings.width = tcount*(NeP.ButtonsSize+NeP.ButtonsPadding)-NeP.ButtonsPadding
+	mainframe.settings.height = NeP.ButtonsSize+18
 
 	mainframe.settings.minHeight = mainframe.settings.height
 	mainframe.settings.minWidth = mainframe.settings.width
@@ -92,7 +109,6 @@ function NeP.Interface:RefreshToggles()
 end
 
 function NeP.Interface:ResetToggles()
-	tcount = 0
 	for k in pairs(Toggles) do
 		Toggles[k]:Hide()
 	end

@@ -3,6 +3,7 @@
 
 	<Script file="tools.lua" />
 	<Script file="mainframe.lua" />
+	<Script file="settings.lua" />
 	<Script file="toggles.lua" />
 	<Script file="default_toggles.lua" />
 	<Script file="om.lua" />
