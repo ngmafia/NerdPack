@@ -1,5 +1,6 @@
-local _, NeP = ...
-NeP.Interface = {}
+local _, NeP          = ...
+local usedGUIs        = {}
+NeP.Interface         = {}
 NeP.Globals.Interface = {}
 
 -- Locals
@@ -27,7 +28,7 @@ function NeP.Interface:Header(element, parent, offset, table)
 		tmp:SetJustifyH(strupper(element.align))
 	end
 	if element.key then
-		table.window.elements[element.key] = tmp
+		usedGUIs[table.key].elements[element.key] = tmp
 	end
 end
 
@@ -49,7 +50,7 @@ function NeP.Interface:Text(element, parent, offset, table)
 		tmp:SetJustifyH(strupper(element.align))
 	end
 	if element.key then
-		table.window.elements[element.key] = tmp
+		usedGUIs[table.key].elements[element.key] = tmp
 	end
 end
 
@@ -60,7 +61,7 @@ function NeP.Interface:Rule(element, parent, offset, table)
 	tmp.frame:SetPoint('TOPLEFT', parent.content, 'TOPLEFT', 5, offset-3)
 	tmp.frame:SetPoint('BOTTOMRIGHT', parent.content, 'BOTTOMRIGHT', -5, offset-3)
 	if element.key then
-		table.window.elements[element.key] = tmp
+		usedGUIs[table.key].elements[element.key] = tmp
 	end
 end
 
@@ -79,7 +80,7 @@ function NeP.Interface:Texture(element, parent, offset, table)
 	tmp.texture:SetTexture(element.texture)
 	tmp.texture:SetAllPoints(tmp)
 	if element.key then
-		table.window.elements[element.key] = tmp
+		usedGUIs[table.key].elements[element.key] = tmp
 	end
 end
 
@@ -113,8 +114,8 @@ function NeP.Interface:Checkbox(element, parent, offset, table)
 		element.push = tmp_desc:GetStringHeight() + 5
 	end
 	if element.key then
-		table.window.elements[element.key..'Text'] = tmp_text
-		table.window.elements[element.key] = tmp
+		usedGUIs[table.key].elements[element.key..'Text'] = tmp_text
+		usedGUIs[table.key].elements[element.key] = tmp
 	end
 end
 
@@ -170,8 +171,8 @@ function NeP.Interface:Spinner(element, parent, offset, table)
 		element.push = tmp_desc:GetStringHeight() + 5
 	end
 	if element.key then
-		table.window.elements[element.key..'Text'] = tmp_text
-		table.window.elements[element.key] = tmp_spin
+		usedGUIs[table.key].elements[element.key..'Text'] = tmp_text
+		usedGUIs[table.key].elements[element.key] = tmp_spin
 	end
 end
 
@@ -235,9 +236,9 @@ function NeP.Interface:Checkspin(element, parent, offset, table)
 		element.push = tmp_desc:GetStringHeight() + 5
 	end
 	if element.key then
-		table.window.elements[element.key..'Text'] = tmp_text
-		table.window.elements[element.key..'Check'] = tmp_check
-		table.window.elements[element.key..'Spin'] = tmp_spin
+		usedGUIs[table.key].elements[element.key..'Text'] = tmp_text
+		usedGUIs[table.key].elements[element.key..'Check'] = tmp_check
+		usedGUIs[table.key].elements[element.key..'Spin'] = tmp_spin
 	end
 end
 
@@ -280,8 +281,8 @@ function NeP.Interface:Combo(element, parent, offset, table)
 		element.push = tmp_desc:GetStringHeight() + 5
 	end
 	if element.key then
-		table.window.elements[element.key..'Text'] = tmp_text
-		table.window.elements[element.key] = tmp_list
+		usedGUIs[table.key].elements[element.key..'Text'] = tmp_text
+		usedGUIs[table.key].elements[element.key] = tmp_list
 	end
 end
 
@@ -314,7 +315,7 @@ function NeP.Interface:Button(element, parent, offset, table)
 		tmp:SetPoint("TOPLEFT", parent.content, 0, offset)
 	end
 	if element.key then
-		table.window.elements[element.key] = tmp
+		usedGUIs[table.key].elements[element.key] = tmp
 	end
 end
 
@@ -352,8 +353,8 @@ function NeP.Interface:Input(element, parent, offset, table)
 		element.push = tmp_desc:GetStringHeight() + 5
 	end
 	if element.key then
-		table.window.elements[element.key..'Text'] = tmp_text
-		table.window.elements[element.key] = tmp_input
+		usedGUIs[table.key].elements[element.key..'Text'] = tmp_text
+		usedGUIs[table.key].elements[element.key] = tmp_input
 	end
 end
 
@@ -372,7 +373,7 @@ function NeP.Interface:Statusbar(element, parent, _, table)
 		tmp_statusbar.frame.Right:SetText(element.textRight)
 	end
 	if element.key then
-		table.window.elements[element.key] = tmp_statusbar
+		usedGUIs[table.key].elements[element.key] = tmp_statusbar
 	end
 end
 
@@ -396,6 +397,7 @@ local _Elements = {
 
 function NeP.Interface:BuildElements(table, parent)
 	local offset = -5
+	usedGUIs[table.key].elements = {}
 	for _, element in ipairs(table.config) do
 		local push, pull = 0, 0
 		-- Create defaults
@@ -429,19 +431,21 @@ function NeP.Interface:BuildElements(table, parent)
 	end
 end
 
--- So people wont create the same GUI over and over
-local usedGUIs = {}
+function NeP.Interface:GetElement(key, element)
+	return usedGUIs[key].elements[element]
+end
 
 function NeP.Interface:BuildGUI(eval)
+	if not eval.key then return end
 	-- This opens a existing GUI instead of creating another
-	if usedGUIs[eval] then
-		usedGUIs[eval]()
+	if usedGUIs[eval.key] then
+		usedGUIs[eval.key].parent:Show()
 		return
 	end
 	-- Create a new one
-	if not eval.key then return end
+	usedGUIs[eval.key] = {}
 	local parent = DiesalGUI:Create('Window')
-	usedGUIs[eval.key] = function() parent:Show() end
+	usedGUIs[eval.key].parent = parent
 	parent:SetWidth(eval.width or 200)
 	parent:SetHeight(eval.height or 300)
 	parent.frame:SetClampedToScreen(true)
@@ -475,5 +479,6 @@ end
 -- Gobals
 NeP.Globals.Interface = {
 	BuildGUI = NeP.Interface.BuildGUI,
-	Fetch = NeP.Config.Read
+	Fetch = NeP.Config.Read,
+	GetElement = NeP.Interface.GetElement
 }
