@@ -1,7 +1,7 @@
 local _, NeP = ...
 
 -- Local stuff for speed
-local UnitExists        = UnitExists
+local UnitExists        = NeP.Core.UnitExists
 local UnitIsDeadOrGhost = UnitIsDeadOrGhost
 local UnitCanAttack     = UnitCanAttack
 local UnitIsFriend      = UnitIsFriend
@@ -58,7 +58,6 @@ function NeP.OM:Insert(ref, Obj)
 end
 
 function NeP.OM:Add(Obj)
-	UnitExists = ObjectExists or UnitExists
 	if not UnitExists(Obj) then return end
 	-- Dead Units
 	if UnitIsDeadOrGhost(Obj) then

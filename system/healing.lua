@@ -1,7 +1,7 @@
 local _, NeP = ...
 
 -- Local stuff for speed
-local UnitExists              = UnitExists
+local UnitExists              = NeP.Core.UnitExists
 local UnitHealth              = UnitHealth
 local UnitGUID                = UnitGUID
 local UnitHealthMax           = UnitHealthMax
@@ -24,7 +24,7 @@ function NeP.Healing:GetRoster()
 		or UnitIsDeadOrGhost(Obj.key) then
 			Roster[GUID] = nil
 		elseif GUID ~= UnitGUID(Obj.key) then
-			self:Add(Obj)
+			--self:Add(Obj)
 			Roster[GUID] = nil
 		end
 	end

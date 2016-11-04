@@ -29,6 +29,11 @@ local d_color = {
 	rgb = {1,1,1}
 }
 
+function NeP.Core.UnitExists(unit)
+	UnitExists = ObjectExists or UnitExists
+	return UnitExists(unit)
+end
+
 function NeP.Core:ClassColor(unit, type)
 	type = type and type:lower() or 'hex'
 	if UnitExists(unit) then

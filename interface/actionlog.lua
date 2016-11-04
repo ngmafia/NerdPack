@@ -1,7 +1,7 @@
 local _, NeP = ...
 
 -- Locals
-local UnitExists = UnitExists
+local UnitExists = NeP.Core.UnitExists
 local date       = date
 local UnitName   = UnitName
 
@@ -84,7 +84,7 @@ function NeP.ActionLog:Refresh(event, spell, target)
 end
 
 function NeP.ActionLog:Add(event, spell, icon, target)
-	target = UnitExists(target) and UnitName(target)
+	target = NeP.Core.UnitExists(target) and UnitName(target)
 	event = event or 'Unknown'
 	icon = icon or 'Interface\\ICONS\\Inv_gizmo_02.png'
 	if self:Refresh(event, spell, target) then return end
