@@ -117,7 +117,6 @@ end
 
 NeP.Listener:Add("NeP_CR", "PLAYER_LOGIN", function()
 	SetCR()
-	NeP.Spells:Filter()
 end)
 
 NeP.Listener:Add("NeP_CR", "PLAYER_SPECIALIZATION_CHANGED", function(unitID)

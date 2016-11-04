@@ -521,7 +521,6 @@ NeP.DSL:Register('swimming', function ()
 end)
 
 NeP.DSL:Register("lastcast", function(Unit, Spell)
-	Spell = NeP.Spells:Convert(Spell)
 	if UnitIsUnit('player', Unit) then
 		local LastCast = NeP.Parser.LastCast
 		return LastCast == Spell, LastCast
@@ -531,7 +530,6 @@ NeP.DSL:Register("lastcast", function(Unit, Spell)
 end)
 
 NeP.DSL:Register("lastgcd", function(Unit, Spell)
-	Spell = NeP.Spells:Convert(Spell)
 	if UnitIsUnit('player', Unit) then
 		local LastCast = NeP.Parser.LastGCD
 		return LastCast == Spell, LastCast

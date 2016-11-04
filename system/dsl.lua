@@ -1,6 +1,6 @@
-local _, NeP = ...
-
-local DSL = NeP.DSL
+local _, NeP     = ...
+local DSL        = NeP.DSL
+local UnitExists = NeP.Core.UnitExists
 
 function NeP.Core:string_split(string, delimiter)
 	local result, from = {}, 1
@@ -107,14 +107,7 @@ local function ProcessCondition(Strg, Spell)
 	end
 	-- Condition arguments
 	local Strg, Args = pArgs(Strg)
-	if Args then
-		if Args:find('^%a') then
-			-- Translates the name to the correct locale
-			Args = NeP.Spells:Convert(Args)
-		end
-	else
-		Args = Spell
-	end
+	if not Args then Args = Spell end
 	Strg = Strg:gsub('%s', '')
 	-- Process the Condition itself
 	local Condition = DSL:Get(Strg)

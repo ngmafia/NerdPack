@@ -30,7 +30,6 @@ end
 
 -- Automated tauting
 NeP.Actions['taunt'] = function(eval, args)
-	local spell = NeP.Spells:Convert(args)
 	if not spell then return end
 	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
 		local Threat = UnitThreatSituation("player", Obj.key)
@@ -45,7 +44,6 @@ end
 
 -- Ress all dead
 NeP.Actions['ressdead'] = function(eval, args)
-	local spell = NeP.Spells:Convert(args)
 	if not spell then return end
 	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
 		if Obj.distance < 40 and UnitIsPlayer(Obj.Key)

@@ -145,8 +145,14 @@ local function CondSpaces(cond)
 end
 
 -- FIXME: more needs to be done for conditions like we do for the RangedSlot
-function NeP.Compiler.Conditions(eval)
+function NeP.Compiler.Conditions(eval, name)
 	eval[2] = CondSpaces(eval[2])
+	-- Convert spells inside ()
+	NeP.Core:WhenInGame(function()
+		eval[2]:gsub("%((.-)%)", function(s)
+			return NeP.Spells:Convert(s, name)
+		end)
+	end)
 end
 
 function NeP.Compiler.CondLegacy(cond)
