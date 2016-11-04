@@ -436,13 +436,14 @@ function NeP.Interface:GetElement(key, element)
 end
 
 function NeP.Interface:BuildGUI(eval)
-	if not eval.key then return end
 	-- This opens a existing GUI instead of creating another
-	if usedGUIs[eval.key] then
-		usedGUIs[eval.key].parent:Show()
+	local test = type(eval) == 'string' and eval or eval.key
+	if usedGUIs[test] then
+		usedGUIs[test].parent:Show()
 		return
 	end
 	-- Create a new one
+	if not eval.key then return end
 	usedGUIs[eval.key] = {}
 	local parent = DiesalGUI:Create('Window')
 	usedGUIs[eval.key].parent = parent
