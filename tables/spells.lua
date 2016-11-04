@@ -2307,7 +2307,7 @@ end
 local warned_spells = {}
 function NeP.Spells:Convert(spell, crname)
 	if not spell then return end
-	if spell:find('%d') then
+	if type(spell) == 'number' or spell:find('%d') then
 		spell = GetSpellInfo(spell) or spell
 	elseif SpellsTable then
 		spell = spell:lower()
