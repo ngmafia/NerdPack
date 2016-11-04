@@ -15,9 +15,10 @@ local pairs             = pairs
 NeP.OM = {}
 
 local OM_c = {
-	Enemy = {},
+	Enemy    = {},
 	Friendly = {},
-	Dead = {}
+	Dead     = {},
+	Objects  = {}
 }
 
 -- This cleans/updates the tables and then returns it
@@ -67,6 +68,8 @@ function NeP.OM:Add(Obj)
 	-- Enemie
 	elseif UnitCanAttack('player', Obj) then
 		NeP.OM:Insert('Enemy', Obj)
+	elseif ObjectIsType and ObjectIsType(Obj, ObjectTypes.GameObject) then
+		NeP.OM:Insert('Objects', Obj)
 	end
 end
 
