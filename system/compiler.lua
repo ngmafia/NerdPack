@@ -169,8 +169,8 @@ function NeP.Compiler.CondLegacy(cond)
 			else
 				str = str .. '&' .. tmp
 			end
-			str = str..'}'
 		end
+		str = str..'}'
 	elseif not cond then
 		str = 'true'
 	else
