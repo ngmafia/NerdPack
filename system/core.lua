@@ -2,11 +2,8 @@ local _, NeP     = ...
 NeP.Core         = {}
 NeP.Globals.Core = NeP.Core
 
--- test
-NeP.Core.UnitExists        = ObjectExists or UnitExists
-
 -- Locals for speed
-local UnitExists           = NeP.Core.UnitExists
+local UnitExists           = ObjectExists or UnitExists
 local UnitClass            = UnitClass
 local GetSpellInfo         = GetSpellInfo
 local GetItemInfo          = GetItemInfo
