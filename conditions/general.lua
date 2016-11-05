@@ -662,22 +662,13 @@ end)
 ------------------------------------------ BUFFS/FUNCs -----------------------------------
 ------------------------------------------------------------------------------------------
 
-local function oFilter(owner, spell, spellID, caster)
-	if not owner then
-		return not (spellID == tonumber(spell) and (caster == 'player' or caster == 'pet'))
-	elseif owner == "any" then
-		return spellID ~= tonumber(spell)
-	end
-	return true
-end
-
-local function UnitBuff(target, spell, owner)
+local function UnitBuff(target, spell)
 	if tonumber(spell) then spell = GetSpellInfo(spell) end
 	local name,_,_,count,_,_,expires,caster = _G['UnitBuff'](target, spell)
 	return name, count, expires, caster
 end
 
-local function UnitDebuff(target, spell, owner)
+local function UnitDebuff(target, spell)
 	if tonumber(spell) then spell = GetSpellInfo(spell) end
 	local name, _,_, count, _,_, expires, caster = _G['UnitDebuff'](target, spell)
 	return name, count, expires, caster
@@ -687,7 +678,7 @@ local heroismBuffs = { 32182, 90355, 80353, 2825, 146555 }
 NeP.DSL:Register("hashero", function()
 	for i = 1, #heroismBuffs do
 		local SpellName = NeP.Core:GetSpellName(heroismBuffs[i])
-		local buff = UnitBuff('player', SpellName, "any")
+		local buff = UnitBuff('player', SpellName)
 		if buff then return true end
 	end
 	return false
@@ -703,7 +694,7 @@ NeP.DSL:Register("buff", function(target, spell)
 end)
 
 NeP.DSL:Register("buff.any", function(target, spell)
-	local buff = UnitBuff(target, spell, "any")
+	local buff = UnitBuff(target, spell)
 	return not not buff
 end)
 
@@ -726,7 +717,7 @@ NeP.DSL:Register("debuff", function(target, spell)
 end)
 
 NeP.DSL:Register("debuff.any", function(target, spell)
-	local debuff = UnitDebuff(target, spell, "any")
+	local debuff = UnitDebuff(target, spell)
 	return not not debuff
 end)
 
