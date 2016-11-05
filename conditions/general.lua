@@ -672,33 +672,15 @@ local function oFilter(owner, spell, spellID, caster)
 end
 
 local function UnitBuff(target, spell, owner)
-	local name, count, caster, expires, spellID
-	if tonumber(spell) then
-		local go, i = true, 0
-		while i <= 40 and go do
-			i = i + 1
-			name,_,_,count,_,_,expires,caster,_,_,spellID = _G['UnitBuff'](target, i)
-			go = oFilter(owner, spell, spellID, caster)
-		end
-	else
-		name,_,_,count,_,_,expires,caster = _G['UnitBuff'](target, spell)
-	end
+	if tonumber(spell) then spell = GetSpellInfo(spell) end
+	local name,_,_,count,_,_,expires,caster = _G['UnitBuff'](target, spell)
 	return name, count, expires, caster
 end
 
 local function UnitDebuff(target, spell, owner)
-	local name, count, caster, expires, spellID, power
-	if tonumber(spell) then
-		local go, i = true, 0
-		while i <= 40 and go do
-			i = i + 1
-			name,_,_,count,_,_,expires,caster,_,_,spellID,_,_,_,power = _G['UnitDebuff'](target, i)
-			go = oFilter(owner, spell, spellID, caster)
-		end
-	else
-		name,_,_,count,_,_,expires,caster = _G['UnitDebuff'](target, spell)
-	end
-	return name, count, expires, caster, power
+	if tonumber(spell) then spell = GetSpellInfo(spell) end
+	local name, _,_, count, _,_, expires, caster = _G['UnitDebuff'](target, spell)
+	return name, count, expires, caster
 end
 
 local heroismBuffs = { 32182, 90355, 80353, 2825, 146555 }
