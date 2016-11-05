@@ -3,8 +3,8 @@ local L           = NeP.Locale
 
 local config = {
     key = n_name..'_Settings',
-    title = n_name..' Settings',
-    subtitle = 'Settings',
+    title = n_name,
+    subtitle = L:TA('Settings', 'option'),
     width = 250,
     height = 270,
     config = {
