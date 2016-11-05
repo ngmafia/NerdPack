@@ -664,13 +664,9 @@ end)
 
 local function oFilter(owner, spell, spellID, caster)
 	if not owner then
-		if spellID == tonumber(spell) and (caster == 'player' or caster == 'pet') then
-			return false
-		end
+		return not (spellID == tonumber(spell) and (caster == 'player' or caster == 'pet'))
 	elseif owner == "any" then
-		if spellID == tonumber(spell) then
-			return false
-		end
+		return spellID ~= tonumber(spell)
 	end
 	return true
 end
@@ -687,7 +683,6 @@ local function UnitBuff(target, spell, owner)
 	else
 		name,_,_,count,_,_,expires,caster = _G['UnitBuff'](target, spell)
 	end
-	-- This adds some random factor
 	return name, count, expires, caster
 end
 
