@@ -1,3 +1,3 @@
 local _, NeP = ...
 
-NeP.Locale.enGB = NeP.LocaleenUS
+NeP.Locale.enGB = NeP.Locale.enUS
