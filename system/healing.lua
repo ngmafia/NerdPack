@@ -1,7 +1,7 @@
 local _, NeP = ...
 
 -- Local stuff for speed
-local UnitExists              = UnitExists
+local UnitExists              = ObjectExists or UnitExists
 local UnitHealth              = UnitHealth
 local UnitGUID                = UnitGUID
 local UnitHealthMax           = UnitHealthMax

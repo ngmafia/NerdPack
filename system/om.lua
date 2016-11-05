@@ -1,7 +1,7 @@
 local _, NeP = ...
 
 -- Local stuff for speed
-local UnitExists        = UnitExists
+local UnitExists        = ObjectExists or UnitExists
 local UnitIsDeadOrGhost = UnitIsDeadOrGhost
 local UnitCanAttack     = UnitCanAttack
 local UnitIsFriend      = UnitIsFriend

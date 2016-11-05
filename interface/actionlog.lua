@@ -1,7 +1,7 @@
 local _, NeP = ...
 
 -- Locals
-local UnitExists = UnitExists
+local UnitExists = ObjectExists or UnitExists
 local date       = date
 local UnitName   = UnitName
 
