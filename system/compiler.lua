@@ -149,7 +149,11 @@ function NeP.Compiler.Conditions(eval, name)
 	eval[2] = CondSpaces(eval[2])
 	-- Convert spells inside ()
 	NeP.Core:WhenInGame(function()
-		eval[2] = eval[2]:gsub("%((.-)%)", function(s) return '('..NeP.Spells:Convert(s, name)..')' end)
+		eval[2] = eval[2]:gsub("%((.-)%)", function(s)
+			-- we cant convert number due to it messing up other things
+			if tonumber(s) then return s end
+			return '('..NeP.Spells:Convert(s, name)..')'
+		end)
 	end)
 end
 
