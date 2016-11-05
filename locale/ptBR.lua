@@ -34,5 +34,11 @@ NeP.Locale.ptBR = {
 	Dummies = {
 		Name = 'boneco de treinamento',
 		Pattern = {'boneco de treinamento'}
-	}
+	},
+	Settings = {
+		option = 'Definições',
+		bsize = 'Tamanho dos botões',
+		bpad = 'Espaçamento dos botões',
+		apply_bt = 'Aplicar'
+	},
 }

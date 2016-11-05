@@ -33,5 +33,11 @@ NeP.Locale.enUS = {
 	Dummies = {
 		Name = 'dummy', -- Moust commun name
 		Pattern = {'dummy', 'training bag'} -- These are the usual things to look for in the description in case name fails
-	}
+	},
+	Settings = {
+		Option = 'Settings',
+		bsize = 'Button size',
+		bpad = 'Button padding',
+		apply_bt = 'Aplly'
+	},
 }
