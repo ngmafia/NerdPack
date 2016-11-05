@@ -722,25 +722,17 @@ end)
 
 NeP.DSL:Register("buff.any", function(target, spell)
 	local buff = UnitBuff(target, spell, "any")
-	if not not buff then
-		return true
-	end
+	return not not buff
 end)
 
 NeP.DSL:Register("buff.count", function(target, spell)
-	local buff,count,_,caster = UnitBuff(target, spell)
-	if not not buff and (caster == 'player' or caster == 'pet') then
-		return count
-	end
-	return 0
+	local buff, count, _,caster = UnitBuff(target, spell)
+	return not not buff and (caster == 'player' or caster == 'pet') and count or 0
 end)
 
 NeP.DSL:Register("buff.duration", function(target, spell)
 	local buff,_,expires,caster = UnitBuff(target, spell)
-	if buff and (caster == 'player' or caster == 'pet') then
-		return (expires - GetTime())
-	end
-	return 0
+	return buff and (caster == 'player' or caster == 'pet') and (expires - GetTime()) or 0
 end)
 
 ------------------------------------------ DEBUFFS ---------------------------------------
@@ -748,32 +740,22 @@ end)
 
 NeP.DSL:Register("debuff", function(target, spell)
 	local debuff,_,_,caster = UnitDebuff(target, spell)
-	if not not debuff and (caster == 'player' or caster == 'pet') then
-		return true
-	end
+	return not not debuff and (caster == 'player' or caster == 'pet')
 end)
 
 NeP.DSL:Register("debuff.any", function(target, spell)
 	local debuff = UnitDebuff(target, spell, "any")
-	if not not debuff then
-		return true
-	end
+	return not not debuff
 end)
 
 NeP.DSL:Register("debuff.count", function(target, spell)
 	local debuff,count,_,caster = UnitDebuff(target, spell)
-	if not not debuff and (caster == 'player' or caster == 'pet') then
-		return count
-	end
-	return 0
+	return not not debuff and (caster == 'player' or caster == 'pet') and count or 0
 end)
 
 NeP.DSL:Register("debuff.duration", function(target, spell)
 	local debuff,_,expires,caster = UnitDebuff(target, spell)
-	if debuff and (caster == 'player' or caster == 'pet') then
-		return (expires - GetTime())
-	end
-	return 0
+	return debuff and (caster == 'player' or caster == 'pet') and (expires - GetTime()) or 0
 end)
 
 --------------------------------------------SHARED CLASS------------------------------------------------------
