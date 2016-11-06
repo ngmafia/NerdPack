@@ -609,16 +609,14 @@ end)
 ------------------------------------------------------------------------------------------
 
 local function UnitBuffL(target, spell, own)
-	local spell, rank = GetSpellInfo(spell)
-	if not spell then return end
-	local name,_,_,count,_,_,expires,caster = UnitBuff(target, spell, rank or '', own and 'PLAYER')
+	local spellx, rank = GetSpellInfo(spell)
+	local name,_,_,count,_,_,expires,caster = UnitBuff(target, spellx or spell, rank or '', own and 'PLAYER')
 	return name, count, expires, caster
 end
 
 local function UnitDebuffL(target, spell, own)
-	local spell, rank = GetSpellInfo(spell)
-	if not spell then return end
-	local name, _,_, count, _,_, expires, caster = UnitDebuff(target, spell, rank or '', own and 'PLAYER')
+	local spellx, rank = GetSpellInfo(spell)
+	local name, _,_, count, _,_, expires, caster = UnitDebuff(target, spellx or spell, rank or '', own and 'PLAYER')
 	return name, count, expires, caster
 end
 
