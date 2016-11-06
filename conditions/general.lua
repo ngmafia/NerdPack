@@ -1,5 +1,4 @@
 local _, NeP = ...
-local LibBoss = LibStub("LibBossIDs-1.0")
 
 -- Local stuff for faster performance
 -- This does increase memory usage but saves CPU time
@@ -282,7 +281,7 @@ NeP.DSL:Register('boss', function (target)
 	if UnitClsf[classification] then
 		return UnitClsf[classification] >= 3
 	end
-	return LibBoss.BossIDs[NeP.Core:UnitID(target)] ~= nil
+	return NeP.BossID:Eval(target)
 end)
 
 NeP.DSL:Register('elite', function (target)
@@ -290,7 +289,7 @@ NeP.DSL:Register('elite', function (target)
 	if UnitClsf[classification] then
 		return UnitClsf[classification] >= 2
 	end
-	return LibBoss.BossIDs[NeP.Core:UnitID(target)] ~= nil
+	return NeP.BossID:Eval(target)
 end)
 
 NeP.DSL:Register("id", function(target, id)
