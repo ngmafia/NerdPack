@@ -43,7 +43,7 @@ local function iterate(tb, unit, distance, infront)
     end
   end
   -- Nameplates hack
-  for i=1, 25 do
+  for i=1, 40 do
     local Obj = 'nameplate'..i
     if UnitExists(Obj) then
       local GUID = UnitGUID(Obj)
