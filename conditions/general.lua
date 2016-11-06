@@ -606,15 +606,15 @@ end)
 ------------------------------------------ BUFFS/FUNCs -----------------------------------
 ------------------------------------------------------------------------------------------
 
-local function UnitBuff(target, spell)
+local function UnitBuff(target, spell, own)
 	if tonumber(spell) then spell = GetSpellInfo(spell) end
-	local name,_,_,count,_,_,expires,caster = _G['UnitBuff'](target, spell)
+	local name,_,_,count,_,_,expires,caster = _G['UnitBuff'](target, spell, own and 'PLAYER')
 	return name, count, expires, caster
 end
 
 local function UnitDebuff(target, spell)
 	if tonumber(spell) then spell = GetSpellInfo(spell) end
-	local name, _,_, count, _,_, expires, caster = _G['UnitDebuff'](target, spell)
+	local name, _,_, count, _,_, expires, caster = _G['UnitDebuff'](target, spell, own and 'PLAYER')
 	return name, count, expires, caster
 end
 
@@ -631,10 +631,8 @@ end)
 ------------------------------------------ BUFFS -----------------------------------------
 ------------------------------------------------------------------------------------------
 NeP.DSL:Register("buff", function(target, spell)
-	local buff,_,_,caster = UnitBuff(target, spell)
-	if not not buff and (caster == 'player' or caster == 'pet') then
-		return true
-	end
+	local buff = UnitBuff(target, spell, true)
+	return not not buff
 end)
 
 NeP.DSL:Register("buff.any", function(target, spell)
@@ -643,21 +641,21 @@ NeP.DSL:Register("buff.any", function(target, spell)
 end)
 
 NeP.DSL:Register("buff.count", function(target, spell)
-	local buff, count, _,caster = UnitBuff(target, spell)
-	return not not buff and (caster == 'player' or caster == 'pet') and count or 0
+	local buff, count = UnitBuff(target, spell, true)
+	return not not buff and count or 0
 end)
 
 NeP.DSL:Register("buff.duration", function(target, spell)
-	local buff,_,expires,caster = UnitBuff(target, spell)
-	return buff and (caster == 'player' or caster == 'pet') and (expires - GetTime()) or 0
+	local buff,_,expires = UnitBuff(target, spell, true)
+	return buff and (expires - GetTime()) or 0
 end)
 
 ------------------------------------------ DEBUFFS ---------------------------------------
 ------------------------------------------------------------------------------------------
 
 NeP.DSL:Register("debuff", function(target, spell)
-	local debuff,_,_,caster = UnitDebuff(target, spell)
-	return not not debuff and (caster == 'player' or caster == 'pet')
+	local debuff = UnitDebuff(target, spell, true)
+	return not not debuff
 end)
 
 NeP.DSL:Register("debuff.any", function(target, spell)
@@ -666,13 +664,13 @@ NeP.DSL:Register("debuff.any", function(target, spell)
 end)
 
 NeP.DSL:Register("debuff.count", function(target, spell)
-	local debuff,count,_,caster = UnitDebuff(target, spell)
-	return not not debuff and (caster == 'player' or caster == 'pet') and count or 0
+	local debuff,count = UnitDebuff(target, spell, true)
+	return not not debuff and count or 0
 end)
 
 NeP.DSL:Register("debuff.duration", function(target, spell)
-	local debuff,_,expires,caster = UnitDebuff(target, spell)
-	return debuff and (caster == 'player' or caster == 'pet') and (expires - GetTime()) or 0
+	local debuff,_,expires = UnitDebuff(target, spell)
+	return debuff and (expires - GetTime()) or 0
 end)
 
 --------------------------------------------SHARED CLASS------------------------------------------------------
