@@ -608,13 +608,13 @@ end)
 
 local function UnitBuff(target, spell, own)
 	local spell, rank = GetSpellInfo(spell)
-	local name,_,_,count,_,_,expires,caster = _G['UnitBuff'](target, spell, rank or '', own and 'PLAYER')
+	local name,_,_,count,_,_,expires,caster = UnitBuff(target, spell, rank or '', own and 'PLAYER')
 	return name, count, expires, caster
 end
 
 local function UnitDebuff(target, spell, own)
 	local spell, rank = GetSpellInfo(spell)
-	local name, _,_, count, _,_, expires, caster = _G['UnitDebuff'](target, spell, rank or '', own and 'PLAYER')
+	local name, _,_, count, _,_, expires, caster = UnitDebuff(target, spell, rank or '', own and 'PLAYER')
 	return name, count, expires, caster
 end
 
