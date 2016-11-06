@@ -6,5 +6,6 @@
 	<Script file="states.lua" />
 	<Script file="deprecated.lua" />
 	<Script file="artifacts.lua" />
+	<Script file="area.lua" />
 
 </Ui>
