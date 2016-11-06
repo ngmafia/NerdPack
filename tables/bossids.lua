@@ -1800,7 +1800,7 @@ function NeP.BossID:Add(...)
 			end
 		end
 	else
-		local id = tonumber(id)
+		local id = tonumber(...)
     if id then
       bossids[id] = true
     end
