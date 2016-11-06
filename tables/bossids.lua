@@ -1,7 +1,9 @@
-local _, NeP     = ...
-local strsplit   = strsplit
-local UnitExists = UnitExists
-local UnitGUID   = UnitGUID
+local _, NeP       = ...
+NeP.BossID         = {}
+NeP.Globals.BossID = NeP.BossID
+local strsplit     = strsplit
+local UnitExists   = UnitExists
+local UnitGUID     = UnitGUID
 
 local bossids = {
   -------------------------------------------------------------------------------
