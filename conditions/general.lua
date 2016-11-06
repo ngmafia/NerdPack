@@ -631,13 +631,11 @@ end)
 ------------------------------------------ BUFFS -----------------------------------------
 ------------------------------------------------------------------------------------------
 NeP.DSL:Register("buff", function(target, spell)
-	local buff = UnitBuff(target, spell, true)
-	return not not buff
+	return not not UnitBuff(target, spell, true)
 end)
 
 NeP.DSL:Register("buff.any", function(target, spell)
-	local buff = UnitBuff(target, spell)
-	return not not buff
+	return not not UnitBuff(target, spell)
 end)
 
 NeP.DSL:Register("buff.count", function(target, spell)
@@ -654,13 +652,11 @@ end)
 ------------------------------------------------------------------------------------------
 
 NeP.DSL:Register("debuff", function(target, spell)
-	local debuff = UnitDebuff(target, spell, true)
-	return not not debuff
+	return not not UnitDebuff(target, spell, true)
 end)
 
 NeP.DSL:Register("debuff.any", function(target, spell)
-	local debuff = UnitDebuff(target, spell)
-	return not not debuff
+	return not not UnitDebuff(target, spell)
 end)
 
 NeP.DSL:Register("debuff.count", function(target, spell)
