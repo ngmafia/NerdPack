@@ -10,8 +10,7 @@ NeP.Listener:Add('NeP_Talents', 'PLAYER_ENTERING_WORLD', function()
 	for spec =1, GetNumSpecializations() do
 		for i=1, 7 do
 			for k=1,3 do
-				local talent_name = select(2, GetTalentInfo(i, k))
-				local talent_ID = GetTalentInfo(i,k,spec)
+				local talent_ID, talent_name = GetTalentInfo(i,k,spec)
 				talents[spec][talent_name] = talent_ID
 				talents[spec][talent_ID] = talent_ID
 				talents[spec][tostring(i)..','..tostring(k)] = talent_ID
@@ -21,7 +20,5 @@ NeP.Listener:Add('NeP_Talents', 'PLAYER_ENTERING_WORLD', function()
 end)
 
 NeP.DSL:Register("talent", function(_, args)
-	local spec = GetActiveSpecGroup()
-	local _,_,_, selected, available = GetTalentInfoByID(talents[spec][args], spec)
-	return selected and available
+	return select(10, GetTalentInfoByID(talents[spec][args], GetActiveSpecGroup()))
 end)
