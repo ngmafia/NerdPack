@@ -5,23 +5,30 @@ local GetActiveSpecGroup    = GetActiveSpecGroup
 local GetTalentInfoByID     = GetTalentInfoByID
 
 local talents = {}
+local rows = 7
+local cols = 3
 
-NeP.Listener:Add('NeP_Talents', 'PLAYER_ENTERING_WORLD', function()
-	for spec =1, GetNumSpecializations() do
-		if not talents[spec] then
-			talents[spec] = {}
-		end
-		for i=1, 7 do
-			for k=1,3 do
-				local talent_ID, talent_name = GetTalentInfo(i,k,spec)
-				talents[spec][talent_name] = talent_ID
-				talents[spec][talent_ID] = talent_ID
-				talents[spec][tostring(i)..','..tostring(k)] = talent_ID
-			end
+local function UpdateTalents()
+	-- this is always 1, dont know why bother but oh well...
+	local spec = GetActiveSpecGroup()
+	for i = 1, rows do
+		for k = 1, cols do
+			local talent_ID, talent_name = GetTalentInfo(i, k, spec)
+			talents[talent_name] = talent_ID
+			talents[talent_ID] = talent_ID
+			talents[tostring(i)..','..tostring(k)] = talent_ID
 		end
 	end
+end
+
+NeP.Listener:Add('NeP_Talents', 'ACTIVE_TALENT_GROUP_CHANGED', function()
+	UpdateTalents()
+end)
+
+NeP.Listener:Add('NeP_Talents', 'PLAYER_ENTERING_WORLD', function()
+	UpdateTalents()
 end)
 
 NeP.DSL:Register("talent", function(_, args)
-	return select(10, GetTalentInfoByID(talents[spec][args], GetActiveSpecGroup()))
+	return select(10, GetTalentInfoByID(talents[args], GetActiveSpecGroup()))
 end)
