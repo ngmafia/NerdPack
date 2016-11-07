@@ -34,18 +34,10 @@ local function iterate(tb, unit, distance, infront)
   if Cache[ct][oGUID] then
     return Cache[ct][oGUID]
   end
-  local total, counted = 0, {}
+  local total = 0
   -- OM
-  for _, Obj in pairs(NeP.OM:Get(tb)) do
+  for _, Obj in pairs(NeP.OM:Get(tb, true)) do
     if testunit(unit, Obj.key, distance, Obj.isdummy or tb ~= 'Enemy', infront) then
-      counted[Obj.guid] = true
-      total = total +1
-    end
-  end
-  -- Nameplates hack
-  for GUID, Obj in pairs(NeP.OM:GetPlates(tb)) do
-    if not counted[GUID]
-    and testunit(unit, Obj.key, distance, Obj.isdummy or tb ~= 'Enemy', infront) then
       total = total +1
     end
   end

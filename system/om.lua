@@ -21,24 +21,52 @@ local OM_c = {
 	Objects  = {}
 }
 
+local plates = {
+  Friendly = {},
+  Enemy = {}
+}
+
+
 -- This cleans/updates the tables and then returns it
 -- Due to Generic OM, a unit can still exist (target) but no longer be the same unit,
 -- To counter this we compare GUID's.
-function NeP.OM:Get(ref)
-	local tb, count = OM_c[ref], 0
-	for GUID, Obj in pairs(tb) do
-		if not UnitExists(Obj.key) then
-			tb[GUID] = nil
-		elseif GUID ~= UnitGUID(Obj.key)
-		or ref ~= 'Dead' and UnitIsDeadOrGhost(Obj.key) then
-			self:Add(Obj.key)
-			tb[GUID] = nil
-		else
-			count = count + 1
-			Obj.distance = NeP.Protected.Distance('player', Obj.key)
-		end
+
+local function MergeTable(table, Obj, GUID)
+	if not table[GUID]
+	and UnitExists(Obj.key)
+	and GUID == UnitGUID(Obj.key) then
+		table[GUID] = Obj
+		Obj.distance = NeP.Protected.Distance('player', Obj.key)
 	end
-	return tb, count
+end
+
+function NeP.OM:Get(ref, want_plates)
+	-- Hack for nameplates
+	if want_plates and not NeP.AdvancedOM then
+		local temp = {}
+		for GUID, Obj in pairs(plates[ref]) do
+			MergeTable(temp, Obj, GUID)
+		end
+		for GUID, Obj in pairs(OM_c[ref]) do
+			MergeTable(temp, Obj, GUID)
+		end
+		return temp
+	-- Normal
+	else
+		local tb = OM_c[ref]
+		for GUID, Obj in pairs(tb) do
+			-- remove invalid units
+			if not UnitExists(Obj.key)
+			or GUID ~= UnitGUID(Obj.key)
+			or ref ~= 'Dead' and UnitIsDeadOrGhost(Obj.key) then
+				tb[GUID] = nil
+			else
+				-- update
+				Obj.distance = NeP.Protected.Distance('player', Obj.key)
+			end
+		end
+		return tb
+	end
 end
 
 function NeP.OM:Insert(ref, Obj)
@@ -71,21 +99,6 @@ function NeP.OM:Add(Obj)
 	elseif ObjectIsType and ObjectIsType(Obj, ObjectTypes.GameObject) then
 		NeP.OM:Insert('Objects', Obj)
 	end
-end
-
-local plates = {
-  Friendly = {},
-  Enemy = {}
-}
-
-function NeP.OM:GetPlates(ref)
-	for GUID, Obj in pairs(plates[ref]) do
-		if not UnitExists(Obj.key)
-		or GUID ~= UnitGUID(Obj.key) then
-			plates[ref][GUID] = nil
-		end
-	end
-	return plates[ref]
 end
 
 local function addPlate(tb, Obj)
