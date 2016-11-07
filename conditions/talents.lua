@@ -8,6 +8,9 @@ local talents = {}
 
 NeP.Listener:Add('NeP_Talents', 'PLAYER_ENTERING_WORLD', function()
 	for spec =1, GetNumSpecializations() do
+		if not talents[spec] then
+			talents[spec] = {}
+		end
 		for i=1, 7 do
 			for k=1,3 do
 				local talent_ID, talent_name = GetTalentInfo(i,k,spec)
