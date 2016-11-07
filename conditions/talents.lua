@@ -23,10 +23,9 @@ end
 
 NeP.Listener:Add('NeP_Talents', 'ACTIVE_TALENT_GROUP_CHANGED', function()
 	UpdateTalents()
-end)
-
-NeP.Listener:Add('NeP_Talents', 'PLAYER_ENTERING_WORLD', function()
-	UpdateTalents()
+	NeP.Listener:Add('NeP_Talents', 'PLAYER_ENTERING_WORLD', function()
+		UpdateTalents()
+	end)
 end)
 
 NeP.DSL:Register("talent", function(_, args)
