@@ -43,14 +43,10 @@ local function iterate(tb, unit, distance, infront)
     end
   end
   -- Nameplates hack
-  for i=1, 40 do
-    local Obj = 'nameplate'..i
-    if UnitExists(Obj) then
-      local GUID = UnitGUID(Obj)
-      if not counted[GUID]
-      and testunit(unit, Obj, distance, UnitIsFriend('player', Obj) and tb ~= 'Enemy', infront) then
-        total = total +1
-      end
+  for GUID, Obj in pairs(NeP.OM:GetPlates(tb)) do
+    if not counted[GUID]
+    and testunit(unit, Obj.key, distance, Obj.isdummy or tb ~= 'Enemy', infront) then
+      total = total +1
     end
   end
   -- cache the result for this unit

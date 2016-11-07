@@ -59,20 +59,33 @@ local function recycleStatusBars()
 	end
 end
 
+local function Add(Obj, offset)
+	local Health = math.floor(((UnitHealth(Obj.key) or 1) / (UnitHealthMax(Obj.key) or 1)) * 100)
+	local statusBar = getStatusBar()
+	local distance = NeP.Core:Round(Obj.distance or 0)
+	statusBar.frame:SetPoint('TOP', ListWindow.content, 'TOP', 2, offset )
+	statusBar.frame.Left:SetText('|cff'..NeP.Core:ClassColor(Obj.key, 'hex')..Obj.name)
+	statusBar.frame.Right:SetText('( |cffff0000ID|r: '..Obj.id..' / |cffff0000Health|r: '..Health..' / |cffff0000Dist|r: '..distance..' )')
+	statusBar.frame:SetScript('OnMouseDown', function(self) TargetUnit(Obj.key) end)
+	statusBar:SetValue(Health)
+end
+
+local added = {}
+
 local function RefreshGUI()
 	local offset = -5
+	wipe(added)
 	recycleStatusBars()
-	local temp = NeP.OM:Get(dOM)
-	for _, Obj in pairs(temp) do
-		local Health = math.floor(((UnitHealth(Obj.key) or 1) / (UnitHealthMax(Obj.key) or 1)) * 100)
-		local statusBar = getStatusBar()
-		local distance = NeP.Core:Round(Obj.distance or 0)
-		statusBar.frame:SetPoint('TOP', ListWindow.content, 'TOP', 2, offset )
-		statusBar.frame.Left:SetText('|cff'..NeP.Core:ClassColor(Obj.key, 'hex')..Obj.name)
-		statusBar.frame.Right:SetText('( |cffff0000ID|r: '..Obj.id..' / |cffff0000Health|r: '..Health..' / |cffff0000Dist|r: '..distance..' )')
-		statusBar.frame:SetScript('OnMouseDown', function(self) TargetUnit(Obj.key) end)
-		statusBar:SetValue(Health)
+	for GUID, Obj in pairs(NeP.OM:Get(dOM)) do
+		added[GUID] = true
+		Add(Obj, offset)
 		offset = offset -18
+	end
+	for GUID, Obj in pairs(NeP.OM:GetPlates(dOM)) do
+		if not added[GUID] then
+			Add(Obj, offset)
+			offset = offset -18
+		end
 	end
 end
 

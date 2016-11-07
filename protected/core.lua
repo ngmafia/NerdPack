@@ -26,6 +26,7 @@ function NeP.Protected.SetUnlocker(name, unlocker)
 		end
 	end
 	if unlocker.om then
+		NeP.AdvancedOM = true
 		NeP.OM.Maker = unlocker.om
 	end
 	NeP.Unlocked = true

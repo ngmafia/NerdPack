@@ -73,8 +73,50 @@ function NeP.OM:Add(Obj)
 	end
 end
 
+local plates = {
+  Friendly = {},
+  Enemy = {}
+}
+
+function NeP.OM:GetPlates(ref)
+	for GUID, Obj in pairs(plates[ref]) do
+		if not UnitExists(Obj.key)
+		or GUID ~= UnitGUID(Obj.key) then
+			plates[ref][GUID] = nil
+		end
+	end
+	return plates[ref]
+end
+
+local function addPlate(tb, Obj)
+	local GUID = UnitGUID(Obj)
+	local ObjID = select(6, strsplit('-', GUID))
+	local distance = NeP.Protected.Distance('player', Obj)
+	plates[tb][GUID] = {
+		key = Obj,
+		name = UnitName(Obj),
+		distance = distance,
+		id = tonumber(ObjID) or '0',
+		guid = GUID,
+		isdummy = NeP.DSL:Get('isdummy')(Obj)
+	}
+end
+
 C_Timer.NewTicker(1, (function()
 	NeP.OM.Maker()
+	-- Nameplates
+	if not NeP.AdvancedOM then
+		for i=1, 40 do
+			local Obj = 'nameplate'..i
+			if UnitExists(Obj) then
+				if UnitIsFriend('player',Obj) then
+					addPlate('Friendly', Obj)
+				else
+					addPlate('Enemy', Obj)
+				end
+			end
+		end
+	end
 end), nil)
 
 -- Gobals
