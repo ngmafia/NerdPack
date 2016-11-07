@@ -46,3 +46,4 @@ C_Timer.After(5, function ()
 end)
 
 NeP.Globals.AddUnlocker = NeP.Protected.AddUnlocker
+NeP.Globals.AdvancedOM = NeP.AdvancedOM
