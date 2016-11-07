@@ -21,9 +21,9 @@ local function UpdateTalents()
 	end
 end
 
-NeP.Listener:Add('NeP_Talents', 'ACTIVE_TALENT_GROUP_CHANGED', function()
+NeP.Listener:Add('NeP_Talents', 'PLAYER_LOGIN', function()
 	UpdateTalents()
-	NeP.Listener:Add('NeP_Talents', 'PLAYER_ENTERING_WORLD', function()
+	NeP.Listener:Add('NeP_Talents', 'ACTIVE_TALENT_GROUP_CHANGED', function()
 		UpdateTalents()
 	end)
 end)
