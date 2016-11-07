@@ -43,8 +43,6 @@ local GetSpecialization           = GetSpecialization
 local UnitMana                    = UnitMana
 local UnitManaMax                 = UnitManaMax
 local GetRuneCooldown             = GetRuneCooldown
-local GetActiveSpecGroup          = GetActiveSpecGroup
-local GetTalentInfo               = GetTalentInfo
 local IsEquippedItem              = IsEquippedItem
 local UnitSpellHaste              = UnitSpellHaste
 local GetHaste                    = GetHaste
@@ -54,8 +52,6 @@ local GetAverageItemLevel         = GetAverageItemLevel
 local UnitIsCharmed               = UnitIsCharmed
 local IsSwimming                  = IsSwimming
 local IsFalling                   = IsFalling
-local UnitBuff                    = UnitBuff
-local UnitDebuff                  = UnitDebuff
 
 local SPELL_POWER_INSANITY       = SPELL_POWER_INSANITY
 local SPELL_POWER_FOCUS          = SPELL_POWER_FOCUS
@@ -248,14 +244,6 @@ end)
 
 NeP.DSL:Register('haste', function(unit)
 	return UnitSpellHaste(unit)
-end)
-
-NeP.DSL:Register("talent", function(_, args)
-	local row, col = strsplit(",", args, 2)
-	row, col = tonumber(row), tonumber(col)
-	local group = GetActiveSpecGroup()
-	local _,_,_, selected, active = GetTalentInfo(row, col, group)
-	return active and selected
 end)
 
 -------------------------------------UNITS--------------------------------------------
@@ -602,72 +590,6 @@ NeP.DSL:Register('isdummy', function(unit)
 	if not UnitExists(unit) then return end
 	if UnitName(unit):lower():find(communName) then return true end
 	return NeP.Tooltip:Unit(unit, matchs)
-end)
-
------------------------------------------- BUFFS/FUNCs -----------------------------------
-------------------------------------------------------------------------------------------
-
-local function UnitBuffL(target, spell, own)
-	local spellx, rank = GetSpellInfo(spell)
-	local name,_,_,count,_,_,expires,caster = UnitBuff(target, spellx or spell, rank or '', own and 'PLAYER')
-	return name, count, expires, caster
-end
-
-local function UnitDebuffL(target, spell, own)
-	local spellx, rank = GetSpellInfo(spell)
-	local name, _,_, count, _,_, expires, caster = UnitDebuff(target, spellx or spell, rank or '', own and 'PLAYER')
-	return name, count, expires, caster
-end
-
-local heroismBuffs = { 32182, 90355, 80353, 2825, 146555 }
-NeP.DSL:Register("hashero", function()
-	for i = 1, #heroismBuffs do
-		local SpellName = NeP.Core:GetSpellName(heroismBuffs[i])
-		local buff = UnitBuffL('player', SpellName)
-		if buff then return true end
-	end
-	return false
-end)
-
------------------------------------------- BUFFS -----------------------------------------
-------------------------------------------------------------------------------------------
-NeP.DSL:Register("buff", function(target, spell)
-	return not not UnitBuffL(target, spell, true)
-end)
-
-NeP.DSL:Register("buff.any", function(target, spell)
-	return not not UnitBuffL(target, spell)
-end)
-
-NeP.DSL:Register("buff.count", function(target, spell)
-	local buff, count = UnitBuffL(target, spell, true)
-	return not not buff and count or 0
-end)
-
-NeP.DSL:Register("buff.duration", function(target, spell)
-	local buff,_,expires = UnitBuffL(target, spell, true)
-	return buff and (expires - GetTime()) or 0
-end)
-
------------------------------------------- DEBUFFS ---------------------------------------
-------------------------------------------------------------------------------------------
-
-NeP.DSL:Register("debuff", function(target, spell)
-	return not not UnitDebuffL(target, spell, true)
-end)
-
-NeP.DSL:Register("debuff.any", function(target, spell)
-	return not not UnitDebuffL(target, spell)
-end)
-
-NeP.DSL:Register("debuff.count", function(target, spell)
-	local debuff,count = UnitDebuffL(target, spell, true)
-	return not not debuff and count or 0
-end)
-
-NeP.DSL:Register("debuff.duration", function(target, spell)
-	local debuff,_,expires = UnitDebuffL(target, spell)
-	return debuff and (expires - GetTime()) or 0
 end)
 
 --------------------------------------------SHARED CLASS------------------------------------------------------

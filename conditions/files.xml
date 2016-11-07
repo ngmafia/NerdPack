@@ -7,5 +7,7 @@
 	<Script file="deprecated.lua" />
 	<Script file="artifacts.lua" />
 	<Script file="area.lua" />
+	<Script file="talents.lua" />
+	<Script file="buffs.lua" />
 
 </Ui>
