@@ -12,6 +12,10 @@ local select            = select
 local tonumber          = tonumber
 local pairs             = pairs
 
+--Advanced
+local ObjectIsType = ObjectIsType
+local ObjectTypes  = ObjectTypes
+
 NeP.OM = {}
 
 local OM_c = {
