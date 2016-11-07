@@ -45,5 +45,5 @@ end)
 
 NeP.DSL:Register('immune', function(target, arg)
 	local match = Immune[tostring(arg)]
-	return match and tlp:Scan_Debuff(target, match)
+	return match and tlp:Scan_Buff(target, match)
 end)
