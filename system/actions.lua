@@ -33,7 +33,7 @@ end
 
 -- Executes a users macrp
 NeP.Actions['macro'] = function(eval, macro)
-	eval.exe = function() RunMacro('player', GetSpellInfo(macro)) end
+	eval.exe = function() RunMacro('player', macro) end
 	return true
 end
 
