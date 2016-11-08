@@ -11,6 +11,9 @@ local UnitPlayerOrPetInParty = UnitPlayerOrPetInParty
 local GetItemCooldown        = GetItemCooldown
 local GetItemSpell           = GetItemSpell
 local GetItemCount           = GetItemCount
+local CancelShapeshiftForm   = CancelShapeshiftForm
+local CancelUnitBuff         = CancelUnitBuff
+local RunMacro               = RunMacro
 
 NeP.Actions = {}
 
@@ -28,8 +31,26 @@ NeP.Actions['dispelall'] = function(eval)
 	end
 end
 
+-- Executes a users macrp
+NeP.Actions['macro'] = function(eval, macro)
+	eval.exe = function() RunMacro('player', GetSpellInfo(macro)) end
+	return true
+end
+
+-- Cancel buff
+NeP.Actions['cancelbuff'] = function(eval, buff)
+	eval.exe = function() CancelUnitBuff('player', GetSpellInfo(buff)) end
+	return true
+end
+
+-- Cancel Shapeshift Form
+NeP.Actions['cancelform'] = function(eval)
+	eval.exe = CancelShapeshiftForm
+	return true
+end
+
 -- Automated tauting
-NeP.Actions['taunt'] = function(eval, args)
+NeP.Actions['taunt'] = function(eval, spell)
 	if not spell then return end
 	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
 		local Threat = UnitThreatSituation("player", Obj.key)
@@ -43,7 +64,7 @@ NeP.Actions['taunt'] = function(eval, args)
 end
 
 -- Ress all dead
-NeP.Actions['ressdead'] = function(eval, args)
+NeP.Actions['ressdead'] = function(eval, spell)
 	if not spell then return end
 	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
 		if Obj.distance < 40 and UnitIsPlayer(Obj.Key)
