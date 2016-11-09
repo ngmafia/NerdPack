@@ -13,31 +13,31 @@ local Data = {}
 
 -- Thse are Mixed Damage types (magic and pysichal)
 local Doubles = {
-	[3] = 'Holy + Physical',
-	[5] = 'Fire + Physical',
-	[9] = 'Nature + Physical',
-	[17] = 'Frost + Physical',
-	[33] = 'Shadow + Physical',
-	[65] = 'Arcane + Physical',
+	[3]   = 'Holy + Physical',
+	[5]   = 'Fire + Physical',
+	[9]   = 'Nature + Physical',
+	[17]  = 'Frost + Physical',
+	[33]  = 'Shadow + Physical',
+	[65]  = 'Arcane + Physical',
 	[127] = 'Arcane + Shadow + Frost + Nature + Fire + Holy + Physical',
 }
 
 local function addToData(GUID)
 	if not Data[GUID] then
 		Data[GUID] = {
-			dmgTaken = 0,
+			dmgTaken   = 0,
 			dmgTaken_P = 0,
 			dmgTaken_M = 0,
-			Hits = 0,
-			firstHit = GetTime(),
-			lastHit = 0
+			Hits       = 0,
+			firstHit   = GetTime(),
+			lastHit    = 0
 		}
 	end
 end
 
 --[[ This Logs the damage done for every unit ]]
 local logDamage = function(...)
-	local _, _,_,_,_,_,_, GUID, _,_,_,_,_, school, Amount = ...
+	local _,_,_,_,_,_,_, GUID, _,_,_,_,_, school, Amount = ...
 	-- Mixed
 	if Doubles[school] then
 		Data[GUID].dmgTaken_P = Data[GUID].dmgTaken_P + Amount
@@ -51,26 +51,32 @@ local logDamage = function(...)
 	end
 	-- Totals
 	Data[GUID].dmgTaken = Data[GUID].dmgTaken + Amount
-	Data[GUID].Hits = Data[GUID].Hits + 1
+	Data[GUID].Hits     = Data[GUID].Hits + 1
 end
 
 --[[ This Logs the swings (damage) done for every unit ]]
 local logSwing = function(...)
-	local _, _,_,_,_,_,_, GUID, _,_,_, Amount = ...
+	local _,_,_,_,_,_,_, GUID, _,_,_, Amount = ...
 	Data[GUID].dmgTaken_P = Data[GUID].dmgTaken_P + Amount
-	Data[GUID].dmgTaken = Data[GUID].dmgTaken + Amount
-	Data[GUID].Hits = Data[GUID].Hits + 1
+	Data[GUID].dmgTaken   = Data[GUID].dmgTaken + Amount
+	Data[GUID].Hits       = Data[GUID].Hits + 1
 end
 
---[[ This Logs the swings (damage) done for every unit
-Disabled for now, needs to count total and self heals ]]
+--[[ This Logs the healing done for every unit
+		 !!~counting selfhealing only for now~!!]]
 local logHealing = function(...)
-	--local _,_,_,_,_,_,_, GUID, _,_,_,_,_,_, Amount = ...
+	local _,_,_, sourceGUID, _,_,_, GUID, _,_,_,_,_,_, Amount = ...
+	local playerGUID = UnitGUID('player')
+	if sourceGUID == playerGUID then
+		Data[GUID].dmgTaken_P = Data[GUID].dmgTaken_P - Amount
+		Data[GUID].dmgTaken_M = Data[GUID].dmgTaken_M - Amount
+		Data[GUID].dmgTaken   = Data[GUID].dmgTaken - Amount
+	end
 end
 
 --[[ This Logs the last action done for every unit ]]
 local addAction = function(...)
-	local _, _,_, sourceGUID, _,_,_,_, destName,_,_,_, spellName = ...
+	local _,_,_, sourceGUID, _,_,_,_, destName, _,_,_, spellName = ...
 	if not spellName then return end
 	addToData(sourceGUID)
 	-- Add to action Log, only for self for now
@@ -106,7 +112,7 @@ function NeP.CombatTracker:CombatTime(UNIT)
 end
 
 function NeP.CombatTracker:getDMG(UNIT)
-	local total, Hits = 0, 0
+	local total, Hits, phys, magic = 0, 0, 0, 0
 	local GUID = UnitGUID(UNIT)
 	if Data[GUID] then
 		local time = GetTime()
@@ -115,11 +121,13 @@ function NeP.CombatTracker:getDMG(UNIT)
 			Data[GUID] = nil
 		else
 			local combatTime = self:CombatTime(UNIT)
-			total = Data[GUID].dmgTaken / combatTime
-			Hits = Data[GUID].Hits
+			total            = Data[GUID].dmgTaken / combatTime
+			phys             = Data[GUID].dmgTaken_P / combatTime
+			magic            = Data[GUID].dmgTaken_M / combatTime
+			Hits             = Data[GUID].Hits
 		end
 	end
-	return total, Hits
+	return total, Hits, phys, magic
 end
 
 function NeP.CombatTracker:TimeToDie(unit)
