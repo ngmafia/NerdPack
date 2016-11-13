@@ -82,34 +82,42 @@ function NeP.Parser.Table(spell, cond)
 	end
 end
 
+local function Exe(eval, tspell)
+	-- Special like libs and funcs
+	if eval.exe then
+		return eval.exe()
+	-- Normal
+	else
+		NeP.Protected[eval.func](tspell, eval.target)
+		return true
+	end
+end
+
 function NeP.Parser.Parse(eval)
 	local spell, cond = eval[1], eval[2]
 	local endtime, cname = castingTime()
+	-- Its a table
 	if not spell.spell then
 		return NeP.Parser.Table(spell, cond, eval)
-	elseif (spell.bypass or endtime == 0) and (eval.exe or NeP.Parser.Target(eval))
-	and (eval.exe or NeP.Parser.Spell(eval)) then
-		local tspell, result = eval.spell or spell.spell
+	-- Nornal
+	elseif (spell.bypass or endtime == 0)
+	and eval.exe or (NeP.Parser.Spell(eval) and NeP.Parser.Target(eval)) then
+		local tspell = eval.spell or spell.spell
 		if NeP.DSL.Parse(cond, tspell) then
-			-- Libs and functions in the spell place
-			if eval.exe then
-				result = eval.exe()
-			else
-				-- (!spell) this clips the spell
-				if spell.interrupts then
-					-- Dont interrupt if its to cast the same thing or the current is about to finish
-					if cname == tspell or (endtime > 0 and endtime < 1) then return true end
+			-- (!spell) this clips the spell
+			if spell.interrupts then
+				if cname == tspell then
+					return true
+				elseif endtime > 0 then
 					SpellStopCasting()
 				end
-				NeP.Protected[eval.func](tspell, eval.target)
-				result = true
 			end
 			NeP.Parser.LastCast = tspell
 			NeP.Parser.LastGCD = (not eval.nogcd and tspell) or NeP.Parser.LastGCD
 			NeP.Parser.LastTarget = eval.target
 			NeP.ActionLog:Add(eval.type, tspell, spell.icon, eval.target)
 			NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
-			return result
+			return Exe(eval, tspell)
 		end
 	end
 end

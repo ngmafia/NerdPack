@@ -88,11 +88,10 @@ end
 NeP.Actions['#'] = function(eval)
 	local item = eval[1]
 	if item and item.id and GetItemSpell(item.spell) then
-		local isUsable = IsUsableItem(item.spell)
-		local ready = select(2, GetItemCooldown(item.id)) == 0
-		if isUsable and ready and (GetItemCount(item.spell) > 0) then
-			return true
-		end
+		return IsUsableItem(item.spell)
+		and select(2,GetItemCooldown(item.id)) == 0
+		and GetItemCount(item.spell) > 0
+		and NeP.Helpers:Check(item.spell, eval.target)
 	end
 end
 

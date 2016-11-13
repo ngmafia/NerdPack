@@ -1,8 +1,10 @@
-local _, NeP = ...
-
-NeP.Helpers = {}
-
-local spellHasFailed = {}
+local _, NeP 					= ...
+NeP.Helpers 					= {}
+local spellHasFailed 	= {}
+local UnitGUID 				= UnitGUID
+local UIErrorsFrame 	= UIErrorsFrame
+local wipe 						= wipe
+local C_Timer 				= C_Timer
 
 local function addToData(GUID)
 	if not spellHasFailed[GUID] then
@@ -11,14 +13,6 @@ local function addToData(GUID)
 end
 
 local UI_Erros = {
-	--[SPELL_FAILED_NOT_BEHIND] = function(GUID, spell)
-	--	addToData(GUID)
-	--	spellHasFailed[GUID].behind = true
-	--end,
-	--[SPELL_FAILED_TOO_CLOSE] = function(GUID, spell)
-	--	addToData(GUID)
-	--	spellHasFailed[GUID][spell] = true
-	--end
 	-- infront / LoS
 	[50] = function(GUID)
 		addToData(GUID)
@@ -33,25 +27,24 @@ local UI_Erros = {
 	[220] = function(GUID, spell)
 		addToData(GUID)
 		spellHasFailed[GUID][spell] = ''
+	end,
+	-- Item not ready
+	[50] = function(GUID, spell)
+		addToData(GUID)
+		spellHasFailed[GUID][spell] = ''
 	end
 }
 
 function NeP.Helpers:Infront(target)
 	if not target then return end
 	local GUID = UnitGUID(target)
-	if GUID and spellHasFailed[GUID] then
-		return spellHasFailed[GUID].infront
-	end
-	return true
+	return GUID and spellHasFailed[GUID] and spellHasFailed[GUID].infront or true
 end
 
 function NeP.Helpers:Check(spell, target)
 	if not target or not spell then return true end
 	local GUID = UnitGUID(target)
-	if GUID and spellHasFailed[GUID] then
-		return spellHasFailed[GUID][spell] == nil
-	end
-	return true
+	return GUID and spellHasFailed[GUID] and spellHasFailed[GUID][spell] == nil or true
 end
 
 NeP.Listener:Add("NeP_Helpers", "UI_ERROR_MESSAGE", function(error)
