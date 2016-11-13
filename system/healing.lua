@@ -20,12 +20,10 @@ local maxDistance = 40
 
 function NeP.Healing:GetRoster()
 	for GUID, Obj in pairs(Roster) do
-		if not  UnitExists(Obj.key)
-		or  Obj.distance > maxDistance
-		or UnitIsDeadOrGhost(Obj.key) then
-			Roster[GUID] = nil
-		elseif GUID ~= UnitGUID(Obj.key) then
-			--self:Add(Obj)
+		if not Obj or not  UnitExists(Obj.key)
+		or Obj.distance > maxDistance
+		or UnitIsDeadOrGhost(Obj.key)
+		or GUID ~= UnitGUID(Obj.key) then
 			Roster[GUID] = nil
 		end
 	end
@@ -36,6 +34,7 @@ function NeP.Healing:GetPredictedHealth(unit)
 	return UnitHealth(unit)-(UnitGetTotalHealAbsorbs(unit) or 0)+(UnitGetIncomingHeals(unit) or 0)
 end
 
+-- This Add's more index to the Obj in the OM table
 function NeP.Healing:Add(Obj)
 	local Role = UnitGroupRolesAssigned(Obj.key)
 	local healthRaw = UnitHealth(Obj.key)
