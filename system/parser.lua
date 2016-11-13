@@ -35,10 +35,7 @@ local function castingTime()
 		return (endTime/1000)-time, name
 	end
 	name, _,_,_,_, endTime = UnitChannelInfo("player")
-	if endTime then
-		return (endTime/1000)-time, name
-	end
-	return 0
+	return (endTime and (endTime/1000)-time) or 0, name
 end
 
 function NeP.Parser.Target(eval)
@@ -51,10 +48,8 @@ function NeP.Parser.Target(eval)
 		return true
 	end
 	eval.target = NeP.FakeUnits:Filter(target.target)
-	if UnitExists(eval.target) and UnitIsVisible(eval.target)
-	and NeP.Protected.LineOfSight('player', eval.target) then
-		return true
-	end
+	return UnitExists(eval.target) and UnitIsVisible(eval.target)
+	and NeP.Protected.LineOfSight('player', eval.target)
 end
 
 function NeP.Parser.Spell(eval)
@@ -65,10 +60,8 @@ function NeP.Parser.Spell(eval)
 	local isUsable, notEnoughMana = IsUsableSpell(eval[1].spell)
 	if skillType ~= 'FUTURESPELL' and isUsable and not notEnoughMana then
 		local GCD = NeP.DSL:Get('gcd')()
-		if GetSpellCooldown(eval[1].spell) <= GCD
-		and NeP.Helpers:Check(eval[1].spell, eval.target) then
-			return true
-		end
+		return GetSpellCooldown(eval[1].spell) <= GCD
+		and NeP.Helpers:Check(eval[1].spell, eval.target)
 	end
 end
 

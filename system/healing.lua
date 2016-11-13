@@ -1,4 +1,7 @@
-local _, NeP = ...
+local _, NeP 			= ...
+NeP.Healing 			= {}
+local Roster 			= {}
+local maxDistance = 40
 
 -- Local stuff for speed
 local UnitExists              = ObjectExists or UnitExists
@@ -13,10 +16,6 @@ local UnitPlayerOrPetInParty  = UnitPlayerOrPetInParty
 local UnitIsUnit              = UnitIsUnit
 local strsplit                = strsplit
 local C_Timer 								= C_Timer
-
-NeP.Healing = {}
-local Roster = {}
-local maxDistance = 40
 
 function NeP.Healing:GetRoster()
 	for GUID, Obj in pairs(Roster) do
