@@ -109,7 +109,7 @@ function NeP.OM:Add(Obj)
 	end
 end
 
-C_Timer.NewTicker(1, (function()
+C_Timer.NewTicker(1, (function(self)
 	NeP.OM.Maker()
 	-- Nameplates
 	if not NeP.AdvancedOM then
@@ -127,6 +127,7 @@ C_Timer.NewTicker(1, (function()
 	-- remove nameplates when advanced
 	elseif nPlates then
 		nPlates = nil
+		self:Cancel()
 	end
 end), nil)
 
