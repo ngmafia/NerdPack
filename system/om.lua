@@ -74,8 +74,8 @@ end
 function NeP.OM:Insert(Tbl, Obj, GUID)
 	-- Dont add existing Objs (Update)
 	local Test = Tbl[GUID]
-	if Test then
-		Test.distance = NeP.Protected.Distance('player', Test.key)
+	if Test and UnitExists(Test.key) then
+		Test.distance = NeP.Protected.Distance('player', Obj)
 	-- Add
 	else
 		local ObjID = select(6, strsplit('-', GUID))
@@ -84,7 +84,7 @@ function NeP.OM:Insert(Tbl, Obj, GUID)
 			key = Obj,
 			name = UnitName(Obj),
 			distance = distance,
-			id = tonumber(ObjID) or '0',
+			id = tonumber(ObjID or 0),
 			guid = GUID,
 			isdummy = NeP.DSL:Get('isdummy')(Obj)
 		}
