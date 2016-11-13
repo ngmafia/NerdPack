@@ -109,9 +109,13 @@ function NeP.OM:Add(Obj)
 	end
 end
 
-C_Timer.NewTicker(1, (function(self)
+-- Regular
+C_Timer.NewTicker(1, (function()
 	NeP.OM.Maker()
-	-- Nameplates
+end), nil)
+
+-- Nameplates (This gets killed once advanced)
+C_Timer.NewTicker(1, (function(self)
 	if not NeP.AdvancedOM then
 		for i=1, 40 do
 			local Obj = 'nameplate'..i
