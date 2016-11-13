@@ -30,12 +30,8 @@ end
 
 local function castingTime()
 	local time = GetTime()
-	local name, _,_,_,_, endTime = UnitCastingInfo("player")
-	if endTime then
-		return (endTime/1000)-time, name
-	end
-	name, _,_,_,_, endTime = UnitChannelInfo("player")
-	return (endTime and (endTime/1000)-time) or 0, name
+	local name, _,_,_,_, endTime = UnitCastingInfo("player") or UnitChannelInfo("player")
+	return (name and (endTime/1000)-time) or 0, name
 end
 
 function NeP.Parser.Target(eval)
@@ -47,34 +43,31 @@ function NeP.Parser.Target(eval)
 	elseif target.cursor then
 		return true
 	end
+	-- Filter the unit (FakeUnits)
 	eval.target = NeP.FakeUnits:Filter(target.target)
+	-- Eval if the unit is valid
 	return UnitExists(eval.target) and UnitIsVisible(eval.target)
 	and NeP.Protected.LineOfSight('player', eval.target)
 end
 
 function NeP.Parser.Spell(eval)
+	-- Special (Action, Items, etc)
 	if eval[1].token then
 		return NeP.Actions[eval[1].token](eval)
-	end
-	local skillType = GetSpellBookItemInfo(eval[1].spell)
-	local isUsable, notEnoughMana = IsUsableSpell(eval[1].spell)
-	if skillType ~= 'FUTURESPELL' and isUsable and not notEnoughMana then
-		local GCD = NeP.DSL:Get('gcd')()
-		return GetSpellCooldown(eval[1].spell) <= GCD
-		and NeP.Helpers:Check(eval[1].spell, eval.target)
-	end
-end
-
-function NeP.Parser.Table(spell, cond)
-	if NeP.DSL.Parse(cond) then
-		for i=1, #spell do
-			if NeP.Parser.Parse(spell[i]) then
-				return true
-			end
+	-- Regular spell
+	else
+		local skillType = GetSpellBookItemInfo(eval[1].spell)
+		local isUsable, notEnoughMana = IsUsableSpell(eval[1].spell)
+		if skillType ~= 'FUTURESPELL' and isUsable and not notEnoughMana then
+			local GCD = NeP.DSL:Get('gcd')()
+			return GetSpellCooldown(eval[1].spell) <= GCD
+			and NeP.Helpers:Check(eval[1].spell, eval.target)
 		end
 	end
 end
 
+-- If a Lib or a function in spell returns true, the loop breaks and starts over
+-- Otherwise it will just move to the next castable spell.
 local function Exe(eval, tspell)
 	-- Special like libs and funcs
 	if eval.exe then
@@ -91,7 +84,13 @@ function NeP.Parser.Parse(eval)
 	local endtime, cname = castingTime()
 	-- Its a table
 	if not spell.spell then
-		return NeP.Parser.Table(spell, cond, eval)
+		if NeP.DSL.Parse(cond) then
+			for i=1, #spell do
+				if NeP.Parser.Parse(spell[i]) then
+					return true
+				end
+			end
+		end
 	-- Nornal
 	elseif (spell.bypass or endtime == 0)
 	and eval.exe or (NeP.Parser.Spell(eval) and NeP.Parser.Target(eval)) then
