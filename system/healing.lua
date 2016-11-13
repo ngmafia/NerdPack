@@ -12,6 +12,7 @@ local UnitIsDeadOrGhost       = UnitIsDeadOrGhost
 local UnitPlayerOrPetInParty  = UnitPlayerOrPetInParty
 local UnitIsUnit              = UnitIsUnit
 local strsplit                = strsplit
+local C_Timer 								= C_Timer
 
 NeP.Healing = {}
 local Roster = {}
@@ -40,17 +41,12 @@ function NeP.Healing:Add(Obj)
 	local healthRaw = UnitHealth(Obj.key)
 	local maxHealth = UnitHealthMax(Obj.key)
 	local healthPercent =  (healthRaw / maxHealth) * 100
-	Roster[Obj.guid] = {
-		key = Obj.key,
-		name = Obj.name,
-		id = Obj.id,
-		health = healthPercent,
-		healthRaw = healthRaw,
-		healthMax = maxHealth,
-		healthPredict = self:GetPredictedHealth(Obj.key),
-		distance = Obj.distance,
-		role = Role
-	}
+	Obj.healthPredict = self:GetPredictedHealth(Obj.key)
+	Obj.health = healthPercent
+	Obj.healthRaw = healthRaw
+	Obj.healthMax = maxHealth
+	Obj.role = Role
+	Roster[Obj.guid] = Obj
 end
 
 function NeP.Healing:Refresh(GUID, Obj)
