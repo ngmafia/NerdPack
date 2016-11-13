@@ -14,6 +14,7 @@ local function UpdateTalents()
 	for i = 1, rows do
 		for k = 1, cols do
 			local talent_ID, talent_name = GetTalentInfo(i, k, spec)
+			if not talent_name then return end
 			talents[talent_name] = talent_ID
 			talents[talent_ID] = talent_ID
 			talents[tostring(i)..','..tostring(k)] = talent_ID
