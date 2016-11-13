@@ -65,59 +65,48 @@ function NeP.OM:Get(ref, want_plates)
 			or GUID ~= UnitGUID(Obj.key)
 			or ref ~= 'Dead' and UnitIsDeadOrGhost(Obj.key) then
 				tb[GUID] = nil
-			else
-				-- update
-				Obj.distance = NeP.Protected.Distance('player', Obj.key)
 			end
 		end
 		return tb
 	end
 end
 
-function NeP.OM:Insert(ref, Obj)
-	local GUID = UnitGUID(Obj) or '0'
-	-- Dont add existing Objs
-	if OM_c[ref][GUID] then return end
-	local ObjID = select(6, strsplit('-', GUID))
-	local distance = NeP.Protected.Distance('player', Obj)
-	OM_c[ref][GUID] = {
-		key = Obj,
-		name = UnitName(Obj),
-		distance = distance,
-		id = tonumber(ObjID) or '0',
-		guid = GUID,
-		isdummy = NeP.DSL:Get('isdummy')(Obj)
-	}
+function NeP.OM:Insert(Tbl, Obj, GUID)
+	-- Dont add existing Objs (Update)
+	local Test = Tbl[GUID]
+	if Test then
+		Test.distance = NeP.Protected.Distance('player', Test.key)
+	-- Add
+	else
+		local ObjID = select(6, strsplit('-', GUID))
+		local distance = NeP.Protected.Distance('player', Obj)
+		Tbl[GUID] = {
+			key = Obj,
+			name = UnitName(Obj),
+			distance = distance,
+			id = tonumber(ObjID) or '0',
+			guid = GUID,
+			isdummy = NeP.DSL:Get('isdummy')(Obj)
+		}
+	end
 end
 
 function NeP.OM:Add(Obj)
 	if not UnitExists(Obj) then return end
+	local GUID = UnitGUID(Obj) or '0'
 	-- Dead Units
 	if UnitIsDeadOrGhost(Obj) then
-		NeP.OM:Insert('Dead', Obj)
+		NeP.OM:Insert(OM_c['Dead'], Obj, GUID)
 	-- Friendly
 	elseif UnitIsFriend('player', Obj) then
-		NeP.OM:Insert('Friendly', Obj)
+		NeP.OM:Insert(OM_c['Friendly'], Obj, GUID)
 	-- Enemie
 	elseif UnitCanAttack('player', Obj) then
-		NeP.OM:Insert('Enemy', Obj)
+		NeP.OM:Insert(OM_c['Enemy'], Obj, GUID)
+	-- Objects
 	elseif ObjectIsType and ObjectIsType(Obj, ObjectTypes.GameObject) then
-		NeP.OM:Insert('Objects', Obj)
+		NeP.OM:Insert(OM_c['Objects'], Obj, GUID)
 	end
-end
-
-local function addPlate(tb, Obj)
-	local GUID = UnitGUID(Obj)
-	local ObjID = select(6, strsplit('-', GUID))
-	local distance = NeP.Protected.Distance('player', Obj)
-	nPlates[tb][GUID] = {
-		key = Obj,
-		name = UnitName(Obj),
-		distance = distance,
-		id = tonumber(ObjID) or '0',
-		guid = GUID,
-		isdummy = NeP.DSL:Get('isdummy')(Obj)
-	}
 end
 
 C_Timer.NewTicker(1, (function()
@@ -127,10 +116,11 @@ C_Timer.NewTicker(1, (function()
 		for i=1, 40 do
 			local Obj = 'nameplate'..i
 			if UnitExists(Obj) then
+				local GUID = UnitGUID(Obj) or '0'
 				if UnitIsFriend('player',Obj) then
-					addPlate('Friendly', Obj)
+					NeP.OM:Insert(nPlates['Friendly'], Obj, GUID)
 				else
-					addPlate('Enemy', Obj)
+					NeP.OM:Insert(nPlates['Enemy'], Obj, GUID)
 				end
 			end
 		end
