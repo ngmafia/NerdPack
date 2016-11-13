@@ -30,7 +30,8 @@ end
 
 local function castingTime()
 	local time = GetTime()
-	local name, _,_,_,_, endTime = UnitCastingInfo("player") or UnitChannelInfo("player")
+	local name, _,_,_,_, endTime = UnitCastingInfo("player")
+	if not name then name, _,_,_,_, endTime = UnitChannelInfo("player") end
 	return (name and (endTime/1000)-time) or 0, name
 end
 
@@ -93,7 +94,7 @@ function NeP.Parser.Parse(eval)
 		end
 	-- Nornal
 	elseif (spell.bypass or endtime == 0)
-	and eval.exe or (NeP.Parser.Spell(eval) and NeP.Parser.Target(eval)) then
+	and (eval.exe or (NeP.Parser.Spell(eval) and NeP.Parser.Target(eval))) then
 		local tspell = eval.spell or spell.spell
 		if NeP.DSL.Parse(cond, tspell) then
 			-- (!spell) this clips the spell
