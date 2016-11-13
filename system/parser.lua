@@ -1,9 +1,10 @@
 local _, NeP = ...
+NeP.Parser   = {}
 
 -- Local stuff for speed
 local GetTime              = GetTime
 local UnitBuff             = UnitBuff
-local IsMounted            = IsMounted
+--local IsMounted            = IsMounted
 local UnitCastingInfo      = UnitCastingInfo
 local UnitChannelInfo      = UnitChannelInfo
 local UnitExists           = ObjectExists or UnitExists
@@ -13,9 +14,9 @@ local GetSpellCooldown     = GetSpellCooldown
 local IsUsableSpell        = IsUsableSpell
 local SpellStopCasting     = SpellStopCasting
 local UnitIsDeadOrGhost    = UnitIsDeadOrGhost
+local SecureCmdOptionParse = SecureCmdOptionParse
 local InCombatLockdown     = InCombatLockdown
-
-NeP.Parser = {}
+local C_Timer              = C_Timer
 
 local function IsMountedCheck()
 	for i = 1, 40 do
@@ -42,7 +43,7 @@ end
 
 function NeP.Parser.Target(eval)
 	local target = eval[3]
-	if not target then return end
+	-- Target is returned from a function
 	if target.func then
 		target.target = target.func()
 	-- This is to alow casting at the cursor location where no unit exists
@@ -113,6 +114,9 @@ function NeP.Parser.Parse(eval)
 	end
 end
 
+-- Delay until everything is ready
+NeP.Core:WhenInGame(function()
+
 C_Timer.NewTicker(0.1, (function()
 	NeP.Faceroll:Hide()
 	if NeP.DSL:Get('toggle')(nil, 'mastertoggle') then
@@ -125,3 +129,5 @@ C_Timer.NewTicker(0.1, (function()
 		end
 	end
 end), nil)
+
+end, 99)

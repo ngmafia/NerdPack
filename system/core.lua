@@ -18,6 +18,7 @@ local GetFlyoutSlotInfo    = GetFlyoutSlotInfo
 local HasPetSpells         = HasPetSpells
 local BOOKTYPE_SPELL       = BOOKTYPE_SPELL
 local BOOKTYPE_PET         = BOOKTYPE_PET
+local C_Timer              = C_Timer
 
 function NeP.Core:Print(...)
 	print('[|cff'..NeP.Color..'NeP|r]', ...)
@@ -125,9 +126,10 @@ function NeP.Core:GetSpellBookIndex(spell)
 end
 
 local Run_Cache = {}
-function NeP.Core:WhenInGame(func)
+function NeP.Core:WhenInGame(func, prio)
 	if Run_Cache then
-		Run_Cache[#Run_Cache+1] = func
+		Run_Cache[#Run_Cache+1] = {func = func, prio = prio or 10}
+		table.sort(Run_Cache, function(a,b) return a.prio < b.prio end)
 	else
 		func()
 	end
@@ -135,10 +137,8 @@ end
 
 NeP.Listener:Add("NeP_CR2", "PLAYER_LOGIN", function()
 	NeP.Color = NeP.Core:ClassColor('player', 'hex')
-	C_Timer.After(1, function()
-		for i=1, #Run_Cache do
-			Run_Cache[i]()
-		end
-		Run_Cache = nil
-	end)
+	for i=1, #Run_Cache do
+		Run_Cache[i].func()
+	end
+	Run_Cache = nil
 end)

@@ -11,6 +11,7 @@ local strsplit          = strsplit
 local select            = select
 local tonumber          = tonumber
 local pairs             = pairs
+local C_Timer 					= C_Timer
 
 --Advanced
 local ObjectIsType = ObjectIsType
@@ -25,7 +26,7 @@ local OM_c = {
 	Objects  = {}
 }
 
-local plates = {
+local nPlates = {
   Friendly = {},
   Enemy = {}
 }
@@ -46,9 +47,9 @@ end
 
 function NeP.OM:Get(ref, want_plates)
 	-- Hack for nameplates
-	if want_plates and not NeP.AdvancedOM then
+	if want_plates and nPlates then
 		local temp = {}
-		for GUID, Obj in pairs(plates[ref]) do
+		for GUID, Obj in pairs(nPlates[ref]) do
 			MergeTable(temp, Obj, GUID)
 		end
 		for GUID, Obj in pairs(OM_c[ref]) do
@@ -109,7 +110,7 @@ local function addPlate(tb, Obj)
 	local GUID = UnitGUID(Obj)
 	local ObjID = select(6, strsplit('-', GUID))
 	local distance = NeP.Protected.Distance('player', Obj)
-	plates[tb][GUID] = {
+	nPlates[tb][GUID] = {
 		key = Obj,
 		name = UnitName(Obj),
 		distance = distance,
@@ -133,6 +134,9 @@ C_Timer.NewTicker(1, (function()
 				end
 			end
 		end
+	-- remove nameplates when advanced
+	elseif nPlates then
+		nPlates = nil
 	end
 end), nil)
 
