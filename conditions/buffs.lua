@@ -5,14 +5,12 @@ local GetSpellInfo = GetSpellInfo
 local GetTime      = GetTime
 
 local function UnitBuffL(target, spell, own)
-	local spellx, rank = GetSpellInfo(spell)
-	local name,_,_,count,_,_,expires,caster = UnitBuff(target, spellx or spell, rank or '', own and 'PLAYER')
+	local name,_,_,count,_,_,expires,caster = UnitBuff(target, spell or spell, nil, own and 'PLAYER')
 	return name, count, expires, caster
 end
 
 local function UnitDebuffL(target, spell, own)
-	local spellx, rank = GetSpellInfo(spell)
-	local name, _,_, count, _,_, expires, caster = UnitDebuff(target, spellx or spell, rank or '', own and 'PLAYER')
+	local name, _,_, count, _,_, expires, caster = UnitDebuff(target, spell or spell, nil, own and 'PLAYER')
 	return name, count, expires, caster
 end
 
