@@ -1,4 +1,11 @@
+
+
 local GUI = {
+     --Dispel
+	{type = 'header', text = 'Dispel All when toggled on', align = 'center'},
+	{type = 'checkbox', text = 'Dispel All', key = 'Dispel', default = false},
+	{type = 'ruler'},{type = 'spacer'},
+
 	--Cooldowns
 	{type = 'header', text = 'Cooldowns when toggled on', align = 'center'},
 	{type = 'checkspin', text = 'Use Guardian Spirit', key = 'c_GS', default_check = false, default_spin = 20},
@@ -8,16 +15,16 @@ local GUI = {
 	{type = 'header', text = 'Trinkets', align = 'center'},
 	{type = 'checkbox', text = 'Use Trinkets', key = 'u_T', default = false},
 	{type = 'text', text = 'Check to Enable Trinkets', align = 'center'},
-	{type = 'checkbox', text = 'Top Trinket enabled', key = 'trinket_1', default = false},
-	{type = 'checkbox', text = 'Bottom Trinket enabled', key = 'Trinket_2', default = false},
+	{type = 'checkbox', text = 'Top Trinket', key = 'trinket_1', default = false},
+	{type = 'checkbox', text = 'Bottom Trinket', key = 'Trinket_2', default = false},
 	{type = 'ruler'},{type = 'spacer'},
 
 	--KEYBINDS
 	{type = 'header', text = 'Keybinds', align = 'center'},
 	{type = 'text', text = 'Left Shift: Holy Word: Sanctify | Left Ctrl: Mass Dispel	| Alt: Pause', align = 'center'},
-	{type = 'checkbox', text = 'Holy Word: Sanctify enabled', key = 'k_HWS', default = false},
-	{type = 'checkbox', text = 'Mass Dispel enabled', key = 'k_MD', default = false},
-	{type = 'checkbox', text = 'Pause enabled', key = 'k_P', default = false},
+	{type = 'checkbox', text = 'Holy Word: Sanctify', key = 'k_HWS', default = false},
+	{type = 'checkbox', text = 'Mass Dispel', key = 'k_MD', default = false},
+	{type = 'checkbox', text = 'Pause', key = 'k_P', default = false},
 	{type = 'ruler'},{type = 'spacer'},
 
 	--POTIONS
@@ -31,8 +38,8 @@ local GUI = {
 	--DPS
 	{type = 'header', text = 'DPS mode', align = 'center'},
 	{type = 'text', text = 'Check to enable extra DPS', align = 'center'},
-	{type = 'checkbox', text = 'Holy Word: Chastise enabled', key = 'd_HWC', default = false},
-	{type = 'checkbox', text = 'Holy Fire enabled', key = 'd_HF', default = false},
+	{type = 'checkbox', text = 'Holy Word: Chastise', key = 'd_HWC', default = false},
+	{type = 'checkbox', text = 'Holy Fire', key = 'd_HF', default = false},
 	 {type = 'ruler'},{type = 'spacer'},
 
 	--TANK
@@ -67,7 +74,8 @@ local GUI = {
 	--MOVING
 	{type = 'header', text = 'Moving', align = 'center'},
 	{type = 'text', text = 'Movement speed', align = 'center'},
-	{type = 'checkbox', text = 'Angelic Feather enabled', key = 'm_AF', default = false},
+	{type = 'checkbox', text = 'Angelic Feather', key = 'm_AF', default = false},
+	{type = 'checkbox', text = 'Body and Mind', key = 'm_Body', default = false},
 	{type = 'text', text = 'Lowest health and moving values', align = 'center'},
 	{type = 'spinner', text = 'Holy Word: Serenity', key = 'm_HWSE', default = 60},
 	{type = 'spinner', text = 'Flash Heal Surge of Light', key = 'm_FH', default = 70},
@@ -75,7 +83,7 @@ local GUI = {
 }
 
 local Cooldowns = {
-	--Guardian Spirit if below or if lowest health is below or if UI value and checked.
+	--Guardian Spirit if lowest health is below or if UI value and checked.
 	{'!Guardian Spirit', 'UI(c_GS_check) & lowest.health <= UI(c_GS_spin)', 'lowest'}
 }
 
@@ -88,9 +96,9 @@ local Trinkets = {
 
 local Keybinds = {
 	--Mass Dispel on Mouseover target Left Control when checked in UI.
-	{'Mass Dispel', 'keybind(lcontrol) & UI(k_MD)', 'mouseover.ground'},
+	{'Mass Dispel', 'keybind(lcontrol) & UI(k_MD)', 'cursor.ground'},
 	--Holy Word: Sanctify on Mouseover target left shift when checked in UI.
-	{'Holy Word: Sanctify', 'keybind(lshift) & UI(k_HWS)', 'mouseover.ground'},
+	{'Holy Word: Sanctify', 'keybind(lshift) & UI(k_HWS)', 'cursor.ground'},
 	-- Pause on left alt when checked in UI.
 	{'%pause', 'keybind(lalt)& UI(k_P)'}
 }
@@ -181,7 +189,9 @@ local Moving = {
 	--Flash Heal when Surge of Light is active, Lowest Health  is below or if UI value.
 	{'Flash Heal', 'player.buff(Surge of Light) & lowest.health <= UI(m_FH)', 'lowest'},
 	--Angelic Feather if player is moving for 2 seconds or longer and Missing Angelic Feather and if UI enables it.
-	{'Angelic Feather', 'player.movingfor >= 2 & !player.buff(Angelic Feather) & spell(Angelic Feather).charges >= 1 & UI(m_AF)', 'player.ground'}
+	{'Angelic Feather', 'player.movingfor >= 2 & !player.buff(Angelic Feather) & spell(Angelic Feather).charges >= 1 & UI(m_AF)', 'player.ground'},
+	--Angelic Feather if player is moving for 2 seconds or longer and Missing Angelic Feather and if UI enables it.
+	{'Body and Mind', 'player.movingfor >= 2 & !player.buff(Body And Mind) & UI(m_Body)', 'player'},
 
 }
 
@@ -193,13 +203,13 @@ local inCombat = {
 	{Keybinds},
 	{Potions},
 	{SpiritOfRedemption, 'player.buff(Spirit of Redemption)'},
-	{'%dispelall'},
+	{'%DispelAll', 'UI(Dispel)'}, 
 	{{
 		{Tank, 'tank.health < 100'},
 		{Player, 'health < 100'},
 		{Lowest, 'lowest.health < 100'},
 		{DPS, 'lowest.health > 90'},
-	}, '!moving'},
+	}, '!moving & !player.channeling(Divine Hymn)'},
 	{Moving, 'moving'},
 
 }
@@ -207,6 +217,7 @@ local inCombat = {
 local outCombat = {
 	{Keybinds},
 	{Moving, 'moving'},
+	{"%ressdead(Resurrection)"},
 }
 
 NeP.CR:Add(257, '[NeP] Priest - Holy', inCombat, outCombat, nil, GUI)
