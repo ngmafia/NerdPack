@@ -17,7 +17,7 @@ local UnitIsUnit              = UnitIsUnit
 local strsplit                = strsplit
 local C_Timer 								= C_Timer
 
-function NeP.Healing:GetRoster()
+local function Clean()
 	for GUID, Obj in pairs(Roster) do
 		if not Obj or not  UnitExists(Obj.key)
 		or Obj.distance > maxDistance
@@ -26,20 +26,19 @@ function NeP.Healing:GetRoster()
 			Roster[GUID] = nil
 		end
 	end
-	return Roster
 end
 
-function NeP.Healing:GetPredictedHealth(unit)
+local function GetPredictedHealth(unit)
 	return UnitHealth(unit)-(UnitGetTotalHealAbsorbs(unit) or 0)+(UnitGetIncomingHeals(unit) or 0)
 end
 
 -- This Add's more index to the Obj in the OM table
-function NeP.Healing:Add(Obj)
+local function Add(Obj)
 	local Role = UnitGroupRolesAssigned(Obj.key)
 	local healthRaw = UnitHealth(Obj.key)
 	local maxHealth = UnitHealthMax(Obj.key)
 	local healthPercent =  (healthRaw / maxHealth) * 100
-	Obj.healthPredict = self:GetPredictedHealth(Obj.key)
+	Obj.healthPredict = GetPredictedHealth(Obj.key)
 	Obj.health = healthPercent
 	Obj.healthRaw = healthRaw
 	Obj.healthMax = maxHealth
@@ -47,7 +46,7 @@ function NeP.Healing:Add(Obj)
 	Roster[Obj.guid] = Obj
 end
 
-function NeP.Healing:Refresh(GUID, Obj)
+local function Refresh(GUID, Obj)
 	local temp = Roster[GUID]
 	local healthRaw = UnitHealth(temp.key)
 	temp.health = (healthRaw / UnitHealthMax(temp.key)) * 100
@@ -55,17 +54,25 @@ function NeP.Healing:Refresh(GUID, Obj)
 	temp.distance = Obj.distance
 end
 
+function NeP.Healing:GetRoster()
+	Clean()
+	return Roster
+end
+
 C_Timer.NewTicker(0.1, (function()
+	-- Add refresh
 	for GUID, Obj in pairs(NeP.OM:Get('Friendly')) do
 		if UnitPlayerOrPetInParty(Obj.key)
 		or UnitIsUnit('player', Obj.key) then
 			if Roster[GUID] then
-				NeP.Healing:Refresh(GUID, Obj)
+				Refresh(GUID, Obj)
 			elseif Obj.distance < maxDistance then
-				NeP.Healing:Add(Obj)
+				Add(Obj)
 			end
 		end
 	end
+	-- Clean
+	Clean()
 end), nil)
 
 NeP.DSL:Register("health", function(target)
