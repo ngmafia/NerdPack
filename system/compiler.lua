@@ -116,23 +116,26 @@ function NeP.Compiler.Spell(eval, name)
 	eval[1] = ref
 end
 
-function NeP.Compiler.Target(eval)
+function NeP.Compiler.Target(eval, name)
 	local ref = {}
 	if type(eval[3]) == 'string' then
 		ref.target = eval[3]
 	elseif type(eval[3]) == 'function' then
 		ref.func = eval[3]
+		return
 	else
+		ref.target = 'fake'
 		ref.func = function()
 			return UnitExists('target') and 'target' or 'player'
 		end
 	end
-	if ref.target and ref.target:find('.ground') then
+	-- ground
+	if ref.target:find('.ground') then
 		ref.target = ref.target:sub(0,-8)
-		-- This is to alow casting at the cursor location where no unit exists
-		if ref.target:lower() == 'cursor' then ref.cursor = true end
 		ref.ground = true
 		eval.func = 'CastGround'
+		-- This is to alow casting at the cursor location where no unit exists
+		if ref.target:lower() == 'cursor' then ref.cursor = true end
 	end
 	eval[3] = ref
 end
@@ -196,6 +199,10 @@ function NeP.Compiler.Compile(eval, name)
 		for k=1, #spell do
 			NeP.Compiler.Compile(spell[k], name)
 		end
+		-- Conditions
+		eval[2] = NeP.Compiler.CondLegacy(cond)
+		NeP.Compiler.Conditions(eval)
+		return
 	elseif type(spell) == 'function' then
 		local ref = {}
 		ref.spell = tostring(spell)
@@ -211,9 +218,8 @@ function NeP.Compiler.Compile(eval, name)
 	-- Conditions
 	eval[2] = NeP.Compiler.CondLegacy(cond)
 	NeP.Compiler.Conditions(eval)
-
 	-- Target
-	NeP.Compiler.Target(eval)
+	NeP.Compiler.Target(eval, name)
 end
 
 function NeP.Compiler:Iterate(eval, name)

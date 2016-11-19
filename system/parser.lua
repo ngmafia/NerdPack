@@ -36,16 +36,15 @@ local function castingTime()
 end
 
 function NeP.Parser.Target(eval)
-	local target = eval[3]
-	-- Target is returned from a function
-	if target.func then
-		target.target = target.func()
 	-- This is to alow casting at the cursor location where no unit exists
-	elseif target.cursor then
+	if eval[3].cursor then
 		return true
+	-- Target is returned from a function
+	elseif eval[3].func then
+		eval[3].target = eval[3].func()
 	end
 	-- Filter the unit (FakeUnits)
-	eval.target = NeP.FakeUnits:Filter(target.target)
+	eval.target = NeP.FakeUnits:Filter(eval[3].target)
 	-- Eval if the unit is valid
 	return UnitExists(eval.target) and UnitIsVisible(eval.target)
 	and NeP.Protected.LineOfSight('player', eval.target)
@@ -92,7 +91,7 @@ function NeP.Parser.Parse(eval)
 				end
 			end
 		end
-	-- Nornal
+	-- Normal
 	elseif (spell.bypass or endtime == 0)
 	and (eval.exe or (NeP.Parser.Spell(eval) and NeP.Parser.Target(eval))) then
 		local tspell = eval.spell or spell.spell
