@@ -62,4 +62,4 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(250, '[NeP] Death Knight - Beast Blood', inCombat, outCombat, ExeOnLoad, GUI)
+NeP.CR:Add(250, '[NeP] Death Knight - Blood', inCombat, outCombat, ExeOnLoad, GUI)
