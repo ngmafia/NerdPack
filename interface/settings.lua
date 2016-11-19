@@ -12,7 +12,7 @@ local config = {
 			{ type = 'spinner', text = L:TA('Settings', 'bsize'), key = 'bsize', default = 40},
 			{ type = 'spinner', text = L:TA('Settings', 'bsize'), key = 'bpad', default = 2},
 
-			{ type = 'button', text = L:TA('Settings', 'apply_bt'), callback = function()
+			{ type = 'button', text = L:TA('Settings', 'apply_bt'), align = 'center', with = 200, callback = function()
 				NeP.ButtonsSize = NeP.Config:Read(n_name..'_Settings', 'bsize', 40)
 				NeP.ButtonsPadding = NeP.Config:Read(n_name..'_Settings', 'bpad', 2)
 				NeP.Interface:RefreshToggles()

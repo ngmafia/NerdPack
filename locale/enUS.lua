@@ -38,6 +38,6 @@ NeP.Locale.enUS = {
 		option = 'Settings',
 		bsize = 'Button size',
 		bpad = 'Button padding',
-		apply_bt = 'Aplly'
+		apply_bt = 'Apply'
 	},
 }
