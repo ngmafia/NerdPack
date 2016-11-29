@@ -223,6 +223,7 @@ function NeP.Compiler.Compile(eval, name)
 end
 
 function NeP.Compiler:Iterate(eval, name)
+	if not eval then return end
 	for i=1, #eval do
 		NeP.Compiler.Compile(eval[i], name)
 	end
