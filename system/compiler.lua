@@ -135,7 +135,10 @@ function NeP.Compiler.Target(eval, name)
 		ref.ground = true
 		eval.func = 'CastGround'
 		-- This is to alow casting at the cursor location where no unit exists
-		if ref.target:lower() == 'cursor' then ref.cursor = true end
+		if ref.target:lower() == 'cursor' then
+			ref.cursor = true
+			ref.target = nil
+		end
 	end
 	eval[3] = ref
 end
