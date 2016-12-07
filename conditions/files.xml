@@ -9,5 +9,6 @@
 	<Script file="area.lua" />
 	<Script file="talents.lua" />
 	<Script file="buffs.lua" />
+	<Script file="pull_timer.lua" />
 
 </Ui>
