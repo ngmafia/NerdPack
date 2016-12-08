@@ -1,6 +1,6 @@
 local _, NeP = ...
 
-local match = string.match
+local strsplit = strsplit
 local tonumber = tonumber
 local GetTime = GetTime
 local RegisterAddonMessagePrefix = RegisterAddonMessagePrefix
@@ -14,21 +14,21 @@ NeP.Listener:Add('PullTimer', 'CHAT_MSG_ADDON', function (prefix, arg)
 		return
  	end
 
-	local _, seconds = match(arg or '', '^PT\t(%d+)')
-	if seconds then
+	local kind, seconds = strsplit('\t', arg or '')
+	if kind == 'PT' then
 		pullTimer = GetTime() + tonumber(seconds)
 	end
 end)
 
 NeP.DSL:Register('pull_timer', function ()
 	if not pullTimer then
-		return 0
+		return 999
 	end
 
 	local seconds = pullTimer - GetTime()
 	if seconds < 0 then
 		pullTimer = nil
-		return 0
+		return 999
 	end
 
 	return seconds
