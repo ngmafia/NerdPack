@@ -27,8 +27,9 @@ local OM_c = {
 }
 
 local nPlates = {
-  Friendly = {},
-  Enemy = {}
+	Friendly = {},
+	Enemy = {},
+	Dead = {}
 }
 
 
