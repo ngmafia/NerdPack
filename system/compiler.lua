@@ -1,6 +1,7 @@
 local _, NeP = ...
 
 -- Locals
+local tonumber             = tonumber
 local GetInventorySlotInfo = GetInventorySlotInfo
 local GetInventoryItemID   = GetInventoryItemID
 local GetItemInfo          = GetItemInfo
@@ -91,11 +92,17 @@ function NeP.Compiler.Spell(eval, name)
 				ref.spell = GetInventoryItemID("player", invItem)
 			end
 			if not ref.spell then return end
-			local itemName, itemLink, _,_,_,_,_,_,_, texture = GetItemInfo(ref.spell)
+			local itemID = tonumber(ref.spell)
+			if not itemID then
+				itemID = NeP.Core:GetItemID(itemName)
+			end
+			if not tonumber(itemID) then return end
+			local itemName, itemLink, _,_,_,_,_,_,_, texture = GetItemInfo(itemID)
+			if not itemName then return end
+			ref.id = itemID
 			ref.spell = itemName
 			ref.icon = texture
 			ref.link = itemLink
-			ref.id = NeP.Core:GetItemID(itemName)
 		end)
 		skip = true
 	end
