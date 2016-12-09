@@ -94,7 +94,7 @@ function NeP.Compiler.Spell(eval, name)
 			if not ref.spell then return end
 			local itemID = tonumber(ref.spell)
 			if not itemID then
-				itemID = NeP.Core:GetItemID(itemName)
+				itemID = NeP.Core:GetItemID(ref.spell)
 			end
 			if not tonumber(itemID) then return end
 			local itemName, itemLink, _,_,_,_,_,_,_, texture = GetItemInfo(itemID)
