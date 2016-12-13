@@ -66,7 +66,7 @@ end
 -- Ress all dead
 NeP.Actions['ressdead'] = function(eval, spell)
 	if not spell then return end
-	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
+	for _, Obj in pairs(NeP.OM:Get('Friendly')) do
 		if Obj.distance < 40 and UnitIsPlayer(Obj.Key)
 		and UnitIsDeadOrGhost(Obj.key) and UnitPlayerOrPetInParty(Obj.key) then
 			eval.spell = spell
