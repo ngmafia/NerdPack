@@ -52,6 +52,7 @@ local GetAverageItemLevel         = GetAverageItemLevel
 local UnitIsCharmed               = UnitIsCharmed
 local IsSwimming                  = IsSwimming
 local IsFalling                   = IsFalling
+local IsCurrentSpell              = IsCurrentSpell
 
 local SPELL_POWER_INSANITY       = SPELL_POWER_INSANITY
 local SPELL_POWER_FOCUS          = SPELL_POWER_FOCUS
@@ -422,6 +423,12 @@ end)
 
 NeP.DSL:Register("combat", function(target)
 	return UnitAffectingCombat(target)
+end)
+
+NeP.DSL:Register("isattacking", function()
+	-- Checks if the player has autoattack toggled currently
+	-- Use {'/startattack', '!isattacking'}, at the top of a CR to force autoattacks
+	return IsCurrentSpell(6603)
 end)
 
 NeP.DSL:Register("role", function(target, role)
