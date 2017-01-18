@@ -98,7 +98,7 @@ NeP.Actions['#'] = function(eval)
 		and select(2,GetItemCooldown(item.id)) == 0
 		and GetItemCount(item.spell) > 0
 		and NeP.Helpers:Check(item.spell, eval.target) then
-			if itemBlacklist[item.id] ~= nil then
+			if itemBlacklist[item.id] then
 				if itemBlacklist[item.id] > GetTime() then
 					return false
 				else
