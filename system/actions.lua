@@ -98,16 +98,14 @@ NeP.Actions['#'] = function(eval)
 		and select(2,GetItemCooldown(item.id)) == 0
 		and GetItemCount(item.spell) > 0
 		and NeP.Helpers:Check(item.spell, eval.target) then
-			if itemBlacklist[item.id] then
-				if itemBlacklist[item.id] > GetTime() then
-					return false
-				else
-					itemBlacklist[item.id] = nil
-				end
-			end
 
 			-- Blacklist for 5 seconds
+			local tm = itemBlacklist[item.id] or 0
+			if tm[item.id] > GetTime() then
+					return false
+			end
 			itemBlacklist[item.id] = GetTime() + 5
+
 			return true
 		end
 	end
