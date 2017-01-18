@@ -11,6 +11,7 @@ local UnitPlayerOrPetInParty = UnitPlayerOrPetInParty
 local GetItemCooldown        = GetItemCooldown
 local GetItemSpell           = GetItemSpell
 local GetItemCount           = GetItemCount
+local GetTime                = GetTime
 local CancelShapeshiftForm   = CancelShapeshiftForm
 local CancelUnitBuff         = CancelUnitBuff
 local RunMacro               = RunMacro
@@ -84,14 +85,31 @@ NeP.Actions['pause'] = function(eval)
 	return true
 end
 
+-- #TODO: Remove this at some point.
+--   GetItemCooldown shows items ready when they really are not.
+
+local itemBlacklist = {}
+
 -- Items
 NeP.Actions['#'] = function(eval)
 	local item = eval[1]
 	if item and item.id and GetItemSpell(item.spell) then
-		return IsUsableItem(item.spell)
+		if IsUsableItem(item.spell)
 		and select(2,GetItemCooldown(item.id)) == 0
 		and GetItemCount(item.spell) > 0
-		and NeP.Helpers:Check(item.spell, eval.target)
+		and NeP.Helpers:Check(item.spell, eval.target) then
+			if itemBlacklist[item.id] ~= nil then
+				if itemBlacklist[item.id] > GetTime() then
+					return false
+				else
+					itemBlacklist[item.id] = nil
+				end
+			end
+
+			-- Blacklist for 5 seconds
+			itemBlacklist[item.id] = GetTime() + 5
+			return true
+		end
 	end
 end
 
