@@ -18,6 +18,18 @@ local RunMacro               = RunMacro
 
 NeP.Actions = {}
 
+-- DispelSelf
+NeP.Actions['dispelself'] = function(eval)
+	for _,spellID, _,_,_,_, dispelType in LibDisp:IterateDispellableAuras('player') do
+    if dispelType then
+      eval.spell = GetSpellInfo(spellID)
+      eval.target = 'player'
+    	eval.func = 'Cast'
+      return true
+  	end
+  end
+end
+
 -- Dispell all
 NeP.Actions['dispelall'] = function(eval)
 	for _, Obj in pairs(NeP.Healing:GetRoster()) do
