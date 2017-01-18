@@ -101,7 +101,7 @@ NeP.Actions['#'] = function(eval)
 
 			-- Blacklist for 5 seconds
 			local tm = itemBlacklist[item.id] or 0
-			if tm[item.id] > GetTime() then
+			if tm > GetTime() then
 					return false
 			end
 			itemBlacklist[item.id] = GetTime() + 5
