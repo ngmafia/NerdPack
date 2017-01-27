@@ -4,12 +4,12 @@ NeP.Locale = {}
 
 local locale = GetLocale()
 function NeP.Locale:TA(gui, index)
-	if NeP.Locale[locale] and NeP.Locale[locale][gui] then
-		if NeP.Locale[locale][gui][index] then
-			return NeP.Locale[locale][gui][index]
-		end
-	end
-	return NeP.Locale.enUS[gui][index] or 'INVALID STRING'
+  if NeP.Locale[locale] and NeP.Locale[locale][gui] then
+    if NeP.Locale[locale][gui][index] then
+      return NeP.Locale[locale][gui][index]
+    end
+  end
+  return NeP.Locale.enUS[gui][index] or 'INVALID STRING'
 end
 
 --[[
