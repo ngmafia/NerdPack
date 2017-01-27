@@ -10,25 +10,25 @@ local LAD = LibStub("LibArtifactData-1.0")
 ]]
 
 NeP.DSL:Register('artifact.acquired_power', function(artifactID)
-  	return LAD.GetAcquiredArtifactPower(artifactID)
+  return LAD.GetAcquiredArtifactPower(artifactID)
 end)
 
 NeP.DSL:Register('artifact.active_id', function()
-	return LAD.GetActiveArtifactID()
+  return LAD.GetActiveArtifactID()
 end)
 
 NeP.DSL:Register('artifact.knowledge', function()
-	return select(1,LAD.GetArtifactKnowledge())
+  return select(1,LAD.GetArtifactKnowledge())
 end)
 
 NeP.DSL:Register('artifact.power', function(artifactID)
-	return select(3,LAD.GetArtifactPower(artifactID))
+  return select(3,LAD.GetArtifactPower(artifactID))
 end)
 
 NeP.DSL:Register('artifact.relics', function(artifactID)
-	return LAD.GetArtifactRelics(artifactID)
+  return LAD.GetArtifactRelics(artifactID)
 end)
 
 NeP.DSL:Register('artifact.num_obtained', function()
-	return LAD.GetNumObtainedArtifacts()
+  return LAD.GetNumObtainedArtifacts()
 end)
