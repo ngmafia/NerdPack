@@ -139,6 +139,13 @@ function NeP.CombatTracker:TimeToDie(unit)
 	return ttd or 8675309
 end
 
+function NeP.CombatTracker:LastCast(unit)
+  local GUID = UnitGUID(unit)
+  if Data[GUID] then
+    return Data[GUID].lastcast
+  end
+end
+
 NeP.Listener:Add('NeP_CombatTracker', 'COMBAT_LOG_EVENT_UNFILTERED', function(...)
 	local _, EVENT, _,_,_,_,_, GUID = ...
 	-- Add the unit to our data if we dont have it
