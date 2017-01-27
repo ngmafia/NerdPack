@@ -325,10 +325,6 @@ NeP.DSL:Register("player", function(target)
   return UnitIsPlayer(target)
 end)
 
-NeP.DSL:Register("isself", function(target)
-  return UnitIsUnit(target, 'player')
-end)
-
 NeP.DSL:Register("exists", function(target)
   return UnitExists(target)
 end)
@@ -514,6 +510,11 @@ end)
 
 NeP.DSL:Register('swimming', function ()
   return IsSwimming()
+end)
+
+--return if a unit is a unit
+NeP.DSL:Register('is', function(a,b)
+  return UnitIsUnit(a,b)
 end)
 
 NeP.DSL:Register("lastcast", function(Unit, Spell)
