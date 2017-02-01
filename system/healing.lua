@@ -32,14 +32,22 @@ local function GetPredictedHealth(unit)
 	return UnitHealth(unit)-(UnitGetTotalHealAbsorbs(unit) or 0)+(UnitGetIncomingHeals(unit) or 0)
 end
 
+local function GetPredictedHealth_Percent(unit)
+	return math.floor((GetPredictedHealth(unit)/UnitHealthMax(unit))*100)
+end
+
+local function healthPercent(unit)
+	return math.floor((UnitHealth(unit)/UnitHealthMax(unit))*100)
+end
+
 -- This Add's more index to the Obj in the OM table
 local function Add(Obj)
 	local Role = UnitGroupRolesAssigned(Obj.key)
 	local healthRaw = UnitHealth(Obj.key)
 	local maxHealth = UnitHealthMax(Obj.key)
-	local healthPercent =  (healthRaw / maxHealth) * 100
-	Obj.healthPredict = GetPredictedHealth(Obj.key)
-	Obj.health = healthPercent
+	Obj.predicted = GetPredictedHealth_Percent(Obj.key)
+	Obj.predicted_Raw = GetPredictedHealth(Obj.key)
+	Obj.health = healthPercent(Obj.key)
 	Obj.healthRaw = healthRaw
 	Obj.healthMax = maxHealth
 	Obj.role = Role
@@ -52,6 +60,8 @@ local function Refresh(GUID, Obj)
 	temp.health = (healthRaw / UnitHealthMax(temp.key)) * 100
 	temp.healthRaw = healthRaw
 	temp.distance = Obj.distance
+	temp.predicted = GetPredictedHealth_Percent(Obj.key)
+	temp.predicted_Raw = GetPredictedHealth(Obj.key)
 end
 
 function NeP.Healing:GetRoster()
@@ -76,25 +86,28 @@ C_Timer.NewTicker(0.1, (function()
 end), nil)
 
 NeP.DSL:Register("health", function(target)
-	local GUID = UnitGUID(target)
-	local Obj = Roster[GUID]
+	local Obj = Roster[UnitGUID(target)]
 	return Obj and Obj.health or math.floor((UnitHealth(target) / UnitHealthMax(target)) * 100)
 end)
 
 NeP.DSL:Register("health.actual", function(target)
-	local GUID = UnitGUID(target)
-	local Obj = Roster[GUID]
+	local Obj = Roster[UnitGUID(target)]
 	return Obj and Obj.healthRaw or UnitHealth(target)
 end)
 
 NeP.DSL:Register("health.max", function(target)
-	local GUID = UnitGUID(target)
-	local Obj = Roster[GUID]
+	local Obj = Roster[UnitGUID(target)]
 	return Obj and Obj.maxHealth or UnitHealthMax(target)
 end)
 
-NeP.DSL:Register("health.predicted", function(unit)
-	return NeP.Healing:GetPredictedHealth(unit)
+NeP.DSL:Register("health.predicted", function(target)
+	local Obj = Roster[UnitGUID(target)]
+	return Obj and Obj.predicted or UnitHealth(target)
+end)
+
+NeP.DSL:Register("health.predicted.actual", function(target)
+	local Obj = Roster[UnitGUID(target)]
+	return Obj and Obj.predicted_Raw or UnitHealth(target)
 end)
 
 -- USAGE: UNIT.area(DISTANCE, HEALTH).heal >= #
