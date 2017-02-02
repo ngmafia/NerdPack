@@ -3,7 +3,6 @@ local UnitExists   = UnitExists
 local UnitGUID     = UnitGUID
 local C_Timer      = C_Timer
 local wipe         = wipe
-local UnitIsFriend = UnitIsFriend
 
 local Cache = {
   Enemy              = {},

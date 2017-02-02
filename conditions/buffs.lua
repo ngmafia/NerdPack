@@ -1,7 +1,6 @@
 local _, NeP       = ...
 local UnitBuff     = UnitBuff
 local UnitDebuff   = UnitDebuff
-local GetSpellInfo = GetSpellInfo
 local GetTime      = GetTime
 
 local function UnitBuffL(target, spell, own)

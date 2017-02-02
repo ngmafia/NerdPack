@@ -123,7 +123,7 @@ function NeP.Compiler.Spell(eval, name)
 	eval[1] = ref
 end
 
-function NeP.Compiler.Target(eval, name)
+function NeP.Compiler.Target(eval)
 	local ref = {}
 	if type(eval[3]) == 'string' then
 		ref.target = eval[3]
@@ -169,7 +169,7 @@ function NeP.Compiler.Conditions(eval, name)
 end
 
 function NeP.Compiler.CondLegacy(cond)
-	local str = ''
+	local str
 	if type(cond) == 'boolean' then
 		str = tostring(cond):lower()
 	elseif type(cond) == 'function' then

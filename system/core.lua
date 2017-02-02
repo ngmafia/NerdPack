@@ -18,7 +18,6 @@ local GetFlyoutSlotInfo    = GetFlyoutSlotInfo
 local HasPetSpells         = HasPetSpells
 local BOOKTYPE_SPELL       = BOOKTYPE_SPELL
 local BOOKTYPE_PET         = BOOKTYPE_PET
-local C_Timer              = C_Timer
 
 function NeP.Core:Print(...)
 	print('[|cff'..NeP.Color..'NeP|r]', ...)

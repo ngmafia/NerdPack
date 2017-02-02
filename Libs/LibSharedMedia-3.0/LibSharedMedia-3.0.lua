@@ -16,22 +16,18 @@ if not lib then return end
 
 local _G = getfenv(0)
 
-local pairs		= _G.pairs
-local type		= _G.type
-
-local band			= _G.bit.band
-
-local table_insert	= _G.table.insert
-local table_sort	= _G.table.sort
-
-local locale = GetLocale()
+local pairs		           = _G.pairs
+local type		           = _G.type
+local band			         = _G.bit.band
+local table_sort	       = _G.table.sort
+local locale             = GetLocale()
 local locale_is_western
-local LOCALE_MASK = 0
-lib.LOCALE_BIT_koKR		= 1
-lib.LOCALE_BIT_ruRU		= 2
-lib.LOCALE_BIT_zhCN		= 4
-lib.LOCALE_BIT_zhTW		= 8
-lib.LOCALE_BIT_western	= 128
+local LOCALE_MASK        = 0
+lib.LOCALE_BIT_koKR		   = 1
+lib.LOCALE_BIT_ruRU		   = 2
+lib.LOCALE_BIT_zhCN		   = 4
+lib.LOCALE_BIT_zhTW		   = 8
+lib.LOCALE_BIT_western	 = 128
 
 local CallbackHandler = LibStub:GetLibrary("CallbackHandler-1.0")
 
@@ -123,69 +119,69 @@ Due to this, we cannot use it as a replacement for FRIZQT__.TTF
 ]]
 
 if locale == "koKR" then
-	LOCALE_MASK = lib.LOCALE_BIT_koKR
---
-	SML_MT_font["굵은 글꼴"]		= [[Fonts\2002B.TTF]]
-	SML_MT_font["기본 글꼴"]		= [[Fonts\2002.TTF]]
-	SML_MT_font["데미지 글꼴"]		= [[Fonts\K_Damage.TTF]]
-	SML_MT_font["퀘스트 글꼴"]		= [[Fonts\K_Pagetext.TTF]]
---
-	lib.DefaultMedia["font"] = "기본 글꼴" -- someone from koKR please adjust if needed
---
+  LOCALE_MASK = lib.LOCALE_BIT_koKR
+  --
+  SML_MT_font["굵은 글꼴"]		= [[Fonts\2002B.TTF]]
+  SML_MT_font["기본 글꼴"]		= [[Fonts\2002.TTF]]
+  SML_MT_font["데미지 글꼴"]		= [[Fonts\K_Damage.TTF]]
+  SML_MT_font["퀘스트 글꼴"]		= [[Fonts\K_Pagetext.TTF]]
+  --
+  lib.DefaultMedia["font"] = "기본 글꼴" -- someone from koKR please adjust if needed
+  --
 elseif locale == "zhCN" then
-	LOCALE_MASK = lib.LOCALE_BIT_zhCN
---
-	SML_MT_font["伤害数字"]		= [[Fonts\ARKai_C.ttf]]
-	SML_MT_font["默认"]			= [[Fonts\ARKai_T.ttf]]
-	SML_MT_font["聊天"]			= [[Fonts\ARHei.ttf]]
---
-	lib.DefaultMedia["font"] = "默认" -- someone from zhCN please adjust if needed
---
+  LOCALE_MASK = lib.LOCALE_BIT_zhCN
+  --
+  SML_MT_font["伤害数字"]		= [[Fonts\ARKai_C.ttf]]
+  SML_MT_font["默认"]			= [[Fonts\ARKai_T.ttf]]
+  SML_MT_font["聊天"]			= [[Fonts\ARHei.ttf]]
+  --
+  lib.DefaultMedia["font"] = "默认" -- someone from zhCN please adjust if needed
+  --
 elseif locale == "zhTW" then
-	LOCALE_MASK = lib.LOCALE_BIT_zhTW
---
-	SML_MT_font["提示訊息"]		= [[Fonts\bHEI00M.ttf]]
-	SML_MT_font["聊天"]			= [[Fonts\bHEI01B.ttf]]
-	SML_MT_font["傷害數字"]		= [[Fonts\bKAI00M.ttf]]
-	SML_MT_font["預設"]			= [[Fonts\bLEI00D.ttf]]
---
-	lib.DefaultMedia["font"] = "預設" -- someone from zhTW please adjust if needed
+  LOCALE_MASK = lib.LOCALE_BIT_zhTW
+  --
+  SML_MT_font["提示訊息"]		= [[Fonts\bHEI00M.ttf]]
+  SML_MT_font["聊天"]			= [[Fonts\bHEI01B.ttf]]
+  SML_MT_font["傷害數字"]		= [[Fonts\bKAI00M.ttf]]
+  SML_MT_font["預設"]			= [[Fonts\bLEI00D.ttf]]
+  --
+  lib.DefaultMedia["font"] = "預設" -- someone from zhTW please adjust if needed
 
 elseif locale == "ruRU" then
-	LOCALE_MASK = lib.LOCALE_BIT_ruRU
---
-	SML_MT_font["2002"]								= [[Fonts\2002.TTF]]
-	SML_MT_font["2002 Bold"]						= [[Fonts\2002B.TTF]]
-	SML_MT_font["AR CrystalzcuheiGBK Demibold"]		= [[Fonts\ARHei.TTF]]
-	SML_MT_font["AR ZhongkaiGBK Medium (Combat)"]	= [[Fonts\ARKai_C.TTF]]
-	SML_MT_font["AR ZhongkaiGBK Medium"]			= [[Fonts\ARKai_T.TTF]]
-	SML_MT_font["Arial Narrow"]						= [[Fonts\ARIALN.TTF]]
-	SML_MT_font["Friz Quadrata TT"]					= [[Fonts\FRIZQT___CYR.TTF]]
-	SML_MT_font["MoK"]								= [[Fonts\K_Pagetext.TTF]]
-	SML_MT_font["Morpheus"]							= [[Fonts\MORPHEUS_CYR.TTF]]
-	SML_MT_font["Nimrod MT"]						= [[Fonts\NIM_____.ttf]]
-	SML_MT_font["Skurri"]							= [[Fonts\SKURRI_CYR.TTF]]
---
-	lib.DefaultMedia.font = "Friz Quadrata TT"
---
+  LOCALE_MASK = lib.LOCALE_BIT_ruRU
+  --
+  SML_MT_font["2002"]								= [[Fonts\2002.TTF]]
+  SML_MT_font["2002 Bold"]						= [[Fonts\2002B.TTF]]
+  SML_MT_font["AR CrystalzcuheiGBK Demibold"]		= [[Fonts\ARHei.TTF]]
+  SML_MT_font["AR ZhongkaiGBK Medium (Combat)"]	= [[Fonts\ARKai_C.TTF]]
+  SML_MT_font["AR ZhongkaiGBK Medium"]			= [[Fonts\ARKai_T.TTF]]
+  SML_MT_font["Arial Narrow"]						= [[Fonts\ARIALN.TTF]]
+  SML_MT_font["Friz Quadrata TT"]					= [[Fonts\FRIZQT___CYR.TTF]]
+  SML_MT_font["MoK"]								= [[Fonts\K_Pagetext.TTF]]
+  SML_MT_font["Morpheus"]							= [[Fonts\MORPHEUS_CYR.TTF]]
+  SML_MT_font["Nimrod MT"]						= [[Fonts\NIM_____.ttf]]
+  SML_MT_font["Skurri"]							= [[Fonts\SKURRI_CYR.TTF]]
+  --
+  lib.DefaultMedia.font = "Friz Quadrata TT"
+  --
 else
-	LOCALE_MASK = lib.LOCALE_BIT_western
-	locale_is_western = true
---
-	SML_MT_font["2002"]								= [[Fonts\2002.TTF]]
-	SML_MT_font["2002 Bold"]						= [[Fonts\2002B.TTF]]
-	SML_MT_font["AR CrystalzcuheiGBK Demibold"]		= [[Fonts\ARHei.TTF]]
-	SML_MT_font["AR ZhongkaiGBK Medium (Combat)"]	= [[Fonts\ARKai_C.TTF]]
-	SML_MT_font["AR ZhongkaiGBK Medium"]			= [[Fonts\ARKai_T.TTF]]
-	SML_MT_font["Arial Narrow"]						= [[Fonts\ARIALN.TTF]]
-	SML_MT_font["Friz Quadrata TT"]					= [[Fonts\FRIZQT__.TTF]]
-	SML_MT_font["MoK"]								= [[Fonts\K_Pagetext.TTF]]
-	SML_MT_font["Morpheus"]							= [[Fonts\MORPHEUS_CYR.TTF]]
-	SML_MT_font["Nimrod MT"]						= [[Fonts\NIM_____.ttf]]
-	SML_MT_font["Skurri"]							= [[Fonts\SKURRI_CYR.TTF]]
---
-	lib.DefaultMedia.font = "Friz Quadrata TT"
---
+  LOCALE_MASK = lib.LOCALE_BIT_western
+  locale_is_western = true
+  --
+  SML_MT_font["2002"]								= [[Fonts\2002.TTF]]
+  SML_MT_font["2002 Bold"]						= [[Fonts\2002B.TTF]]
+  SML_MT_font["AR CrystalzcuheiGBK Demibold"]		= [[Fonts\ARHei.TTF]]
+  SML_MT_font["AR ZhongkaiGBK Medium (Combat)"]	= [[Fonts\ARKai_C.TTF]]
+  SML_MT_font["AR ZhongkaiGBK Medium"]			= [[Fonts\ARKai_T.TTF]]
+  SML_MT_font["Arial Narrow"]						= [[Fonts\ARIALN.TTF]]
+  SML_MT_font["Friz Quadrata TT"]					= [[Fonts\FRIZQT__.TTF]]
+  SML_MT_font["MoK"]								= [[Fonts\K_Pagetext.TTF]]
+  SML_MT_font["Morpheus"]							= [[Fonts\MORPHEUS_CYR.TTF]]
+  SML_MT_font["Nimrod MT"]						= [[Fonts\NIM_____.ttf]]
+  SML_MT_font["Skurri"]							= [[Fonts\SKURRI_CYR.TTF]]
+  --
+  lib.DefaultMedia.font = "Friz Quadrata TT"
+  --
 end
 
 -- STATUSBAR
@@ -201,92 +197,92 @@ lib.MediaTable.sound["None"]								= [[Interface\Quiet.ogg]]	-- Relies on the f
 lib.DefaultMedia.sound = "None"
 
 local function rebuildMediaList(mediatype)
-	local mtable = mediaTable[mediatype]
-	if not mtable then return end
-	if not mediaList[mediatype] then mediaList[mediatype] = {} end
-	local mlist = mediaList[mediatype]
-	-- list can only get larger, so simply overwrite it
-	local i = 0
-	for k in pairs(mtable) do
-		i = i + 1
-		mlist[i] = k
-	end
-	table_sort(mlist)
+  local mtable = mediaTable[mediatype]
+  if not mtable then return end
+  if not mediaList[mediatype] then mediaList[mediatype] = {} end
+  local mlist = mediaList[mediatype]
+  -- list can only get larger, so simply overwrite it
+  local i = 0
+  for k in pairs(mtable) do
+    i = i + 1
+    mlist[i] = k
+  end
+  table_sort(mlist)
 end
 
 function lib:Register(mediatype, key, data, langmask)
-	if type(mediatype) ~= "string" then
-		error(MAJOR..":Register(mediatype, key, data, langmask) - mediatype must be string, got "..type(mediatype))
-	end
-	if type(key) ~= "string" then
-		error(MAJOR..":Register(mediatype, key, data, langmask) - key must be string, got "..type(key))
-	end
-	mediatype = mediatype:lower()
-	if mediatype == lib.MediaType.FONT and ((langmask and band(langmask, LOCALE_MASK) == 0) or not (langmask or locale_is_western)) then return false end
-	if mediatype == lib.MediaType.SOUND and type(data) == "string" then
-		local path = data:lower()
-		-- Only ogg and mp3 are valid sounds.
-		if not path:find(".ogg", nil, true) and not path:find(".mp3", nil, true) then
-			return false
-		end
-	end
-	if not mediaTable[mediatype] then mediaTable[mediatype] = {} end
-	local mtable = mediaTable[mediatype]
-	if mtable[key] then return false end
-	
-	mtable[key] = data
-	rebuildMediaList(mediatype)
-	self.callbacks:Fire("LibSharedMedia_Registered", mediatype, key)
-	return true
+  if type(mediatype) ~= "string" then
+    error(MAJOR..":Register(mediatype, key, data, langmask) - mediatype must be string, got "..type(mediatype))
+  end
+  if type(key) ~= "string" then
+    error(MAJOR..":Register(mediatype, key, data, langmask) - key must be string, got "..type(key))
+  end
+  mediatype = mediatype:lower()
+  if mediatype == lib.MediaType.FONT and ((langmask and band(langmask, LOCALE_MASK) == 0) or not (langmask or locale_is_western)) then return false end
+  if mediatype == lib.MediaType.SOUND and type(data) == "string" then
+    local path = data:lower()
+    -- Only ogg and mp3 are valid sounds.
+    if not path:find(".ogg", nil, true) and not path:find(".mp3", nil, true) then
+      return false
+    end
+  end
+  if not mediaTable[mediatype] then mediaTable[mediatype] = {} end
+  local mtable = mediaTable[mediatype]
+  if mtable[key] then return false end
+
+  mtable[key] = data
+  rebuildMediaList(mediatype)
+  self.callbacks:Fire("LibSharedMedia_Registered", mediatype, key)
+  return true
 end
 
 function lib:Fetch(mediatype, key, noDefault)
-	local mtt = mediaTable[mediatype]
-	local overridekey = overrideMedia[mediatype]
-	local result = mtt and ((overridekey and mtt[overridekey] or mtt[key]) or (not noDefault and defaultMedia[mediatype] and mtt[defaultMedia[mediatype]])) or nil
-	return result ~= "" and result or nil
+  local mtt = mediaTable[mediatype]
+  local overridekey = overrideMedia[mediatype]
+  local result = mtt and ((overridekey and mtt[overridekey] or mtt[key]) or (not noDefault and defaultMedia[mediatype] and mtt[defaultMedia[mediatype]])) or nil
+  return result ~= "" and result or nil
 end
 
 function lib:IsValid(mediatype, key)
-	return mediaTable[mediatype] and (not key or mediaTable[mediatype][key]) and true or false
+  return mediaTable[mediatype] and (not key or mediaTable[mediatype][key]) and true or false
 end
 
 function lib:HashTable(mediatype)
-	return mediaTable[mediatype]
+  return mediaTable[mediatype]
 end
 
 function lib:List(mediatype)
-	if not mediaTable[mediatype] then
-		return nil
-	end
-	if not mediaList[mediatype] then
-		rebuildMediaList(mediatype)
-	end
-	return mediaList[mediatype]
+  if not mediaTable[mediatype] then
+    return nil
+  end
+  if not mediaList[mediatype] then
+    rebuildMediaList(mediatype)
+  end
+  return mediaList[mediatype]
 end
 
 function lib:GetGlobal(mediatype)
-	return overrideMedia[mediatype]
+  return overrideMedia[mediatype]
 end
 
 function lib:SetGlobal(mediatype, key)
-	if not mediaTable[mediatype] then
-		return false
-	end
-	overrideMedia[mediatype] = (key and mediaTable[mediatype][key]) and key or nil
-	self.callbacks:Fire("LibSharedMedia_SetGlobal", mediatype, overrideMedia[mediatype])
-	return true
+  if not mediaTable[mediatype] then
+    return false
+  end
+  overrideMedia[mediatype] = (key and mediaTable[mediatype][key]) and key or nil
+  self.callbacks:Fire("LibSharedMedia_SetGlobal", mediatype, overrideMedia[mediatype])
+  return true
 end
 
 function lib:GetDefault(mediatype)
-	return defaultMedia[mediatype]
+  return defaultMedia[mediatype]
 end
 
 function lib:SetDefault(mediatype, key)
-	if mediaTable[mediatype] and mediaTable[mediatype][key] and not defaultMedia[mediatype] then
-		defaultMedia[mediatype] = key
-		return true
-	else
-		return false
-	end
+  if mediaTable[mediatype] and mediaTable[mediatype][key] and not defaultMedia[mediatype] then
+    defaultMedia[mediatype] = key
+    return true
+  else
+    return false
+  end
 end

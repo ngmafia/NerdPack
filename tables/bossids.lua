@@ -138,7 +138,6 @@ local bossids = {
   -------------------------------------------------------------------------------
   [9156]	= true,	-- Ambassador Flamelash
   [8923]	= true,	-- Panzor the Invincible
-  [17808]	= true,	-- Anger'rel
   [9039]	= true,	-- Doom'rel
   [9040]	= true,	-- Dope'rel
   [9037]	= true,	-- Gloom'rel
@@ -391,7 +390,6 @@ local bossids = {
   [54445] = true,	-- Echo of Jaina
   [54123] = true,	-- Echo of Sylvanas
   [54544] = true,	-- Echo of Tyrande
-  [54432] = true,	-- Murozond
 
   -------------------------------------------------------------------------------
   -- Eye of Azshara
@@ -504,7 +502,6 @@ local bossids = {
   -- Halls of Reflection
   -------------------------------------------------------------------------------
   [38112]	= true,	-- Falric
-  [38113]	= true,	-- Marwyn
   [37226]	= true,	-- The Lich King
   [38113]	= true,	-- Marvyn
 
@@ -1749,7 +1746,6 @@ local bossids = {
   [23577]	= true,	-- Halazzi
   [28517]	= true,	-- Halazzi
   [29022]	= true,	-- Halazzi
-  [24239]	= true,	-- Malacrass
 
   -- Final Bosses
   [24239]	= true,	-- Hex Lord Malacrass
@@ -1792,19 +1788,19 @@ local bossids = {
 }
 
 function NeP.BossID:Add(...)
-	if type(...) == 'table' then
-		for id in pairs(...) do
+  if type(...) == 'table' then
+    for id in pairs(...) do
       id = tonumber(id)
-			if id then
-				bossids[id] = true
-			end
-		end
-	else
-		local id = tonumber(...)
+      if id then
+        bossids[id] = true
+      end
+    end
+  else
+    local id = tonumber(...)
     if id then
       bossids[id] = true
     end
-	end
+  end
 end
 
 function NeP.BossID:Eval(unit)
