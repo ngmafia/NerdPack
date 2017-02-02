@@ -96,7 +96,7 @@ function NeP.Parser.Parse(eval)
 	and (eval.exe or (NeP.Parser.Target(eval) and NeP.Parser.Spell(eval))) then
 		-- Evaluate conditions
 		local tspell = eval.spell or spell.spell
-		if NeP.DSL.Parse(cond, tspell) then
+		if NeP.DSL.Parse(cond, tspell, eval.target) then
 			-- (!spell) this clips the spell
 			if spell.interrupts then
 				if cname == tspell then

@@ -95,14 +95,13 @@ local function Nest(Strg, Spell)
 	return DSL.Parse(Strg, Spell)
 end
 
-local function ProcessCondition(Strg, Spell)
+local function ProcessCondition(Strg, Spell, Target)
 	-- Process Unit Stuff
 	local unitID, rest = strsplit('.', Strg, 2)
-	-- default target
-	local target =  'player'
 	unitID =  NeP.FakeUnits:Filter(unitID)
+	-- condition Target
 	if unitID and UnitExists(unitID) then
-		target = unitID
+		Target = unitID
 		Strg = rest
 	end
 	-- Condition arguments
@@ -111,7 +110,7 @@ local function ProcessCondition(Strg, Spell)
 	Strg = Strg:gsub('%s', '')
 	-- Process the Condition itself
 	local Condition = DSL:Get(Strg)
-	if Condition then return Condition(target, Args) end
+	if Condition then return Condition(Target, Args) end
 end
 
 local fOps = {['!='] = '~=',['='] = '=='}
@@ -144,7 +143,7 @@ local function ExeFunc(Strg)
 	return _G[Strg](Args)
 end
 
-function NeP.DSL.Parse(Strg, Spell)
+function NeP.DSL.Parse(Strg, Spell, Target)
 	local pX = Strg:sub(1, 1)
 	if Strg:find('{(.-)}') then
 		return Nest(Strg, Spell)
@@ -167,7 +166,7 @@ function NeP.DSL.Parse(Strg, Spell)
 	elseif OPs[Strg] then
 		return OPs[Strg](Strg, Spell)
 	elseif Strg:find('%a') then
-		return ProcessCondition(Strg, Spell)
+		return ProcessCondition(Strg, Spell, Target)
 	end
 	return Strg
 end
