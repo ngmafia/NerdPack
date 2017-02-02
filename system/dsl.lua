@@ -110,7 +110,7 @@ local function ProcessCondition(Strg, Spell, Target)
 	Strg = Strg:gsub('%s', '')
 	-- Process the Condition itself
 	local Condition = DSL:Get(Strg)
-	if Condition then return Condition(Target, Args) end
+	if Condition then return Condition(Target or "player", Args) end
 end
 
 local fOps = {['!='] = '~=',['='] = '=='}
