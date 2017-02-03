@@ -32,7 +32,7 @@ end
 
 function NeP.DSL:Register_Deprecated(name, replace, condition, overwrite)
 	name = name:lower()
-	self:RegisterConditon(name, condition, overwrite)
+	self:Register(name, condition, overwrite)
 	if not Deprecated_Warn[name] then
 		Deprecated_Warn[name] = {}
 		Deprecated_Warn[name].replace = replace
