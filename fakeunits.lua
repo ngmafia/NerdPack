@@ -42,7 +42,7 @@ end)
 NeP.FakeUnits:Add('lbuff', function(num, args)
   local role, buff = strsplit(',', args, 2)
     local tempTable = {}
-    for _, Obj in pairs(NeP.OM:GetRoster()) do
+    for _, Obj in pairs(NeP.Healing:GetRoster()) do
         if Obj.role == role and NeP.DSL:Get('buff')(Obj.key, buff) then
             tempTable[#tempTable+1] = {
                 key = Obj.key,
@@ -58,7 +58,7 @@ end)
 NeP.FakeUnits:Add('lnbuff', function(num, args)
   local role, buff = strsplit(',', args, 2)
     local tempTable = {}
-    for _, Obj in pairs(NeP.OM:GetRoster()) do
+    for _, Obj in pairs(NeP.Healing:GetRoster()) do
         if Obj.role == role and not NeP.DSL:Get('buff')(Obj.key, buff) then
             tempTable[#tempTable+1] = {
                 key = Obj.key,
