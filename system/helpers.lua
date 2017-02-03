@@ -14,7 +14,7 @@ end
 
 local UI_Erros = {
 	-- infront / LoS
-	[50] = function(GUID)
+	[50] = function(GUID, spell)
 		addToData(GUID)
 		spellHasFailed[GUID][spell] = ''
 		spellHasFailed[GUID].infront = false
