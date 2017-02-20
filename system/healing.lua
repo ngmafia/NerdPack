@@ -36,6 +36,10 @@ local function GetPredictedHealth_Percent(unit)
 	return math.floor((GetPredictedHealth(unit)/UnitHealthMax(unit))*100)
 end
 
+local function GetMissingPredictedHealth(unit)
+	return UnitHealthMax(unit) - UnitHealth(unit)+(UnitGetTotalHealAbsorbs(unit) or 0)-(UnitGetIncomingHeals(unit) or 0)
+end
+
 local function healthPercent(unit)
 	return math.floor((UnitHealth(unit)/UnitHealthMax(unit))*100)
 end
@@ -46,6 +50,7 @@ local function Add(Obj)
 	local healthRaw = UnitHealth(Obj.key)
 	local maxHealth = UnitHealthMax(Obj.key)
 	Obj.predicted = GetPredictedHealth_Percent(Obj.key)
+	Obj.missingpredicted = GetMissingPredictedHealth(Obj.key)
 	Obj.predicted_Raw = GetPredictedHealth(Obj.key)
 	Obj.health = healthPercent(Obj.key)
 	Obj.healthRaw = healthRaw
@@ -61,6 +66,7 @@ local function Refresh(GUID, Obj)
 	temp.healthRaw = healthRaw
 	temp.distance = Obj.distance
 	temp.predicted = GetPredictedHealth_Percent(Obj.key)
+	temp.missingpredicted = GetMissingPredictedHealth(Obj.key)
 	temp.predicted_Raw = GetPredictedHealth(Obj.key)
 end
 
@@ -108,6 +114,11 @@ end)
 NeP.DSL:Register("health.predicted.actual", function(target)
 	local Obj = Roster[UnitGUID(target)]
 	return Obj and Obj.predicted_Raw or UnitHealth(target)
+end)
+
+NeP.DSL:Register("health.missingpredicted", function(target)
+	local Obj = Roster[UnitGUID(target)]
+	return Obj and Obj.missingpredicted or UnitHealth(target)
 end)
 
 -- USAGE: UNIT.area(DISTANCE, HEALTH).heal >= #
