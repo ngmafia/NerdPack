@@ -5,12 +5,12 @@ local GetTime      = GetTime
 
 local function UnitBuffL(target, spell, own)
   local name,_,_,count,_,_,expires,caster = UnitBuff(target, spell, own)
-  return name, count, expires, caster
+  return name, count, expires, caster or false
 end
 
 local function UnitDebuffL(target, spell, own)
   local name, _,_, count, _,_, expires, caster = UnitDebuff(target, spell, own)
-  return name, count, expires, caster
+  return name, count, expires, caster or false
 end
 
 local heroismBuffs = { 32182, 90355, 80353, 2825, 146555 }
@@ -26,16 +26,17 @@ end)
 ------------------------------------------ BUFFS -----------------------------------------
 ------------------------------------------------------------------------------------------
 NeP.DSL:Register("buff", function(target, spell)
-  return not not UnitBuffL(target, spell, 'PLAYER')
+  print(target, spell)
+  return UnitBuffL(target, spell, 'PLAYER')
 end)
 
-NeP.DSL:Register("buff.any", function(target, spell)
-  return not not UnitBuffL(target, spell)
+NeP.DSL:Register("buff.own", function(target, spell)
+  return UnitBuffL(target, spell)
 end)
 
 NeP.DSL:Register("buff.count", function(target, spell)
   local buff, count = UnitBuffL(target, spell, 'PLAYER')
-  return not not buff and count or 0
+  return buff and count or 0
 end)
 
 NeP.DSL:Register("buff.duration", function(target, spell)
@@ -47,16 +48,16 @@ end)
 ------------------------------------------------------------------------------------------
 
 NeP.DSL:Register("debuff", function(target, spell)
-  return not not UnitDebuffL(target, spell, 'PLAYER')
+  return  UnitDebuffL(target, spell, 'PLAYER')
 end)
 
 NeP.DSL:Register("debuff.any", function(target, spell)
-  return not not UnitDebuffL(target, spell)
+  return UnitDebuffL(target, spell)
 end)
 
 NeP.DSL:Register("debuff.count", function(target, spell)
   local debuff,count = UnitDebuffL(target, spell, 'PLAYER')
-  return not not debuff and count or 0
+  return debuff and count or 0
 end)
 
 NeP.DSL:Register("debuff.duration", function(target, spell)
