@@ -26,7 +26,6 @@ end)
 ------------------------------------------ BUFFS -----------------------------------------
 ------------------------------------------------------------------------------------------
 NeP.DSL:Register("buff", function(target, spell)
-  print(target, spell)
   return UnitBuffL(target, spell, 'PLAYER')
 end)
 
