@@ -17,8 +17,7 @@ local heroismBuffs = { 32182, 90355, 80353, 2825, 146555 }
 NeP.DSL:Register("hashero", function()
   for i = 1, #heroismBuffs do
     local SpellName = NeP.Core:GetSpellName(heroismBuffs[i])
-    local buff = UnitBuffL('player', SpellName)
-    if buff then return true end
+    if UnitBuffL('player', SpellName) then return true end
   end
   return false
 end)
