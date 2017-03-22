@@ -19,7 +19,6 @@ NeP.DSL:Register("hashero", function()
     local SpellName = NeP.Core:GetSpellName(heroismBuffs[i])
     if UnitBuffL('player', SpellName) then return true end
   end
-  return false
 end)
 
 ------------------------------------------ BUFFS -----------------------------------------
