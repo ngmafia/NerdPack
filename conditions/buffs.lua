@@ -4,12 +4,12 @@ local UnitDebuff   = UnitDebuff
 local GetTime      = GetTime
 
 local function UnitBuffL(target, spell, own)
-  local name,_,_,count,_,_,expires,caster = UnitBuff(target, spell, own)
+  local name,_,_,count,_,_,expires,caster = UnitBuff(target, spell, nil, own)
   return name, count, expires, caster or false
 end
 
 local function UnitDebuffL(target, spell, own)
-  local name, _,_, count, _,_, expires, caster = UnitDebuff(target, spell, own)
+  local name, _,_, count, _,_, expires, caster = UnitDebuff(target, spell, nil, own)
   return name, count, expires, caster or false
 end
 
