@@ -29,7 +29,7 @@ NeP.DSL:Register("buff", function(target, spell)
   return UnitBuffL(target, spell, 'PLAYER')
 end)
 
-NeP.DSL:Register("buff.own", function(target, spell)
+NeP.DSL:Register("buff.any", function(target, spell)
   return UnitBuffL(target, spell)
 end)
 
