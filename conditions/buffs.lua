@@ -5,12 +5,12 @@ local GetTime      = GetTime
 
 local function UnitBuffL(target, spell, own)
   local name,_,_,count,_,_,expires,caster = UnitBuff(target, spell, nil, own)
-  return name, count, expires, caster or false
+  return name, count, expires, caster
 end
 
 local function UnitDebuffL(target, spell, own)
   local name, _,_, count, _,_, expires, caster = UnitDebuff(target, spell, nil, own)
-  return name, count, expires, caster or false
+  return name, count, expires, caster
 end
 
 local heroismBuffs = { 32182, 90355, 80353, 2825, 146555 }
