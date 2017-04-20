@@ -20,8 +20,9 @@ NeP.Actions = {}
 
 -- DispelSelf
 NeP.Actions['dispelself'] = function(eval)
-  for _,spellID, _,_,_,_, dispelType in LibDisp:IterateDispellableAuras('player') do
-    if dispelType then
+  for _,spellID, _,_,_,_, dispelType, duration, expires in LibDisp:IterateDispellableAuras('player') do
+    -- wait a random time before dispelling, makes it look less boot like...
+    if dispelType and (duration - expires) > math.random(.5, 1.5) then
       eval.spell = GetSpellInfo(spellID)
       eval.target = 'player'
       eval.func = 'Cast'
