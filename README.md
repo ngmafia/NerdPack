@@ -14,7 +14,7 @@ Protected modules will automate everything and therefore breaks WoW's TOS.
 
 ###Easy install:
 Download NerdPack's toolbox, this will install and update everything for you.  
-[Click Here](http://nerdpackaddon.site/MTS/NerdPack_ToolBox.zip) to download.
+[Click Here](https://github.com/MrTheSoulz/NerdPack-Tool/raw/master/NeP-ToolBox_Release.zip) to download.
 ![](http://nerdpackaddon.site/MTS/ToolBox_Show1.png)
 ![](http://nerdpackaddon.site/MTS/ToolBox_Show2.png)
 
