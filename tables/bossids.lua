@@ -32,3 +32,17 @@ function NeP.BossID:Eval(unit)
     return bossids[tonumber(unit)]
   end
 end
+
+NeP.BossID:Add({
+  -- The Nighthold
+  [102263] = true, -- Skorpyron
+  [101002] = true, -- Krosus
+  [104415] = true, -- Chronomatic Anomaly
+  [104288] = true, -- Trilliax
+  [103758] = true, -- Star Augur Etraeus
+  [105503] = true, -- Gul'dan
+  [110965] = true, -- Grand Magistrix Elisande
+  [107699] = true, -- Spellblade Aluriel
+  [104528] = true, -- High Botanist Tel'arn
+  [103685] = true, -- Tichondrius
+})
