@@ -15,10 +15,9 @@ function NeP.Core:string_split(string, delimiter)
 end
 
 local function pArgs(Strg)
+	Strg = Strg or ""
 	local Args = Strg:match('%((.+)%)')
-	if Args then
-		Strg = Strg:gsub('%((.+)%)', '')
-	end
+	Strg = Strg:gsub('%((.+)%)', '')
 	return Strg, Args
 end
 
