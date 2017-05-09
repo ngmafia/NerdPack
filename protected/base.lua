@@ -39,7 +39,7 @@ NeP.Protected.LineOfSight = function(_,b)
   return NeP.Helpers:Infront(b)
 end
 
-local ValidUnits = {'player', 'mouseover', 'target', 'arena1', 'arena2', 'focus', 'pet'}
+local ValidUnits = {'player', 'mouseover', 'target', 'arena1', 'arena2', 'arena3', 'arena4', 'focus', 'pet', 'boss1', 'boss2', 'boss3', 'boss4'}
 NeP.OM.Maker = function()
   -- If in Group scan frames...
   if IsInGroup() or IsInRaid() then
