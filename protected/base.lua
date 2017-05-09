@@ -39,15 +39,20 @@ NeP.Protected.LineOfSight = function(_,b)
   return NeP.Helpers:Infront(b)
 end
 
-local ValidUnits = {'player', 'mouseover', 'target', 'arena1', 'arena2', 'arena3', 'arena4', 'focus', 'pet', 'boss1', 'boss2', 'boss3', 'boss4'}
+local ValidUnits = {'player', 'mouseover', 'target', 'focus', 'pet',}
+local ValidUnitsN = {'boss', 'arena', 'arenapet}
+
 NeP.OM.Maker = function()
   -- If in Group scan frames...
   if IsInGroup() or IsInRaid() then
     local prefix = (IsInRaid() and 'raid') or 'party'
     for i = 1, GetNumGroupMembers() do
-      local object = prefix..i
-      NeP.OM:Add(object)
-      NeP.OM:Add(object..'target')
+      local unit = prefix..i
+			local pet = prefix..'pet'..i
+      NeP.OM:Add(unit)
+			NeP.OM:Add(pet)
+      NeP.OM:Add(unit..'target')
+      NeP.OM:Add(pet..'target')
     end
   end
   -- Valid Units
@@ -55,5 +60,13 @@ NeP.OM.Maker = function()
     local object = ValidUnits[i]
     NeP.OM:Add(object)
     NeP.OM:Add(object..'target')
+  end
+	-- Valid Units with numb (5)
+  for i=1, #ValidUnitsN do
+			for k=1, 5 do
+				local object = ValidUnitsN[i]..k
+				NeP.OM:Add(object)
+				NeP.OM:Add(object..'target')
+			end
   end
 end
