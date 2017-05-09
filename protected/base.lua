@@ -40,7 +40,7 @@ NeP.Protected.LineOfSight = function(_,b)
 end
 
 local ValidUnits = {'player', 'mouseover', 'target', 'focus', 'pet',}
-local ValidUnitsN = {'boss', 'arena', 'arenapet}
+local ValidUnitsN = {'boss', 'arena', 'arenapet'}
 
 NeP.OM.Maker = function()
   -- If in Group scan frames...
@@ -62,11 +62,11 @@ NeP.OM.Maker = function()
     NeP.OM:Add(object..'target')
   end
 	-- Valid Units with numb (5)
-  for i=1, #ValidUnitsN do
-			for k=1, 5 do
-				local object = ValidUnitsN[i]..k
-				NeP.OM:Add(object)
-				NeP.OM:Add(object..'target')
-			end
-  end
+	for i=1, #ValidUnitsN do
+		for k=1, 5 do
+			local object = ValidUnitsN[i]..k
+			NeP.OM:Add(object)
+			NeP.OM:Add(object..'target')
+		end
+	end
 end
