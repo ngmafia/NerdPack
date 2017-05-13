@@ -112,6 +112,7 @@ local function ProcessCondition(Strg, Spell, Target)
 	-- Process the Condition itself
 	local Condition = DSL:Get(Strg)
 	if Condition then return Condition(Target or "player", Args) end
+	return Strg
 end
 
 local fOps = {['!='] = '~=',['='] = '=='}
