@@ -20,7 +20,7 @@ local function pArgs(Strg, Spell, Target)
 	Strg = Strg or ""
 	local Args = Strg:match('%((.+)%)')
 	Strg = Strg:gsub('%((.+)%)', '')
-	if Args then Args = DSL.Parse(Args, Spell, Target) end
+	--if Args then print('> '..Args) Args = DSL.Parse(Args, Spell, Target) print('<',Args) end
 	return Strg, Args, Spell, Target
 end
 
@@ -112,8 +112,7 @@ local function ProcessCondition(Strg, Spell, Target)
 	Strg = Strg:gsub('%s', '')
 	-- Process the Condition itself
 	local Condition = DSL:Get(Strg)
-	if Condition then return Condition(Target or "player", Args) end
-	return Strg
+	return Condition(Target or "player", Args)
 end
 
 local fOps = {['!='] = '~=',['='] = '=='}
