@@ -16,11 +16,11 @@ function NeP.Core:string_split(string, delimiter)
 	return result
 end
 
-local function pArgs(Strg)
+local function pArgs(Strg, Spell, Target)
 	Strg = Strg or ""
 	local Args = Strg:match('%((.+)%)')
 	Strg = Strg:gsub('%((.+)%)', '')
-	return Strg, Args
+	return Strg, DSL.Parse(Args, Spell, Target)
 end
 
 local function FilerNumber(str)
@@ -106,7 +106,7 @@ local function ProcessCondition(Strg, Spell, Target)
 		Strg = rest
 	end
 	-- Condition arguments
-	local Strg, Args = pArgs(Strg)
+	local Strg, Args = pArgs(Strg, Spell, Target)
 	if not Args then Args = Spell end
 	Strg = Strg:gsub('%s', '')
 	-- Process the Condition itself
