@@ -20,7 +20,8 @@ local function pArgs(Strg, Spell, Target)
 	Strg = Strg or ""
 	local Args = Strg:match('%((.+)%)')
 	Strg = Strg:gsub('%((.+)%)', '')
-	return Strg, DSL.Parse(Args, Spell, Target)
+	if Args then Args = DSL.Parse(Args, Spell, Target) end
+	return Strg, Args, Spell, Target
 end
 
 local function FilerNumber(str)
