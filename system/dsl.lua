@@ -41,7 +41,7 @@ local OPs = {
 	['-']     = function(arg1, arg2) return arg1 - arg2 end,
 	['/']     = function(arg1, arg2) return arg1 / arg2 end,
 	['*']     = function(arg1, arg2) return arg1 * arg2 end,
-	['!']     = function(arg1, arg2) return not DSL.Parse(arg1, arg2) end,
+	['!']     = function(arg1, arg2, Target) return not DSL.Parse(arg1, arg2, Target) end,
 	['@']     = function(arg1) return NeP.Library:Parse(pArgs(arg1)) end,
 	['true']  = function() return true end,
 	['false'] = function() return false end,
@@ -52,21 +52,21 @@ local function DoMath(arg1, arg2, token)
 	return (arg1 and arg2) and OPs[token](arg1, arg2)
 end
 
-local function _AND(Strg, Spell)
+local function _AND(Strg, Spell, Target)
 	local Arg1, Arg2 = Strg:match('(.*)&(.*)')
-	Arg1 = DSL.Parse(Arg1, Spell)
+	Arg1 = DSL.Parse(Arg1, Spell, Target)
 	-- Dont process anything in front sence we already failed
 	if not Arg1 then return false end
-	Arg2 = DSL.Parse(Arg2, Spell)
+	Arg2 = DSL.Parse(Arg2, Spell, Target)
 	return Arg1 and Arg2
 end
 
-local function _OR(Strg, Spell)
+local function _OR(Strg, Spell, Target)
 	local Arg1, Arg2 = Strg:match('(.*)||(.*)')
 	Arg1 = DSL.Parse(Arg1, Spell)
 	-- Dont process anything in front sence we already hit
 	if Arg1 then return true end
-	Arg2 = DSL.Parse(Arg2, Spell)
+	Arg2 = DSL.Parse(Arg2, Spell, Target)
 	return Arg1 or Arg2
 end
 
@@ -86,12 +86,12 @@ local function FindNest(Strg)
 	end
 end
 
-local function Nest(Strg, Spell)
+local function Nest(Strg, Spell, Target)
 	local Start, End = FindNest(Strg)
-	local Result = DSL.Parse(Strg:sub(Start+1, End-1), Spell)
+	local Result = DSL.Parse(Strg:sub(Start+1, End-1), Spell, Target)
 	Result = tostring(Result or false)
 	Strg = Strg:sub(1, Start-1)..Result..Strg:sub(End+1)
-	return DSL.Parse(Strg, Spell)
+	return DSL.Parse(Strg, Spell, Target)
 end
 
 local function ProcessCondition(Strg, Spell, Target)
@@ -113,20 +113,20 @@ local function ProcessCondition(Strg, Spell, Target)
 end
 
 local fOps = {['!='] = '~=',['='] = '=='}
-local function Comperatores(Strg, Spell)
+local function Comperatores(Strg, Spell, Target)
 	local OP = ''
 	for Token in Strg:gmatch('[><=~]') do OP = OP..Token end
 	if Strg:find('!=') then OP = '!=' end
 	local arg1, arg2 = unpack(NeP.Core:string_split(Strg, OP))
-	arg1, arg2 = DSL.Parse(arg1, Spell), DSL.Parse(arg2, Spell)
+	arg1, arg2 = DSL.Parse(arg1, Spell, Target), DSL.Parse(arg2, Spell, Target)
 	return DoMath(arg1, arg2, (fOps[OP] or OP))
 end
 
-local function StringMath(Strg, Spell)
+local function StringMath(Strg, Spell, Target)
 	local OP, total = Strg:match('[/%*%+%-]'), 0
 	local tempT = NeP.Core:string_split(Strg, OP)
 	for i=1, #tempT do
-		Strg = DSL.Parse(tempT[i], Spell)
+		Strg = DSL.Parse(tempT[i], Spell, Target)
 		if total == 0 then
 			total = Strg
 		else
@@ -145,25 +145,25 @@ end
 function NeP.DSL.Parse(Strg, Spell, Target)
 	local pX = Strg:sub(1, 1)
 	if Strg:find('{(.-)}') then
-		return Nest(Strg, Spell)
+		return Nest(Strg, Spell, Target)
 	elseif Strg:find('||') then
-		return _OR(Strg, Spell)
+		return _OR(Strg, Spell, Target)
 	elseif Strg:find('&') then
-		return _AND(Strg, Spell)
+		return _AND(Strg, Spell, Target)
 	elseif OPs[pX] then
 		Strg = Strg:sub(2);
-		return OPs[pX](Strg, Spell)
+		return OPs[pX](Strg, Spell, Target)
 	elseif Strg:find("func=") then
 		Strg = Strg:sub(6);
 		return ExeFunc(Strg)
 	elseif Strg:find('[><=~]') then
-		return Comperatores(Strg, Spell)
+		return Comperatores(Strg, Spell, Target)
 	elseif Strg:find('!=') then
-		return Comperatores(Strg, Spell)
+		return Comperatores(Strg, Spell, Target)
 	elseif Strg:find("[/%*%+%-]") then
-		return StringMath(Strg, Spell)
+		return StringMath(Strg, Spell, Target)
 	elseif OPs[Strg] then
-		return OPs[Strg](Strg, Spell)
+		return OPs[Strg](Strg, Spell, Target)
 	elseif Strg:find('%a') then
 		return ProcessCondition(Strg, Spell, Target)
 	end
