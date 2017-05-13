@@ -1,6 +1,8 @@
 local _, NeP     = ...
 local DSL        = NeP.DSL
 local UnitExists = ObjectExists or UnitExists
+local unpack     = unpack
+local strsplit   = strsplit
 
 function NeP.Core:string_split(string, delimiter)
 	local result, from = {}, 1
