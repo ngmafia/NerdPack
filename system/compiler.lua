@@ -7,6 +7,7 @@ local GetInventoryItemID   = GetInventoryItemID
 local GetItemInfo          = GetItemInfo
 local GetSpellInfo         = GetSpellInfo
 local UnitExists           = ObjectExists or UnitExists
+local unpack               = unpack
 
 NeP.Compiler = {}
 
@@ -127,24 +128,27 @@ function NeP.Compiler.Target(eval)
 	local ref = {}
 	if type(eval[3]) == 'string' then
 		ref.target = eval[3]
+		-- ground
+		if ref.target:find('.ground') then
+			ref.target = ref.target:sub(0,-8)
+			ref.ground = true
+			eval.func = 'CastGround'
+			-- This is to alow casting at the cursor location where no unit exists
+			if ref.target:lower() == 'cursor' then
+				ref.cursor = true
+				ref.target = nil
+			end
+		end
 	elseif type(eval[3]) == 'function' then
+		ref.target = 'fake'
 		ref.func = eval[3]
-		return
+	elseif type(eval[3]) == 'table' then
+		ref.nest = true
+		ref.targets = {unpack(eval[3])}
 	else
 		ref.target = 'fake'
 		ref.func = function()
 			return UnitExists('target') and 'target' or 'player'
-		end
-	end
-	-- ground
-	if ref.target:find('.ground') then
-		ref.target = ref.target:sub(0,-8)
-		ref.ground = true
-		eval.func = 'CastGround'
-		-- This is to alow casting at the cursor location where no unit exists
-		if ref.target:lower() == 'cursor' then
-			ref.cursor = true
-			ref.target = nil
 		end
 	end
 	eval[3] = ref
