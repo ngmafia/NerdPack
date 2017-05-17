@@ -172,51 +172,11 @@ function NeP.Compiler.Conditions(eval, name)
 	end)
 end
 
-function NeP.Compiler.CondLegacy(cond)
-	local str
-	if type(cond) == 'boolean' then
-		str = tostring(cond):lower()
-	elseif type(cond) == 'function' then
-		-- FIXME: this shouldnt go to globals we need a table with these
-		local name = tostring(cond)
-		_G[name] = cond
-		str = 'func='..name
-	elseif type(cond) == 'table' then
-		-- convert everything into a string so we can then process it
-		str = '{'
-		for k=1, #cond do
-			local tmp = cond[k]
-			tmp = NeP.Compiler.CondLegacy(tmp)
-			if tmp:lower() == 'or' then
-				str = str .. '||' .. tmp
-			elseif k ~= 1 then
-				str = str .. '&' .. tmp
-			else
-				str = str .. tmp
-			end
-		end
-		str = str..'}'
-	elseif not cond then
-		str = 'true'
-	else
-		str = cond
-	end
-	return str
-end
-
 function NeP.Compiler.Compile(eval, name)
 	local spell, cond = eval[1], eval[2]
 	-- Spell
 	if type(spell) == 'string' then
 		NeP.Compiler.Spell(eval, name)
-	elseif type(spell) == 'table' then
-		for k=1, #spell do
-			NeP.Compiler.Compile(spell[k], name)
-		end
-		-- Conditions
-		eval[2] = NeP.Compiler.CondLegacy(cond)
-		NeP.Compiler.Conditions(eval)
-		return
 	elseif type(spell) == 'function' then
 		local ref = {}
 		ref.spell = tostring(spell)
