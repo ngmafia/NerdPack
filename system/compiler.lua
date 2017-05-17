@@ -190,7 +190,7 @@ function NeP.Compiler.Compile(eval, name)
 		eval[1] = {}
 	end
 	-- Conditions
-	eval[2] = NeP.Compiler.CondLegacy(cond)
+
 	NeP.Compiler.Conditions(eval)
 	-- Target
 	NeP.Compiler.Target(eval, name)
