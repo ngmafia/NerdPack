@@ -124,7 +124,7 @@ function NeP.Compiler.Spell(eval, name)
 	eval[1] = ref
 end
 
-function NeP.Compiler.Target(eval)
+function NeP.Compiler.Target(eval, name)
 	local ref = {}
 	if type(eval[3]) == 'string' then
 		ref.target = eval[3]
@@ -136,15 +136,14 @@ function NeP.Compiler.Target(eval)
 			-- This is to alow casting at the cursor location where no unit exists
 			if ref.target:lower() == 'cursor' then
 				ref.cursor = true
-				ref.target = nil
+				ref.target = 'fake'
 			end
 		end
 	elseif type(eval[3]) == 'function' then
 		ref.target = 'fake'
 		ref.func = eval[3]
 	elseif type(eval[3]) == 'table' then
-		ref.nest = true
-		ref.targets = {unpack(eval[3])}
+		-- to be done
 	else
 		ref.target = 'fake'
 		ref.func = function()
@@ -183,6 +182,9 @@ function NeP.Compiler.Conditions(eval, name)
 end
 
 function NeP.Compiler.Compile(eval, name)
+	-- check if this was already done
+	if eval[4] then return end
+
 	local spell, cond = eval[1], eval[2]
 	local spelltype = type(spell)
 	-- Spell
@@ -202,14 +204,16 @@ function NeP.Compiler.Compile(eval, name)
 		eval[1] = ref
 	else
 		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Spell cant be a', type(spell))
-		eval[1] = {}
 	end
 
 	-- Conditions
-	NeP.Compiler.Conditions(eval)
+	NeP.Compiler.Conditions(eval, name)
 
 	-- Target
 	NeP.Compiler.Target(eval, name)
+
+	-- this is used in order for the compiler knows this was already processed
+	eval[4] = true
 end
 
 function NeP.Compiler:Iterate(eval, name)
