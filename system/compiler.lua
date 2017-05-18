@@ -161,15 +161,25 @@ end
 
 -- FIXME: more needs to be done for conditions like we do for the RangedSlot
 function NeP.Compiler.Conditions(eval, name)
-	eval[2] = CondSpaces(eval[2])
-	-- Convert spells inside ()
-	NeP.Core:WhenInGame(function()
-		eval[2] = eval[2]:gsub("%((.-)%)", function(s)
-			-- we cant convert number due to it messing up other things
-			if tonumber(s) then return '('..s..')' end
-			return '('..NeP.Spells:Convert(s, name)..')'
+	local condtype = type(eval[2])
+	if not eval[2] then 
+		eval[2] = 'true'
+	elseif condtype  == 'boolean' then
+		eval[2] = tostring(eval[2])
+	elseif condtype  == 'table' then
+		NeP.Core:Print('Invalid condition format:', condtype, 'in the cr:', name)
+		eval[2] = 'true'
+	else
+		eval[2] = CondSpaces(eval[2])
+		-- Convert spells inside ()
+		NeP.Core:WhenInGame(function()
+			eval[2] = eval[2]:gsub("%((.-)%)", function(s)
+				-- we cant convert number due to it messing up other things
+				if tonumber(s) then return '('..s..')' end
+				return '('..NeP.Spells:Convert(s, name)..')'
+			end)
 		end)
-	end)
+	end
 end
 
 function NeP.Compiler.Compile(eval, name)
