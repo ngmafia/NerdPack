@@ -184,6 +184,7 @@ end
 function NeP.Compiler.Compile(eval, name)
 	-- check if this was already done
 	if eval[4] then return end
+	eval[4] = true
 
 	local spell, cond = eval[1], eval[2]
 	local spelltype = type(spell)
@@ -218,9 +219,6 @@ function NeP.Compiler.Compile(eval, name)
 
 	-- Target
 	NeP.Compiler.Target(eval, name)
-
-	-- this is used in order for the compiler knows this was already processed
-	eval[4] = true
 end
 
 function NeP.Compiler:Iterate(eval, name)
