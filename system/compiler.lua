@@ -196,6 +196,7 @@ function NeP.Compiler.Compile(eval, name)
 			func = 'Cast',
 			type = 'Spell'
 		}
+		eval[2] = 'true'
 	elseif spelltype == 'string' then
 		NeP.Compiler.Spell(eval, name)
 	elseif spelltype == 'table' then
