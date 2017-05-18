@@ -174,10 +174,15 @@ end
 
 function NeP.Compiler.Compile(eval, name)
 	local spell, cond = eval[1], eval[2]
+	local spelltype = type(spell)
 	-- Spell
-	if type(spell) == 'string' then
+	if spelltype == 'string' then
 		NeP.Compiler.Spell(eval, name)
-	elseif type(spell) == 'function' then
+	elseif spelltype == 'table' then
+		for k=1, #spell do
+			NeP.Compiler.Compile(spell[k], name)
+		end
+	elseif spelltype == 'function' then
 		local ref = {}
 		ref.spell = tostring(spell)
 		ref.token = 'func'
@@ -189,9 +194,10 @@ function NeP.Compiler.Compile(eval, name)
 		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Spell cant be a', type(spell))
 		eval[1] = {}
 	end
-	-- Conditions
 
+	-- Conditions
 	NeP.Compiler.Conditions(eval)
+
 	-- Target
 	NeP.Compiler.Target(eval, name)
 end
