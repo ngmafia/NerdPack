@@ -59,7 +59,7 @@ NeP.FakeUnits:Add('lnbuff', function(num, args)
   	local buff, role = strsplit(',', args, 2)
     local tempTable = {}
     for _, Obj in pairs(NeP.Healing:GetRoster()) do
-        if Obj.role == role and not NeP.DSL:Get('buff')(Obj.key, buff) then
+        if (not role or Obj.role == role) and not NeP.DSL:Get('buff')(Obj.key, buff) then
             tempTable[#tempTable+1] = {
                 key = Obj.key,
                 health = Obj.health
@@ -75,7 +75,7 @@ NeP.FakeUnits:Add('ldebuff', function(num, args)
   	local buff, role = strsplit(',', args, 2)
     local tempTable = {}
     for _, Obj in pairs(NeP.Healing:GetRoster()) do
-        if Obj.role == role and NeP.DSL:Get('debuff')(Obj.key, buff) then
+        if (not role or Obj.role == role) and NeP.DSL:Get('debuff')(Obj.key, buff) then
             tempTable[#tempTable+1] = {
                 key = Obj.key,
                 health = Obj.health
@@ -91,7 +91,7 @@ NeP.FakeUnits:Add('lndebuff', function(num, args)
   	local buff, role = strsplit(',', args, 2)
     local tempTable = {}
     for _, Obj in pairs(NeP.Healing:GetRoster()) do
-        if Obj.role == role and not NeP.DSL:Get('debuff')(Obj.key, buff) then
+        if (not role or Obj.role == role) and not NeP.DSL:Get('debuff')(Obj.key, buff) then
             tempTable[#tempTable+1] = {
                 key = Obj.key,
                 health = Obj.health
