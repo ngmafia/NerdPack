@@ -190,7 +190,7 @@ function NeP.Compiler.Compile(eval, name)
 	-- Spell
 	if spelltype == 'nil' then
 		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Spell cant be a', type(spell))
-		spell = {
+		eval[1] = {
 			spell = 'fake',
 			func = 'Cast',
 			type = 'Spell'
