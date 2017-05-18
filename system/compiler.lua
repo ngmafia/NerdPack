@@ -188,7 +188,14 @@ function NeP.Compiler.Compile(eval, name)
 	local spell, cond = eval[1], eval[2]
 	local spelltype = type(spell)
 	-- Spell
-	if spelltype == 'string' then
+	if spelltype == 'nil' then
+		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Spell cant be a', type(spell))
+		spell = {
+			spell = 'fake',
+			func = 'Cast',
+			type = 'Spell'
+		}
+	elseif spelltype == 'string' then
 		NeP.Compiler.Spell(eval, name)
 	elseif spelltype == 'table' then
 		for k=1, #spell do
