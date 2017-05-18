@@ -83,6 +83,21 @@ local function checkCasting(target)
   if name then return name, startTime, endTime, notInterruptible end
 end
 
+NeP.DSL:Register('true', function()
+  return true
+end)
+
+NeP.DSL:Register('false', function()
+  return false
+end)
+
+NeP.DSL:Register('false', function(target)
+  local max = UnitPowerMax(target)
+  local curr = UnitPower(target)
+  local regen = select(2, GetPowerRegen(target))
+  return (max - curr) * (1.0 / regen)
+end)
+
 NeP.DSL:Register('timetomax', function(target)
   local max = UnitPowerMax(target)
   local curr = UnitPower(target)

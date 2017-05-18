@@ -168,10 +168,6 @@ function NeP.DSL.Parse(Strg, Spell, Target)
 	elseif OPs[Strg] then
 		return OPs[Strg](Strg, Spell, Target)
 	elseif Strg:find('%a') then
-		--booleans
-		if Strg:lower():find('true') then return true end
-		if Strg:lower():find('false') then return false end
-		--conditions 
 		return ProcessCondition(Strg, Spell, Target)
 	end
 	return Strg
