@@ -95,7 +95,7 @@ end
 NeP.Actions['pause'] = function(eval)
   eval.type = 'Pause'
   eval.target = nil
-  eval.exe = function() end
+  eval.exe = function() return true end
   return true
 end
 
