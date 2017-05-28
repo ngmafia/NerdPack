@@ -435,45 +435,61 @@ function NeP.Interface:GetElement(key, element)
 	return usedGUIs[key].elements[element]
 end
 
-function NeP.Interface:BuildGUI(eval)
-	-- This opens a existing GUI instead of creating another
+function NeP.Interface:Body(eval, parent)
+	local left, top = unpack(NeP.Config:Read(eval.key, 'Location', {500, 500}))
+	parent.settings.left = left
+	parent.settings.top = top
+	parent:UpdatePosition()
+	if not eval.color then eval.color = NeP.Color end
+	if type(eval.color) == 'function' then eval.color = eval.color() end
+	NeP.UI.spinnerStyleSheet['bar-background']['color'] = eval.color
+	if eval.title then
+		parent:SetTitle("|cff"..eval.color..eval.title.."|r", eval.subtitle)
+	end
+	if eval.config then
+		local window = DiesalGUI:Create('ScrollFrame')
+		parent:AddChild(window)
+		window:SetParent(parent.content)
+		window:SetAllPoints(parent.content)
+		window.elements = { }
+		eval.window = window
+		NeP.Interface:BuildElements(eval, window)
+	end
+end
+
+-- This opens a existing GUI instead of creating another
+function NeP.Interface:TestCreated(eval)
 	local test = type(eval) == 'string' and eval or eval.key
 	if usedGUIs[test] then
 		usedGUIs[test].parent:Show()
-		return
+		return true
 	end
-	-- Create a new one
+end
+
+function NeP.Interface:BuildGUI(eval)
+
+	--Tests
+	if NeP.Interface:TestCreated(eval) then return end
 	if not eval.key then return end
+
+	-- Create a new parent
 	usedGUIs[eval.key] = {}
 	local parent = DiesalGUI:Create('Window')
 	usedGUIs[eval.key].parent = parent
 	parent:SetWidth(eval.width or 200)
 	parent:SetHeight(eval.height or 300)
 	parent.frame:SetClampedToScreen(true)
+
+	--Save Location after dragging
 	parent:SetEventListener('OnDragStop', function(self, _, left, top)
 		NeP.Config:Write(eval.key, 'Location', {left, top})
 	end)
+
+	-- Only build the body after we'r done loading configs
 	NeP.Core:WhenInGame(function()
-		local left, top = unpack(NeP.Config:Read(eval.key, 'Location', {500, 500}))
-		parent.settings.left = left
-		parent.settings.top = top
-		parent:UpdatePosition()
-		if not eval.color then eval.color = NeP.Color end
-		if type(eval.color) == 'function' then eval.color = eval.color() end
-		NeP.UI.spinnerStyleSheet['bar-background']['color'] = eval.color
-		if eval.title then
-			parent:SetTitle("|cff"..eval.color..eval.title.."|r", eval.subtitle)
-		end
-		if eval.config then
-			local window = DiesalGUI:Create('ScrollFrame')
-			parent:AddChild(window)
-			window:SetParent(parent.content)
-			window:SetAllPoints(parent.content)
-			window.elements = { }
-			eval.window = window
-			NeP.Interface:BuildElements(eval, window)
-		end
+		NeP.Interface:Body(eval, parent)
 	end)
+
 	return parent
 end
 

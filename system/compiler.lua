@@ -150,7 +150,7 @@ end
 -- FIXME: more needs to be done for conditions like we do for the RangedSlot
 function NeP.Compiler.Conditions(eval, name)
 	local condtype = type(eval[2])
-	if not eval[2] then 
+	if not eval[2] then
 		eval[2] = 'true'
 	elseif condtype  == 'boolean' then
 		eval[2] = tostring(eval[2])
