@@ -160,11 +160,11 @@ local divine_hammer={
   --actions.DH+=/crusader_strike,if=holy_power<=4
   }
 
-local outCombat={
+local outcombat={
   {Keybinds},
 }
 
-local inCombat={
+local incombat={
   {Keybinds},
   {Interupts, 'target.interruptAt(45)'},
   {Survival, 'player.health<100'},
@@ -180,4 +180,8 @@ local inCombat={
 
 }
 
-NeP.CR:Add(70, '[NeP] Paladin - Retribution', inCombat, outCombat)
+NeP.CR:Add(70, {
+  name = '[NeP] Paladin - Retribution',
+  ic = incombat,
+  ooc = outcombat
+})

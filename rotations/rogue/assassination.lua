@@ -3,16 +3,16 @@ local Keybinds = {
 	{'%pause', 'keybind(alt)'},
 }
 
-local inCombat = {
+local incombat = {
 
 }
 
-local outCombat = {
+local outcombat = {
 	{Keybinds},
 }
 
 NeP.CR:Add(259, {
   name = '[NeP] Rogue - Assassination',
-  ic = InCombat,
-  ooc = OutCombat,
+  ic = incombat,
+  ooc = outcombat,
 })

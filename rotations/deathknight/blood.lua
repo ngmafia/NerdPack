@@ -1,11 +1,11 @@
-local GUI = {
+local gui = {
 	{type = 'header', text = 'Keybinds:'},
 	{type = 'text', text = 'Alt: Pause\nControl: Death and Decay'},
 	{type = 'spacer'},{type = 'ruler'},
 	{type = 'checkbox', text = 'Automated Death and Decay', key = 'aDnD', default = false}
 }
 
-local function ExeOnLoad()
+local function exeload()
 	NeP.Interface:AddToggle({
 		key = 'taunt',
 		name = 'Taunt Units',
@@ -51,15 +51,15 @@ local ST = {
 	{'Heart Strike'}
 }
 
-local inCombat = {
+local incombat = {
 	{Keybinds},
 	{Cooldowns, 'toggle(cooldowns)'},
 	{Taunts, 'toggle(taunt)'},
 	{ST, 'target.inmelee'}
 }
 
-local outCombat = {
+local outcombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(250, '[NeP] Death Knight - Blood', inCombat, outCombat, ExeOnLoad, GUI)
+NeP.CR:Add(250, '[NeP] Death Knight - Blood', incombat, outcombat, exeload, gui)

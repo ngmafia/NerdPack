@@ -1,4 +1,4 @@
-local GUI = {
+local gui = {
 	{type = 'header', text = 'Keybinds:'},
 	{type = 'text', text = 'Alt: Pause\nControl: Hold to Vengeful Retreat and Fel Rush'},
 }
@@ -28,15 +28,15 @@ local ST = {
 	{'Demon\'s Bite'}
 }
 
-local inCombat = {
+local incombat = {
 	{Keybinds},
 	{'Metamorphosis', 'toggle(cooldowns)'},
 	{AoE, 'player.area(8).enemies >= 3'},
 	{ST, 'target.inmelee'},
 }
 
-local outCombat = {
+local outcombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(577, '[NeP] Demon Hunter - Havoc', inCombat, outCombat, nil, GUI)
+NeP.CR:Add(577, '[NeP] Demon Hunter - Havoc', incombat, outcombat, nil, gui)

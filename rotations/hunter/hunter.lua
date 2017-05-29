@@ -1,15 +1,15 @@
-local inCombat = {
+local incombat = {
 	{'Mend Pet', 'pet.health < 100'},
 	{'Kill Command', 'target.petrange < 25'},
 	{'Cobra Shot'}
 }
 
-local outCombat = {
+local outcombat = {
 
 }
 
 NeP.CR:Add(3, {
   name = '[NeP] Hunter - Basic',
-  ic = InCombat,
-  ooc = OutCombat
+  ic = incombat,
+  ooc = outcombat
 })

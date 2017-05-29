@@ -1,6 +1,6 @@
 
 
-local GUI = {
+local gui = {
   --Dispel
   {type = 'header', text = 'Dispel All when toggled on', align = 'center'},
   {type = 'checkbox', text = 'Dispel All', key = 'Dispel', default = false},
@@ -195,7 +195,7 @@ local Moving = {
 
 }
 
-local inCombat = {
+local incombat = {
   --Fade when you get aggro.
   {'fade', 'aggro'},
   {Cooldowns, 'toggle(cooldowns)'},
@@ -214,10 +214,15 @@ local inCombat = {
 
 }
 
-local outCombat = {
+local outcombat = {
   {Keybinds},
   {Moving, 'moving'},
   {"%ressdead(Resurrection)"},
 }
 
-NeP.CR:Add(257, '[NeP] Priest - Holy', inCombat, outCombat, nil, GUI)
+NeP.CR:Add(257, {
+  name = '[NeP] Priest - Holy',
+  ic = incombat,
+  ooc = outcombat,
+  gui = gui
+})

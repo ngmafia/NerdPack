@@ -70,7 +70,7 @@ local ST = {
 	{'Hammer of the Righteous'},
 }
 
-local inCombat = {
+local incombat = {
 	{Keybinds},
 	{Survival, "player.health<100"},
 	{Interrupts, 'target.interruptAt(50)'},
@@ -78,7 +78,7 @@ local inCombat = {
 	{ST, 'target.inmelee&target.infront'}
 }
 
-local outCombat = {
+local outcombat = {
 	{Keybinds},
 	--# Executed before combat begins. Accepts non-harmful actions only.
 	--actions.precombat=flask,type=flask_of_ten_thousand_scars
@@ -90,4 +90,8 @@ local outCombat = {
 	--actions.precombat+=/potion,name=unbending_potion
 }
 
-NeP.CR:Add(66, '[NeP] Paladin - Protection', inCombat, outCombat)
+NeP.CR:Add(66, {
+  name = '[NeP] Paladin - Protection',
+  ic = incombat,
+  ooc = outcombat
+})

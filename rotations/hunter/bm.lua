@@ -3,12 +3,12 @@ local Keybinds = {
 	{'%pause', 'keybind(alt)'},
 }
 
-local inCombat = {
+local incombat = {
 
 }
 
-local outCombat = {
+local outcombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(253, '[NeP] Hunter - Beast Mastery', inCombat, outCombat)
+NeP.CR:Add(253, '[NeP] Hunter - Beast Mastery', incombat, outcombat)

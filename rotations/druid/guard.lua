@@ -1,9 +1,9 @@
-local GUI = {
+local gui = {
 	{type = 'header', text = 'Keybinds:'},
 	{type = 'text', text = 'Alt: Pause'},
 }
 
-local function ExeOnLoad()
+local function exeload()
 	NeP.Interface:AddToggle({
 		key = 'taunt',
 		name = 'Taunt Units',
@@ -48,7 +48,7 @@ local ST = {
 	{'Swipe', nil, 'target'},
 }
 
-local InCombat = {
+local incombat = {
 	{Keybinds},
 	{Cooldowns, 'toggle(cooldowns)'},
 	--Growl Use to establish threat on targets not attacking you.
@@ -56,14 +56,14 @@ local InCombat = {
 	{ST, 'target.inmelee'}
 }
 
-local OutCombat = {
+local outcombat = {
 	{Keybinds},
 }
 
 NeP.CR:Add(104, {
   name = '[NeP] Druid - Guardian',
-  ic = InCombat,
-  ooc = OutCombat,
-	gui = GUI,
-	load = ExeOnLoad
+  ic = incombat,
+  ooc = outcombat,
+	gui = gui,
+	load = exeload
 })

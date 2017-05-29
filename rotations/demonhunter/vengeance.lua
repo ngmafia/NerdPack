@@ -49,13 +49,13 @@ local ST = {
 	{'Shear'}
 }
 
-local inCombat = {
+local incombat = {
 	{Keybinds},
 	{Interrupts, 'target.interruptAt(40)'},
 	{ST, 'target.infront'}
 }
 
-local outCombat = {
+local outcombat = {
 	--actions.precombat=flask,type=flask_of_the_seventh_demon
 	--actions.precombat+=/food,type=the_hungry_magister
 	--actions.precombat+=/augmentation,type=defiled
@@ -64,4 +64,4 @@ local outCombat = {
 	--actions.precombat+=/potion,name=unbending_potion
 }
 
-NeP.CR:Add(581, '[NeP] Demon Hunter - Vengeance', inCombat, outCombat)
+NeP.CR:Add(581, '[NeP] Demon Hunter - Vengeance', incombat, outcombat)

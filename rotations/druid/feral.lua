@@ -1,4 +1,4 @@
-local GUI = {
+local gui = {
 	{type = 'header', text = 'Keybinds:'},
 	{type = 'text', text = 'Alt: Pause'},
 }
@@ -14,8 +14,8 @@ local Cooldowns = {
 	{'Tiger\'s Fury', 'player.energy <= 35'},
 	--Incarnation: King of the Jungle Use on every cooldown for additional damage (if selected).
 	{'Incarnation: King of the Jungle'},
-	--Elune's Guidance Use at 0 CP and follow with a 5 CP Finishing Move (if selected).
-	{'Elune\'s Guidance', 'player.combopoints = 0'}
+	--Elune's guidance Use at 0 CP and follow with a 5 CP Finishing Move (if selected).
+	{'Elune\'s guidance', 'player.combopoints = 0'}
 }
 
 local Combo = {
@@ -52,20 +52,20 @@ local ST = {
 	{'Shred', nil, 'target'}
 }
 
-local InCombat = {
+local incombat = {
 	{Keybinds},
 	{Cooldowns, 'toggle(cooldowns)'},
 	{AoE, 'target.area(8).enemies >= 3'},
 	{ST, 'target.inmelee'}
 }
 
-local OutCombat = {
+local outcombat = {
 	{Keybinds},
 }
 
 NeP.CR:Add(103, {
   name = '[NeP] Druid - Feral',
-  ic = InCombat,
-  ooc = OutCombat,
-	gui = GUI
+  ic = incombat,
+  ooc = outcombat,
+	gui = gui
 })

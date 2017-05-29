@@ -1,9 +1,9 @@
-local GUI = {
+local gui = {
 	{type = 'header', text = 'Keybinds:'},
 	{type = 'text', text = 'Alt: Pause'},
 }
 
-local exeOnLoad = function()
+local exeload = function()
 	NeP.Interface:AddToggle({
 		key = 'taunt',
 		name = 'Taunt Units',
@@ -71,7 +71,7 @@ local Prot = {
 	{'Devastate'}
 }
 
-local inCombat = {
+local incombat = {
 	{Keybinds},
 	--# Executed every time the actor is available.
 	--actions=intercept
@@ -85,14 +85,14 @@ local inCombat = {
 	{Prot, 'target.infront & target.range < 8'}
 }
 
-local outCombat = {
+local outcombat = {
 	{Keybinds},
 }
 
 NeP.CR:Add(73, {
   name = '[NeP] Warrior - Protection',
-  ic = InCombat,
-  ooc = OutCombat,
-	load = exeOnLoad,
-	gui = GUI
+  ic = incombat,
+  ooc = outcombat,
+	load = exeload,
+	gui = gui
 })

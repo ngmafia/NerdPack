@@ -1,13 +1,13 @@
-local InCombat = {
+local incombat = {
 
 }
 
-local OutCombat = {
+local outcombat = {
 
 }
 
 NeP.CR:Add(9, {
   name = '[NeP] Warlock - Basic',
-  ic = InCombat,
-  ooc = OutCombat
+  ic = incombat,
+  ooc = outcombat
 })

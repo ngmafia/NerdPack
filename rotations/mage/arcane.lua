@@ -3,11 +3,11 @@ local Keybinds = {
 	{'%pause', 'keybind(alt)'},
 }
 
-local inCombat = {
+local incombat = {
 
 }
 
-local outCombat = {
+local outcombat = {
 	{Keybinds},
 }
-NeP.CR:Add(62, '[NeP] Mage - Arcane', inCombat, outCombat)
+NeP.CR:Add(62, '[NeP] Mage - Arcane', incombat, outcombat)

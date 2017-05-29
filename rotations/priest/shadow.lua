@@ -76,7 +76,7 @@ local ST = {
 	{'Mind Spike'},
 }
 
-local inCombat = {
+local incombat = {
 	{Keybinds},
 	{Interrupts, 'toggle(interrupts) & target.interruptAt(50) & target.infront & target.range <= 30'},
 	{Survival, 'player.health < 100'},
@@ -85,9 +85,13 @@ local inCombat = {
 	{ST},
 }
 
-local outCombat = {
+local outcombat = {
 	--Power Word: Shield for Body and Soul to gain increased movement speed if moving.
 	{'Power Word: Shield', 'talent(2,2) & player.moving', 'player'},
 }
 
-NeP.CR:Add(258, '[NeP] Priest - Shadow', inCombat, outCombat)
+NeP.CR:Add(258, {
+  name = '[NeP] Priest - Shadow',
+  ic = incombat,
+  ooc = outcombat,
+})

@@ -1,4 +1,4 @@
-local GUI = {
+local gui = {
   {type = 'header', text = 'Keybinds', align = 'center'},
   {type = 'text', text = 'Alt: PAUSE CR'},
 
@@ -18,7 +18,7 @@ local GUI = {
   {type = 'spinner', text = 'Holy Light (Health %)', key = 'L_HL', default = 100},
 }
 
-local exeOnLoad = function()
+local exeload = function()
   NeP.Interface:AddToggle({
     key = 'dps',
     icon = 'Interface\\Icons\\Spell_shaman_stormearthfire.png‎',
@@ -77,7 +77,7 @@ local DPS = {
   {'Crusader Strike', nil, 'target'}
 }
 
-local inCombat = {
+local incombat = {
   {Keybinds},
   {DPS, 'toggle(dps) & !lowest.health < 70 & target.enemy'},
   {Moving, 'player.moving'},
@@ -88,7 +88,7 @@ local inCombat = {
   }, '!player.moving' }
 }
 
-local outCombat = {
+local outcombat = {
   {Keybinds},
   {Moving},
   {{ -- Not moving
@@ -96,4 +96,10 @@ local outCombat = {
   }, '!player.moving' },
 }
 
-NeP.CR:Add(65, '[NeP] Paladin - Holy', inCombat, outCombat, exeOnLoad, GUI)
+NeP.CR:Add(65, {
+  name = '[NeP] Paladin - Holy',
+  ic = incombat,
+  ooc = outcombat,
+  load = exeload,
+  gui = gui
+})

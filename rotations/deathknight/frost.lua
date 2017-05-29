@@ -3,13 +3,13 @@ local Keybinds = {
 	{'%pause', 'keybind(alt)'},
 }
 
-local inCombat = {
+local incombat = {
 
 }
 
-local outCombat = {
+local outcombat = {
 	{Keybinds},
 }
 
 
-NeP.CR:Add(251, '[NeP] Death Knight - Frost', inCombat, outCombat)
+NeP.CR:Add(251, '[NeP] Death Knight - Frost', incombat, outcombat)

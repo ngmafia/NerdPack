@@ -1,12 +1,12 @@
-local InCombat = {
+local incombat = {
 
 }
 
-local OutCombat = {
+local outcombat = {
 }
 
 NeP.CR:Add(4, {
   name = '[NeP] Rouge - Basic',
-  ic = InCombat,
-  ooc = OutCombat
+  ic = incombat,
+  ooc = outcombat
 })

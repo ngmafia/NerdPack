@@ -3,12 +3,12 @@ local Keybinds = {
 	{'%pause', 'keybind(alt)'},
 }
 
-local inCombat = {
+local incombat = {
 
 }
 
-local outCombat = {
+local outcombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(252, '[NeP] Death Knight - Unholy', inCombat, outCombat)
+NeP.CR:Add(252, '[NeP] Death Knight - Unholy', incombat, outcombat)

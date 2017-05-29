@@ -1,9 +1,9 @@
-local GUI = {
+local gui = {
 	{type = 'header', text = 'Keybinds:'},
 	{type = 'text', text = 'Alt: Pause\nShift: Flamestrike'},
 }
 
-local exeOnLoad = function()
+local exeload = function()
 end
 
 local Survival = {
@@ -107,7 +107,7 @@ local ST = {
 	{'Fireball'}
 }
 
-local inCombat = {
+local incombat = {
 	{Keybinds},
 	{Survival, 'player.health < 100'},
 	{Moving, 'player.moving'},
@@ -127,8 +127,8 @@ local inCombat = {
 	{ST, 'target.range<=40&target.infront'},
 }
 
-local outCombat = {
+local outcombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(63, '[NeP] Mage - Fire', inCombat, outCombat, exeOnLoad, GUI)
+NeP.CR:Add(63, '[NeP] Mage - Fire', incombat, outcombat, exeload, gui)

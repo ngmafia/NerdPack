@@ -3,12 +3,16 @@ local Keybinds = {
 	{'%pause', 'keybind(alt)'},
 }
 
-local inCombat = {
+local incombat = {
 
 }
 
-local outCombat = {
+local outcombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(256, '[NeP] Priest - Discipline', inCombat, outCombat)
+NeP.CR:Add(256, {
+  name = '[NeP] Priest - Discipline',
+  ic = incombat,
+  ooc = outcombat,
+})
