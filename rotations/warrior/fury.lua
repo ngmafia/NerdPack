@@ -11,4 +11,8 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(72, '[NeP] Warrior - Fury', inCombat, outCombat)
+NeP.CR:Add(72, {
+  name = '[NeP] Warrior - Fury',
+  ic = InCombat,
+  ooc = OutCombat,
+})

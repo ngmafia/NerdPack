@@ -11,4 +11,8 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(259, '[NeP] Rogue - Assassination', inCombat, outCombat)
+NeP.CR:Add(259, {
+  name = '[NeP] Rogue - Assassination',
+  ic = InCombat,
+  ooc = OutCombat,
+})

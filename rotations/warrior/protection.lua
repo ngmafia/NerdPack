@@ -89,4 +89,10 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(73, '[NeP] Warrior - Protection', inCombat, outCombat, exeOnLoad, GUI)
+NeP.CR:Add(73, {
+  name = '[NeP] Warrior - Protection',
+  ic = InCombat,
+  ooc = OutCombat,
+	load = exeOnLoad,
+	gui = GUI
+})

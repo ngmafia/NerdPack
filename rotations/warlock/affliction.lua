@@ -11,4 +11,8 @@ local outCombat = {
 	{Keybinds},
 }
 
-NeP.CR:Add(265, '[NeP] Warlock - Affliction', inCombat, outCombat)
+NeP.CR:Add(265, {
+  name = '[NeP] Warlock - Affliction',
+  ic = InCombat,
+  ooc = OutCombat,
+})
