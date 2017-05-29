@@ -8,4 +8,8 @@ local outCombat = {
 
 }
 
-NeP.CR:Add(3, '[NeP] Hunter - Basic', inCombat, outCombat)
+NeP.CR:Add(3, {
+  name = '[NeP] Hunter - Basic',
+  ic = InCombat,
+  ooc = OutCombat
+})

@@ -3,6 +3,11 @@ local InCombat = {
 }
 
 local OutCombat = {
+
 }
 
-NeP.CR:Add(8, '[NeP] Mage - Basic', InCombat, OutCombat)
+NeP.CR:Add(8, {
+  name = '[NeP] Mage - Basic',
+  ic = InCombat,
+  ooc = OutCombat
+})
