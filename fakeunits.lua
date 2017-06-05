@@ -40,10 +40,10 @@ end)
 
 -- lowest with certain buff
 NeP.FakeUnits:Add('lbuff', function(num, args)
-  	local buff, role = strsplit(',', args, 2)
+  local buff, role = strsplit(',', args, 2)
     local tempTable = {}
     for _, Obj in pairs(NeP.Healing:GetRoster()) do
-        if (not role or Obj.role == role) and NeP.DSL:Get('buff.any')(Obj.key, buff) then
+        if (not role or Obj.role == role) and NeP.DSL:Get('buff')(Obj.key, buff) then
             tempTable[#tempTable+1] = {
                 key = Obj.key,
                 health = Obj.health
@@ -59,7 +59,7 @@ NeP.FakeUnits:Add('lnbuff', function(num, args)
   	local buff, role = strsplit(',', args, 2)
     local tempTable = {}
     for _, Obj in pairs(NeP.Healing:GetRoster()) do
-        if (not role or Obj.role == role) and not NeP.DSL:Get('buff.any')(Obj.key, buff) then
+        if (not role or Obj.role == role) and not NeP.DSL:Get('buff')(Obj.key, buff) then
             tempTable[#tempTable+1] = {
                 key = Obj.key,
                 health = Obj.health
