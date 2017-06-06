@@ -3,7 +3,7 @@
 
 	<!-- external libs -->
 	<Script file="LibStub/LibStub.lua" />
-	<Include file="CallbackHandler-1.0\CallbackHandler-1.0.xml" />
+	<Include file="CallbackHandler-1.0\CallbackHandler-1.0.lua" />
 	<Script file="LibRangeCheck-2.0\LibRangeCheck-2.0.lua" />
 	<Script file="AceAddon-3.0\AceAddon-3.0.lua" />
 	<Script file="LibDispellable-1.0\LibDispellable-1.0.lua" />
