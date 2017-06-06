@@ -72,6 +72,7 @@ function NeP.CR:GetList(Spec)
 	-- Specs
 	if CRs[Spec] then
 		for k in pairs(CRs[Spec]) do
+			print(k)
 			result[#result+1] = k
 		end
 	end
@@ -95,8 +96,8 @@ end
 local function SetCR()
 	local spec = GetSpecializationInfo(GetSpecialization())
 	local last = NeP.Config:Read('SELECTED', spec)
+	BuildCRs(spec, last)
 	if CRs[spec] and CRs[spec][last] then
-		BuildCRs(spec, last)
 		NeP.CR:Set(spec, last)
 	end
 end
@@ -113,5 +114,6 @@ end)
 
 --Globals
 NeP.Globals.CR = {
-	Add = NeP.CR.Add
+	Add = NeP.CR.Add,
+	GetList = NeP.CR.GetList
 }
