@@ -150,7 +150,7 @@ DiesalGUI:RegisterObjectConstructor("StatusBar", function()
   local frame = CreateFrame('StatusBar',nil,UIParent)
   self.frame  = frame
 
-  self:AddStyleSheet(NeP.UI.statusBarStylesheet)
+  --self:AddStyleSheet(NeP.UI.statusBarStylesheet)
 
   frame.Left = frame:CreateFontString()
   frame.Left:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 14)
