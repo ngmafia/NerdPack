@@ -48,7 +48,7 @@ end
 
 function NeP.CR:Set(Spec, Name)
 	-- execute the previous unload
-	if self.CR.unload then self.CR.unload() end
+	if self.CR and self.CR.unload then self.CR.unload() end
 
 	local _, englishClass, classIndex  = UnitClass('player')
 	local a, b = englishClass:sub(1, 1):upper(), englishClass:sub(2):lower()
@@ -61,7 +61,9 @@ function NeP.CR:Set(Spec, Name)
 	NeP.Config:Write('SELECTED', Spec, Name)
 	NeP.Interface:SetCheckedCR(Name)
 	NeP.Interface:ResetToggles()
-	self.CR.load()
+
+	--Execute onload
+	if self.CR then self.CR.load() end
 end
 
 function NeP.CR:GetList(Spec)
@@ -91,13 +93,12 @@ local function BuildCRs(Spec, Last)
 end
 
 local function SetCR()
-	local Spec = GetSpecializationInfo(GetSpecialization())
-	local englishClass  = select(2, UnitClass('player'))
-	local a, b = englishClass:sub(1, 1):upper(), englishClass:sub(2):lower()
-	local classCR = '[NeP] '..a..b..' - Basic'
-	local last = NeP.Config:Read('SELECTED', Spec, classCR)
-	BuildCRs(Spec, last)
-	NeP.CR:Set(Spec, last)
+	local spec = GetSpecializationInfo(GetSpecialization())
+	local last = NeP.Config:Read('SELECTED', spec)
+	if CRs[spec] and CRs[spec][last] then
+		BuildCRs(spec, last)
+		NeP.CR:Set(spec, last)
+	end
 end
 
 NeP.Listener:Add("NeP_CR", "PLAYER_LOGIN", function()

@@ -1,44 +1,48 @@
 local _, NeP = ...
 local L = NeP.Locale
+local IsControlKeyDown = IsControlKeyDown
 
-local dToggles = {
-	{
-		key = 'mastertoggle',
-		name = 'MasterToggle',
-		text = L:TA('mainframe', 'MasterToggle'),
-		icon = 'Interface\\ICONS\\Ability_repair.png',
-		func = function(self, button)
-			if button == "RightButton" then
-				if IsControlKeyDown() then
-					NeP.Interface.MainFrame.drag:Show()
-				else
-					NeP.Interface:DropMenu()
-				end
-			end
-		end
-	},
-	{
-		key = 'interrupts',
-		name = 'Interrupts',
-		text = L:TA('mainframe', 'Interrupts'),
-		icon = 'Interface\\ICONS\\Ability_Kick.png',
-	},
-	{
-		key = 'cooldowns',
-		name = 'Cooldowns',
-		text = L:TA('mainframe', 'Cooldowns'),
-		icon = 'Interface\\ICONS\\Achievement_BG_winAB_underXminutes.png',
-	},
-	{
-		key = 'aoe',
-		name = 'Multitarget',
-		text = L:TA('mainframe', 'AoE'),
-		icon = 'Interface\\ICONS\\Ability_Druid_Starfall.png',
-	}
-}
+-- MasterToggle
+NeP.Interface:AddToggle({
+  key = 'mastertoggle',
+  name = 'MasterToggle',
+  text = L:TA('mainframe', 'MasterToggle'),
+  icon = 'Interface\\ICONS\\Ability_repair.png',
+  func = function(self, button)
+    if button == "RightButton" then
+      if IsControlKeyDown() then
+        self.MainFrame.drag:Show()
+      else
+        NeP.Interface:DropMenu()
+      end
+    end
+  end,
+  nohide = true
+})
 
-function NeP.Interface:DefaultToggles()
-	for i=1, #dToggles do
-		self:AddToggle(dToggles[i])
-	end
-end
+--Interrupts
+NeP.Interface:AddToggle({
+  key = 'interrupts',
+  name = 'Interrupts',
+  text = L:TA('mainframe', 'Interrupts'),
+  icon = 'Interface\\ICONS\\Ability_Kick.png',
+  nohide = true
+})
+
+-- Cooldowns
+NeP.Interface:AddToggle({
+  key = 'cooldowns',
+  name = 'Cooldowns',
+  text = L:TA('mainframe', 'Cooldowns'),
+  icon = 'Interface\\ICONS\\Achievement_BG_winAB_underXminutes.png',
+  nohide = true
+})
+
+--Multitarget
+NeP.Interface:AddToggle({
+  key = 'aoe',
+  name = 'Multitarget',
+  text = L:TA('mainframe', 'AoE'),
+  icon = 'Interface\\ICONS\\Ability_Druid_Starfall.png',
+  nohide = true
+})

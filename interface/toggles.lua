@@ -2,9 +2,13 @@ local n_name, NeP = ...
 local mainframe = NeP.Interface.MainFrame
 local L = NeP.Locale
 local GameTooltip = GameTooltip
+local CreateFrame = CreateFrame
 
 NeP.ButtonsSize = 40
 NeP.ButtonsPadding = 2
+
+local min_width = 40
+local min_height = 25
 
 -- Load Saved sizes
 NeP.Core:WhenInGame(function()
@@ -65,6 +69,7 @@ local function CreateToggle(eval)
 	temp.texture = SetTexture(temp, eval.icon)
 	temp.actv = NeP.Config:Read('TOGGLE_STATES', eval.key, false)
 	temp:SetChecked(temp.actv)
+	temp.nohide = eval.nohide
 	temp.Checked_texture = SetTexture(temp)
 	temp:SetCheckedTexture(temp.Checked_texture)
 	temp:RegisterForClicks("LeftButtonUp", "RightButtonUp")
@@ -84,7 +89,7 @@ function NeP.Interface:AddToggle(eval)
 	else
 		CreateToggle(eval)
 	end
-	NeP.Interface:RefreshToggles()
+	self:RefreshToggles()
 end
 
 function NeP.Interface:RefreshToggles()
@@ -98,21 +103,30 @@ function NeP.Interface:RefreshToggles()
 		end
 	end
 
+	-- Set size to match ButtonsSize
 	mainframe.settings.width = tcount*(NeP.ButtonsSize+NeP.ButtonsPadding)-NeP.ButtonsPadding
 	mainframe.settings.height = NeP.ButtonsSize+18
 
+	-- Dont go bellow the mimimum allowed
+	if mainframe.settings.width<min_width then mainframe.settings.width=min_width end
+	if mainframe.settings.height<min_height then mainframe.settings.height=min_height end
+
+	-- Dont allow Resize
 	mainframe.settings.minHeight = mainframe.settings.height
 	mainframe.settings.minWidth = mainframe.settings.width
 	mainframe.settings.maxHeight = mainframe.settings.height
 	mainframe.settings.maxWidth = mainframe.settings.width
+
+	-- apply
 	mainframe:ApplySettings()
 end
 
 function NeP.Interface:ResetToggles()
-	for k in pairs(Toggles) do
-		Toggles[k]:Hide()
+	for k, v in pairs(Toggles) do
+		if not v.nohide then
+			Toggles[k]:Hide()
+		end
 	end
-	self:DefaultToggles()
 end
 
 function NeP.Interface:toggleToggle(key, state)

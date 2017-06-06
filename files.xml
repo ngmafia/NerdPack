@@ -11,7 +11,6 @@
 	<include file="system\files.xml" />
 	<Include file="interface\files.xml" />
 	<Include file="conditions\files.xml" />
-	<Include file="rotations\files.xml" />
 	<Include file="protected\files.xml" />
 	<Script file="commands.lua" />
 	<Script file="fakeunits.lua" />
