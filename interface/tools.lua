@@ -143,7 +143,7 @@ function NeP.Interface:Spinner(element, parent, offset, table)
 		tmp_spin.settings.shiftStep = element.shiftStep
 	end
 	tmp_spin:ApplySettings()
-	tmp_spin:AddStyleSheet(NeP.UI.spinnerStyleSheet)
+	--tmp_spin:AddStyleSheet(NeP.UI.spinnerStyleSheet)
 	tmp_spin:SetEventListener('OnValueChanged', function(_, _, userInput, number)
 		if not userInput then return end
 		NeP.Config:Write(table.key, element.key, number)
@@ -199,7 +199,7 @@ function NeP.Interface:Checkspin(element, parent, offset, table)
 	tmp_spin:SetNumber(
 		NeP.Config:Read(table.key, element.key..'_spin', element.default_spin or 0)
 	)
-	tmp_spin:AddStyleSheet(NeP.UI.spinnerStyleSheet)
+	--tmp_spin:AddStyleSheet(NeP.UI.spinnerStyleSheet)
 	tmp_spin:ApplySettings()
 	tmp_spin:SetEventListener('OnValueChanged', function(_, _, userInput, number)
 		if not userInput then return end
@@ -293,7 +293,7 @@ function NeP.Interface:Button(element, parent, offset, table)
 	tmp:SetText(element.text)
 	tmp:SetWidth(element.width or 100)
 	tmp:SetHeight(element.height or 20)
-	tmp:AddStyleSheet(NeP.UI.buttonStyleSheet)
+	--tmp:AddStyleSheet(NeP.UI.buttonStyleSheet)
 	tmp:SetEventListener("OnClick", element.callback)
 	if element.desc then
 		local tmp_desc = DiesalGUI:Create("FontString")
@@ -442,7 +442,7 @@ function NeP.Interface:Body(eval, parent)
 	parent:UpdatePosition()
 	if not eval.color then eval.color = NeP.Color end
 	if type(eval.color) == 'function' then eval.color = eval.color() end
-	NeP.UI.spinnerStyleSheet['bar-background']['color'] = eval.color
+	--NeP.UI.spinnerStyleSheet['bar-background']['color'] = eval.color
 	if eval.title then
 		parent:SetTitle("|cff"..eval.color..eval.title.."|r", eval.subtitle)
 	end

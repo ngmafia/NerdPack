@@ -1,4 +1,4 @@
--- $Id: ScrollingMessageFrame.lua 53 2016-07-12 21:56:30Z diesal2010 $
+-- $Id: ScrollingMessageFrame.lua 60 2016-11-04 01:34:23Z diesal2010 $
 
 local DiesalGUI = LibStub('DiesalGUI-1.0')
 -- ~~| Libraries |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -13,8 +13,8 @@ local GetCursorPosition 												= GetCursorPosition
 -- ~~| ScrollingMessageFrame |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 local Type 		= 'ScrollingMessageFrame'
 local Version 	= 1
--- ~~| ScrollingMessageFrame StyleSheets |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-local styleSheet = {		
+-- ~~| ScrollingMessageFrame Stylesheets |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+local Stylesheet = {		
 	['track-background'] = {					
 		type			= 'texture',
 		layer			= 'BACKGROUND',
@@ -78,8 +78,8 @@ local wireFrame = {
 local methods = {		
 	['OnAcquire'] = function(self)					
 		self:ApplySettings()
-		self:AddStyleSheet(styleSheet)
-		self:AddStyleSheet(wireFrame)	
+		self:SetStylesheet(Stylesheet)
+		self:SetStylesheet(wireFrame)	
 		self:Show()
 	end,
 	['OnRelease'] = function(self)						
@@ -113,7 +113,7 @@ local methods = {
 		local windowSize 				= self.scrollFrame:GetHeight()		
 		local trackSize 				= self.track:GetHeight()
 		local windowContentRatio 	= windowSize / contentSize
-		local gripSize 				= DiesalTools:Round(trackSize * windowContentRatio)
+		local gripSize 				= DiesalTools.Round(trackSize * windowContentRatio)
 		
 		gripSize = max(gripSize, 10) -- might give this a setting?
 		gripSize = min(gripSize, trackSize)		
@@ -129,12 +129,12 @@ local methods = {
 					
 		local windowPositionRatio 	= verticalScroll / verticalScrollRange			
 		local trackScrollAreaSize 	= trackSize - gripSize
-		local gripPositionOnTrack 	= DiesalTools:Round(trackScrollAreaSize * windowPositionRatio)			
+		local gripPositionOnTrack 	= DiesalTools.Round(trackScrollAreaSize * windowPositionRatio)			
 		
 		self.grip:SetPoint('TOP',0,-gripPositionOnTrack)		
 	end,	
 	['SetVerticalScroll'] = function(self,scroll) -- user scrolled only
-		self.settings.forceScrollBottom = DiesalTools:Round(scroll) == DiesalTools:Round(self.scrollFrame:GetVerticalScrollRange())
+		self.settings.forceScrollBottom = DiesalTools.Round(scroll) == DiesalTools.Round(self.scrollFrame:GetVerticalScrollRange())
 		self.scrollFrame:SetVerticalScroll(scroll)
 	end,	
 	['AddMessage'] = function(self,msg)			

@@ -1,4 +1,4 @@
--- $Id: DropDownItem.lua 53 2016-07-12 21:56:30Z diesal2010 $
+-- $Id: DropDownItem.lua 60 2016-11-04 01:34:23Z diesal2010 $
 
 local DiesalGUI = LibStub('DiesalGUI-1.0')
 -- ~~| Libraries |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -12,12 +12,12 @@ local sub, format, lower, upper,gsub								= string.sub, string.format, string.
 -- ~~| DropdownItem |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 local Type 		= 'DropdownItem'
 local Version 	= 2
--- ~~| DropdownItem StyleSheets |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-local styleSheet = {
+-- ~~| DropdownItem Stylesheets |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+local Stylesheet = {
 	['frame-hover'] = {
 		type			= 'texture',
 		layer			= 'HIGHLIGHT',
-		color			= 'ffffff',
+		color			= 'b3d9ff',
 		alpha			= .1,
 	},
 }
@@ -25,8 +25,8 @@ local styleSheet = {
 local methods = {
 	['OnAcquire'] = function(self)
 		self:ApplySettings()
-		self:AddStyleSheet(styleSheet)
-		-- self:AddStyleSheet(wireFrameSheet)
+		self:SetStylesheet(Stylesheet)
+		-- self:SetStylesheet(wireFrameSheet)
 		self:Show()
 	end,
 	['OnRelease'] = function(self)
@@ -86,9 +86,9 @@ local methods = {
 			end
 		else
 			dropdown.dropdown:Hide()
-			dropdown:ClearSelection()			
+			dropdown:ClearSelection()
 		end
-		
+
 		dropdown:SetText(dropdownText)
 		dropdown:FireEvent("OnValueChanged",settings.key,settings.value,selectionTable)
 		dropdown:FireEvent("OnValueSelected",settings.key,settings.value,selectionTable)
@@ -106,8 +106,8 @@ local methods = {
 -- ~~| DropdownItem Constructor |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 local function Constructor()
 	local self 		= DiesalGUI:CreateObjectBase(Type)
-	local frame		= CreateFrame('Button',nil,UIParent)		
-	self.frame		= frame	
+	local frame		= CreateFrame('Button',nil,UIParent)
+	self.frame		= frame
 	self.defaults = {	}
 	-- ~~ Construct ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	frame:SetScript("OnClick", function(this,button) self:OnClick() end)
@@ -123,12 +123,10 @@ local function Constructor()
 
 	local check = self:CreateRegion("Texture", 'check', frame)
 	DiesalStyle:StyleTexture(check,{
-		offset 	= {2,nil,0,nil},
+    position 	= {2,nil,0,nil},
 		height	= 16,
 		width		= 16,
-		texFile	= 'DiesalGUIcons',
-		texColor	= 'ffff00',		
-		texCoord	= {10,5,16,256,128},
+    image    = {'DiesalGUIcons', {10,5,16,256,128},'FFFF00'},
 	})
 	check:Hide()
 	-- ~~ Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

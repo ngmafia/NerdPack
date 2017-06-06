@@ -1,0 +1,12 @@
+[submodule "Libs/LibStub"]
+	path = Libs/LibStub
+	url = https://github.com/zerosnake0/LibStub
+[submodule "Libs/CallbackHandler-1.0"]
+	path = Libs/CallbackHandler-1.0
+	url = https://github.com/zerosnake0/CallbackHandler-1.0
+[submodule "Libs/LibArtifactData-1.0"]
+	path = Libs/LibArtifactData-1.0
+	url = https://github.com/Rainrider/LibArtifactData-1.0
+[submodule "Libs/LibDispellable-1.0"]
+	path = Libs/LibDispellable-1.0
+	url = https://github.com/AdiAddons/LibDispellable-1.0

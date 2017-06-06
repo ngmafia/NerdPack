@@ -2,80 +2,92 @@ local DiesalGUI = LibStub("DiesalGUI-1.0")
 -- ~~| Libraries |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 local DiesalTools = LibStub("DiesalTools-1.0")
 local DiesalStyle = LibStub("DiesalStyle-1.0")
+-- ~~| Diesal Upvalues |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+local Colors = DiesalStyle.Colors
+local HSL, ShadeColor, TintColor = DiesalTools.HSL, DiesalTools.ShadeColor, DiesalTools.TintColor
 -- | Lua Upvalues |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -- | WoW Upvalues |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -- | AccordianSection |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 local Type = 'AccordianSection'
-local Version = 2
--- | StyleSheets |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-local styleSheet = {	
-	['button-background'] = {			
+local Version = 3
+-- | Stylesheets |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+local Stylesheet = {
+	['button-background'] = {
 		type			= 'texture',
-		layer			= 'BACKGROUND',							
-		color			= '232f38',
-		colorEnd	= '2d3c47',
-		gradient	= 'VERTICAL',		
-		alpha			= .95,		
-		offset 		= {0,0,-1,0},		
+		layer			= 'BACKGROUND',
+    gradient	= {'VERTICAL',Colors.UI_400_GR[1],Colors.UI_400_GR[2]},
+    alpha     = .95,
+		position 		= {0,0,-1,0},
 	},
-	
-		
-	['button-outline'] = {			
+	['button-outline'] = {
 		type			= 'outline',
-		layer			= 'BACKGROUND',							
-		color			= '000000',		
-		offset 		= {1,1,0,1},		
+		layer			= 'BACKGROUND',
+		color			= '000000',
+		position 	= {1,1,0,1},
 	},
-			
-	['button-inline'] = {			
+	['button-inline'] = {
 		type			= 'outline',
-		layer			= 'ARTWORK',					
-		color			= 'FFFFFF',		
-		gradient	= 'VERTICAL',		
-		alpha			= .02,
-		alphaEnd	= .07,				
-		offset		= {0,0,-1,0},		
-	},	
+		layer			= 'ARTWORK',
+    gradient	= {'VERTICAL','ffffff','ffffff'},
+    alpha     = {.03,.02},
+		position	= {0,0,-1,0},
+	},
 	['button-hover'] = {
 		type			= 'texture',
 		layer			= 'HIGHLIGHT',
 		color			= 'ffffff',
 		alpha			= .1,
 	},
+  ['button-leftExpandIcon'] = {
+    type			= 'texture',
+    position 	= {0,nil,-1,nil},
+    height	  = 16,
+    width	  	= 16,
+    image     = {'DiesalGUIcons',{3,6,16,256,128},HSL(Colors.UI_Hue,Colors.UI_Saturation,.65)},
+    alpha	  	= 1,
+  },
+  ['button-leftCollapseIcon'] = {
+    type			= 'texture',
+    position 	= {0,nil,-1,nil},
+    height	  = 16,
+    width	  	= 16,
+    image     = {'DiesalGUIcons',{4,6,16,256,128},HSL(Colors.UI_Hue,Colors.UI_Saturation,.65)},
+    alpha	  	= 1,
+  },
 	['content-background'] = {
 		type			= 'texture',
-		layer			= 'BACKGROUND',				
-		color			= '182228',		
-		alpha			= .95,	
-		offset		= {0,0,-1,0},			
-	},		
-	['content-top'] = {
+		layer			= 'BACKGROUND',
+		color			= Colors.UI_300,
+		alpha			= .95,
+		position	= {0,0,-1,0},
+	},
+	['content-topShadow'] = {
 		type			= 'texture',
-		layer			= 'ARTWORK',		
-		color			= '000000',
-		gradient	= 'VERTICAL',		
-		alpha			= 0,
-		alphaEnd	= .3,
-		offset		= {0,0,-1,nil},	
+		layer			= 'ARTWORK',
+    gradient	= {'VERTICAL','000000','000000'},
+		alpha			= {.05,0},
+		position	= {0,0,-1,nil},
 		height		= 4,
 	},
-	['content-bottom'] = {
+	['content-bottomShadow'] = {
 		type			= 'texture',
-		layer			= 'ARTWORK',		
-		color			= '000000',
-		gradient	= 'VERTICAL',		
-		alpha			= .3,
-		alphaEnd	= 0,			
-		offset		= {0,0,nil,0},	
+		layer			= 'ARTWORK',
+    gradient	= {'VERTICAL','000000','000000'},
+		alpha			= {0,.05},
+		position	= {0,0,nil,0},
 		height		= 4,
 	},
 	['content-inline'] = {
 		type			= 'outline',
-		layer			= 'ARTWORK',				
-		color			= 'ffffff',		
-		alpha			= .02,	
-		offset		= {0,0,-1,0},			
+		layer			= 'ARTWORK',
+		color			= 'ffffff',
+		alpha			= .02,
+		position	= {0,0,-1,0},
 	},
+  ['text-Font'] = {
+    type			= 'font',
+    color     = Colors.UI_F450,
+  },
 }
 local wireFrameSheet = {
 	['frame-white'] = {
@@ -101,13 +113,11 @@ local wireFrameSheet = {
 -- | Methods |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 local methods = {
 	['OnAcquire'] = function(self)
-		self:AddStyleSheet(styleSheet)
+		self:SetStylesheet(Stylesheet)
 		self:Show()
 	end,
-	['OnRelease'] = function(self)
-
-	end,
-	['ApplySettings'] = function(self)				
+	['OnRelease'] = function(self)	end,
+	['ApplySettings'] = function(self)
 		self.button:SetHeight(self.settings.buttonHeight)
 		-- postion
 		self:ClearAllPoints()
@@ -118,46 +128,52 @@ local methods = {
 			local anchor = self.settings.parentObject.children[self.settings.position-1].frame
 			self:SetPoint('TOPLEFT',anchor,'BOTTOMLEFT',0,0)
 			self:SetPoint('RIGHT')
-		end	
+		end
 		-- set section name
-		self.text:SetText(self.settings.sectionName)	
+		self.text:SetText(self.settings.sectionName)
 		-- set section state
 		self[self.settings.expanded and 'Expand' or 'Collapse'](self)
 		-- set button visibility
-		self:SetButtonVisbility(self.settings.buttonVisbility)
-	end,	
-	['Collapse'] = function(self)	
-		if not self.settings.collapsable then	self:UpdateHeight()	return end 	
+		self:SetButton(self.settings.button)
+	end,
+	['Collapse'] = function(self)
+		if not self.settings.button then self:UpdateHeight() return end
 		self.settings.expanded = false
-		self:FireEvent("OnStateChange", self.settings.position, 'Collapse') 		
-		self.arrow:SetTexCoord(DiesalTools:GetIconCoords(7,5,16,256,128))
+		self:FireEvent("OnStateChange", self.settings.position, 'Collapse')
+    self.textures['button-leftCollapseIcon']:SetAlpha(self.textures['button-leftCollapseIcon'].style.alpha[1])
+    self.textures['button-leftExpandIcon']:SetAlpha(0)
 		self.content:Hide()
 		self:UpdateHeight()
 	end,
-	['Expand'] = function(self)		
+	['Expand'] = function(self)
 		self.settings.expanded = true
-		self:FireEvent("OnStateChange", self.settings.position, 'Expand') 		
-		self.arrow:SetTexCoord(DiesalTools:GetIconCoords(5,5,16,256,128))
+		self:FireEvent("OnStateChange", self.settings.position, 'Expand')
+    self.textures['button-leftExpandIcon']:SetAlpha(self.textures['button-leftExpandIcon'].style.alpha[1])
+    self.textures['button-leftCollapseIcon']:SetAlpha(0)
 		self.content:Show()
 		self:UpdateHeight()
-	end,	
-	['SetButtonVisbility'] = function(self,state)			
-		self.settings.buttonVisbility = state
+	end,
+	['SetButton'] = function(self,state)
+		self.settings.button = state
 		self.button[state and 'Show' or 'Hide'](self.button)
-		self:UpdateHeight()
-	end,	
+    if not state then
+      self:Expand()
+    else
+      self:UpdateHeight()
+    end
+	end,
 	['UpdateHeight'] = function(self)
 		local settings, children = self.settings, self.children
 		local contentHeight = 0
-		self.content:SetPoint('TOPLEFT',self.frame,0,settings.buttonVisbility and settings.buttonHeight *-1 or 0)
-		
+		self.content:SetPoint('TOPLEFT',self.frame,0,settings.button and -settings.buttonHeight or 0)
+
 		if settings.expanded then
-			contentHeight = settings.contentPad[3] + settings.contentPad[4]		
-			for i=1 , #children do contentHeight = contentHeight + children[i].frame:GetHeight() end			
+			contentHeight = settings.contentPadding[3] + settings.contentPadding[4]
+			for i=1 , #children do contentHeight = contentHeight + children[i].frame:GetHeight() end
 		end
 		self.content:SetHeight(contentHeight)
-		self:SetHeight((settings.buttonVisbility and settings.buttonHeight or 0) + contentHeight)		
-		self:FireEvent("OnHeightChange",contentHeight) 		
+		self:SetHeight((settings.button and settings.buttonHeight or 0) + contentHeight)
+		self:FireEvent("OnHeightChange",contentHeight)
 	end,
 }
 -- | Constructor |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -167,36 +183,25 @@ local function Constructor()
 	self.frame		= frame
 	-- ~~ Default Settings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	self.defaults = {
-		collapsable		 	=	true,
-		buttonVisbility	=	true,
-		contentPad			= {0,0,3,2},				
+		button        	=	true,
+		contentPadding	= {0,0,3,1 },
 		expanded				= true,
-		buttonHeight		= 17,
+		buttonHeight		= 16,
 	}
-	-- ~~ Events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	-- OnAcquire, OnRelease, OnHeightSet, OnWidthSet
 	-- ~~ Construct ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 	local button = self:CreateRegion("Button", 'button', frame)
 	button:SetPoint('TOPRIGHT')
-	button:SetPoint('TOPLEFT')	
+	button:SetPoint('TOPLEFT')
 	button:SetScript("OnClick", function(this,button)
 		DiesalGUI:OnMouse(this,button)
-		self[self.settings.expanded and "Collapse" or "Expand"](self)			
+		self[self.settings.expanded and "Collapse" or "Expand"](self)
 	end)
-	local arrow = self:CreateRegion("Texture", 'arrow', button)
-	DiesalStyle:StyleTexture(arrow,{
-		offset 	= {1,nil,-1,nil},
-		height	= 16,
-		width		= 16,
-		texFile	= 'DiesalGUIcons',
-		alpha		= .7,
-	})
+
 	local text = self:CreateRegion("FontString", 'text', button)
-	text:SetPoint("TOPLEFT",13,-5)
-	text:SetPoint("RIGHT",-4,0)
+	text:SetPoint("TOPLEFT",15,-2)
+	text:SetPoint("BOTTOMRIGHT",-15,0)
 	text:SetHeight(0)
-	text:SetJustifyH("TOP")
+	text:SetJustifyH("MIDDLE")
 	text:SetJustifyH("LEFT")
 	text:SetWordWrap(false)
 

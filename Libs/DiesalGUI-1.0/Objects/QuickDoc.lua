@@ -1,4 +1,4 @@
--- $Id: QuickDoc.lua 53 2016-07-12 21:56:30Z diesal2010 $
+-- $Id: QuickDoc.lua 60 2016-11-04 01:34:23Z diesal2010 $
 
 -- | Libraries |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 local DiesalTools 	= LibStub("DiesalTools-1.0")
@@ -14,15 +14,15 @@ local abs																			= math.abs
 
 
 -- | TableExplorer |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-local QuickDoc 
+local QuickDoc
 local Type = "QuickDoc"
 local Version = 1
--- | StyleSheets |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-local windowStyleSheet = {	
+-- | Stylesheets |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+local windowStylesheet = {
 	['content-background'] = {
-		type			= 'texture',		
-		color			= '131517',		
-	},	
+		type			= 'texture',
+		color			= '131517',
+	},
 }
 
 -- | Local |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -35,26 +35,20 @@ local doc = {
 		{ type = 'single-line',	text = 'Editor',
 			font = nil.
 			fontSize = 14,
-			text = 'Editor',			
+			text = 'Editor',
 		},
 		{ type = 'columns',	text = 'Editor',
 			font = nil.
 			fontSize = 14,
-			text = 'Editor',			
+			text = 'Editor',
 		},
-		
-		
-		
-	}
-	
-	
-	
+	}	
 }
 
 -- |  Methods |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 local methods = {
 	['OnAcquire'] = function(self)
-		self.settings = DiesalTools:TableCopy( self.defaults )
+		self.settings = DiesalTools.TableCopy( self.defaults )
 		self:ApplySettings()
 		self:Show()
 	end,
@@ -63,7 +57,7 @@ local methods = {
 	end,
 	['ApplySettings'] = function(self)
 
-	end,	
+	end,
 	['BuildDoc'] = function(self,doc)
 -- 		if #doc == 0 then error('BuildDoc(doc) doc requires atleast one section')
 -- 		local settings = self.settings
@@ -71,7 +65,7 @@ local methods = {
 -- 		self:ReleaseChildren()
 -- 		-- setup
 -- 		settings.doc = doc
--- 		
+--
 -- 		if #doc == 0 then
 -- 			tree:UpdateHeight()
 -- 			self.statusText:SetText('|cffff0000Table is empty.')
@@ -102,37 +96,37 @@ local methods = {
 -- 			leaf 			= leaf,
 -- 		})
 -- 		branch:SetEventListener('OnClick',function(this,event,button)
--- 			if button =='RightButton' then			
+-- 			if button =='RightButton' then
 -- 				if not next(this.settings.menuData) then return end
--- 				DiesalMenu:Menu(this.settings.menuData,this.frame,10,-10)	
--- 			end	
+-- 				DiesalMenu:Menu(this.settings.menuData,this.frame,10,-10)
+-- 			end
 -- 		end)
--- 				
+--
 -- 		self:SetBranchLabel(branch,key,value,leaf)
 -- 		self:SetBranchMenu(branch,key,value)
 -- 		self:SetBranchIcon(branch,type(value))
--- 		
+--
 -- 		if value == tree or leaf then branch:ApplySettings() return end
 -- 		-- | sort Branch Table |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--- 		local sortedTable = sortTable(value)		
+-- 		local sortedTable = sortTable(value)
 -- 		-- | build Branch Branches |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -- 		for position, key in ipairs(sortedTable) do
 -- 			if self.settings.endtime <= time() then	self:Timeout() return end
 -- 			self:BuildBranch(branch,key[2],value[key[2]],position,depth+1,position == #sortedTable)
--- 		end	
+-- 		end
 -- 		-- | Update Branch | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--- 		branch:ApplySettings()	
-	end,	
+-- 		branch:ApplySettings()
+	end,
 	['Show'] = function(self)
 		self.window:Show()
-	end,	
+	end,
 }
 -- ~~| TableExplorer Constructor |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 local function Constructor()
 	QuickDoc = DiesalGUI:CreateObjectBase(Type)
 	-- ~~ Default Settings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	QuickDoc.defaults = {
-		
+
 	}
 	-- ~~ Construct ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	local window = DiesalGUI:Create('Window')
@@ -146,21 +140,21 @@ local function Constructor()
 		minWidth 			= 200,
 		minHeight			= 200,
 	},true)
-	window:AddStyleSheet(windowStyleSheet)	
-	
+	window:SetStylesheet(windowStylesheet)
 
-	
 
-	
 
-	
+
+
+
+
 
 	-- ~~ Frames ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	QuickDoc.window 				= window
 	QuickDoc.content 				= window.content
 	QuickDoc.frame					= window.frame
 
-	
+
 	-- ~~ Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	for method, func in pairs(methods) do	QuickDoc[method] = func	end
 	-- ~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

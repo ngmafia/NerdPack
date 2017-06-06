@@ -1,9 +1,12 @@
--- $Id: ComboBoxItem.lua 53 2016-07-12 21:56:30Z diesal2010 $
+-- $Id: ComboBoxItem.lua 60 2016-11-04 01:34:23Z diesal2010 $
 
 local DiesalGUI = LibStub('DiesalGUI-1.0')
 -- ~~| Libraries |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 local DiesalTools = LibStub('DiesalTools-1.0')
 local DiesalStyle = LibStub("DiesalStyle-1.0")
+-- ~~| Diesal Upvalues |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+local Colors = DiesalStyle.Colors
+local HSL, ShadeColor, TintColor = DiesalTools.HSL, DiesalTools.ShadeColor, DiesalTools.TintColor
 -- ~~| Lua Upvalues |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -- ~~| WoW Upvalues |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -11,13 +14,13 @@ local DiesalStyle = LibStub("DiesalStyle-1.0")
 -- ~~| ComboBoxItem |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 local Type 		= 'ComboBoxItem'
 local Version 	= 2
--- ~~| ComboBoxItem StyleSheets |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-local styleSheet = {
+-- ~~| ComboBoxItem Stylesheets |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+local Stylesheet = {
 	['frame-hover'] = {
 		type			= 'texture',
 		layer			= 'HIGHLIGHT',
-		color			= 'ffffff',
-		alpha			= .1,
+		color			= 'b3d9ff',
+		alpha			= .05,
 	},
 }
 -- ~~| ComboBoxItem Locals |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -26,8 +29,8 @@ local styleSheet = {
 local methods = {
 	['OnAcquire'] = function(self)
 		self:ApplySettings()
-		self:AddStyleSheet(styleSheet)
-		-- self:AddStyleSheet(wireFrameSheet)
+		self:SetStylesheet(Stylesheet)
+		-- self:SetStylesheet(wireFrameSheet)
 		self:Show()
 	end,
 	['OnRelease'] = function(self)
@@ -48,7 +51,7 @@ local methods = {
 			self:SetPoint('RIGHT')
 		end
 
-		self:SetHeight(comboBoxSettings.itemHeight)
+		self:SetHeight(comboBoxSettings.dropdownButtonWidth)
 
 		self:SetText(settings.value)
 	end,
@@ -71,7 +74,7 @@ local methods = {
 		comboBox:SetText(settings.value)
 		comboBox:FireEvent("OnValueSelected",settings.key,settings.value)
 	end,
-	['SetSelected'] = function(self,selected)		
+	['SetSelected'] = function(self,selected)
 		if selected then
 			self.settings.parentObject.settings.selectedKey = self.settings.key
 			self.settings.selected = true
@@ -83,10 +86,10 @@ local methods = {
 	end,
 }
 -- ~~| ComboBoxItem Constructor |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-local function Constructor()	
+local function Constructor()
 	local self 		= DiesalGUI:CreateObjectBase(Type)
-	local frame		= CreateFrame('Button',nil,UIParent)		
-	self.frame		= frame	
+	local frame		= CreateFrame('Button',nil,UIParent)
+	self.frame		= frame
 	-- ~~ Default Settings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	self.defaults = {	}
 	-- ~~ Registered Events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -105,12 +108,10 @@ local function Constructor()
 
 	local check = self:CreateRegion("Texture", 'check', frame)
 	DiesalStyle:StyleTexture(check,{
-		offset 	= {2,nil,0,nil},
+		position 	= {2,nil,0,nil},
 		height	= 16,
 		width		= 16,
-		texFile	= 'DiesalGUIcons',
-		texColor	= 'ffff00',
-		texCoord	= {10,5,16,256,128},
+    image    = {'DiesalGUIcons', {10,5,16,256,128},'FFFF00'},
 	})
 	check:Hide()
 	-- ~~ Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

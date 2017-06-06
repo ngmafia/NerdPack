@@ -1,41 +1,32 @@
--- $Id: Window.lua 53 2016-07-12 21:56:30Z diesal2010 $
+-- $Id: Window.lua 60 2016-11-04 01:34:23Z diesal2010 $
 
 local DiesalGUI = LibStub("DiesalGUI-1.0")
 -- | Libraries |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 local DiesalTools = LibStub("DiesalTools-1.0")
 local DiesalStyle = LibStub("DiesalStyle-1.0")
+local Colors = DiesalStyle.Colors
 -- | Lua Upvalues |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 local type, select, pairs, tonumber			= type, select, pairs, tonumber
+local floor, ceil = math.floor, math.ceil
 -- | WoW Upvalues |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -- | Window |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 local Type 		= "Window"
 local Version 	= 14
--- ~~| StyleSheets |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-local styleSheet = {
+-- ~~| Stylesheets |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+local Stylesheet = {
 	['frame-outline'] = {
 		type			= 'outline',
 		layer			= 'BACKGROUND',
 		color			= '000000',
-		offset		= 0,
 	},
 	['frame-shadow'] = {
 		type			= 'shadow',
 	},
 	['titleBar-color'] = {
 		type			= 'texture',
-		layer			= 'ARTWORK',		
-		color			= '000000',		
+		layer			= 'BACKGROUND',
+		color			= '000000',
 		alpha			= .95,
-		offset		= 0,
-	},
-	['titleBar-outline'] = {
-		type			= 'outline',
-		layer			= 'ARTWORK',
-		gradient	= 'VERTICAL',
-		color			= 'FFFFFF',
-		alpha			= .0,
-		alphaEnd	= .05,
-		offset		= -1,
 	},
 	['titletext-Font'] = {
 		type			= 'font',
@@ -44,91 +35,77 @@ local styleSheet = {
 	['closeButton-icon'] = {
 		type			= 'texture',
 		layer			= 'ARTWORK',
-		texFile		= 'DiesalGUIcons',
-		texCoord	= {9,5,16,256,128},
+    image     = {'DiesalGUIcons', {9,5,16,256,128}},
 		alpha 		= .3,
-		offset		= {-2,nil,-1,nil},
+		position	= {-2,nil,-1,nil},
 		width			= 16,
 		height		= 16,
 	},
 	['closeButton-iconHover'] = {
 		type			= 'texture',
 		layer			= 'HIGHLIGHT',
-		texFile		= 'DiesalGUIcons',
-		texCoord		= {9,5,16,256,128},
-		texColor		= 'b30000',
+    image     = {'DiesalGUIcons', {9,5,16,256,128}, 'b30000'},
 		alpha			= 1,
-		offset		= {-2,nil,-1,nil},
+		position	= {-2,nil,-1,nil},
 		width			= 16,
 		height		= 16,
 	},
-	
 	['header-background'] = {
 		type			= 'texture',
 		layer			= 'BACKGROUND',
-		gradient	= 'VERTICAL',				
-		color			= '232f38',
-		colorEnd	= '2d3c47',
-		alpha			= .95,		
-		offset 		= {0,0,0,-1},
-	},	
+    gradient	= {'VERTICAL',Colors.UI_400_GR[1],Colors.UI_400_GR[2]},
+    alpha     = .95,
+		position 	= {0,0,0,-1},
+	},
 	['header-inline'] = {
 		type			= 'outline',
 		layer			= 'BORDER',
-		gradient	= 'VERTICAL',	
-		color			= 'ffffff',
-		alpha 		= .02,
-		alphaEnd	= .05,			
-		offset		= {0,0,0,-1},
+    gradient	= {'VERTICAL','ffffff','ffffff'},
+    alpha     = {.05,.02},
+		position	= {0,0,0,-1},
 	},
 	['header-divider'] = {
 		type			= 'texture',
-		layer			= 'BACKGROUND',
+		layer			= 'BORDER',
 		color			= '000000',
 		alpha 		= 1,
-		offset		= {0,0,nil,0},
+		position	= {0,0,nil,0},
 		height		= 1,
-	},	
+	},
 	['content-background'] = {
 		type			= 'texture',
 		layer			= 'BACKGROUND',
-		color			= '151e24',
+		color			= Colors.UI_100,
 		alpha			= .95,
-		offset		= 0,
-
 	},
 	['content-outline'] = {
 		type			= 'outline',
 		layer			= 'BORDER',
 		color			= 'FFFFFF',
-		alpha			= .03,
-		offset		= 0,
+		alpha			= .01
 	},
-	['footer-background'] = {			
+	['footer-background'] = {
 		type			= 'texture',
 		layer			= 'BACKGROUND',
-		gradient	= 'VERTICAL',				
-		color			= '232f38',
-		colorEnd	= '2d3c47',
-		alpha			= .95,		
-		offset 		= {0,0,-1,0},
+    gradient	= {'VERTICAL',Colors.UI_400_GR[1],Colors.UI_400_GR[2]},
+    alpha     = .95,
+		position 	= {0,0,-1,0},
 	},
 	['footer-divider'] = {
 		type			= 'texture',
 		layer			= 'BACKGROUND',
 		color			= '000000',
-		offset		= {0,0,0,nil},
+		position	= {0,0,0,nil},
 		height		= 1,
-	},				
-	['footer-inline'] = {			
+	},
+	['footer-inline'] = {
 		type			= 'outline',
 		layer			= 'BORDER',
-		gradient	= 'VERTICAL',	
-		color			= 'ffffff',
-		alpha 		= .02,
-		alphaEnd	= .05,			
-		offset		= {0,0,-1,0}	
-	},	
+    gradient	= {'VERTICAL','ffffff','ffffff'},
+    alpha     = {.05,.02},
+		position	= {0,0,-1,0},
+    debug = true,
+	},
 }
 local wireFrame = {
 	['frame-white'] = {
@@ -175,20 +152,27 @@ local sizerWireFrame = {
 		color			= '00aaff',
 	},
 }
--- ~~| Window Locals |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- | Window Locals |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+local function round(num)
+  if num >= 0 then return floor(num+.5)
+  else return ceil(num-.5) end
+end
+
 -- | Methods |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 local methods = {
 	['OnAcquire'] = function(self)
 		self:ApplySettings()
-		self:AddStyleSheet(styleSheet)
-		-- self:AddStyleSheet(sizerWireFrame)
+		self:SetStylesheet(Stylesheet)
+		-- self:SetStylesheet(sizerWireFrame)
 		self:Show()
 	end,
-	['OnRelease'] = function(self)
-
-	end,
+	['OnRelease'] = function(self)	end,
 	['SetTopLevel'] = function(self)
 		DiesalGUI:SetTopLevel(self.frame)
+	end,
+  ['SetContentHeight'] = function(self, height)
+    local contentHeight = round(self.content:GetHeight())
+		self.frame:SetHeight( (self.settings.height - contentHeight) + height )
 	end,
 	['ApplySettings'] = function(self)
 		local settings			= self.settings
@@ -227,16 +211,16 @@ local methods = {
 
 	end,
 	['UpdatePosition'] = function(self)
-		self.frame:ClearAllPoints()	
+		self.frame:ClearAllPoints()
 		if self.settings.top and self.settings.left then
 			self.frame:SetPoint("TOP",UIParent,"BOTTOM",0,self.settings.top)
 			self.frame:SetPoint("LEFT",UIParent,"LEFT",self.settings.left,0)
 		else
 			self.frame:SetPoint("CENTER",UIParent,"CENTER")
 		end
-		
+
 		self.frame:SetWidth(self.settings.width)
-		self.frame:SetHeight(self.settings.height)		
+		self.frame:SetHeight(self.settings.height)
 	end,
 	['UpdateSizers'] = function(self)
 		local settings = self.settings
@@ -280,7 +264,7 @@ local function Constructor()
 		titleBarHeight= 18,
 		title					= '',
 		subTitle			= '',
-		padding				= {1,1,0,1},		
+		padding				= {1,1,0,1},
 		header				= false,
 		headerHeight	= 21,
 		footer				= false,
@@ -303,9 +287,9 @@ local function Constructor()
 	frame:SetScript("OnMouseDown", function(this,button)
 		DiesalGUI:OnMouse(this,button)
 	end)
-	frame:SetScript("OnSizeChanged", function(this,width,height)		
-		self.settings.width 	= DiesalTools:Round(width)
-		self.settings.height	= DiesalTools:Round(height)
+	frame:SetScript("OnSizeChanged", function(this,width,height)
+		self.settings.width 	= DiesalTools.Round(width)
+		self.settings.height	= DiesalTools.Round(height)
 
 		self:FireEvent( "OnSizeChanged", self.settings.width, self.settings.height )
 	end)
@@ -328,8 +312,8 @@ local function Constructor()
 	titleBar:SetScript("OnMouseUp", function(this)
 		frame:StopMovingOrSizing()
 
-		self.settings.top 		= DiesalTools:Round(frame:GetTop())
-		self.settings.left	 	= DiesalTools:Round(frame:GetLeft())
+		self.settings.top 		= DiesalTools.Round(frame:GetTop())
+		self.settings.left	 	= DiesalTools.Round(frame:GetLeft())
 
 		self:UpdatePosition()
 		self:FireEvent( "OnDragStop", self.settings.left, self.settings.top )
@@ -343,7 +327,7 @@ local function Constructor()
 		self:Hide()
 	end)
 	local titletext = self:CreateRegion("FontString", 'titletext', titleBar)
-	titletext:SetWordWrap(false) 
+	titletext:SetWordWrap(false)
 	titletext:SetPoint("TOPLEFT", 4, -5)
 	titletext:SetPoint("TOPRIGHT", -20, -5)
 	titletext:SetJustifyH("TOP")
@@ -363,7 +347,7 @@ local function Constructor()
 	sizerBR:SetScript("OnMouseUp", function(this)
 		frame:StopMovingOrSizing()
 		self:UpdatePosition()
-		self:FireEvent( "OnSizeStop", self.settings.width, self.settings.height )		
+		self:FireEvent( "OnSizeStop", self.settings.width, self.settings.height )
 	end)
 	local sizerB = self:CreateRegion("Frame", 'sizerB', frame)
 	sizerB:SetPoint("BOTTOMLEFT",frame,"BOTTOMLEFT",0,0)

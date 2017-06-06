@@ -1,4 +1,4 @@
--- $Id: Branch.lua 53 2016-07-12 21:56:30Z diesal2010 $
+-- $Id: Branch.lua 60 2016-11-04 01:34:23Z diesal2010 $
 -- ~~| Libraries |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 local DiesalTools = LibStub('DiesalTools-1.0')
 local DiesalStyle = LibStub('DiesalStyle-1.0')
@@ -12,8 +12,8 @@ local tostring											= tostring
 -- ~~| TableExplorerBranch |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 local Type 		= 'Branch'
 local Version 	= 1
--- ~~| StyleSheets |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-local styleSheet = {
+-- ~~| Stylesheets |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+local Stylesheet = {
 	['button-highlight'] = {
 		type			= 'texture',
 		layer			= 'HIGHLIGHT',
@@ -32,26 +32,23 @@ local wireFrameSheet = {
 		type			= 'outline',
 		layer			= 'OVERLAY',
 		color			= 'ffffff',
-		alpha			= .15,
 	},
 	['button-purple'] = {
 		type			= 'outline',
 		layer			= 'OVERLAY',
 		color			= 'aa00ff',
-		alpha			= 0,
 	},
 	['content-yellow'] = {
 		type			= 'outline',
 		layer			= 'OVERLAY',
 		color			= 'fffc00',
-		alpha			= 0,
 	},
 }
 -- ~~| Methods |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 local methods = {
 	['OnAcquire'] = function(self)
 		self:ApplySettings()
-		self:AddStyleSheet(styleSheet)
+		self:SetStylesheet(Stylesheet)
 		self:Show()
 	end,
 	['OnRelease'] = function(self)
@@ -124,16 +121,16 @@ local methods = {
 		self.icon:SetTexCoord(left,right,top,bottom)
 	end,
 	['SetIconExpanded']	= function(self)
-		self.icon:SetTexCoord(DiesalTools:GetIconCoords(2,8,16,256,128))
+		self.icon:SetTexCoord(DiesalTools.GetIconCoords(2,8,16,256,128))
 	end,
 	['SetIconCollapsed'] = function(self)
-		self.icon:SetTexCoord(DiesalTools:GetIconCoords(1,8,16,256,128))
+		self.icon:SetTexCoord(DiesalTools.GetIconCoords(1,8,16,256,128))
 	end,
-	['SetSelected'] = function(self,state)		
-		self:SetStyle('button-selected',{
+	['SetSelected'] = function(self,state)
+		self:UpdateStyle('button-selected',{
 			type			= 'texture',
-			alpha			= state and 1 or 0,				
-		})		
+			alpha			= state and 1 or 0,
+		})
 	end,
 	['UpdateLines'] = function(self)
 		if not self.settings.branches then return end
@@ -141,67 +138,67 @@ local methods = {
 		local expandColor	= '5a5a5a'
 		-- Frame Fold Line
 		if not self.settings.last and not self.settings.leaf then
-			self:SetStyle('frame-foldLine',{
+			self:UpdateStyle('frame-foldLine',{
 				type			= 'texture',
 				layer			= 'OVERLAY',
 				color			= foldColor,
-				offset		= {6,nil,-11,2},
+				position		= {6,nil,-11,2},
 				width			= 1,
 			})
 		end
 		-- expandable Fold Lines
 		if not self.settings.leaf then
-			self:SetStyle('button-square',{
+			self:UpdateStyle('button-square',{
 				type			= 'outline',
 				layer			= 'BORDER',
 				color			= foldColor,
-				offset		= {10,nil,-2,nil},
+				position	= {10,nil,-2,nil},
 				width			= 9,
 				height		= 9,
 			})
-			self:SetStyle('button-expandH',{
+			self:UpdateStyle('button-expandH',{
 				type			= 'texture',
 				layer			= 'BORDER',
 				color			= expandColor,
-				offset		= {8,nil,-6,nil},
+				position		= {8,nil,-6,nil},
 				width			= 5,
 				height		= 1,
 			})
-			self:SetStyle('button-expandV',{
+			self:UpdateStyle('button-expandV',{
 					type			= 'texture',
 					layer			= 'BORDER',
 					color			= expandColor,
-					offset		= {6,nil,-4,nil},
+					position		= {6,nil,-4,nil},
 					width			= 1,
 					height		= 5,
 					alpha			= 1,
 			})
 			if self.settings.expanded then
-				self:SetStyle('button-expandV',{
+				self:UpdateStyle('button-expandV',{
 					type			= 'texture',
 					alpha			= 0,
 				})
 			end
 		else -- Leaf nodes
-			self:SetStyle('button-lineV',{
+			self:UpdateStyle('button-lineV',{
 				type			= 'texture',
 				layer			= 'BORDER',
 				color			= foldColor,
-				offset		= {6,nil,-6,nil},
+				position		= {6,nil,-6,nil},
 				height		= 1,
 				width			= 6,
 			})
-			self:SetStyle('button-lineH',{
+			self:UpdateStyle('button-lineH',{
 				type			= 'texture',
 				layer			= 'BORDER',
 				color			= foldColor,
-				offset		= {6,nil,0,0},
+				position		= {6,nil,0,0},
 				width			= 1,
 			})
 			if self.settings.last then
-				self:SetStyle('button-lineH',{
+				self:UpdateStyle('button-lineH',{
 					type			= 'texture',
-					offset		= {6,nil,0,-7},
+					position		= {6,nil,0,-7},
 				})
 			end
 		end
@@ -221,8 +218,8 @@ local function Constructor()
 		indent				= 13,
 		expIconTex		= 'DiesalGUIcons',
 		colIconTex		= 'DiesalGUIcons',
-		expIconCoords = {DiesalTools:GetIconCoords(2,8,16,256,128)},
-		colIconCoords = {DiesalTools:GetIconCoords(1,8,16,256,128)},
+		expIconCoords = {DiesalTools.GetIconCoords(2,8,16,256,128)},
+		colIconCoords = {DiesalTools.GetIconCoords(1,8,16,256,128)},
 	}
 	-- ~~ Events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	-- OnAcquire, OnRelease, OnHeightSet, OnWidthSet
@@ -236,7 +233,7 @@ local function Constructor()
 		DiesalGUI:OnMouse(this,button)
 		if button == 'LeftButton' then self[not self.settings.expanded and "Expand" or "Collapse"](self) end
 		self:FireEvent("OnClick",button)
-	end)	
+	end)
 	button:SetScript( "OnDoubleClick", function(this,...)
 		self:FireEvent("OnDoubleClick",...)
 	end)
@@ -246,20 +243,20 @@ local function Constructor()
 	button:SetScript( "OnDragStop", function(this,...)
 		self:FireEvent("OnDragStop",...)
 	end)
-	button:SetScript("OnEnter",function(this,...)		
-		self:FireEvent("OnEnter",...)				
+	button:SetScript("OnEnter",function(this,...)
+		self:FireEvent("OnEnter",...)
 	end)
-	button:SetScript("OnLeave", function(this,...)		
-		self:FireEvent("OnLeave",...)					
-	end)	
-		
-	
+	button:SetScript("OnLeave", function(this,...)
+		self:FireEvent("OnLeave",...)
+	end)
+
+
 	local icon = self:CreateRegion("Texture", 'icon', button)
 	DiesalStyle:StyleTexture(icon,{
-		offset 	= {0,nil,2,nil},
+		position 	= {0,nil,2,nil},
 		height	= 16,
 		width		= 16,
-		texFile	= 'DiesalGUIcons',
+		image	  = {'DiesalGUIcons'},
 	})
 
 	local text = self:CreateRegion("FontString", 'text', button)
