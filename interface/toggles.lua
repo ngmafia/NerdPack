@@ -89,7 +89,7 @@ function NeP.Interface:AddToggle(eval)
 	else
 		CreateToggle(eval)
 	end
-	self:RefreshToggles()
+	NeP.Interface:RefreshToggles()
 end
 
 function NeP.Interface:RefreshToggles()
@@ -127,6 +127,7 @@ function NeP.Interface:ResetToggles()
 			Toggles[k]:Hide()
 		end
 	end
+	NeP.Interface:RefreshToggles()
 end
 
 function NeP.Interface:toggleToggle(key, state)
