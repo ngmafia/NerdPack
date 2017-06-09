@@ -18,16 +18,24 @@ local SecureCmdOptionParse = SecureCmdOptionParse
 local InCombatLockdown     = InCombatLockdown
 local C_Timer              = C_Timer
 
+--This is used by the ticker
+--Its used to determin if we should iterate or not
+--Returns true if we're not mounted or in a castable mount
 local function IsMountedCheck()
+	--Figure out if we're mounted on a castable mount
 	for i = 1, 40 do
 		local mountID = select(11, UnitBuff('player', i))
 		if mountID and NeP.ByPassMounts(mountID) then
 			return true
 		end
 	end
+	--return boolean (true if mounted)
 	return (SecureCmdOptionParse("[overridebar][vehicleui][possessbar,@vehicle,exists][mounted]true")) ~= "true"
 end
 
+--This is used by the parser.spell
+--Returns if we're casting/channeling anything, its remaning time and name
+--Also used by the parser for (!spell) if order to figure out if we should clip
 local function castingTime()
 	local time = GetTime()
 	local name, _,_,_,_, endTime = UnitCastingInfo("player")
@@ -35,6 +43,9 @@ local function castingTime()
 	return (name and (endTime/1000)-time) or 0, name
 end
 
+--This works on the current parser target.
+--This function takes care of psudo units (fakeunits).
+--Returns boolean (true if the target is valid).
 function NeP.Parser.Target(eval)
 	-- This is to alow casting at the cursor location where no unit exists
 	if eval[3].cursor then
@@ -50,6 +61,8 @@ function NeP.Parser.Target(eval)
 	and NeP.Protected.LineOfSight('player', eval.target)
 end
 
+--This works on the spell the parser is working on.
+--Returns boolean (true if the spell is valid).
 function NeP.Parser.Spell(eval)
 	-- Special (Action, Items, etc)
 	if eval[1].token then
@@ -79,6 +92,9 @@ local function Exe(eval, tspell)
 	end
 end
 
+--This is the actual Parser...
+--Reads and figures out what it should execute from the CR
+--The Cr when it reaches this point must be already compiled and be ready to run.
 function NeP.Parser.Parse(eval)
 	local spell, cond = eval[1], eval[2]
 	local endtime, cname = castingTime()
@@ -105,11 +121,14 @@ function NeP.Parser.Parse(eval)
 					SpellStopCasting()
 				end
 			end
+			--Set vars
 			NeP.Parser.LastCast = tspell
 			NeP.Parser.LastGCD = (not eval.nogcd and tspell) or NeP.Parser.LastGCD
 			NeP.Parser.LastTarget = eval.target
+			--Update the actionlog and master toggle icon
 			NeP.ActionLog:Add(eval.type, tspell, spell.icon, eval.target)
 			NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
+			--Execute
 			return Exe(eval, tspell)
 		end
 	end
@@ -119,14 +138,17 @@ end
 NeP.Core:WhenInGame(function()
 
 C_Timer.NewTicker(0.1, (function()
+	--Hide Faceroll frame
 	NeP.Faceroll:Hide()
-	if NeP.DSL:Get('toggle')(nil, 'mastertoggle') then
-		if not UnitIsDeadOrGhost('player') and IsMountedCheck() then
-			if NeP.Queuer:Execute() then return end
-			local table = NeP.CR.CR[InCombatLockdown()]
-			for i=1, #table do
-				if NeP.Parser.Parse(table[i]) then break end
-			end
+	--Only run if mastertoggle is enabled, not dead and valid mount situation
+	if NeP.DSL:Get('toggle')(nil, 'mastertoggle'
+	and not UnitIsDeadOrGhost('player') and IsMountedCheck() then
+		--Run the Queue and if it returns true, end
+		if NeP.Queuer:Execute() then return end
+		--Iterate the cr (If it returns tru, end
+		local table = NeP.CR.CR[InCombatLockdown()]
+		for i=1, #table do
+			if NeP.Parser.Parse(table[i]) then break end
 		end
 	end
 end), nil)
