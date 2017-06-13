@@ -84,12 +84,14 @@ function NeP.Interface:UpdateIcon(key, icon)
 end
 
 function NeP.Interface:AddToggle(eval)
-	if Toggles[eval.key] then
-		Toggles[eval.key]:Show()
-	else
-		CreateToggle(eval)
-	end
-	NeP.Interface:RefreshToggles()
+	NeP.Core:WhenInGame(function()
+		if Toggles[eval.key] then
+			Toggles[eval.key]:Show()
+		else
+			CreateToggle(eval)
+		end
+		NeP.Interface:RefreshToggles()
+	end)
 end
 
 function NeP.Interface:RefreshToggles()
