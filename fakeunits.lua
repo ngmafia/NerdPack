@@ -24,7 +24,7 @@ NeP.FakeUnits:Add('lowest', function(num, role)
 	return tempTable[num] and tempTable[num].key
 end)
 
-NeP.FakeUnits:Add('lowestp', function(num, role)
+NeP.FakeUnits:Add({'lowestpredicted', 'lowestp'}, function(num, role)
 	local tempTable = {}
 	for _, Obj in pairs(NeP.Healing:GetRoster()) do
 		if not role or (role and Obj.role == role:upper()) then
@@ -39,7 +39,7 @@ NeP.FakeUnits:Add('lowestp', function(num, role)
 end)
 
 -- lowest with certain buff
-NeP.FakeUnits:Add('lbuff', function(num, args)
+NeP.FakeUnits:Add({'lowestbuff', 'lbuff'}, function(num, args)
   local buff, role = strsplit(',', args, 2)
     local tempTable = {}
     for _, Obj in pairs(NeP.Healing:GetRoster()) do
@@ -55,7 +55,7 @@ NeP.FakeUnits:Add('lbuff', function(num, args)
 end)
 
 -- lowets without certain buff
-NeP.FakeUnits:Add('lnbuff', function(num, args)
+NeP.FakeUnits:Add({'lowestnotbuff', 'lnbuff'}, function(num, args)
   	local buff, role = strsplit(',', args, 2)
     local tempTable = {}
     for _, Obj in pairs(NeP.Healing:GetRoster()) do
@@ -71,7 +71,7 @@ NeP.FakeUnits:Add('lnbuff', function(num, args)
 end)
 
 -- lowest with certain buff
-NeP.FakeUnits:Add('ldebuff', function(num, args)
+NeP.FakeUnits:Add({'lowestdebuff', 'ldebuff'}, function(num, args)
   	local buff, role = strsplit(',', args, 2)
     local tempTable = {}
     for _, Obj in pairs(NeP.Healing:GetRoster()) do
@@ -87,7 +87,7 @@ NeP.FakeUnits:Add('ldebuff', function(num, args)
 end)
 
 -- lowets without certain buff
-NeP.FakeUnits:Add('lndebuff', function(num, args)
+NeP.FakeUnits:Add({'lowestnotdebuff', 'lndebuff'}, function(num, args)
   	local buff, role = strsplit(',', args, 2)
     local tempTable = {}
     for _, Obj in pairs(NeP.Healing:GetRoster()) do
@@ -102,7 +102,7 @@ NeP.FakeUnits:Add('lndebuff', function(num, args)
     return tempTable[num] and tempTable[num].key
 end)
 
--- Lowest
+-- Tank
 NeP.FakeUnits:Add('tank', function(num)
 	local tempTable = {}
 	for _, Obj in pairs(NeP.Healing:GetRoster()) do
@@ -115,4 +115,70 @@ NeP.FakeUnits:Add('tank', function(num)
 	end
 	table.sort( tempTable, function(a,b) return a.prio > b.prio end )
 	return tempTable[num] and tempTable[num].key
+end)
+
+-- Healer
+NeP.FakeUnits:Add('healer', function(num)
+	local tempTable = {}
+	for _, Obj in pairs(NeP.Healing:GetRoster()) do
+		if Obj.role == 'HEALER' and not UnitIsUnit('player', Obj.key) then
+			tempTable[#tempTable+1] = {
+				key = Obj.key,
+				prio = Obj.healthMax
+			}
+		end
+	end
+	table.sort( tempTable, function(a,b) return a.prio > b.prio end )
+	return tempTable[num] and tempTable[num].key
+end)
+
+-- DAMAGER
+NeP.FakeUnits:Add('damager', function(num)
+	local tempTable = {}
+	for _, Obj in pairs(NeP.Healing:GetRoster()) do
+		if Obj.role == 'DAMAGER' and not UnitIsUnit('player', Obj.key) then
+			tempTable[#tempTable+1] = {
+				key = Obj.key,
+				prio = Obj.healthMax
+			}
+		end
+	end
+	table.sort( tempTable, function(a,b) return a.prio > b.prio end )
+	return tempTable[num] and tempTable[num].key
+end)
+
+-- enemie with buff
+NeP.FakeUnits:Add({'enemiebuff', 'ebuff'}, function(num, buff)
+    for _, Obj in pairs(NeP.OM:Get('enemie') do
+        if NeP.DSL:Get('buff')(Obj.key, buff) then
+            return Obj.key
+        end
+    end
+end)
+
+-- enemie without buff
+NeP.FakeUnits:Add({'enemienbuff', 'enbuff'}, function(num, buff)
+    for _, Obj in pairs(NeP.OM:Get('enemie') do
+        if not NeP.DSL:Get('buff')(Obj.key, buff) then
+            return Obj.key
+        end
+    end
+end)
+
+-- enemie with debuff
+NeP.FakeUnits:Add({'enemiedebuff', 'edebuff'}, function(num, debuff)
+    for _, Obj in pairs(NeP.OM:Get('enemie') do
+        if NeP.DSL:Get('debuff')(Obj.key, debuff) then
+            return Obj.key
+        end
+    end
+end)
+
+-- enemie without debuff
+NeP.FakeUnits:Add({'enemienbuff', 'enbuff'}, function(num, debuff)
+    for _, Obj in pairs(NeP.OM:Get('enemie') do
+        if not NeP.DSL:Get('debuff')(Obj.key, debuff) then
+            return Obj.key
+        end
+    end
 end)
