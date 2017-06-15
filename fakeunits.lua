@@ -195,3 +195,12 @@ NeP.FakeUnits:Add({'enemynbuff', 'enbuff'}, function(num, debuff)
         end
     end
 end)
+
+-- enemy ADD
+NeP.FakeUnits:Add('adds'}, function(num, debuff)
+    for _, Obj in pairs(NeP.OM:Get('Enemy') do
+        if NeP.BossID:Eval(Obj.key) then
+            return Obj.key
+        end
+    end
+end)
