@@ -38,6 +38,7 @@ local function UnitID(unit)
   else
     unitid = select(6, strsplit("-", UnitGUID(unit)))
     return unit, tonumber(unitid)
+  end
 end
 
 function NeP.BossID:Eval(unit)
