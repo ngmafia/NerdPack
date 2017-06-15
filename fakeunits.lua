@@ -147,10 +147,10 @@ NeP.FakeUnits:Add('damager', function(num)
 	return tempTable[num] and tempTable[num].key
 end)
 
--- Lowest
-NeP.FakeUnits:Add({'lowestenemie', 'loweste', 'le'}, function(num)
+-- Lowest enemy
+NeP.FakeUnits:Add({'lowestenemy', 'loweste', 'le'}, function(num)
 	local tempTable = {}
-	for _, Obj in pairs(NeP.OM:Get('enemie') do
+	for _, Obj in pairs(NeP.OM:Get('Enemy') do
 		tempTable[#tempTable+1] = {
 			key = Obj.key,
 			health = Obj.health
@@ -160,36 +160,36 @@ NeP.FakeUnits:Add({'lowestenemie', 'loweste', 'le'}, function(num)
 	return tempTable[num] and tempTable[num].key
 end)
 
--- enemie with buff
-NeP.FakeUnits:Add({'enemiebuff', 'ebuff'}, function(num, buff)
-    for _, Obj in pairs(NeP.OM:Get('enemie') do
+-- enemy with buff
+NeP.FakeUnits:Add({'enemybuff', 'ebuff'}, function(num, buff)
+    for _, Obj in pairs(NeP.OM:Get('Enemy') do
         if NeP.DSL:Get('buff')(Obj.key, buff) then
             return Obj.key
         end
     end
 end)
 
--- enemie without buff
-NeP.FakeUnits:Add({'enemienbuff', 'enbuff'}, function(num, buff)
-    for _, Obj in pairs(NeP.OM:Get('enemie') do
+-- enemy without buff
+NeP.FakeUnits:Add({'enemynbuff', 'enbuff'}, function(num, buff)
+    for _, Obj in pairs(NeP.OM:Get('Enemy') do
         if not NeP.DSL:Get('buff')(Obj.key, buff) then
             return Obj.key
         end
     end
 end)
 
--- enemie with debuff
-NeP.FakeUnits:Add({'enemiedebuff', 'edebuff'}, function(num, debuff)
-    for _, Obj in pairs(NeP.OM:Get('enemie') do
+-- enemy with debuff
+NeP.FakeUnits:Add({'enemydebuff', 'edebuff'}, function(num, debuff)
+    for _, Obj in pairs(NeP.OM:Get('Enemy') do
         if NeP.DSL:Get('debuff')(Obj.key, debuff) then
             return Obj.key
         end
     end
 end)
 
--- enemie without debuff
-NeP.FakeUnits:Add({'enemienbuff', 'enbuff'}, function(num, debuff)
-    for _, Obj in pairs(NeP.OM:Get('enemie') do
+-- enemy without debuff
+NeP.FakeUnits:Add({'enemynbuff', 'enbuff'}, function(num, debuff)
+    for _, Obj in pairs(NeP.OM:Get('Enemy') do
         if not NeP.DSL:Get('debuff')(Obj.key, debuff) then
             return Obj.key
         end
