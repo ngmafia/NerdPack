@@ -147,6 +147,19 @@ NeP.FakeUnits:Add('damager', function(num)
 	return tempTable[num] and tempTable[num].key
 end)
 
+-- Lowest
+NeP.FakeUnits:Add({'lowestenemie', 'loweste', 'le'}, function(num)
+	local tempTable = {}
+	for _, Obj in pairs(NeP.OM:Get('enemie') do
+		tempTable[#tempTable+1] = {
+			key = Obj.key,
+			health = Obj.health
+		}
+	end
+	table.sort( tempTable, function(a,b) return a.health < b.health end )
+	return tempTable[num] and tempTable[num].key
+end)
+
 -- enemie with buff
 NeP.FakeUnits:Add({'enemiebuff', 'ebuff'}, function(num, buff)
     for _, Obj in pairs(NeP.OM:Get('enemie') do
