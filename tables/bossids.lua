@@ -24,13 +24,26 @@ function NeP.BossID:Add(...)
   end
 end
 
-function NeP.BossID:Eval(unit)
-  if tonumber(unit) then
-    return bossids[tonumber(unit)]
-  elseif UnitExists(unit) then
-    unit = select(6, strsplit("-", UnitGUID(unit)))
-    return bossids[tonumber(unit)]
+local function WoWBossID(unit)
+  for i=1, 4 do
+    if UnitIsUnit(unit, "boss"..i) then
+      return true
+    end
   end
+end
+
+local function UnitID(unit)
+  if tonumber(unit) then
+    return nil, tonumber(unit)
+  else
+    unitid = select(6, strsplit("-", UnitGUID(unit)))
+    return unit, tonumber(unitid)
+end
+
+function NeP.BossID:Eval(unit)
+  if not unit return false end
+  local unit, unitid = UnitID(unit)
+  return UnitExists(unit) and WoWBossID(unit) or bossids[unitid]
 end
 
 NeP.BossID:Add({
