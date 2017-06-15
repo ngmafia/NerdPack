@@ -239,10 +239,6 @@ NeP.DSL:Register('IsNear', function(target, args)
   end
 end)
 
-NeP.DSL:Register('equipped', function(_, item)
-  return IsEquippedItem(item)
-end)
-
 NeP.DSL:Register('gcd', function()
   local class = select(3,UnitClass("player"))
   -- Some class's always have GCD = 1
@@ -519,10 +515,6 @@ NeP.DSL:Register("incdmg.magic", function(target, args)
   return 0
 end)
 
-NeP.DSL:Register("ilevel", function()
-  return math.floor(select(1,GetAverageItemLevel()))
-end)
-
 NeP.DSL:Register('swimming', function ()
   return IsSwimming()
 end)
@@ -603,14 +595,6 @@ NeP.DSL:Register("glyph", function(_,spell)
     end
   end
   return false
-end)
-
-NeP.DSL:Register('twohand', function()
-  return IsEquippedItemType("Two-Hand")
-end)
-
-NeP.DSL:Register('onehand', function()
-  return IsEquippedItemType("One-Hand")
 end)
 
 local communName = NeP.Locale:TA('Dummies', 'Name')

@@ -10,5 +10,6 @@
 	<Script file="talents.lua" />
 	<Script file="buffs.lua" />
 	<Script file="pull_timer.lua" />
+	<Script file="items.lua" />
 
 </Ui>
