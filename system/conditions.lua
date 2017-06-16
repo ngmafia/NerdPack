@@ -33,7 +33,7 @@ end
 function NeP.DSL:Register(name, condition, overwrite)
 	if type(name) == 'table' then
 		for i=1, #name do
-			_add(name, condition, overwrite)
+			_add(name[i], condition, overwrite)
 		end
 	elseif type(name) == 'string' then
 		_add(name, condition, overwrite)
