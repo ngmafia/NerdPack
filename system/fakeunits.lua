@@ -13,7 +13,7 @@ end
 function NeP.FakeUnits:Add(name, func)
 	if type(name) == 'table' then
 		for i=1, #name do
-			_add(name, func)
+			_add(name[i], func)
 		end
 	elseif type(name) == 'string' then
 		_add(name, func)
