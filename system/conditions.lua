@@ -23,7 +23,7 @@ function NeP.DSL:Get(Strg)
 	return noop
 end
 
-local function _add(name, condition, overwrite)
+function _add(name, condition, overwrite)
 	name = name:lower()
 	if not conditions[name] or overwrite then
 		conditions[name] = condition
