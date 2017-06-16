@@ -1,6 +1,6 @@
 local _, NeP       = ...
 NeP.AddsID         = {}
-NeP.Globals.BossID = NeP.AddsID
+NeP.Globals.AddsID = NeP.AddsID
 local strsplit     = strsplit
 local UnitExists   = UnitExists
 local UnitGUID     = UnitGUID
@@ -8,7 +8,7 @@ local UnitGUID     = UnitGUID
 --AddsIDs Lib
 local addsids = {}
 
-function NeP.BossID:Add(...)
+function NeP.AddsID:Add(...)
   if type(...) == 'table' then
     for id in pairs(...) do
       id = tonumber(id)
@@ -24,7 +24,7 @@ function NeP.BossID:Add(...)
   end
 end
 
-function NeP.BossID:Eval(unit)
+function NeP.AddsID:Eval(unit)
   if tonumber(unit) then
     return addsids[tonumber(unit)]
   elseif UnitExists(unit) then
@@ -34,10 +34,10 @@ function NeP.BossID:Eval(unit)
 end
 
 NeP.AddsID:Add({
-  -- Shadowmoon Burial Grounds
+	--	Shadowmoon Burial Grounds
 	[75966] = true,	-- Defiled Spirit (Shadowmoon Burial Grounds)
-  [76518] = true,	-- Ritual of Bones (Shadowmoon Burial Grounds)
-  --(BRF Oregorger
+	[76518] = true,	-- Ritual of Bones (Shadowmoon Burial Grounds)
+	--	(BRF Oregorger
 	[77252] = true,	-- Ore Crate (BRF Oregorger)
 	[77665] = true,	-- Iron Bomber (BRF Blackhand)
 	[77891] = true,	-- Grasping Earth (BRF Kromog)
@@ -46,14 +46,14 @@ NeP.AddsID:Add({
 	[78583] = true,	-- Dominator Turret (BRF Iron Maidens)
 	[78584] = true,	-- Dominator Turret (BRF Iron Maidens)
 	[79504] = true,	-- Ore Crate (BRF Oregorger)
-  --...
+	--	...
 	[79511] = true,	-- Blazing Trickster (Auchindoun Heroic)
-  [76220] = true,	-- Blazing Trickster (Auchindoun Normal)
+	[76220] = true,	-- Blazing Trickster (Auchindoun Normal)
 	[81638] = true,	-- Aqueous Globule (The Everbloom)
 	[86644] = true,	-- Ore Crate (BRF Oregorger)
 	[76222] = true,	-- Rallying Banner (UBRS Black Iron Grunt)
 	[76267] = true,	-- Solar Zealot (Skyreach)
-  --HFC
+	--	HFC
 	[94873] = true,	-- Felfire Flamebelcher (HFC)
 	[90432] = true,	-- Felfire Flamebelcher (HFC)
 	[95586] = true,	-- Felfire Demolisher (HFC)

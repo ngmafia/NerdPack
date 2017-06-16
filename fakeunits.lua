@@ -150,7 +150,7 @@ end)
 -- Lowest enemy
 NeP.FakeUnits:Add({'lowestenemy', 'loweste', 'le'}, function(num)
 	local tempTable = {}
-	for _, Obj in pairs(NeP.OM:Get('Enemy') do
+	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
 		tempTable[#tempTable+1] = {
 			key = Obj.key,
 			health = Obj.health
@@ -162,7 +162,7 @@ end)
 
 -- enemy with buff
 NeP.FakeUnits:Add({'enemybuff', 'ebuff'}, function(num, buff)
-    for _, Obj in pairs(NeP.OM:Get('Enemy') do
+    for _, Obj in pairs(NeP.OM:Get('Enemy')) do
         if NeP.DSL:Get('buff')(Obj.key, buff) then
             return Obj.key
         end
@@ -171,7 +171,7 @@ end)
 
 -- enemy without buff
 NeP.FakeUnits:Add({'enemynbuff', 'enbuff'}, function(num, buff)
-    for _, Obj in pairs(NeP.OM:Get('Enemy') do
+    for _, Obj in pairs(NeP.OM:Get('Enemy')) do
         if not NeP.DSL:Get('buff')(Obj.key, buff) then
             return Obj.key
         end
@@ -180,7 +180,7 @@ end)
 
 -- enemy with debuff
 NeP.FakeUnits:Add({'enemydebuff', 'edebuff'}, function(num, debuff)
-    for _, Obj in pairs(NeP.OM:Get('Enemy') do
+    for _, Obj in pairs(NeP.OM:Get('Enemy')) do
         if NeP.DSL:Get('debuff')(Obj.key, debuff) then
             return Obj.key
         end
@@ -189,7 +189,7 @@ end)
 
 -- enemy without debuff
 NeP.FakeUnits:Add({'enemynbuff', 'enbuff'}, function(num, debuff)
-    for _, Obj in pairs(NeP.OM:Get('Enemy') do
+    for _, Obj in pairs(NeP.OM:Get('Enemy')) do
         if not NeP.DSL:Get('debuff')(Obj.key, debuff) then
             return Obj.key
         end
@@ -198,7 +198,7 @@ end)
 
 -- enemy ADD
 NeP.FakeUnits:Add('adds'}, function(num, debuff)
-    for _, Obj in pairs(NeP.OM:Get('Enemy') do
+    for _, Obj in pairs(NeP.OM:Get('Enemy')) do
         if NeP.BossID:Eval(Obj.key) then
             return Obj.key
         end

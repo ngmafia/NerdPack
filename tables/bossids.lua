@@ -42,7 +42,7 @@ local function UnitID(unit)
 end
 
 function NeP.BossID:Eval(unit)
-  if not unit return false end
+  if not unit then return false end
   local unit, unitid = UnitID(unit)
   return UnitExists(unit) and WoWBossID(unit) or bossids[unitid]
 end
