@@ -153,7 +153,7 @@ NeP.FakeUnits:Add({'lowestenemy', 'loweste', 'le'}, function(num)
 	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
 		tempTable[#tempTable+1] = {
 			key = Obj.key,
-			health = NeP.DSL:Get("health")(Obj.health)
+			health = NeP.DSL:Get("health")(Obj.key)
 		}
 	end
 	table.sort( tempTable, function(a,b) return a.health < b.health end )
