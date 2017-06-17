@@ -10,6 +10,8 @@ NeP.ButtonsPadding = 2
 NeP.min_width = 40
 NeP.min_height = 25
 
+local title_size = 18
+
 -- Load Saved sizes
 NeP.Core:WhenInGame(function()
 	NeP.ButtonsSize = NeP.Config:Read(n_name..'_Settings', 'bsize', 40)
@@ -18,7 +20,6 @@ NeP.Core:WhenInGame(function()
 end)
 
 local Toggles = {}
-local tcount = 0
 
 local function SetTexture(parent, icon)
 	local temp = parent:CreateTexture()
@@ -55,20 +56,20 @@ local function OnEnter(self, name, text)
 end
 
 local function CreateToggle(eval)
-	local pos = (NeP.ButtonsSize*tcount)+(tcount*NeP.ButtonsPadding)-(NeP.ButtonsSize+NeP.ButtonsPadding)
+	--local pos = (NeP.ButtonsSize*tcount)+(tcount*NeP.ButtonsPadding)-(NeP.ButtonsSize+NeP.ButtonsPadding)
 	eval.key = eval.key:lower()
 	Toggles[eval.key] = CreateFrame("CheckButton", eval.key, mainframe.content)
 	local temp = Toggles[eval.key]
 	temp:SetFrameStrata("high")
 	temp:SetFrameLevel(1)
 	temp.key = eval.key
-	temp:SetPoint("LEFT", mainframe.content, pos, 0)
-	temp:SetSize(NeP.ButtonsSize, NeP.ButtonsSize)
+	--temp:SetPoint("LEFT", mainframe.content, pos, 0)
+	--temp:SetSize(NeP.ButtonsSize, NeP.ButtonsSize)
 	temp:SetFrameLevel(1)
 	temp:SetNormalFontObject("GameFontNormal")
 	temp.texture = SetTexture(temp, eval.icon)
 	temp.actv = NeP.Config:Read('TOGGLE_STATES', eval.key, false)
-	temp:SetChecked(temp.actv)
+	--temp:SetChecked(temp.actv)
 	temp.nohide = eval.nohide
 	temp.Checked_texture = SetTexture(temp)
 	temp:SetCheckedTexture(temp.Checked_texture)
@@ -95,23 +96,42 @@ function NeP.Interface:AddToggle(eval)
 end
 
 function NeP.Interface:RefreshToggles()
-	tcount = 0
+	local tcount, row_count, maxed = 0, 0, 0
+
 	for k in pairs(Toggles) do
 		if Toggles[k]:IsShown() then
+
+			-- This is to handle rows
+			local n1 = NeP.Config:Read(n_name..'_Settings', 'brow', 10)
+			if tcount >= n1 then
+				maxed = tcount
+				tcount = 0
+				row_count = row_count + 1
+			end
+
 			tcount = tcount + 1
+
+
 			local pos = (NeP.ButtonsSize*tcount)+(tcount*NeP.ButtonsPadding)-(NeP.ButtonsSize+NeP.ButtonsPadding)
 			Toggles[k]:SetSize(NeP.ButtonsSize, NeP.ButtonsSize)
-			Toggles[k]:SetPoint("LEFT", mainframe.content, pos, 0)
+			print(-(row_count*NeP.ButtonsSize))
+			Toggles[k]:SetPoint("TOPLEFT", mainframe.content, pos, -(row_count*NeP.ButtonsSize))
+			Toggles[k]:SetChecked(Toggles[k].actv)
 		end
+	end
+
+
+	if maxed > 0 then
+		tcount = maxed
 	end
 
 	-- Set size to match ButtonsSize
 	mainframe.settings.width = tcount*(NeP.ButtonsSize+NeP.ButtonsPadding)-NeP.ButtonsPadding
-	mainframe.settings.height = NeP.ButtonsSize+18
+	mainframe.settings.height = (NeP.ButtonsSize*(row_count+1))+title_size
 
 	-- Dont go bellow the mimimum allowed
-	if mainframe.settings.width<NeP.min_width then mainframe.settings.width=NeP.min_width end
-	if mainframe.settings.height<NeP.min_height then mainframe.settings.height=NeP.min_height end
+	--if mainframe.settings.width<NeP.min_width then mainframe.settings.width=NeP.min_width end
+	--if mainframe.settings.height<NeP.min_height then mainframe.settings.height=NeP.min_height end
 
 	-- Dont allow Resize
 	mainframe.settings.minHeight = mainframe.settings.height
