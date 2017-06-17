@@ -189,7 +189,7 @@ NeP.FakeUnits:Add({'enemydebuff', 'edebuff'}, function(_, debuff)
 end)
 
 -- enemy without debuff
-NeP.FakeUnits:Add({'enemyndebuff', 'enbuff'}, function(_, debuff)
+NeP.FakeUnits:Add({'enemyndebuff', 'endebuff'}, function(_, debuff)
     for _, Obj in pairs(NeP.OM:Get('Enemy')) do
         if not NeP.DSL:Get('debuff')(Obj.key, debuff) then
             return Obj.key
