@@ -1,6 +1,7 @@
 local _, NeP = ...
 
-return
+-- DONT LOAD THIS (BROKEN!S)
+if true then return end
 
 -- Locals
 local UnitExists = ObjectExists or UnitExists

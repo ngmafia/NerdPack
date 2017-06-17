@@ -2,6 +2,8 @@
 ..\FrameXML\UI.xsd">
 
 	<Script file="tools.lua" />
+	<Script file="ui_elements.lua" />
+	<Script file="styles_load.lua" />
 	<Script file="mainframe.lua" />
 	<Script file="settings.lua" />
 	<Script file="toggles.lua" />
