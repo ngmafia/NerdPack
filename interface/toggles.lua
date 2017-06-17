@@ -114,7 +114,6 @@ function NeP.Interface:RefreshToggles()
 
 			local pos = (NeP.ButtonsSize*tcount)+(tcount*NeP.ButtonsPadding)-(NeP.ButtonsSize+NeP.ButtonsPadding)
 			Toggles[k]:SetSize(NeP.ButtonsSize, NeP.ButtonsSize)
-			print(-(row_count*NeP.ButtonsSize))
 			Toggles[k]:SetPoint("TOPLEFT", mainframe.content, pos, -(row_count*NeP.ButtonsSize))
 			Toggles[k]:SetChecked(Toggles[k].actv)
 		end
