@@ -104,7 +104,7 @@ local function ProcessCondition(Strg, Spell, Target)
 	-- condition Target
 	if unitID and UnitExists(unitID) then
 		Target = unitID
-		Strg = rest
+		Strg = rest or Strg
 	end
 	-- Condition arguments
 	local Strg, Args = pArgs(Strg, Spell, Target)
