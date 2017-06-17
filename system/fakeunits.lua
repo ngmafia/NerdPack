@@ -10,7 +10,7 @@ local function _add(name, func)
 	end
 end
 
-function NeP.FakeUnits:Add(name, func)
+function NeP.FakeUnits.Add(_, name, func)
 	if type(name) == 'table' then
 		for i=1, #name do
 			_add(name[i], func)
@@ -22,13 +22,14 @@ function NeP.FakeUnits:Add(name, func)
 	end
 end
 
-function NeP.FakeUnits:Filter(unit)
-	for token,func in pairs(Units) do
-		if unit:find('^'..token) then
-			local arg2 = unit:match('%((.+)%)')
-			local num = unit:match("%d+") or 1
-			return func(tonumber(num), arg2)
-		end
+function NeP.FakeUnits.Filter(_, unit)
+	-- Find and remove num and arg
+	local arg = unit:match('%((.+)%)')
+	local num = unit:match("%d+") or 1
+	if Units[unit] then
+		unit = unit:gsub(arg or '', '')
+		unit = unit:gsub(num or '', '')
+		return Units[unit](tonumber(num), arg)
 	end
 	return unit
 end
