@@ -56,20 +56,16 @@ local function OnEnter(self, name, text)
 end
 
 local function CreateToggle(eval)
-	--local pos = (NeP.ButtonsSize*tcount)+(tcount*NeP.ButtonsPadding)-(NeP.ButtonsSize+NeP.ButtonsPadding)
 	eval.key = eval.key:lower()
 	Toggles[eval.key] = CreateFrame("CheckButton", eval.key, mainframe.content)
 	local temp = Toggles[eval.key]
 	temp:SetFrameStrata("high")
 	temp:SetFrameLevel(1)
 	temp.key = eval.key
-	--temp:SetPoint("LEFT", mainframe.content, pos, 0)
-	--temp:SetSize(NeP.ButtonsSize, NeP.ButtonsSize)
 	temp:SetFrameLevel(1)
 	temp:SetNormalFontObject("GameFontNormal")
 	temp.texture = SetTexture(temp, eval.icon)
 	temp.actv = NeP.Config:Read('TOGGLE_STATES', eval.key, false)
-	--temp:SetChecked(temp.actv)
 	temp.nohide = eval.nohide
 	temp.Checked_texture = SetTexture(temp)
 	temp:SetCheckedTexture(temp.Checked_texture)
@@ -110,8 +106,6 @@ function NeP.Interface:RefreshToggles()
 			end
 
 			tcount = tcount + 1
-
-
 			local pos = (NeP.ButtonsSize*tcount)+(tcount*NeP.ButtonsPadding)-(NeP.ButtonsSize+NeP.ButtonsPadding)
 			Toggles[k]:SetSize(NeP.ButtonsSize, NeP.ButtonsSize)
 			Toggles[k]:SetPoint("TOPLEFT", mainframe.content, pos, -(row_count*NeP.ButtonsSize))
@@ -119,7 +113,7 @@ function NeP.Interface:RefreshToggles()
 		end
 	end
 
-
+	-- this is to handle max width
 	if maxed > 0 then
 		tcount = maxed
 	end
@@ -129,8 +123,8 @@ function NeP.Interface:RefreshToggles()
 	mainframe.settings.height = (NeP.ButtonsSize*(row_count+1))+title_size
 
 	-- Dont go bellow the mimimum allowed
-	--if mainframe.settings.width<NeP.min_width then mainframe.settings.width=NeP.min_width end
-	--if mainframe.settings.height<NeP.min_height then mainframe.settings.height=NeP.min_height end
+	if mainframe.settings.width<NeP.min_width then mainframe.settings.width=NeP.min_width end
+	if mainframe.settings.height<NeP.min_height then mainframe.settings.height=NeP.min_height end
 
 	-- Dont allow Resize
 	mainframe.settings.minHeight = mainframe.settings.height
@@ -152,11 +146,11 @@ function NeP.Interface:ResetToggles()
 end
 
 function NeP.Interface:toggleToggle(key, state)
-	local self = Toggles[key:lower()]
-	if not self then return end
-	self.actv = state or not self.actv
-	self:SetChecked(self.actv)
-	NeP.Config:Write('TOGGLE_STATES', self.key, self.actv)
+	local tmp = Toggles[key:lower()]
+	if not tmp then return end
+	tmp.actv = state or not tmp.actv
+	tmp:SetChecked(tmp.actv)
+	NeP.Config:Write('TOGGLE_STATES', tmp.key, tmp.actv)
 end
 
 -- Globals
