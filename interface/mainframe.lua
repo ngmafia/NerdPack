@@ -61,7 +61,7 @@ function NeP.Interface.DropMenu()
 	EasyMenu(DropMenu, menuFrame, menuFrame, 0, 0, "MENU")
 end
 
-function NeP.Interface.Add(name, func)
+function NeP.Interface.Add(_, name, func)
 	table.insert(DropMenu, {
 		text = tostring(name),
 		func = func,
