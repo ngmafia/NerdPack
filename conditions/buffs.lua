@@ -67,7 +67,7 @@ end)
 
 -- Counts how many units have the buff
 -- USAGE: count(BUFF).buffs > = #
-NeP.DSL:Register("count.buffs", function(_,buff)
+NeP.DSL:Register("count.enemies.buffs", function(_,buff)
   local n1 = 0
   for _, Obj in pairs(NeP.OM:Get('Enemy')) do
       if not NeP.DSL:Get('buff')(Obj.key, buff) then
@@ -77,11 +77,35 @@ NeP.DSL:Register("count.buffs", function(_,buff)
   return n1
 end)
 
+-- Counts how many units have the buff
+-- USAGE: count(BUFF).buffs > = #
+NeP.DSL:Register("count.friendly.buffs", function(_,buff)
+  local n1 = 0
+  for _, Obj in pairs(NeP.Healing:GetRoster()) do
+      if not NeP.DSL:Get('buff')(Obj.key, buff) then
+          n1 = n1 + 1
+      end
+  end
+  return n1
+end)
+
 -- Counts how many units have the debuff
 -- USAGE: count(DEBUFF).debuffs > = #
-NeP.DSL:Register("count.debuffs", function(_,debuff)
+NeP.DSL:Register("count.enemies.debuffs", function(_,debuff)
   local n1 = 0
   for _, Obj in pairs(NeP.OM:Get('Enemy')) do
+      if not NeP.DSL:Get('debuff')(Obj.key, debuff) then
+          n1 = n1 + 1
+      end
+  end
+  return n1
+end)
+
+-- Counts how many units have the debuff
+-- USAGE: count(DEBUFF).debuffs > = #
+NeP.DSL:Register("count.friendly.debuffs", function(_,debuff)
+  local n1 = 0
+  for _, Obj in pairs(NeP.Healing:GetRoster()) do
       if not NeP.DSL:Get('debuff')(Obj.key, debuff) then
           n1 = n1 + 1
       end
