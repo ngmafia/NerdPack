@@ -1,6 +1,7 @@
 local _, NeP = ...
 
-local UnitIsUnit = UnitIsUnit
+local UnitIsUnit 	= UnitIsUnit
+local strsplit 		= strsplit
 --[[
 local Roles = {
 	['TANK'] = 1,
@@ -56,7 +57,7 @@ end)
 
 -- lowets without certain buff
 NeP.FakeUnits:Add({'lowestnotbuff', 'lnbuff'}, function(num, args)
-  	local buff, role = strsplit(',', args, 2)
+		local buff, role = strsplit(',', args, 2)
     local tempTable = {}
     for _, Obj in pairs(NeP.Healing:GetRoster()) do
         if (not role or Obj.role == role) and not NeP.DSL:Get('buff')(Obj.key, buff) then
@@ -72,7 +73,7 @@ end)
 
 -- lowest with certain buff
 NeP.FakeUnits:Add({'lowestdebuff', 'ldebuff'}, function(num, args)
-  	local buff, role = strsplit(',', args, 2)
+		local buff, role = strsplit(',', args, 2)
     local tempTable = {}
     for _, Obj in pairs(NeP.Healing:GetRoster()) do
         if (not role or Obj.role == role) and NeP.DSL:Get('debuff.any')(Obj.key, buff) then
@@ -88,7 +89,7 @@ end)
 
 -- lowets without certain buff
 NeP.FakeUnits:Add({'lowestnotdebuff', 'lndebuff'}, function(num, args)
-  	local buff, role = strsplit(',', args, 2)
+		local buff, role = strsplit(',', args, 2)
     local tempTable = {}
     for _, Obj in pairs(NeP.Healing:GetRoster()) do
         if (not role or Obj.role == role) and not NeP.DSL:Get('debuff.any')(Obj.key, buff) then
@@ -161,7 +162,7 @@ NeP.FakeUnits:Add({'lowestenemy', 'loweste', 'le'}, function(num)
 end)
 
 -- enemy with buff
-NeP.FakeUnits:Add({'enemybuff', 'ebuff'}, function(num, buff)
+NeP.FakeUnits:Add({'enemybuff', 'ebuff'}, function(_, buff)
     for _, Obj in pairs(NeP.OM:Get('Enemy')) do
         if NeP.DSL:Get('buff')(Obj.key, buff) then
             return Obj.key
@@ -170,7 +171,7 @@ NeP.FakeUnits:Add({'enemybuff', 'ebuff'}, function(num, buff)
 end)
 
 -- enemy without buff
-NeP.FakeUnits:Add({'enemynbuff', 'enbuff'}, function(num, buff)
+NeP.FakeUnits:Add({'enemynbuff', 'enbuff'}, function(_, buff)
     for _, Obj in pairs(NeP.OM:Get('Enemy')) do
         if not NeP.DSL:Get('buff')(Obj.key, buff) then
             return Obj.key
@@ -179,7 +180,7 @@ NeP.FakeUnits:Add({'enemynbuff', 'enbuff'}, function(num, buff)
 end)
 
 -- enemy with debuff
-NeP.FakeUnits:Add({'enemydebuff', 'edebuff'}, function(num, debuff)
+NeP.FakeUnits:Add({'enemydebuff', 'edebuff'}, function(_, debuff)
     for _, Obj in pairs(NeP.OM:Get('Enemy')) do
         if NeP.DSL:Get('debuff')(Obj.key, debuff) then
             return Obj.key
@@ -188,7 +189,7 @@ NeP.FakeUnits:Add({'enemydebuff', 'edebuff'}, function(num, debuff)
 end)
 
 -- enemy without debuff
-NeP.FakeUnits:Add({'enemynbuff', 'enbuff'}, function(num, debuff)
+NeP.FakeUnits:Add({'enemyndebuff', 'enbuff'}, function(_, debuff)
     for _, Obj in pairs(NeP.OM:Get('Enemy')) do
         if not NeP.DSL:Get('debuff')(Obj.key, debuff) then
             return Obj.key
@@ -197,7 +198,7 @@ NeP.FakeUnits:Add({'enemynbuff', 'enbuff'}, function(num, debuff)
 end)
 
 -- enemy ADD
-NeP.FakeUnits:Add('adds', function(num)
+NeP.FakeUnits:Add('adds', function()
     for _, Obj in pairs(NeP.OM:Get('Enemy')) do
         if NeP.AddsID:Eval(Obj.key) then
             return Obj.key
@@ -206,7 +207,7 @@ NeP.FakeUnits:Add('adds', function(num)
 end)
 
 -- enemy Boss
-NeP.FakeUnits:Add('boss', function(num)
+NeP.FakeUnits:Add('boss', function()
     for _, Obj in pairs(NeP.OM:Get('Enemy')) do
         if NeP.BossID:Eval(Obj.key) then
             return Obj.key
