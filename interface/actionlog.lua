@@ -1,8 +1,5 @@
 local _, NeP = ...
 
--- DONT LOAD THIS (BROKEN!S)
-if true then return end
-
 -- Locals
 local UnitExists 	= ObjectExists or UnitExists
 local date       	= date
@@ -23,7 +20,8 @@ local delta = 0
 local NeP_AL = NeP.Interface:BuildGUI({
 	key = 'NeP_ALFrame',
 	width = 460,
-	height = abs_height,
+	title = L:TA('AL', 'Option'),
+	height = abs_height
 })
 NeP.Interface:Add(L:TA('AL', 'Option'), function() NeP_AL:Show() end)
 NeP_AL:Hide()
@@ -33,12 +31,14 @@ local headers = {
 	{'TOPLEFT', 'Description', 130},
 	{'TOPRIGHT', 'Time', -25}
 }
+
+--[[
 for i=1, 3 do
 	NeP_AL.header = NeP_AL.content:CreateFontString('NeP_ALHeaderText')
 	NeP_AL.header:SetFont('Fonts\\ARIALN.TTF', log_height-3)
 	NeP_AL.header:SetPoint(headers[i][1], NeP_AL.frame, headers[i][3], 0)
 	NeP_AL.header:SetText('|cff'..NeP.Color..L:TA('AL', headers[i][2]))
-end
+end]]
 
 NeP_AL.frame:SetScript('OnMouseWheel', function(_, mouse)
 	local top = #Data - log_items
