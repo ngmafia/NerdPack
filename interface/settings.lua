@@ -35,7 +35,7 @@ local config = {
         {text = 'Black', key = '000000'},
         {text = 'Class Color', key = 'CLASS'},
       }, default = '000000'},
-      -- tittle_alpha
+      -- content_alpha
       { type = 'spinner', text = 'content_alpha', key = 'content_alpha', step = .05, min = 0, max = 1, default = .75},
 
       { type = 'spacer' },{ type = 'ruler' },

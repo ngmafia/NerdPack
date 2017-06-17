@@ -75,12 +75,12 @@ local function CreateToggle(eval)
 	temp:SetScript("OnLeave", function() GameTooltip:Hide() end)
 end
 
-function NeP.Interface:UpdateIcon(key, icon)
+function NeP.Interface.UpdateIcon(_, key, icon)
 	if not icon or not Toggles[key] then return end
 	Toggles[key].texture:SetTexture(icon)
 end
 
-function NeP.Interface:AddToggle(eval)
+function NeP.Interface.AddToggle(_, eval)
 	NeP.Core:WhenInGame(function()
 		if Toggles[eval.key] then
 			Toggles[eval.key]:Show()
@@ -91,7 +91,7 @@ function NeP.Interface:AddToggle(eval)
 	end)
 end
 
-function NeP.Interface:RefreshToggles()
+function NeP.Interface.RefreshToggles()
 	local tcount, row_count, maxed = 0, 0, 0
 
 	for k in pairs(Toggles) do
@@ -136,7 +136,7 @@ function NeP.Interface:RefreshToggles()
 	mainframe:ApplySettings()
 end
 
-function NeP.Interface:ResetToggles()
+function NeP.Interface.ResetToggles()
 	for k, v in pairs(Toggles) do
 		if not v.nohide then
 			Toggles[k]:Hide()
@@ -145,7 +145,7 @@ function NeP.Interface:ResetToggles()
 	NeP.Interface:RefreshToggles()
 end
 
-function NeP.Interface:toggleToggle(key, state)
+function NeP.Interface.toggleToggle(_, key, state)
 	local tmp = Toggles[key:lower()]
 	if not tmp then return end
 	tmp.actv = state or not tmp.actv

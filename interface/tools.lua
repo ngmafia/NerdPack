@@ -7,7 +7,7 @@ local LibStub     = LibStub
 local unpack 			= unpack
 local DiesalGUI   = LibStub("DiesalGUI-1.0")
 
-function NeP.Interface:Noop() end
+function NeP.Interface.Noop() end
 
 local _Elements = {
 	header    = { func = 'Header', offset = -16 },
