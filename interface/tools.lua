@@ -291,7 +291,7 @@ function NeP.Interface:Button(element, parent, offset, table)
 	parent:AddChild(tmp)
 	tmp:SetParent(parent.content)
 	tmp:SetText(element.text)
-	tmp:SetWidth(element.width or 100)
+	tmp:SetWidth(element.width or parent.content:GetWidth()-10)
 	tmp:SetHeight(element.height or 20)
 	tmp:SetStylesheet(NeP.UI.buttonStyleSheet)
 	tmp:SetEventListener("OnClick", element.callback)
@@ -312,7 +312,7 @@ function NeP.Interface:Button(element, parent, offset, table)
 		local loc = element.align
 		tmp:SetPoint(loc, parent.content, 0, offset)
 	else
-		tmp:SetPoint("TOPLEFT", parent.content, 0, offset)
+		tmp:SetPoint("TOP", parent.content, 0, offset)
 	end
 	if element.key then
 		usedGUIs[table.key].elements[element.key] = tmp
@@ -479,6 +479,7 @@ function NeP.Interface:BuildGUI(eval)
 	parent:SetWidth(eval.width or 200)
 	parent:SetHeight(eval.height or 300)
 	parent.frame:SetClampedToScreen(true)
+	parent:SetStylesheet(NeP.UI.WindowStyleSheet)
 
 	--Save Location after dragging
 	parent:SetEventListener('OnDragStop', function(self, _, left, top)

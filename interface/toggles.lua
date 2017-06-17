@@ -10,7 +10,7 @@ NeP.ButtonsPadding = 2
 NeP.min_width = 40
 NeP.min_height = 25
 
-local title_size = 18
+local title_size = 20
 
 -- Load Saved sizes
 NeP.Core:WhenInGame(function()
@@ -119,7 +119,7 @@ function NeP.Interface:RefreshToggles()
 	end
 
 	-- Set size to match ButtonsSize
-	mainframe.settings.width = tcount*(NeP.ButtonsSize+NeP.ButtonsPadding)-NeP.ButtonsPadding
+	mainframe.settings.width = tcount*(NeP.ButtonsSize+NeP.ButtonsPadding)
 	mainframe.settings.height = (NeP.ButtonsSize*(row_count+1))+title_size
 
 	-- Dont go bellow the mimimum allowed

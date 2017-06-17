@@ -1,12 +1,114 @@
 local _, NeP = ...
+local LibStub = LibStub
+--local DiesalGUI   = LibStub("DiesalGUI-1.0")
+--local DiesalTools = LibStub("DiesalTools-1.0")
+--local SharedMedia = LibStub("LibSharedMedia-3.0")
+local DiesalStyle = LibStub("DiesalStyle-1.0")
+local Colors = DiesalStyle.Colors
+
 
 NeP.UI = {}
+
+NeP.UI.WindowStyleSheet = {
+	['frame-outline'] = {
+		type			= 'outline',
+		layer			= 'BACKGROUND',
+		color			= 'FFFFFF',
+	},
+	['frame-shadow'] = {
+		type			= 'shadow',
+	},
+	['titleBar-color'] = {
+		type			= 'texture',
+		layer			= 'BACKGROUND',
+		color			= 'FFFFFF',
+		alpha			= .95,
+	},
+	['titletext-Font'] = {
+		type			= 'font',
+		color			= 'd8d8d8',
+	},
+	['closeButton-icon'] = {
+		type			= 'texture',
+		layer			= 'ARTWORK',
+    image     = {'DiesalGUIcons', {9,5,16,256,128}},
+		alpha 		= .3,
+		position	= {-2,nil,-1,nil},
+		width			= 16,
+		height		= 16,
+	},
+	['closeButton-iconHover'] = {
+		type			= 'texture',
+		layer			= 'HIGHLIGHT',
+    image     = {'DiesalGUIcons', {9,5,16,256,128}, 'b30000'},
+		alpha			= 1,
+		position	= {-2,nil,-1,nil},
+		width			= 16,
+		height		= 16,
+	},
+	['header-background'] = {
+		type			= 'texture',
+		layer			= 'BACKGROUND',
+    gradient	= {'VERTICAL',Colors.UI_400_GR[1],Colors.UI_400_GR[2]},
+    alpha     = .95,
+		position 	= {0,0,0,-1},
+	},
+	['header-inline'] = {
+		type			= 'outline',
+		layer			= 'BORDER',
+    gradient	= {'VERTICAL','ffffff','ffffff'},
+    alpha     = {.05,.02},
+		position	= {0,0,0,-1},
+	},
+	['header-divider'] = {
+		type			= 'texture',
+		layer			= 'BORDER',
+		color			= '000000',
+		alpha 		= 1,
+		position	= {0,0,nil,0},
+		height		= 1,
+	},
+	['content-background'] = {
+		type			= 'texture',
+		layer			= 'BACKGROUND',
+		color			= Colors.UI_100,
+		alpha			= .95,
+	},
+	['content-outline'] = {
+		type			= 'outline',
+		layer			= 'BORDER',
+		color			= 'FFFFFF',
+		alpha			= .01
+	},
+	['footer-background'] = {
+		type			= 'texture',
+		layer			= 'BACKGROUND',
+    gradient	= {'VERTICAL',Colors.UI_400_GR[1],Colors.UI_400_GR[2]},
+    alpha     = .95,
+		position 	= {0,0,-1,0},
+	},
+	['footer-divider'] = {
+		type			= 'texture',
+		layer			= 'BACKGROUND',
+		color			= '000000',
+		position	= {0,0,0,nil},
+		height		= 1,
+	},
+	['footer-inline'] = {
+		type			= 'outline',
+		layer			= 'BORDER',
+    gradient	= {'VERTICAL','ffffff','ffffff'},
+    alpha     = {.05,.02},
+		position	= {0,0,-1,0},
+    debug = true,
+	},
+}
 
 NeP.UI.buttonStyleSheet = {
   ['frame-color'] = {
     type			= 'texture',
     layer			= 'BACKGROUND',
-    color			= '2f353b',
+    color			= 'FFFFFF',
     offset		= 0,
   },
   ['frame-highlight'] = {
@@ -42,7 +144,7 @@ NeP.UI.buttonStyleSheet = {
   },
   ['text-color'] = {
     type			= 'Font',
-    color			= 'b8c2cc',
+    color			= '000000',
   },
 }
 
@@ -130,7 +232,7 @@ DiesalGUI:RegisterObjectConstructor("Rule", function()
   self.frame		= frame
   frame:SetHeight(1)
   frame.texture = frame:CreateTexture()
-  frame.texture:SetColorTexture(0,0,0,1)
+  frame.texture:SetColorTexture(1,1,1,1)
   frame.texture:SetAllPoints(frame)
   self.SetParent = function(self, parent)
     self.frame:SetParent(parent)
