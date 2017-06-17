@@ -14,7 +14,7 @@ end
 
 local noop = function() end
 
-function NeP.DSL:Get(Strg)
+function NeP.DSL.Get(_, Strg)
 	Strg = Strg:lower()
 	if conditions[Strg] then
 		Deprecated(Strg)
@@ -23,14 +23,14 @@ function NeP.DSL:Get(Strg)
 	return noop
 end
 
-function _add(name, condition, overwrite)
+local function _add(name, condition, overwrite)
 	name = name:lower()
 	if not conditions[name] or overwrite then
 		conditions[name] = condition
 	end
 end
 
-function NeP.DSL:Register(name, condition, overwrite)
+function NeP.DSL.Register(_, name, condition, overwrite)
 	if type(name) == 'table' then
 		for i=1, #name do
 			_add(name[i], condition, overwrite)

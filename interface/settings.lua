@@ -36,7 +36,7 @@ local config = {
         {text = 'Class Color', key = 'CLASS'},
       }, default = '000000'},
       -- content_alpha
-      { type = 'spinner', text = 'content_alpha', key = 'content_alpha', step = .05, min = 0, max = 1, default = .75},
+      { type = 'spinner', text = 'content_alpha', key = 'content_alpha', step = .05, min = 0, max = 1, default = .85},
 
       { type = 'spacer' },{ type = 'ruler' },
 			{ type = 'button', text = L:TA('Settings', 'apply_bt'), callback = function()

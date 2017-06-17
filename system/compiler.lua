@@ -7,7 +7,6 @@ local GetInventoryItemID   = GetInventoryItemID
 local GetItemInfo          = GetItemInfo
 local GetSpellInfo         = GetSpellInfo
 local UnitExists           = ObjectExists or UnitExists
-local unpack               = unpack
 
 NeP.Compiler = {}
 
@@ -47,7 +46,6 @@ function NeP.Compiler.Spell(eval, name)
 	local ref = {
 		spell = eval[1]
 	}
-	local skip = false
 	local arg1, args = ref.spell:match('(.+)%((.+)%)')
 	if args then ref.spell = arg1 end
 	ref.args = args
@@ -113,7 +111,7 @@ function NeP.Compiler.Spell(eval, name)
 	eval[1] = ref
 end
 
-function NeP.Compiler.Target(eval, name)
+function NeP.Compiler.Target(eval)
 	local ref = {}
 	if type(eval[3]) == 'string' then
 		ref.target = eval[3]
@@ -131,7 +129,7 @@ function NeP.Compiler.Target(eval, name)
 	elseif type(eval[3]) == 'function' then
 		ref.target = 'fake'
 		ref.func = eval[3]
-	elseif type(eval[3]) == 'table' then
+	--elseif type(eval[3]) == 'table' then
 		-- to be done
 	else
 		ref.target = 'fake'
@@ -175,7 +173,7 @@ function NeP.Compiler.Compile(eval, name)
 	if eval[4] then return end
 	eval[4] = true
 
-	local spell, cond = eval[1], eval[2]
+	local spell = eval[1]
 	local spelltype = type(spell)
 	-- Spell
 	if spelltype == 'nil' then
@@ -211,7 +209,7 @@ function NeP.Compiler.Compile(eval, name)
 	NeP.Compiler.Target(eval, name)
 end
 
-function NeP.Compiler:Iterate(eval, name)
+function NeP.Compiler.Iterate(_, eval, name)
 	if not eval then return end
 	for i=1, #eval do
 		NeP.Compiler.Compile(eval[i], name)

@@ -19,7 +19,7 @@ local HasPetSpells         = HasPetSpells
 local BOOKTYPE_SPELL       = BOOKTYPE_SPELL
 local BOOKTYPE_PET         = BOOKTYPE_PET
 
-function NeP.Core:Print(...)
+function NeP.Core.Print(_, ...)
 	print('[|cff'..NeP.Color..'NeP|r]', ...)
 end
 
@@ -28,7 +28,7 @@ local d_color = {
 	rgb = {1,1,1}
 }
 
-function NeP.Core:ClassColor(unit, type)
+function NeP.Core.ClassColor(_, unit, type)
 	type = type and type:lower() or 'hex'
 	if UnitExists(unit) then
 		local classid  = select(3, UnitClass(unit))
@@ -39,12 +39,12 @@ function NeP.Core:ClassColor(unit, type)
 	return d_color[type]
 end
 
-function NeP.Core:Round(num, idp)
+function NeP.Core.Round(_, num, idp)
 	local mult = 10^(idp or 0)
 	return math.floor(num * mult + 0.5) / mult
 end
 
-function NeP.Core:GetSpellID(spell)
+function NeP.Core.GetSpellID(_, spell)
 	local _type = type(spell)
 	if not spell then
 		return
@@ -56,7 +56,7 @@ function NeP.Core:GetSpellID(spell)
 	return spellID or spell
 end
 
-function NeP.Core:GetSpellName(spell)
+function NeP.Core.GetSpellName(_, spell)
 	if not spell or type(spell) == 'string' then return spell end
 	local spellID = tonumber(spell)
 	if spellID then
@@ -65,13 +65,13 @@ function NeP.Core:GetSpellName(spell)
 	return spell
 end
 
-function NeP.Core:GetItemID(item)
+function NeP.Core.GetItemID(_, item)
 	if not item or type(item) == 'number' then return item end
 	local itemID = string.match(select(2, GetItemInfo(item)) or '', 'Hitem:(%d+):')
 	return tonumber(itemID) or item
 end
 
-function NeP.Core:UnitID(unit)
+function NeP.Core.UnitID(_, unit)
 	if unit and UnitExists(unit) then
 		local guid = UnitGUID(unit)
 		if guid then
@@ -85,7 +85,7 @@ function NeP.Core:UnitID(unit)
 	end
 end
 
-function NeP.Core:GetSpellBookIndex(spell)
+function NeP.Core.GetSpellBookIndex(_, spell)
 	local spellName = NeP.Core:GetSpellName(spell)
 	if not spellName then return end
 	spellName = spellName:lower()
@@ -125,7 +125,7 @@ function NeP.Core:GetSpellBookIndex(spell)
 end
 
 local Run_Cache = {}
-function NeP.Core:WhenInGame(func, prio)
+function NeP.Core.WhenInGame(_, func, prio)
 	if Run_Cache then
 		local size = #Run_Cache+1
 		Run_Cache[size] = {func = func, prio = (prio or 0) + size}
