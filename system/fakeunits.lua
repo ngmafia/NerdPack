@@ -24,7 +24,7 @@ end
 
 function NeP.FakeUnits:Filter(unit)
 	for token,func in pairs(Units) do
-		if unit:find(token) then
+		if unit:find('^'..token) then
 			local arg2 = unit:match('%((.+)%)')
 			local num = unit:match("%d+") or 1
 			return func(tonumber(num), arg2)
