@@ -61,3 +61,26 @@ NeP.DSL:Register("debuff.duration", function(target, spell)
   local debuff,_,expires = UnitDebuffL(target, spell)
   return debuff and (expires - GetTime()) or 0
 end)
+
+
+----------------------------------------------------------------------------------------------
+
+NeP.DSL:Register("count.buffs", function()
+  local n1 = 0
+  for _, Obj in pairs(NeP.OM:Get('Enemy')) do
+      if not NeP.DSL:Get('buff')(Obj.key, debuff) then
+          n1 = n1 + 1
+      end
+  end
+  return n1
+end
+
+NeP.DSL:Register("count.debuffs", function()
+  local n1 = 0
+  for _, Obj in pairs(NeP.OM:Get('Enemy')) do
+      if not NeP.DSL:Get('debuff')(Obj.key, debuff) then
+          n1 = n1 + 1
+      end
+  end
+  return n1
+end
