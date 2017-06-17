@@ -22,16 +22,13 @@ function NeP.Spells:Add(...)
 end
 
 function NeP.Spells:Convert(spell)
---	print('start', spell)
 	if not spell then return end
 	if type(spell) == 'number' or spell:find('%d') then
 		spell = GetSpellInfo(spell) or spell
 	else
 		if SpellsTable[spell:lower()] then
-			--print('mid', spell:lower())
 			spell = SpellsTable[spell:lower()]
 		end
 	end
-	--print('end', spell)
 	return spell
 end
