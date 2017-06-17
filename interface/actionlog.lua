@@ -4,9 +4,11 @@ local _, NeP = ...
 if true then return end
 
 -- Locals
-local UnitExists = ObjectExists or UnitExists
-local date       = date
-local UnitName   = UnitName
+local UnitExists 	= ObjectExists or UnitExists
+local date       	= date
+local UnitName   	= UnitName
+local CreateFrame = CreateFrame
+local wipe 				= wipe
 
 NeP.ActionLog = {}
 
@@ -38,7 +40,7 @@ for i=1, 3 do
 	NeP_AL.header:SetText('|cff'..NeP.Color..L:TA('AL', headers[i][2]))
 end
 
-NeP_AL.frame:SetScript('OnMouseWheel', function(self, mouse)
+NeP_AL.frame:SetScript('OnMouseWheel', function(_, mouse)
 	local top = #Data - log_items
 	if mouse == 1 then
 		if delta < top then
@@ -105,7 +107,7 @@ function NeP.ActionLog:Add(event, spell, icon, target)
 	self:Update()
 end
 
-function NeP.ActionLog:UpdateRow(row, a, b, c)
+function NeP.ActionLog.UpdateRow(_, row, a, b, c)
 	LogItem[row][1]:SetText(a)
 	LogItem[row][2]:SetText(b)
 	LogItem[row][3]:SetText(c)

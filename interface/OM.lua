@@ -1,5 +1,12 @@
 local _, NeP = ...
 
+local LibStub = LibStub
+local tremove = tremove
+local tinsert = tinsert
+local UnitHealth = UnitHealth
+local UnitHealthMax = UnitHealthMax
+local TargetUnit = TargetUnit
+local C_Timer = C_Timer
 local DiesalGUI = LibStub('DiesalGUI-1.0')
 local L = NeP.Locale
 
@@ -64,13 +71,13 @@ local function RefreshGUI()
 	recycleStatusBars()
 	for _, Obj in pairs(NeP.OM:Get(dOM, true)) do
 		local Health = math.floor(((UnitHealth(Obj.key) or 1) / (UnitHealthMax(Obj.key) or 1)) * 100)
-		local statusBar = getStatusBar()
+		local SB = getStatusBar()
 		local distance = NeP.Core:Round(Obj.distance or 0)
-		statusBar.frame:SetPoint('TOP', ListWindow.content, 'TOP', 2, offset )
-		statusBar.frame.Left:SetText('|cff'..NeP.Core:ClassColor(Obj.key, 'hex')..Obj.name)
-		statusBar.frame.Right:SetText('( |cffff0000ID|r: '..Obj.id..' / |cffff0000Health|r: '..Health..' / |cffff0000Dist|r: '..distance..' )')
-		statusBar.frame:SetScript('OnMouseDown', function(self) TargetUnit(Obj.key) end)
-		statusBar:SetValue(Health)
+		SB.frame:SetPoint('TOP', ListWindow.content, 'TOP', 2, offset )
+		SB.frame.Left:SetText('|cff'..NeP.Core:ClassColor(Obj.key, 'hex')..Obj.name)
+		SB.frame.Right:SetText('( |cffff0000ID|r: '..Obj.id..' / |cffff0000Health|r: '..Health..' / |cffff0000Dist|r: '..distance..' )')
+		SB.frame:SetScript('OnMouseDown', function() TargetUnit(Obj.key) end)
+		SB:SetValue(Health)
 		offset = offset -18
 	end
 end

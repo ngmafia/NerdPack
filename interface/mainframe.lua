@@ -2,6 +2,9 @@ local n_name, NeP = ...
 local logo = '|T'..NeP.Media..'logo.blp:10:10|t'
 local L = NeP.Locale
 
+local EasyMenu 		= EasyMenu
+local CreateFrame = CreateFrame
+
 NeP.Interface.MainFrame = NeP.Interface:BuildGUI({
 	key = 'NePMFrame',
 	width = 100,
@@ -9,7 +12,7 @@ NeP.Interface.MainFrame = NeP.Interface:BuildGUI({
 	title = logo..n_name,
 	subtitle = 'v:'..NeP.Version..' - '..NeP.Branch
 })
-NeP.Interface.MainFrame:SetEventListener('OnClose', function(self)
+NeP.Interface.MainFrame:SetEventListener('OnClose', function()
 	NeP.Core:Print(L:TA('Any', 'NeP_Show'))
 end)
 
@@ -23,11 +26,11 @@ local DropMenu = {
 	{text = L:TA('mainframe', 'CRS_ST'), hasArrow = true, menuList = {}}
 }
 
-function NeP.Interface:ResetCRs()
+function NeP.Interface.ResetCRs()
 	DropMenu[2].menuList = {}
 end
 
-function NeP.Interface:SetCheckedCR(Name)
+function NeP.Interface.SetCheckedCR(Name)
 	for _,v in pairs(DropMenu[2].menuList) do
 		v.checked = Name == v.text
 	end
@@ -44,7 +47,7 @@ function NeP.Interface:AddCR_ST(Name)
 	})
 end
 
-function NeP.Interface:AddCR(Spec, Name, checked)
+function NeP.Interface.AddCR(_, Spec, Name, checked)
 	table.insert(DropMenu[2].menuList, {
 		text = Name,
 		checked = checked,
@@ -54,11 +57,11 @@ function NeP.Interface:AddCR(Spec, Name, checked)
 	})
 end
 
-function NeP.Interface:DropMenu()
+function NeP.Interface.DropMenu()
 	EasyMenu(DropMenu, menuFrame, menuFrame, 0, 0, "MENU")
 end
 
-function NeP.Interface:Add(name, func)
+function NeP.Interface.Add(name, func)
 	table.insert(DropMenu, {
 		text = tostring(name),
 		func = func,
