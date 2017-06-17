@@ -30,7 +30,7 @@ function NeP.Interface.ResetCRs()
 	DropMenu[2].menuList = {}
 end
 
-function NeP.Interface.SetCheckedCR(Name)
+function NeP.Interface.SetCheckedCR(_, Name)
 	for _,v in pairs(DropMenu[2].menuList) do
 		v.checked = Name == v.text
 	end
