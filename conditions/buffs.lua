@@ -65,7 +65,7 @@ end)
 
 ----------------------------------------------------------------------------------------------
 
-NeP.DSL:Register("count.buffs", function(buff)
+NeP.DSL:Register("count.buffs", function(_,buff)
   local n1 = 0
   for _, Obj in pairs(NeP.OM:Get('Enemy')) do
       if not NeP.DSL:Get('buff')(Obj.key, buff) then
@@ -75,7 +75,7 @@ NeP.DSL:Register("count.buffs", function(buff)
   return n1
 end
 
-NeP.DSL:Register("count.debuffs", function(debuff)
+NeP.DSL:Register("count.debuffs", function(_,debuff)
   local n1 = 0
   for _, Obj in pairs(NeP.OM:Get('Enemy')) do
       if not NeP.DSL:Get('debuff')(Obj.key, debuff) then
