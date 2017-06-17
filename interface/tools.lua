@@ -103,9 +103,9 @@ function NeP.Interface:BuildGUI(eval)
 	if not eval.key then return end
 
 	-- Create a new parent
-	self.usedGUIs[eval.key] = {}
+	NeP.Interface.usedGUIs[eval.key] = {}
 	local parent = DiesalGUI:Create('Window')
-	self.usedGUIs[eval.key].parent = parent
+	NeP.Interface.usedGUIs[eval.key].parent = parent
 	parent:SetWidth(eval.width or 200)
 	parent:SetHeight(eval.height or 300)
 	parent.frame:SetClampedToScreen(true)
