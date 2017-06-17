@@ -27,7 +27,7 @@ function NeP.Interface:Header(element, parent, offset, table)
 		tmp:SetJustifyH(strupper(element.align))
 	end
 	if element.key then
-		NeP.usedGUIs[table.key].elements[element.key] = tmp
+		self.usedGUIs[table.key].elements[element.key] = tmp
 	end
 end
 
@@ -49,7 +49,7 @@ function NeP.Interface:Text(element, parent, offset, table)
 		tmp:SetJustifyH(strupper(element.align))
 	end
 	if element.key then
-		NeP.usedGUIs[table.key].elements[element.key] = tmp
+		self.usedGUIs[table.key].elements[element.key] = tmp
 	end
 end
 
@@ -60,7 +60,7 @@ function NeP.Interface:Rule(element, parent, offset, table)
 	tmp.frame:SetPoint('TOPLEFT', parent.content, 'TOPLEFT', 5, offset-3)
 	tmp.frame:SetPoint('BOTTOMRIGHT', parent.content, 'BOTTOMRIGHT', -5, offset-3)
 	if element.key then
-		NeP.usedGUIs[table.key].elements[element.key] = tmp
+		self.usedGUIs[table.key].elements[element.key] = tmp
 	end
 end
 
@@ -79,7 +79,7 @@ function NeP.Interface:Texture(element, parent, offset, table)
 	tmp.texture:SetTexture(element.texture)
 	tmp.texture:SetAllPoints(tmp)
 	if element.key then
-		NeP.usedGUIs[table.key].elements[element.key] = tmp
+		self.usedGUIs[table.key].elements[element.key] = tmp
 	end
 end
 
@@ -113,8 +113,8 @@ function NeP.Interface:Checkbox(element, parent, offset, table)
 		element.push = tmp_desc:GetStringHeight() + 5
 	end
 	if element.key then
-		NeP.usedGUIs[table.key].elements[element.key..'Text'] = tmp_text
-		NeP.usedGUIs[table.key].elements[element.key] = tmp
+		self.usedGUIs[table.key].elements[element.key..'Text'] = tmp_text
+		self.usedGUIs[table.key].elements[element.key] = tmp
 	end
 end
 
@@ -142,7 +142,7 @@ function NeP.Interface:Spinner(element, parent, offset, table)
 		tmp_spin.settings.shiftStep = element.shiftStep
 	end
 	tmp_spin:ApplySettings()
-	tmp_spin:SetStylesheet(NeP.UI.spinnerStyleSheet)
+	tmp_spin:SetStylesheet(self.spinnerStyleSheet)
 	tmp_spin:SetEventListener('OnValueChanged', function(_, _, userInput, number)
 		if not userInput then return end
 		NeP.Config:Write(table.key, element.key, number)
@@ -170,8 +170,8 @@ function NeP.Interface:Spinner(element, parent, offset, table)
 		element.push = tmp_desc:GetStringHeight() + 5
 	end
 	if element.key then
-		NeP.usedGUIs[table.key].elements[element.key..'Text'] = tmp_text
-		NeP.usedGUIs[table.key].elements[element.key] = tmp_spin
+		self.usedGUIs[table.key].elements[element.key..'Text'] = tmp_text
+		self.usedGUIs[table.key].elements[element.key] = tmp_spin
 	end
 end
 
@@ -198,7 +198,7 @@ function NeP.Interface:Checkspin(element, parent, offset, table)
 	tmp_spin:SetNumber(
 		NeP.Config:Read(table.key, element.key..'_spin', element.default_spin or 0)
 	)
-	tmp_spin:SetStylesheet(NeP.UI.spinnerStyleSheet)
+	tmp_spin:SetStylesheet(self.spinnerStyleSheet)
 	tmp_spin:ApplySettings()
 	tmp_spin:SetEventListener('OnValueChanged', function(_, _, userInput, number)
 		if not userInput then return end
@@ -235,9 +235,9 @@ function NeP.Interface:Checkspin(element, parent, offset, table)
 		element.push = tmp_desc:GetStringHeight() + 5
 	end
 	if element.key then
-		NeP.usedGUIs[table.key].elements[element.key..'Text'] = tmp_text
-		NeP.usedGUIs[table.key].elements[element.key..'Check'] = tmp_check
-		NeP.usedGUIs[table.key].elements[element.key..'Spin'] = tmp_spin
+		self.usedGUIs[table.key].elements[element.key..'Text'] = tmp_text
+		self.usedGUIs[table.key].elements[element.key..'Check'] = tmp_check
+		self.usedGUIs[table.key].elements[element.key..'Spin'] = tmp_spin
 	end
 end
 
@@ -280,8 +280,8 @@ function NeP.Interface:Combo(element, parent, offset, table)
 		element.push = tmp_desc:GetStringHeight() + 5
 	end
 	if element.key then
-		NeP.usedGUIs[table.key].elements[element.key..'Text'] = tmp_text
-		NeP.usedGUIs[table.key].elements[element.key] = tmp_list
+		self.usedGUIs[table.key].elements[element.key..'Text'] = tmp_text
+		self.usedGUIs[table.key].elements[element.key] = tmp_list
 	end
 end
 
@@ -292,7 +292,7 @@ function NeP.Interface:Button(element, parent, offset, table)
 	tmp:SetText(element.text)
 	tmp:SetWidth(element.width or parent.content:GetWidth()-10)
 	tmp:SetHeight(element.height or 20)
-	tmp:SetStylesheet(NeP.UI.buttonStyleSheet)
+	tmp:SetStylesheet(self.buttonStyleSheet)
 	tmp:SetEventListener("OnClick", element.callback)
 	if element.desc then
 		local tmp_desc = DiesalGUI:Create("FontString")
@@ -314,7 +314,7 @@ function NeP.Interface:Button(element, parent, offset, table)
 		tmp:SetPoint("TOP", parent.content, 0, offset)
 	end
 	if element.key then
-		NeP.usedGUIs[table.key].elements[element.key] = tmp
+		self.usedGUIs[table.key].elements[element.key] = tmp
 	end
 end
 
@@ -352,8 +352,8 @@ function NeP.Interface:Input(element, parent, offset, table)
 		element.push = tmp_desc:GetStringHeight() + 5
 	end
 	if element.key then
-		NeP.usedGUIs[table.key].elements[element.key..'Text'] = tmp_text
-		NeP.usedGUIs[table.key].elements[element.key] = tmp_input
+		self.usedGUIs[table.key].elements[element.key..'Text'] = tmp_text
+		self.usedGUIs[table.key].elements[element.key] = tmp_input
 	end
 end
 
@@ -372,6 +372,6 @@ function NeP.Interface:Statusbar(element, parent, _, table)
 		tmp_statusbar.frame.Right:SetText(element.textRight)
 	end
 	if element.key then
-		NeP.usedGUIs[table.key].elements[element.key] = tmp_statusbar
+		self.usedGUIs[table.key].elements[element.key] = tmp_statusbar
 	end
 end

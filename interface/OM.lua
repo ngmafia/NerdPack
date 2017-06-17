@@ -27,7 +27,7 @@ for k,v in pairs(bt) do
 	bt[k]:SetParent(parent.content)
 	bt[k]:SetPoint(v.a, parent.content, v.a, 0, 0)
 	bt[k].frame:SetSize(parent.content:GetWidth()/3, 30)
-	bt[k]:SetStylesheet(NeP.UI.buttonStyleSheet)
+	bt[k]:SetStylesheet(NeP.Interface.buttonStyleSheet)
 	bt[k]:SetEventListener("OnClick", function() dOM = v.b end)
 	bt[k]:SetText(L:TA('OM', v.b))
 end

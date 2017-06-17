@@ -27,7 +27,16 @@ local config = {
         {text = 'Black', key = '000000'},
         {text = 'Class Color', key = 'CLASS'},
       }, default = '000000'},
+      -- tittle_alpha
       { type = 'spinner', text = 'tittle_alpha', key = 'tittle_alpha', step = .05, min = 0, max = 1, default = .75},
+      --content_color
+      { type = 'dropdown', text = 'content_color', key = 'content_color', list ={
+        {text = 'White', key = 'FFFFFF'},
+        {text = 'Black', key = '000000'},
+        {text = 'Class Color', key = 'CLASS'},
+      }, default = '000000'},
+      -- tittle_alpha
+      { type = 'spinner', text = 'content_alpha', key = 'content_alpha', step = .05, min = 0, max = 1, default = .75},
 
       { type = 'spacer' },{ type = 'ruler' },
 			{ type = 'button', text = L:TA('Settings', 'apply_bt'), callback = function()

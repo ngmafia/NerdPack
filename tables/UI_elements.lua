@@ -7,9 +7,9 @@ local DiesalStyle = LibStub("DiesalStyle-1.0")
 local Colors = DiesalStyle.Colors
 
 
-NeP.UI = {}
+NeP.Interface = {}
 
-NeP.UI.WindowStyleSheet = {
+NeP.Interface.WindowStyleSheet = {
 	['frame-outline'] = {
 		type			= 'outline',
 		layer			= 'BACKGROUND',
@@ -104,7 +104,7 @@ NeP.UI.WindowStyleSheet = {
 	},
 }
 
-NeP.UI.buttonStyleSheet = {
+NeP.Interface.buttonStyleSheet = {
   ['frame-color'] = {
     type			= 'texture',
     layer			= 'BACKGROUND',
@@ -148,7 +148,7 @@ NeP.UI.buttonStyleSheet = {
   },
 }
 
-NeP.UI.spinnerStyleSheet = {
+NeP.Interface.spinnerStyleSheet = {
   ['bar-background'] = {
     type			= 'texture',
     layer			= 'BORDER',
@@ -156,7 +156,7 @@ NeP.UI.spinnerStyleSheet = {
   },
 }
 
-NeP.UI.createButtonStyle = {
+NeP.Interface.createButtonStyle = {
   type			= 'texture',
   texFile		= 'DiesalGUIcons',
   texCoord		= {1,6,16,256,128},
@@ -166,7 +166,7 @@ NeP.UI.createButtonStyle = {
   height		= 16,
 }
 
-NeP.UI.deleteButtonStyle = {
+NeP.Interface.deleteButtonStyle = {
   type			= 'texture',
   texFile		='DiesalGUIcons',
   texCoord		= {2,6,16,256,128},
@@ -176,23 +176,23 @@ NeP.UI.deleteButtonStyle = {
   height		= 16,
 }
 
-NeP.UI.ButtonNormal = {
+NeP.Interface.ButtonNormal = {
   type			= 'texture',
   texColor		= 'ffffff',
   alpha 		= .7,
 }
 
-NeP.UI.ButtonOver = {
+NeP.Interface.ButtonOver = {
   type			= 'texture',
   alpha 		= 1,
 }
 
-NeP.UI.ButtonClicked = {
+NeP.Interface.ButtonClicked = {
   type			= 'texture',
   alpha 		= .3,
 }
 
-NeP.UI.statusBarStylesheet = {
+NeP.Interface.statusBarStylesheet = {
   ['frame-texture'] = {
     type		= 'texture',
     layer		= 'BORDER',
@@ -252,7 +252,7 @@ DiesalGUI:RegisterObjectConstructor("StatusBar", function()
   local frame = CreateFrame('StatusBar',nil,UIParent)
   self.frame  = frame
 
-  self:SetStylesheet(NeP.UI.statusBarStylesheet)
+  self:SetStylesheet(NeP.Interface.statusBarStylesheet)
 
   frame.Left = frame:CreateFontString()
   frame.Left:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 14)

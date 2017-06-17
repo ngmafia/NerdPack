@@ -1,11 +1,10 @@
-local _, NeP          = ...
-NeP.usedGUIs 					= {}
-local usedGUIs        = NeP.usedGUIs
-NeP.Interface         = {}
-NeP.Globals.Interface = {}
+local _, NeP          	= ...
+NeP.Interface.usedGUIs	= {}
+NeP.Globals.Interface 	= {}
 
 -- Locals
 local LibStub     = LibStub
+local unpack 			= unpack
 local DiesalGUI   = LibStub("DiesalGUI-1.0")
 
 function NeP.Interface:Noop() end
@@ -28,7 +27,7 @@ local _Elements = {
 
 function NeP.Interface:BuildElements(table, parent)
 	local offset = -5
-	usedGUIs[table.key].elements = {}
+	self.usedGUIs[table.key].elements = {}
 	for _, element in ipairs(table.config) do
 		local push, pull = 0, 0
 		-- Create defaults
@@ -63,7 +62,7 @@ function NeP.Interface:BuildElements(table, parent)
 end
 
 function NeP.Interface:GetElement(key, element)
-	return usedGUIs[key].elements[element]
+	return self.usedGUIs[key].elements[element]
 end
 
 function NeP.Interface:Body(eval, parent)
@@ -73,7 +72,7 @@ function NeP.Interface:Body(eval, parent)
 	parent:UpdatePosition()
 	if not eval.color then eval.color = NeP.Color end
 	if type(eval.color) == 'function' then eval.color = eval.color() end
-	--NeP.UI.spinnerStyleSheet['bar-background']['color'] = eval.color
+	self.spinnerStyleSheet['bar-background']['color'] = eval.color
 	if eval.title then
 		parent:SetTitle("|cff"..eval.color..eval.title.."|r", eval.subtitle)
 	end
@@ -91,8 +90,8 @@ end
 -- This opens a existing GUI instead of creating another
 function NeP.Interface:TestCreated(eval)
 	local test = type(eval) == 'string' and eval or eval.key
-	if usedGUIs[test] then
-		usedGUIs[test].parent:Show()
+	if self.usedGUIs[test] then
+		self.usedGUIs[test].parent:Show()
 		return true
 	end
 end
@@ -104,13 +103,12 @@ function NeP.Interface:BuildGUI(eval)
 	if not eval.key then return end
 
 	-- Create a new parent
-	usedGUIs[eval.key] = {}
+	self.usedGUIs[eval.key] = {}
 	local parent = DiesalGUI:Create('Window')
-	usedGUIs[eval.key].parent = parent
+	self.usedGUIs[eval.key].parent = parent
 	parent:SetWidth(eval.width or 200)
 	parent:SetHeight(eval.height or 300)
 	parent.frame:SetClampedToScreen(true)
-	parent:SetStylesheet(NeP.UI.WindowStyleSheet)
 
 	--Save Location after dragging
 	parent:SetEventListener('OnDragStop', function(_,_, left, top)
