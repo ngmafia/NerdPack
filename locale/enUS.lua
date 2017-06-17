@@ -39,7 +39,7 @@ NeP.Locale.enUS = {
     option = 'Settings',
     bsize = 'Button size',
     bpad = 'Button padding',
-    brow = 'Button Rows',
+    brow = 'Maximum bottoms peer row',
     apply_bt = 'Apply'
   },
   States = {

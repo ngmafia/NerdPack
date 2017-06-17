@@ -39,6 +39,7 @@ NeP.Locale.ptBR = {
     option = 'Definições',
     bsize = 'Tamanho dos botões',
     bpad = 'Espaçamento dos botões',
+    bpad = 'Maximo de butões por linha',
     apply_bt = 'Aplicar'
   },
 }
