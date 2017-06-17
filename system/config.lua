@@ -12,7 +12,7 @@ NeP.Listener:Add("NeP_Config", "ADDON_LOADED", function(addon)
 	end
 end)
 
-function NeP.Config:Read(a, b, default)
+function NeP.Config.Read(_, a, b, default)
 	-- only return default if its nil in data
 	if Data[a] and Data[a][b] ~= nil then
 		return Data[a][b]
@@ -20,7 +20,7 @@ function NeP.Config:Read(a, b, default)
 	return default
 end
 
-function NeP.Config:Write(a, b, value)
+function NeP.Config.Write(_, a, b, value)
 	if not Data[a] then
 		Data[a] = {}
 	end

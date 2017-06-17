@@ -2,7 +2,7 @@ local _, NeP = ...
 
 NeP.Commands = {}
 
-function NeP.Commands:Register(name, func, ...)
+function NeP.Commands.Register(_, name, func, ...)
 	SlashCmdList[name] = func
 	local command
 	for i = 1, select('#', ...) do

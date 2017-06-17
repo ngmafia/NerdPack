@@ -102,7 +102,7 @@ local EVENTS = {
 }
 
 --[[ Returns the total ammount of time a unit is in-combat for ]]
-function NeP.CombatTracker:CombatTime(UNIT)
+function NeP.CombatTracker.CombatTime(_, UNIT)
 	local GUID = UnitGUID(UNIT)
 	if Data[GUID] and InCombatLockdown() then
 		local combatTime = (GetTime()-Data[GUID].firstHit)
@@ -139,7 +139,7 @@ function NeP.CombatTracker:TimeToDie(unit)
 	return ttd or 8675309
 end
 
-function NeP.CombatTracker:LastCast(unit)
+function NeP.CombatTracker.LastCast(_, unit)
   local GUID = UnitGUID(unit)
   if Data[GUID] then
     return Data[GUID].lastcast

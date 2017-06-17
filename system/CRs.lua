@@ -7,7 +7,7 @@ local GetSpecialization     = GetSpecialization
 local GetSpecializationInfo = GetSpecializationInfo
 local noop                  = function() end
 
-function NeP.CR:AddGUI(key, eval)
+function NeP.CR.AddGUI(_, key, eval)
 	local temp = {
 		title = key,
 		key = key,
@@ -19,7 +19,7 @@ function NeP.CR:AddGUI(key, eval)
 	NeP.Interface:AddCR_ST(key)
 end
 
-function NeP.CR:Add(SpecID, ...)
+function NeP.CR.Add(_, SpecID, ...)
 	local ev, classIndex = ..., select(3, UnitClass('player'))
 	-- This only allows crs we can use to be registered
 	if classIndex ~= SpecID and not NeP.ClassTable[classIndex][SpecID] then return end
@@ -66,7 +66,7 @@ function NeP.CR:Set(Spec, Name)
 	if self.CR then self.CR.load() end
 end
 
-function NeP.CR:GetList(Spec)
+function NeP.CR.GetList(_, Spec)
 	local result = {}
 	local classIndex = select(3, UnitClass('player'))
 	-- Specs
