@@ -13,6 +13,7 @@ local config = {
 			{ type = 'spinner', text = L:TA('Settings', 'bpad'), key = 'bpad', default = 2},
       { type = 'spinner', text = L:TA('Settings', 'brow'), key = 'brow', step = 1, min = 1, max = 20, default = 10},
 
+      { type = 'spacer' },{ type = 'ruler' },
 			{ type = 'button', text = L:TA('Settings', 'apply_bt'), align = 'center', with = 200, callback = function()
 				NeP.ButtonsSize = NeP.Config:Read(n_name..'_Settings', 'bsize', 40)
 				NeP.ButtonsPadding = NeP.Config:Read(n_name..'_Settings', 'bpad', 2)
