@@ -1,5 +1,6 @@
 local n_name, NeP = ...
 local L           = NeP.Locale
+local DiesalStyle = LibStub("DiesalStyle-1.0")
 
 local config = {
     key = n_name..'_Settings',
@@ -14,10 +15,25 @@ local config = {
       { type = 'spinner', text = L:TA('Settings', 'brow'), key = 'brow', step = 1, min = 1, max = 20, default = 10},
 
       { type = 'spacer' },{ type = 'ruler' },
+      --outline_color
+      { type = 'dropdown', text = 'outline_color', key = 'outline_color', list ={
+        {text = 'White', key = 'FFFFFF'},
+        {text = 'Black', key = '000000'},
+        {text = 'Class Color', key = 'CLASS'},
+      }, default = 'CLASS'},
+      --tittle_color
+      { type = 'dropdown', text = 'tittle_color', key = 'tittle_color', list ={
+        {text = 'White', key = 'FFFFFF'},
+        {text = 'Black', key = '000000'},
+        {text = 'Class Color', key = 'CLASS'},
+      }, default = '000000'},
+
+      { type = 'spacer' },{ type = 'ruler' },
 			{ type = 'button', text = L:TA('Settings', 'apply_bt'), callback = function()
 				NeP.ButtonsSize = NeP.Config:Read(n_name..'_Settings', 'bsize', 40)
 				NeP.ButtonsPadding = NeP.Config:Read(n_name..'_Settings', 'bpad', 2)
 				NeP.Interface:RefreshToggles()
+        NeP.Interface:UpdateStyles()
 			end}
 		}
 }
@@ -25,3 +41,9 @@ local config = {
 NeP.STs = NeP.Interface:BuildGUI(config)
 NeP.Interface:Add(n_name..' '..L:TA('Settings', 'option'), function() NeP.STs:Show() end)
 NeP.STs:Hide()
+
+
+-- Update Styles
+NeP.Core:WhenInGame(function()
+	NeP.Interface:UpdateStyles()
+end,999)

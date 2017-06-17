@@ -1,4 +1,4 @@
-local _, NeP          = ...
+local n_name, NeP          = ...
 local usedGUIs        = {}
 NeP.Interface         = {}
 NeP.Globals.Interface = {}
@@ -482,7 +482,7 @@ function NeP.Interface:BuildGUI(eval)
 	parent:SetStylesheet(NeP.UI.WindowStyleSheet)
 
 	--Save Location after dragging
-	parent:SetEventListener('OnDragStop', function(self, _, left, top)
+	parent:SetEventListener('OnDragStop', function(_,_, left, top)
 		NeP.Config:Write(eval.key, 'Location', {left, top})
 	end)
 
@@ -494,6 +494,22 @@ function NeP.Interface:BuildGUI(eval)
 	return parent
 end
 
+function NeP.Interface:UpdateStyles()
+	--outline
+	local outline_default = NeP.UI.WindowStyleSheet['frame-outline'].color
+	local outline_saved = NeP.Config:Read(n_name..'_Settings', 'outline_color', outline_default)
+	if outline_saved == 'CLASS' then outline_saved = NeP.Core:ClassColor('player', 'hex') end
+	NeP.UI.WindowStyleSheet['frame-outline'].color = outline_saved
+	--Tittle
+	local tittle_default = NeP.UI.WindowStyleSheet['titleBar-color'].color
+	local tittle_saved = NeP.Config:Read(n_name..'_Settings', 'tittle_color', tittle_default)
+	if tittle_saved == 'CLASS' then tittle_saved = NeP.Core:ClassColor('player', 'hex') end
+	NeP.UI.WindowStyleSheet['titleBar-color'].color = tittle_saved
+	--Loop
+	for k,v in pairs(usedGUIs) do
+		v.parent:SetStylesheet(NeP.UI.WindowStyleSheet)
+	end
+end
 -- Gobals
 NeP.Globals.Interface = {
 	BuildGUI = NeP.Interface.BuildGUI,

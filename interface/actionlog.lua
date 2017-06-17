@@ -1,5 +1,7 @@
 local _, NeP = ...
 
+return
+
 -- Locals
 local UnitExists = ObjectExists or UnitExists
 local date       = date

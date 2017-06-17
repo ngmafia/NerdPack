@@ -1,4 +1,4 @@
-local _, NeP = ...
+local n_name, NeP = ...
 local LibStub = LibStub
 --local DiesalGUI   = LibStub("DiesalGUI-1.0")
 --local DiesalTools = LibStub("DiesalTools-1.0")
@@ -22,7 +22,7 @@ NeP.UI.WindowStyleSheet = {
 		type			= 'texture',
 		layer			= 'BACKGROUND',
 		color			= 'FFFFFF',
-		alpha			= .95,
+		alpha			= .75,
 	},
 	['titletext-Font'] = {
 		type			= 'font',
