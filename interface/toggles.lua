@@ -7,8 +7,8 @@ local CreateFrame = CreateFrame
 NeP.ButtonsSize = 40
 NeP.ButtonsPadding = 2
 
-local min_width = 40
-local min_height = 25
+NeP.min_width = 40
+NeP.min_height = 25
 
 -- Load Saved sizes
 NeP.Core:WhenInGame(function()
@@ -110,8 +110,8 @@ function NeP.Interface:RefreshToggles()
 	mainframe.settings.height = NeP.ButtonsSize+18
 
 	-- Dont go bellow the mimimum allowed
-	if mainframe.settings.width<min_width then mainframe.settings.width=min_width end
-	if mainframe.settings.height<min_height then mainframe.settings.height=min_height end
+	if mainframe.settings.width<NeP.min_width then mainframe.settings.width=NeP.min_width end
+	if mainframe.settings.height<NeP.min_height then mainframe.settings.height=NeP.min_height end
 
 	-- Dont allow Resize
 	mainframe.settings.minHeight = mainframe.settings.height

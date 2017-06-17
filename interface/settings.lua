@@ -9,9 +9,9 @@ local config = {
     height = 270,
     config = {
 			{ type = 'header', text = n_name..' |r'..NeP.Version..' '..NeP.Branch, size = 25, align = 'Center'},
-			{ type = 'spinner', text = L:TA('Settings', 'bsize'), key = 'bsize', default = 40},
+			{ type = 'spinner', text = L:TA('Settings', 'bsize'), key = 'bsize', min = NeP.min_width, default = 40},
 			{ type = 'spinner', text = L:TA('Settings', 'bpad'), key = 'bpad', default = 2},
-      { type = 'spinner', text = L:TA('Settings', 'brow'), key = 'brow', default = 1},
+      { type = 'spinner', text = L:TA('Settings', 'brow'), key = 'brow', nim = 1, default = 10},
 
 			{ type = 'button', text = L:TA('Settings', 'apply_bt'), align = 'center', with = 200, callback = function()
 				NeP.ButtonsSize = NeP.Config:Read(n_name..'_Settings', 'bsize', 40)
