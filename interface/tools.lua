@@ -6,10 +6,7 @@ NeP.Globals.Interface = {}
 
 -- Locals
 local LibStub     = LibStub
-local strupper    = strupper
 local DiesalGUI   = LibStub("DiesalGUI-1.0")
-local DiesalTools = LibStub("DiesalTools-1.0")
-local SharedMedia = LibStub("LibSharedMedia-3.0")
 
 function NeP.Interface:Noop() end
 
