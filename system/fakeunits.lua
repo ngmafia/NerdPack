@@ -26,10 +26,6 @@ function NeP.FakeUnits.Filter(_, unit)
 	-- Find and remove num and arg
 	local arg = unit:match('%((.+)%)')
 	local num = unit:match("%d+") or 1
-	if Units[unit] then
-		unit = unit:gsub(arg or '', '')
-		unit = unit:gsub(num or '', '')
-		return Units[unit](tonumber(num), arg)
-	end
-	return unit
+	local funit = unit:gsub(arg or '', ''):gsub(num or '', '')
+	return Units[funit] and Units[funit](tonumber(num), arg) or unit
 end
