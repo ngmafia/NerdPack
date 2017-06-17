@@ -65,6 +65,8 @@ end)
 
 ----------------------------------------------------------------------------------------------
 
+-- Counts how many units have the buff
+-- USAGE: count(BUFF).buffs > = #
 NeP.DSL:Register("count.buffs", function(_,buff)
   local n1 = 0
   for _, Obj in pairs(NeP.OM:Get('Enemy')) do
@@ -73,8 +75,10 @@ NeP.DSL:Register("count.buffs", function(_,buff)
       end
   end
   return n1
-end
+end)
 
+-- Counts how many units have the debuff
+-- USAGE: count(DEBUFF).debuffs > = #
 NeP.DSL:Register("count.debuffs", function(_,debuff)
   local n1 = 0
   for _, Obj in pairs(NeP.OM:Get('Enemy')) do
@@ -83,4 +87,4 @@ NeP.DSL:Register("count.debuffs", function(_,debuff)
       end
   end
   return n1
-end
+end)
