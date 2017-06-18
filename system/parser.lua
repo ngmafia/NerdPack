@@ -17,7 +17,7 @@ local UnitIsDeadOrGhost    = UnitIsDeadOrGhost
 local SecureCmdOptionParse = SecureCmdOptionParse
 local InCombatLockdown     = InCombatLockdown
 local C_Timer              = C_Timer
-local noop_t		   = {{(funtion() NeP.Core:Print("No CR Selected...") end)}}
+local noop_t		   = NeP.Compiler:Iterate({{(funtion() NeP.Core:Print("No CR Selected...") end)}}, "FakeCR")
 
 --This is used by the ticker
 --Its used to determin if we should iterate or not
