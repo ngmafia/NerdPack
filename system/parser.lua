@@ -19,7 +19,7 @@ local InCombatLockdown     = InCombatLockdown
 local C_Timer              = C_Timer
 
 --Fake CR so the parser dosent error of no CR is selected
-local noop_t		   = {{(funtion() NeP.Core:Print("No CR Selected...") end)}}
+local noop_t = {{(function() NeP.Core:Print("No CR Selected...") end)}}
 NeP.Compiler:Iterate(noop_t, "FakeCR")
 
 --This is used by the ticker
