@@ -17,6 +17,7 @@ local UnitIsDeadOrGhost    = UnitIsDeadOrGhost
 local SecureCmdOptionParse = SecureCmdOptionParse
 local InCombatLockdown     = InCombatLockdown
 local C_Timer              = C_Timer
+local noop_t		   = {{(funtion() NeP.Core:Print("No CR Selected...") end)}}
 
 --This is used by the ticker
 --Its used to determin if we should iterate or not
@@ -146,7 +147,7 @@ C_Timer.NewTicker(0.1, (function()
 		--Run the Queue (If it returns true, end)
 		if NeP.Queuer:Execute() then return end
 		--Iterate the CR (If it returns true, end)
-		local table = NeP.CR.CR[InCombatLockdown()]
+		local table = NeP.CR.CR[InCombatLockdown()] or noop_t
 		for i=1, #table do
 			if NeP.Parser.Parse(table[i]) then break end
 		end
