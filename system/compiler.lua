@@ -62,7 +62,7 @@ function NeP.Compiler.Spell(eval, name)
 	if ref.spell:find('^/') then
 		ref.token = 'macro'
 		eval.nogcd = true
-		eval.exe = function(eval) return NeP.Protected["Macro"](eval.args, eval.target) end
+		eval.exe = function(eval) return NeP.Protected["Macro"](eval.spell, eval.target) end
 	elseif ref.spell:find('^@') then
 		ref.spell = ref.spell:sub(2)
 		ref.token = 'lib'

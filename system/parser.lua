@@ -48,28 +48,30 @@ local function castingTime()
 end
 
 local function _exe(eval, endtime, cname)
-	local spell, cond = eval[1], eval[2]
-	-- Evaluate conditions
-	eval.spell = eval.spell or spell.spell
-	if NeP.DSL.Parse(cond, eval.spell, eval.target)
-	and NeP.Helpers:Check(eval.spell, eval.target) then
-		-- (!spell) this clips the spell
-		if spell.interrupts then
-			if cname == eval.spell then
-				return true
-			elseif endtime > 0 then
-				SpellStopCasting()
+	if NeP.Parser.Target(eval) then
+		local spell, cond = eval[1], eval[2]
+		-- Evaluate conditions
+		eval.spell = eval.spell or spell.spell
+		if NeP.DSL.Parse(cond, eval.spell, eval.target)
+		and NeP.Helpers:Check(eval.spell, eval.target) then
+			-- (!spell) this clips the spell
+			if spell.interrupts then
+				if cname == eval.spell then
+					return true
+				elseif endtime > 0 then
+					SpellStopCasting()
+				end
 			end
+			--Set vars
+			NeP.Parser.LastCast = eval.spell
+			NeP.Parser.LastGCD = (not eval.nogcd and eval.spell) or NeP.Parser.LastGCD
+			NeP.Parser.LastTarget = eval.target
+			--Update the actionlog and master toggle icon
+			NeP.ActionLog:Add(spell.token, eval.spell, spell.icon, eval.target)
+			NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
+			--Execute
+			return eval.exe(eval)
 		end
-		--Set vars
-		NeP.Parser.LastCast = eval.spell
-		NeP.Parser.LastGCD = (not eval.nogcd and eval.spell) or NeP.Parser.LastGCD
-		NeP.Parser.LastTarget = eval.target
-		--Update the actionlog and master toggle icon
-		NeP.ActionLog:Add(spell.token, eval.spell, spell.icon, eval.target)
-		NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
-		--Execute
-		return eval.exe(eval)
 	end
 end
 
