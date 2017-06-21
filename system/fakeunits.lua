@@ -34,7 +34,17 @@ function NeP.FakeUnits.Filter(_, unit)
 	if type(unit) == 'table' then
 		local tmp = {}
 		for i=1, #unit do
-			tmp[#tmp+1] = process(unit)
+			-- If the fake unit returns a table then we need
+			-- to merge it, EX: {tank, enemies}
+			-- tank is a single unit while enemie is a table
+			local tmp_unit = process(unit)
+			if type(tmp_unit)=='table' then
+				for i=1, #tmp_unit do
+					tmp[#tmp+1] = tmp_unit[i]
+				end
+			else
+				tmp[#tmp+1] = tmp_unit
+			end
 		end
 		return tmp
 	end
