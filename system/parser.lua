@@ -99,9 +99,8 @@ function NeP.Parser.Parse(eval)
 	if spell.is_table then
 		if NeP.DSL.Parse(cond) then
 			for i=1, #spell do
-				if NeP.Parser.Parse(spell[i]) then
-					return true
-				end
+				local res = NeP.Parser.Parse(spell[i])
+				if res then return res end
 			end
 		end
 	-- Normal
@@ -135,7 +134,8 @@ C_Timer.NewTicker(0.1, (function()
 		--Iterate the CR (If it returns true, end)
 		local table = NeP.CR.CR[InCombatLockdown()] or noop_t
 		for i=1, #table do
-			if NeP.Parser.Parse(table[i]) then break end
+			local res = NeP.Parser.Parse(table[i])
+			if res then return res end
 		end
 	end
 end), nil)
