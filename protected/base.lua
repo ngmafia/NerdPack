@@ -5,19 +5,24 @@ local IsInGroup          = IsInGroup
 
 NeP.Protected.Cast = function(spell, target)
   NeP.Faceroll:Set(spell, target)
+  return true
 end
 
 NeP.Protected.CastGround = function(spell, target)
   NeP.Faceroll:Set(spell, target)
+  return true
 end
 
 NeP.Protected.Macro = function()
+  return true
 end
 
 NeP.Protected.UseItem = function()
+  return true
 end
 
 NeP.Protected.UseInvItem = function()
+  return true
 end
 
 local rangeCheck = LibStub("LibRangeCheck-2.0")

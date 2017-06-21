@@ -14,5 +14,6 @@
 	<Include file="protected\files.xml" />
 	<Script file="commands.lua" />
 	<Script file="fakeunits.lua" />
+	<Script file="actions.lua" />
 
 </Ui>

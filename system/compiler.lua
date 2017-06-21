@@ -43,9 +43,7 @@ local invItems = {
 
 -- Takes a string a produces a table in its place
 function NeP.Compiler.Spell(eval, name)
-	local ref = {
-		spell = eval[1]
-	}
+	local ref = { spell = eval[1] }
 	local arg1, args = ref.spell:match('(.+)%((.+)%)')
 	if args then ref.spell = arg1 end
 	ref.args = args
@@ -62,52 +60,44 @@ function NeP.Compiler.Spell(eval, name)
 	end
 
 	if ref.spell:find('^/') then
-		ref.token = '/'
-		eval.type = 'Macro'
+		ref.token = 'macro'
 		eval.nogcd = true
-		eval.func = 'Macro'
+		eval.exe = function(eval) return NeP.Protected["Macro"](eval.args, eval.target) end
 	elseif ref.spell:find('^@') then
 		ref.spell = ref.spell:sub(2)
-		ref.token = 'func'
-		eval.type = 'Lib'
+		ref.token = 'lib'
 		eval.nogcd = true
 		eval.exe = function() return NeP.Library:Parse(ref.spell, ref.args) end
 	elseif ref.spell:find('^%%') then
-		ref.token = ref.spell:sub(1,1)
-		ref.spell = ref.spell:sub(2)
+		ref.token = ref.spell:sub(2)
 	elseif ref.spell:find('^#') then
 		ref.spell = ref.spell:sub(2)
-		ref.token = '#'
-		eval.type = 'Item'
+		ref.token = 'item'
 		eval.nogcd = true
-		eval.func = 'UseItem'
-		NeP.Core:WhenInGame(function()
-			if invItems[ref.spell] then
-				local invItem = GetInventorySlotInfo(invItems[ref.spell])
-				ref.spell = GetInventoryItemID("player", invItem)
-			end
-			if not ref.spell then return end
-			local itemID = tonumber(ref.spell)
-			if not itemID then
-				itemID = NeP.Core:GetItemID(ref.spell)
-			end
-			if not tonumber(itemID) then return end
-			local itemName, itemLink, _,_,_,_,_,_,_, texture = GetItemInfo(itemID)
-			if not itemName then return end
-			ref.id = itemID
-			ref.spell = itemName
-			ref.icon = texture
-			ref.link = itemLink
-		end)
+		if invItems[ref.spell] then
+			local invItem = GetInventorySlotInfo(invItems[ref.spell])
+			ref.spell = GetInventoryItemID("player", invItem)
+		end
+		if not ref.spell then return end
+		local itemID = tonumber(ref.spell)
+		if not itemID then
+			itemID = NeP.Core:GetItemID(ref.spell)
+		end
+		if not tonumber(itemID) then return end
+		local itemName, itemLink, _,_,_,_,_,_,_, texture = GetItemInfo(itemID)
+		if not itemName then return end
+		ref.id = itemID
+		ref.spell = itemName
+		ref.icon = texture
+		ref.link = itemLink
+		eval.exe = function(eval) return NeP.Protected["UseItem"](eval.spell, eval.target) end
 	else
-		NeP.Core:WhenInGame(function()
-			ref.spell = NeP.Spells:Convert(ref.spell, name)
-			ref.icon = select(3,GetSpellInfo(ref.spell))
-		end)
-		eval.func = 'Cast'
-		eval.type = 'Spell'
+		ref.spell = NeP.Spells:Convert(ref.spell, name)
+		ref.icon = select(3,GetSpellInfo(ref.spell))
+		eval.exe = function(eval) return NeP.Protected["Cast"](eval.spell, eval.target) end
+		ref.token = 'spell_cast'
 	end
-
+	--replace with compiled
 	eval[1] = ref
 end
 
@@ -119,7 +109,7 @@ function NeP.Compiler.Target(eval)
 		if ref.target:find('.ground') then
 			ref.target = ref.target:sub(0,-8)
 			ref.ground = true
-			eval.func = 'CastGround'
+			eval.exe = function(eval) return NeP.Protected["CastGround"](eval.spell, eval.target) end
 			-- This is to alow casting at the cursor location where no unit exists
 			if ref.target:lower() == 'cursor' then
 				ref.cursor = true
@@ -158,12 +148,10 @@ function NeP.Compiler.Conditions(eval, name)
 	else
 		eval[2] = CondSpaces(eval[2])
 		-- Convert spells inside ()
-		NeP.Core:WhenInGame(function()
-			eval[2] = eval[2]:gsub("%((.-)%)", function(s)
-				-- we cant convert number due to it messing up other things
-				if tonumber(s) then return '('..s..')' end
-				return '('..NeP.Spells:Convert(s, name)..')'
-			end)
+		eval[2] = eval[2]:gsub("%((.-)%)", function(s)
+			-- we cant convert number due to it messing up other things
+			if tonumber(s) then return '('..s..')' end
+			return '('..NeP.Spells:Convert(s, name)..')'
 		end)
 	end
 end
@@ -180,21 +168,19 @@ function NeP.Compiler.Compile(eval, name)
 		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Spell cant be a', type(spell))
 		eval[1] = {
 			spell = 'fake',
-			func = 'Cast',
-			type = 'Spell'
+			token = 'spell_Cast',
 		}
 		eval[2] = 'true'
 	elseif spelltype == 'string' then
 		NeP.Compiler.Spell(eval, name)
 	elseif spelltype == 'table' then
+		spell.is_table = true
 		for k=1, #spell do
 			NeP.Compiler.Compile(spell[k], name)
 		end
 	elseif spelltype == 'function' then
 		local ref = {}
-		ref.spell = tostring(spell)
-		ref.token = 'func'
-		eval.type = 'Function'
+		ref.token = 'function'
 		eval.exe = spell
 		eval.nogcd = true
 		eval[1] = ref
@@ -211,7 +197,9 @@ end
 
 function NeP.Compiler.Iterate(_, eval, name)
 	if not eval then return end
-	for i=1, #eval do
-		NeP.Compiler.Compile(eval[i], name)
-	end
+	NeP.Core:WhenInGame(function()
+		for i=1, #eval do
+			NeP.Compiler.Compile(eval[i], name)
+		end
+	end)
 end

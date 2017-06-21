@@ -65,37 +65,6 @@ function NeP.Parser.Target(eval)
 	and NeP.Protected.LineOfSight('player', eval.target)
 end
 
---This works on the spell the parser is working on.
---Returns boolean (true if the spell is valid).
-function NeP.Parser.Spell(eval)
-	-- Special (Action, Items, etc)
-	if eval[1].token then
-		return NeP.Actions[eval[1].token](eval)
-	-- Regular spell
-	else
-		local skillType = GetSpellBookItemInfo(eval[1].spell)
-		local isUsable, notEnoughMana = IsUsableSpell(eval[1].spell)
-		if skillType ~= 'FUTURESPELL' and isUsable and not notEnoughMana then
-			local GCD = NeP.DSL:Get('gcd')()
-			return GetSpellCooldown(eval[1].spell) <= GCD
-			and NeP.Helpers:Check(eval[1].spell, eval.target)
-		end
-	end
-end
-
--- If a Lib or a function in spell returns true, the loop breaks and starts over
--- Otherwise it will just move to the next castable spell.
-local function Exe(eval, tspell)
-	-- Special like libs and funcs
-	if eval.exe then
-		return eval.exe()
-	-- Normal
-	else
-		NeP.Protected[eval.func](tspell, eval.target)
-		return true
-	end
-end
-
 --This is the actual Parser...
 --Reads and figures out what it should execute from the CR
 --The Cr when it reaches this point must be already compiled and be ready to run.
@@ -103,7 +72,7 @@ function NeP.Parser.Parse(eval)
 	local spell, cond = eval[1], eval[2]
 	local endtime, cname = castingTime()
 	-- Its a table
-	if not spell.spell then
+	if spell.is_table then
 		if NeP.DSL.Parse(cond) then
 			for i=1, #spell do
 				if NeP.Parser.Parse(spell[i]) then
@@ -113,27 +82,28 @@ function NeP.Parser.Parse(eval)
 		end
 	-- Normal
 	elseif (spell.bypass or endtime == 0)
-	and (eval.exe or (NeP.Parser.Target(eval) and NeP.Parser.Spell(eval))) then
+	and NeP.Parser.Target(eval)
+	and NeP.Actions:Eval(spell.token)(eval) then
 		-- Evaluate conditions
-		local tspell = eval.spell or spell.spell
-		if NeP.DSL.Parse(cond, tspell, eval.target) then
+		eval.spell = eval.spell or spell.spell
+		if NeP.DSL.Parse(cond, eval.spell, eval.target) then
 			-- (!spell) this clips the spell
 			if spell.interrupts then
-				if cname == tspell then
+				if cname == eval.spell then
 					return true
 				elseif endtime > 0 then
 					SpellStopCasting()
 				end
 			end
 			--Set vars
-			NeP.Parser.LastCast = tspell
-			NeP.Parser.LastGCD = (not eval.nogcd and tspell) or NeP.Parser.LastGCD
+			NeP.Parser.LastCast = eval.spell
+			NeP.Parser.LastGCD = (not eval.nogcd and eval.spell) or NeP.Parser.LastGCD
 			NeP.Parser.LastTarget = eval.target
 			--Update the actionlog and master toggle icon
-			NeP.ActionLog:Add(eval.type, tspell, spell.icon, eval.target)
+			NeP.ActionLog:Add(eval.token, eval.spell, spell.icon, eval.target)
 			NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
 			--Execute
-			return Exe(eval, tspell)
+			return eval.exe(eval)
 		end
 	end
 end
