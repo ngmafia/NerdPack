@@ -67,7 +67,7 @@ local function _exe(eval, endtime, cname)
 			NeP.Parser.LastGCD = (not eval.nogcd and eval.spell) or NeP.Parser.LastGCD
 			NeP.Parser.LastTarget = eval.target
 			--Update the actionlog and master toggle icon
-			NeP.ActionLog:Add(spell.token, eval.spell, spell.icon, eval.target)
+			NeP.ActionLog:Add(spell.token, eval.spell or "", spell.icon, eval.target)
 			NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
 			--Execute
 			return eval.exe(eval)
