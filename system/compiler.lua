@@ -119,8 +119,6 @@ function NeP.Compiler.Target(eval)
 	elseif type(eval[3]) == 'function' then
 		ref.target = 'fake'
 		ref.func = eval[3]
-	--elseif type(eval[3]) == 'table' then
-		-- to be done
 	else
 		ref.target = 'fake'
 		ref.func = function()

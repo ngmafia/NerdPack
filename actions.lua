@@ -133,6 +133,5 @@ NeP.Actions:Add('spell_cast', function(eval)
 	if skillType ~= 'FUTURESPELL' and isUsable and not notEnoughMana then
 		local GCD = NeP.DSL:Get('gcd')()
 		return GetSpellCooldown(eval[1].spell) <= GCD
-		and NeP.Helpers:Check(eval[1].spell, eval.target)
 	end
 end)

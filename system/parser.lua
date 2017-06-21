@@ -47,6 +47,32 @@ local function castingTime()
 	return (name and (endTime/1000)-time) or 0, name
 end
 
+local function _exe(eval, endtime, cname)
+	local spell, cond = eval[1], eval[2]
+	-- Evaluate conditions
+	eval.spell = eval.spell or spell.spell
+	if NeP.DSL.Parse(cond, eval.spell, eval.target)
+	and NeP.Helpers:Check(eval.spell, eval.target) then
+		-- (!spell) this clips the spell
+		if spell.interrupts then
+			if cname == eval.spell then
+				return true
+			elseif endtime > 0 then
+				SpellStopCasting()
+			end
+		end
+		--Set vars
+		NeP.Parser.LastCast = eval.spell
+		NeP.Parser.LastGCD = (not eval.nogcd and eval.spell) or NeP.Parser.LastGCD
+		NeP.Parser.LastTarget = eval.target
+		--Update the actionlog and master toggle icon
+		NeP.ActionLog:Add(spell.token, eval.spell, spell.icon, eval.target)
+		NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
+		--Execute
+		return eval.exe(eval)
+	end
+end
+
 --This works on the current parser target.
 --This function takes care of psudo units (fakeunits).
 --Returns boolean (true if the target is valid).
@@ -58,8 +84,6 @@ function NeP.Parser.Target(eval)
 	elseif eval[3].func then
 		eval[3].target = eval[3].func()
 	end
-	-- Filter the unit (FakeUnits)
-	eval.target = NeP.FakeUnits:Filter(eval[3].target)
 	-- Eval if the unit is valid
 	return UnitExists(eval.target) and UnitIsVisible(eval.target)
 	and NeP.Protected.LineOfSight('player', eval.target)
@@ -69,7 +93,7 @@ end
 --Reads and figures out what it should execute from the CR
 --The Cr when it reaches this point must be already compiled and be ready to run.
 function NeP.Parser.Parse(eval)
-	local spell, cond = eval[1], eval[2]
+	local spell, cond, target = eval[1], eval[2], eval[3]
 	local endtime, cname = castingTime()
 	-- Its a table
 	if spell.is_table then
@@ -82,28 +106,17 @@ function NeP.Parser.Parse(eval)
 		end
 	-- Normal
 	elseif (spell.bypass or endtime == 0)
-	and NeP.Parser.Target(eval)
 	and NeP.Actions:Eval(spell.token)(eval) then
-		-- Evaluate conditions
-		eval.spell = eval.spell or spell.spell
-		if NeP.DSL.Parse(cond, eval.spell, eval.target) then
-			-- (!spell) this clips the spell
-			if spell.interrupts then
-				if cname == eval.spell then
-					return true
-				elseif endtime > 0 then
-					SpellStopCasting()
-				end
+		--Target is an array
+		local _target = NeP.FakeUnits:Filter(target.target)
+		if type(_target) == 'table' then
+			for i=1, #_target do
+				eval.target = _target[i]
+				if _exe(eval, endtime, cname) then return true end
 			end
-			--Set vars
-			NeP.Parser.LastCast = eval.spell
-			NeP.Parser.LastGCD = (not eval.nogcd and eval.spell) or NeP.Parser.LastGCD
-			NeP.Parser.LastTarget = eval.target
-			--Update the actionlog and master toggle icon
-			NeP.ActionLog:Add(eval.token, eval.spell, spell.icon, eval.target)
-			NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
-			--Execute
-			return eval.exe(eval)
+		else
+			eval.target = _target
+			return _exe(eval, endtime, cname)
 		end
 	end
 end

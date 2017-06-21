@@ -22,10 +22,21 @@ function NeP.FakeUnits.Add(_, name, func)
 	end
 end
 
-function NeP.FakeUnits.Filter(_, unit)
+local function process(unit)
 	-- Find and remove num and arg
 	local arg = unit:match('%((.+)%)')
 	local num = unit:match("%d+") or 1
 	local funit = unit:gsub(arg or '', ''):gsub(num or '', '')
 	return Units[funit] and Units[funit](tonumber(num), arg) or unit
+end
+
+function NeP.FakeUnits.Filter(_, unit)
+	if type(unit) == 'table' then
+		local tmp = {}
+		for i=1, #unit do
+			tmp[#tmp+1] = process(unit)
+		end
+		return tmp
+	end
+	return process(unit)
 end

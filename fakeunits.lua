@@ -214,3 +214,11 @@ NeP.FakeUnits:Add('boss', function()
         end
     end
 end)
+
+NeP.FakeUnits:Add('enemies', function(num)
+	local tempTable = {}
+	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
+		tempTable[#tempTable+1] = Obj.key
+	end
+	return tempTable
+end)
