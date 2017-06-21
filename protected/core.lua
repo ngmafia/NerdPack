@@ -5,14 +5,16 @@ NeP.Protected = {}
 
 local unlockers = {}
 
-function NeP.Protected:AddUnlocker(name, test, functions, extended, om)
+function NeP.Protected:AddUnlocker(name, test, functions, extended, om, prio)
 	table.insert(unlockers, {
 		name = name,
 		test = test,
 		functions = functions,
 		extended = extended,
-		om = om
+		om = om;
+		prio = prio or 0
 	})
+	table.sort( unlockers, function(a,b) return a.prio > b.prio end )
 end
 
 function NeP.Protected.SetUnlocker(name, unlocker)
