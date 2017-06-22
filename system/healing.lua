@@ -61,7 +61,6 @@ local function Refresh(GUID, Obj)
 	temp.healthRaw = healthRaw
 	temp.distance = Obj.distance
 	temp.predicted = GetPredictedHealth_Percent(Obj.key)
-	temp.missingpredicted = GetMissingPredictedHealth(Obj.key)
 	temp.predicted_Raw = GetPredictedHealth(Obj.key)
 end
 
