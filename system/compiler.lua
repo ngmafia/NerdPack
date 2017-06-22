@@ -204,29 +204,42 @@ function NeP.Compiler.Target(eval)
 	eval[3] = ref
 end
 
--- Remove whitespaces (_xspc_ needs to be unique so we dont end up replacing something we shouldn't)
+-- Remove whitespaces (_xspc_ needs to be unique so we dont 
+-- end up replacing something we shouldn't)
 local function CondSpaces(cond)
-	return cond:gsub("%b()", function(s) return s:gsub(" ", "_xspc_") end):gsub("%s", ""):gsub("_xspc_", " ")
+	return cond:gsub("%b()", function(s) 
+		return s:gsub(" ", "_xspc_")
+	end):gsub("%s", ""):gsub("_xspc_", " ")
 end
 
--- FIXME: more needs to be done for conditions like we do for the RangedSlot
-function NeP.Compiler.Conditions(eval, name)
-	local condtype = type(eval[2])
-	if not eval[2] then
+local _cond_types = {
+	['nil'] = function(eval, name)
 		eval[2] = 'true'
-	elseif condtype  == 'boolean' then
+	end,
+	['function'] = function(eval, name)
+		local _func_name = tostring(eval[2])
+		_G[_func_name] = eval[2]
+		eval[2] = 'func='.._func_name
+	end,
+	['boolean'] = function(eval, name)
 		eval[2] = tostring(eval[2])
-	elseif condtype  == 'table' then
-		NeP.Core:Print('Invalid condition format:', condtype, 'in the cr:', name)
-		eval[2] = 'true'
-	else
-		eval[2] = CondSpaces(eval[2])
-		-- Convert spells inside ()
-		eval[2] = eval[2]:gsub("%((.-)%)", function(s)
-			-- we cant convert number due to it messing up other things
+	end,
+	['string'] = function(eval, name)
+		-- Convert spells inside () and remove spaces
+		eval[2] = CondSpaces(eval[2]):gsub("%((.-)%)", function(s)
+			-- we cant convert numbers due to it messing up other things
 			if tonumber(s) then return '('..s..')' end
 			return '('..NeP.Spells:Convert(s, name)..')'
 		end)
+	end
+}
+
+function NeP.Compiler.Conditions(eval, name)
+	local cond_type = _cond_types[type(eval[2])]
+	if cond_type then
+		cond_type(eval, name)
+	else
+		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Condition cant be a', type(eval[2]))
 	end
 end
 
