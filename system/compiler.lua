@@ -112,13 +112,16 @@ end
 
 function NeP.Compiler.Target(eval)
 	local ref, unit_type = {}, type(eval[3])
-	if unit_type == 'string' then
+	-- NIL
+	if not eval[3] then
+		ref.target = function() return UnitExists('target') and 'target' or 'player' end
+	-- string
+	elseif unit_type == 'string' then
 		ref.target = eval[3]
 		unit_ground(ref, eval)
-	elseif unit_type == 'function' or unit_type == 'table' then
-		ref.target = eval[3]
+	-- table or func
 	else
-		ref.target = function() return UnitExists('target') and 'target' or 'player' end
+		ref.target = eval[3]
 	end
 	eval[3] = ref
 end
