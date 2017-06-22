@@ -59,7 +59,6 @@ local function Refresh(GUID, Obj)
 	local healthRaw = UnitHealth(temp.key)
 	temp.health = (healthRaw / UnitHealthMax(temp.key)) * 100
 	temp.healthRaw = healthRaw
-	temp.distance = Obj.distance
 	temp.predicted = GetPredictedHealth_Percent(Obj.key)
 	temp.predicted_Raw = GetPredictedHealth(Obj.key)
 end
