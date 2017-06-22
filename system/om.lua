@@ -93,7 +93,7 @@ function NeP.OM:Insert(Tbl, Obj, GUID)
 end
 
 function NeP.OM:Add(Obj)
-	if not UnitExists(Obj) then return end
+	if not UnitExists(Obj) or not UnitInPhase(Obj) then return end
 	local GUID = UnitGUID(Obj) or '0'
 	-- Dead Units
 	if UnitIsDeadOrGhost(Obj) then
