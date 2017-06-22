@@ -71,11 +71,29 @@ local function _Lib(eval, name, ref)
 	eval.exe = function() return NeP.Library:Parse(ref.spell, ref.args) end
 end
 
-
 local function _Macro(eval, name, ref)
 	ref.token = 'macro'
 	eval.nogcd = true
 	eval.exe = function(eval) return NeP.Protected["Macro"](eval.spell, eval.target) end
+end
+
+local function _Spell(eval, name, ref)
+	ref.spell = NeP.Spells:Convert(ref.spell, name)
+	ref.icon = select(3,GetSpellInfo(ref.spell))
+	eval.exe = function(eval) return NeP.Protected["Cast"](eval.spell, eval.target) end
+	ref.token = 'spell_cast'
+end
+
+local function _Clip(eval, name, ref)
+	ref.interrupts = true
+	ref.bypass = true
+	ref.spell = ref.spell:sub(2)
+end
+
+local function _NoGCD(eval, name, ref)
+	ref.bypass = true
+	eval.nogcd = true
+	ref.spell = ref.spell:sub(2)
 end
 
 local function spell_string(eval, name)
@@ -88,15 +106,11 @@ local function spell_string(eval, name)
 
 	-- Clip
 	if ref.spell:find('^!') then
-		ref.interrupts = true
-		ref.bypass = true
-		ref.spell = ref.spell:sub(2)
+		_Clip(eval, name, ref)
 	end
 	-- No GCD
 	if ref.spell:find('^&') then
-		ref.bypass = true
-		eval.nogcd = true
-		ref.spell = ref.spell:sub(2)
+		_NoGCD(eval, name, ref)
 	end
 
 	-- Macro
@@ -113,12 +127,9 @@ local function spell_string(eval, name)
 		_Items(eval, name, ref)
 	--Normal spell
 	else
-		ref.spell = NeP.Spells:Convert(ref.spell, name)
-		ref.icon = select(3,GetSpellInfo(ref.spell))
-		eval.exe = function(eval) return NeP.Protected["Cast"](eval.spell, eval.target) end
-		ref.token = 'spell_cast'
+		_Spell(eval, name, ref)
 	end
-	
+
 	--replace with compiled
 	eval[1] = ref
 end
