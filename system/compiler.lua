@@ -41,64 +41,116 @@ local invItems = {
 	['ranged']		= 'RangedSlot'
 }
 
--- Takes a string a produces a table in its place
-function NeP.Compiler.Spell(eval, name)
+local function _Items(eval, name, ref)
+	ref.spell = ref.spell:sub(2)
+	ref.token = 'item'
+	eval.nogcd = true
+	if invItems[ref.spell] then
+		local invItem = GetInventorySlotInfo(invItems[ref.spell])
+		ref.spell = GetInventoryItemID("player", invItem)
+	end
+	if not ref.spell then return end
+	local itemID = tonumber(ref.spell)
+	if not itemID then
+		itemID = NeP.Core:GetItemID(ref.spell)
+	end
+	if not tonumber(itemID) then return end
+	local itemName, itemLink, _,_,_,_,_,_,_, texture = GetItemInfo(itemID)
+	if not itemName then return end
+	ref.id = itemID
+	ref.spell = itemName
+	ref.icon = texture
+	ref.link = itemLink
+	eval.exe = function(eval) return NeP.Protected["UseItem"](eval.spell, eval.target) end
+end
+
+local function _Lib(eval, name, ref)
+	ref.spell = ref.spell:sub(2)
+	ref.token = 'lib'
+	eval.nogcd = true
+	eval.exe = function() return NeP.Library:Parse(ref.spell, ref.args) end
+end
+
+
+local function _Macro(eval, name, ref)
+	ref.token = 'macro'
+	eval.nogcd = true
+	eval.exe = function(eval) return NeP.Protected["Macro"](eval.spell, eval.target) end
+end
+
+local function spell_string(eval, name)
 	local ref = { spell = eval[1] }
+	
+	--Arguments
 	local arg1, args = ref.spell:match('(.+)%((.+)%)')
 	if args then ref.spell = arg1 end
 	ref.args = args
 
+	-- Clip
 	if ref.spell:find('^!') then
 		ref.interrupts = true
 		ref.bypass = true
 		ref.spell = ref.spell:sub(2)
 	end
+	-- No GCD
 	if ref.spell:find('^&') then
 		ref.bypass = true
 		eval.nogcd = true
 		ref.spell = ref.spell:sub(2)
 	end
 
+	-- Macro
 	if ref.spell:find('^/') then
-		ref.token = 'macro'
-		eval.nogcd = true
-		eval.exe = function(eval) return NeP.Protected["Macro"](eval.spell, eval.target) end
+		_Macro(eval, name, ref)
+	--Lib
 	elseif ref.spell:find('^@') then
-		ref.spell = ref.spell:sub(2)
-		ref.token = 'lib'
-		eval.nogcd = true
-		eval.exe = function() return NeP.Library:Parse(ref.spell, ref.args) end
+		_Lib(eval, name, ref)
+	--Actions
 	elseif ref.spell:find('^%%') then
 		ref.token = ref.spell:sub(2)
+	-- Items
 	elseif ref.spell:find('^#') then
-		ref.spell = ref.spell:sub(2)
-		ref.token = 'item'
-		eval.nogcd = true
-		if invItems[ref.spell] then
-			local invItem = GetInventorySlotInfo(invItems[ref.spell])
-			ref.spell = GetInventoryItemID("player", invItem)
-		end
-		if not ref.spell then return end
-		local itemID = tonumber(ref.spell)
-		if not itemID then
-			itemID = NeP.Core:GetItemID(ref.spell)
-		end
-		if not tonumber(itemID) then return end
-		local itemName, itemLink, _,_,_,_,_,_,_, texture = GetItemInfo(itemID)
-		if not itemName then return end
-		ref.id = itemID
-		ref.spell = itemName
-		ref.icon = texture
-		ref.link = itemLink
-		eval.exe = function(eval) return NeP.Protected["UseItem"](eval.spell, eval.target) end
+		_Items(eval, name, ref)
+	--Normal spell
 	else
 		ref.spell = NeP.Spells:Convert(ref.spell, name)
 		ref.icon = select(3,GetSpellInfo(ref.spell))
 		eval.exe = function(eval) return NeP.Protected["Cast"](eval.spell, eval.target) end
 		ref.token = 'spell_cast'
 	end
+	
 	--replace with compiled
 	eval[1] = ref
+end
+
+-- Takes a string a produces a table in its place
+function NeP.Compiler.Spell(eval, name)
+	local spell = eval[1]
+	local spelltype = type(spell)
+	-- Spell
+	if spelltype == 'nil' then
+		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Spell cant be a', type(spell))
+		eval[1] = {
+			spell = 'fake',
+			token = 'spell_Cast',
+		}
+		eval[2] = 'true'
+	elseif spelltype == 'string' then
+		spell_string(eval, name)
+	elseif spelltype == 'table' then
+		spell.is_table = true
+		for k=1, #spell do
+			NeP.Compiler.Compile(spell[k], name)
+		end
+	elseif spelltype == 'function' then
+		local ref = {}
+		ref.token = 'function'
+		eval.exe = spell
+		eval.nogcd = true
+		eval[1] = ref
+	else
+		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Spell cant be a', type(spell))
+	end
 end
 
 local function unit_ground(ref, eval)
@@ -156,37 +208,10 @@ function NeP.Compiler.Compile(eval, name)
 	-- check if this was already done
 	if eval[4] then return end
 	eval[4] = true
-
-	local spell = eval[1]
-	local spelltype = type(spell)
-	-- Spell
-	if spelltype == 'nil' then
-		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Spell cant be a', type(spell))
-		eval[1] = {
-			spell = 'fake',
-			token = 'spell_Cast',
-		}
-		eval[2] = 'true'
-	elseif spelltype == 'string' then
-		NeP.Compiler.Spell(eval, name)
-	elseif spelltype == 'table' then
-		spell.is_table = true
-		for k=1, #spell do
-			NeP.Compiler.Compile(spell[k], name)
-		end
-	elseif spelltype == 'function' then
-		local ref = {}
-		ref.token = 'function'
-		eval.exe = spell
-		eval.nogcd = true
-		eval[1] = ref
-	else
-		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Spell cant be a', type(spell))
-	end
-
+	--Spell
+	NeP.Compiler.Spell(eval, name)
 	-- Conditions
 	NeP.Compiler.Conditions(eval, name)
-
 	-- Target
 	NeP.Compiler.Target(eval, name)
 end
