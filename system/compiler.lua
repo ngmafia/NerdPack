@@ -134,33 +134,38 @@ local function spell_string(eval, name)
 	eval[1] = ref
 end
 
--- Takes a string a produces a table in its place
-function NeP.Compiler.Spell(eval, name)
-	local spell = eval[1]
-	local spelltype = type(spell)
-	-- Spell
-	if spelltype == 'nil' then
+local _spell_types = {
+	['nil'] = function(eval, name)
 		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Spell cant be a', type(spell))
 		eval[1] = {
 			spell = 'fake',
-			token = 'spell_Cast',
+			token = 'spell_cast',
 		}
 		eval[2] = 'true'
-	elseif spelltype == 'string' then
-		spell_string(eval, name)
-	elseif spelltype == 'table' then
-		spell.is_table = true
-		for k=1, #spell do
-			NeP.Compiler.Compile(spell[k], name)
+	end,
+	['table'] = function(eval, name)
+		eval[1].is_table = true
+		for k=1, #eval[1] do
+			NeP.Compiler.Compile(eval[1][k], name)
 		end
-	elseif spelltype == 'function' then
+	end,
+	['function'] = function(eval, name)
 		local ref = {}
 		ref.token = 'function'
 		eval.exe = spell
 		eval.nogcd = true
 		eval[1] = ref
+	end,
+	['string'] = spell_string
+}
+
+-- Takes a valid format for spell and produces a table in its place
+function NeP.Compiler.Spell(eval, name)
+	local spell_type = _spell_types[type(eval[1])]
+	if spell_type then
+		spell_type(eval, name)
 	else
-		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Spell cant be a', type(spell))
+		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Spell cant be a', type(eval[1]))
 	end
 end
 
@@ -173,18 +178,28 @@ local function unit_ground(ref, eval)
 	end
 end
 
-function NeP.Compiler.Target(eval)
-	local ref, unit_type = {}, type(eval[3])
-	-- NIL
-	if not eval[3] then
+local _target_types = {
+	['nil'] = function(eval, name, ref)
 		ref.target = function() return UnitExists('target') and 'target' or 'player' end
-	-- string
-	elseif unit_type == 'string' then
+	end,
+	['table'] = function(eval, name, ref)
+		ref.target = eval[3]
+	end,
+	['function'] = function(eval, name, ref)
+		ref.target = eval[3]
+	end,
+	['string'] = function(eval, name, ref)
 		ref.target = eval[3]
 		unit_ground(ref, eval)
-	-- table or func
+	end
+}
+
+function NeP.Compiler.Target(eval)
+	local ref, unit_type = {}, _target_types[type(eval[3])]
+	if unit_type then
+		unit_type(eval, name, ref)
 	else
-		ref.target = eval[3]
+		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Target cant be a', type(eval[3]))
 	end
 	eval[3] = ref
 end
