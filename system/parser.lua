@@ -80,12 +80,7 @@ end
 --Returns boolean (true if the target is valid).
 function NeP.Parser.Target(eval)
 	-- This is to alow casting at the cursor location where no unit exists
-	if eval[3].cursor then
-		return true
-	-- Target is returned from a function
-	elseif eval[3].func then
-		eval[3].target = eval[3].func()
-	end
+	if eval[3].cursor then return true end
 	-- Eval if the unit is valid
 	return UnitExists(eval.target) and UnitIsVisible(eval.target)
 	and NeP.Protected.LineOfSight('player', eval.target)
@@ -93,7 +88,7 @@ end
 
 --This is the actual Parser...
 --Reads and figures out what it should execute from the CR
---The Cr when it reaches this point must be already compiled and be ready to run.
+--The CR when it reaches this point must be already compiled and be ready to run.
 function NeP.Parser.Parse(eval)
 	local spell, cond, target = eval[1], eval[2], eval[3]
 	local endtime, cname = castingTime()
@@ -108,16 +103,10 @@ function NeP.Parser.Parse(eval)
 	-- Normal
 	elseif (spell.bypass or endtime == 0)
 	and NeP.Actions:Eval(spell.token)(eval) then
-		--Target is an array
 		local _target = NeP.FakeUnits:Filter(target.target)
-		if type(_target) == 'table' then
-			for i=1, #_target do
-				eval.target = _target[i]
-				if _exe(eval, endtime, cname) then return true end
-			end
-		else
-			eval.target = _target
-			return _exe(eval, endtime, cname)
+		for i=1, #_target do
+			eval.target = _target[i]
+			if _exe(eval, endtime, cname) then return true end
 		end
 	end
 end

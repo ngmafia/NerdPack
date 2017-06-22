@@ -30,23 +30,44 @@ local function process(unit)
 	return Units[funit] and Units[funit](tonumber(num), arg) or unit
 end
 
-function NeP.FakeUnits.Filter(_, unit)
-	if type(unit) == 'table' then
-		local tmp = {}
-		for i=1, #unit do
-			-- If the fake unit returns a table then we need
-			-- to merge it, EX: {tank, enemies}
-			-- tank is a single unit while enemie is a table
-			local tmp_unit = process(unit)
-			if type(tmp_unit)=='table' then
-				for i=1, #tmp_unit do
-					tmp[#tmp+1] = tmp_unit[i]
-				end
-			else
-				tmp[#tmp+1] = tmp_unit
-			end
-		end
-		return tmp
+local function not_in_tbl(unit, tbl)
+	for i=1, #tbl do
+		if tbl[i] == unit then return false end
 	end
-	return process(unit)
+	return true
+end
+
+-- If the fake unit returns a table then we need
+-- to merge it, EX: {tank, enemies}
+-- tank is a single unit while enemie is a table
+local function add_tbl(unit, tbl)
+	local unit_type = type(unit)
+	--table
+	if unit_type =='table' then
+		NeP.FakeUnits:Filter(unit, tbl)
+	--function
+	elseif unit_type == 'function' then
+		NeP.FakeUnits:Filter(unit(), tbl)
+	--add
+	else
+		unit = process(unit)
+		if type(unit) ~= 'string' then
+			NeP.FakeUnits.Filter(_,unit, tbl)
+		elseif not_in_tbl(unit, tbl) then
+			tbl[#tbl+1] = unit
+		end
+	end
+end
+ 
+function NeP.FakeUnits.Filter(_,unit, tbl)
+	tbl = tbl or {}
+	-- Table (recursive)
+	if type(unit) == 'table' then
+		for i=1, #unit do
+			add_tbl(unit[i], tbl)
+		end
+	else
+		add_tbl(unit, tbl)
+	end
+	return tbl
 end

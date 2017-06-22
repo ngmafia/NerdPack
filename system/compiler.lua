@@ -101,29 +101,24 @@ function NeP.Compiler.Spell(eval, name)
 	eval[1] = ref
 end
 
+local function unit_ground(ref, eval)
+	if ref.target:find('.ground') then
+		ref.target = ref.target:sub(0,-8)
+		eval.exe = function(eval) return NeP.Protected["CastGround"](eval.spell, eval.target) end
+		-- This is to alow casting at the cursor location where no unit exists
+		if ref.target:lower() == 'cursor' then ref.cursor = true end
+	end
+end
+
 function NeP.Compiler.Target(eval)
-	local ref = {}
-	if type(eval[3]) == 'string' then
+	local ref, unit_type = {}, type(eval[3])
+	if unit_type == 'string' then
 		ref.target = eval[3]
-		-- ground
-		if ref.target:find('.ground') then
-			ref.target = ref.target:sub(0,-8)
-			ref.ground = true
-			eval.exe = function(eval) return NeP.Protected["CastGround"](eval.spell, eval.target) end
-			-- This is to alow casting at the cursor location where no unit exists
-			if ref.target:lower() == 'cursor' then
-				ref.cursor = true
-				ref.target = 'fake'
-			end
-		end
-	elseif type(eval[3]) == 'function' then
-		ref.target = 'fake'
-		ref.func = eval[3]
+		unit_ground(ref, eval)
+	elseif unit_type == 'function' then
+		ref.target = eval[3]
 	else
-		ref.target = 'fake'
-		ref.func = function()
-			return UnitExists('target') and 'target' or 'player'
-		end
+		ref.target = function() return UnitExists('target') and 'target' or 'player' end
 	end
 	eval[3] = ref
 end
