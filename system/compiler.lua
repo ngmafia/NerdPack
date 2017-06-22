@@ -115,7 +115,7 @@ function NeP.Compiler.Target(eval)
 	if unit_type == 'string' then
 		ref.target = eval[3]
 		unit_ground(ref, eval)
-	elseif unit_type == 'function' then
+	elseif unit_type == 'function' or unit_type == 'table' then
 		ref.target = eval[3]
 	else
 		ref.target = function() return UnitExists('target') and 'target' or 'player' end
