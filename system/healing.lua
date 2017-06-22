@@ -29,7 +29,7 @@ local function Clean()
 end
 
 local function GetPredictedHealth(unit)
-	return UnitHealth(unit)-(UnitGetTotalHealAbsorbs(unit) or 0)+(UnitGetIncomingHeals(unit) or 0)
+	return UnitHealth(unit)+(UnitGetTotalHealAbsorbs(unit) or 0)+(UnitGetIncomingHeals(unit) or 0)
 end
 
 local function GetPredictedHealth_Percent(unit)
@@ -37,7 +37,7 @@ local function GetPredictedHealth_Percent(unit)
 end
 
 local function GetMissingPredictedHealth(unit)
-	return UnitHealthMax(unit) - UnitHealth(unit)+(UnitGetTotalHealAbsorbs(unit) or 0)-(UnitGetIncomingHeals(unit) or 0)
+	return GetPredictedHealth(unit)-(UnitGetIncomingHeals(unit) or 0)
 end
 
 local function healthPercent(unit)
