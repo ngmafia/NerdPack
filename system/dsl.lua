@@ -100,7 +100,7 @@ end
 local function ProcessCondition(Strg, Spell, Target)
 	-- Process Unit Stuff
 	local unitID, rest = strsplit('.', Strg, 2)
-	unitID =  NeP.FakeUnits:Filter(unitID)
+	unitID =  NeP.FakeUnits:Filter(unitID)[1]
 	-- condition Target
 	if unitID and UnitExists(unitID) then
 		Target = unitID
