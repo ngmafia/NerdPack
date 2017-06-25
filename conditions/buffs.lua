@@ -36,6 +36,11 @@ NeP.DSL:Register("buff.count", function(target, spell)
   return count or 0
 end)
 
+NeP.DSL:Register("buff.count.any", function(target, spell)
+  local _, count = UnitBuffL(target, spell)
+  return count or 0
+end)
+
 NeP.DSL:Register("buff.duration", function(target, spell)
   local buff,_,expires = UnitBuffL(target, spell, 'PLAYER')
   return buff and (expires - GetTime()) or 0
@@ -54,6 +59,11 @@ end)
 
 NeP.DSL:Register("debuff.count", function(target, spell)
   local _,count = UnitDebuffL(target, spell, 'PLAYER')
+  return count or 0
+end)
+
+NeP.DSL:Register("debuff.count.any", function(target, spell)
+  local _,count = UnitDebuffL(target, spell)
   return count or 0
 end)
 
