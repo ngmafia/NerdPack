@@ -4,14 +4,10 @@ NeP.Parser   = {}
 -- Local stuff for speed
 local GetTime              = GetTime
 local UnitBuff             = UnitBuff
---local IsMounted            = IsMounted
 local UnitCastingInfo      = UnitCastingInfo
 local UnitChannelInfo      = UnitChannelInfo
 local UnitExists           = ObjectExists or UnitExists
 local UnitIsVisible        = UnitIsVisible
-local GetSpellBookItemInfo = GetSpellBookItemInfo
-local GetSpellCooldown     = GetSpellCooldown
-local IsUsableSpell        = IsUsableSpell
 local SpellStopCasting     = SpellStopCasting
 local UnitIsDeadOrGhost    = UnitIsDeadOrGhost
 local SecureCmdOptionParse = SecureCmdOptionParse
@@ -87,7 +83,7 @@ end
 ]]
 function NeP.Parser.Unit_Blacklist(_, unit)
 	local _bl = NeP.CR.CR.blacklist
-	if _bl[NeP.Core:UnitID(unit)] then return true end 
+	if _bl[NeP.Core:UnitID(unit)] then return true end
 	for i=1, #_bl.buff do
 		local _count = _bl.buff[i].count
 		if _count then

@@ -12,6 +12,7 @@ local select            = select
 local tonumber          = tonumber
 local pairs             = pairs
 local C_Timer 					= C_Timer
+local UnitInPhase 			= UnitInPhase
 
 --Advanced
 local ObjectIsType = ObjectIsType
@@ -47,7 +48,7 @@ local function MergeTable(table, Obj, GUID)
 	end
 end
 
-function NeP.OM:Get(ref, want_plates)
+function NeP.OM.Get(_, ref, want_plates)
 	-- Hack for nameplates
 	if want_plates and nPlates then
 		local temp = {}
@@ -74,7 +75,7 @@ function NeP.OM:Get(ref, want_plates)
 	end
 end
 
-function NeP.OM:Insert(Tbl, Obj, GUID)
+function NeP.OM.Insert(_, Tbl, Obj, GUID)
 	-- Dont add existing Objs (Update)
 	local Test = Tbl[GUID]
 	if Test and UnitExists(Test.key) then
@@ -94,7 +95,7 @@ function NeP.OM:Insert(Tbl, Obj, GUID)
 	end
 end
 
-function NeP.OM:Add(Obj)
+function NeP.OM.Add(_, Obj)
 	if not UnitExists(Obj) or not UnitInPhase(Obj) then return end
 	local GUID = UnitGUID(Obj) or '0'
 	-- Dead Units

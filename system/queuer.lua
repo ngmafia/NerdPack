@@ -8,7 +8,7 @@ local GetTime              = GetTime
 NeP.Queuer = {}
 local Queue = {}
 
-function NeP.Queuer:Add(spell, target)
+function NeP.Queuer.Add(_, spell, target)
   spell = NeP.Spells:Convert(spell)
   if not spell then return end
   Queue[spell] = {
@@ -17,7 +17,7 @@ function NeP.Queuer:Add(spell, target)
   }
 end
 
-function NeP.Queuer:Spell(spell)
+function NeP.Queuer.Spell(_, spell)
   local skillType = GetSpellBookItemInfo(spell)
   local isUsable, notEnoughMana = IsUsableSpell(spell)
   if skillType ~= 'FUTURESPELL' and isUsable and not notEnoughMana then

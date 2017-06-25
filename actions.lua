@@ -15,7 +15,9 @@ local GetItemCount           = GetItemCount
 local GetTime                = GetTime
 local CancelShapeshiftForm   = CancelShapeshiftForm
 local CancelUnitBuff         = CancelUnitBuff
-local RunMacro               = RunMacro
+local GetSpellCooldown       = GetSpellCooldown
+local GetSpellBookItemInfo   = GetSpellBookItemInfo
+local IsUsableSpell          = IsUsableSpell
 
 -- DispelSelf
 NeP.Actions:Add('dispelself', function(eval)
@@ -24,7 +26,7 @@ NeP.Actions:Add('dispelself', function(eval)
     if dispelType and (duration - expires) > math.random(.5, 1.5) then
       eval.spell = GetSpellInfo(spellID)
       eval[3].target = 'player'
-      eval.exe = function(eval) return NeP.Protected["Cast"](eval.spell, eval.target) end
+      eval.exe = function(eva) return NeP.Protected["Cast"](eva.spell, eva.target) end
       return true
     end
   end
@@ -38,7 +40,7 @@ NeP.Actions:Add('dispelall', function(eval)
       if dispelType and (duration - expires) > math.random(.5, 1.5) then
         eval.spell = GetSpellInfo(spellID)
         eval[3].target = Obj.key
-        eval.exe = function(eval) return NeP.Protected["Cast"](eval.spell, eval.target) end
+        eval.exe = function(eva) return NeP.Protected["Cast"](eva.spell, eva.target) end
         return true
       end
     end
@@ -75,7 +77,7 @@ NeP.Actions:Add('taunt', function(eval, spell)
     if Threat and Threat >= 0 and Threat < 3 and Obj.distance <= 30 then
       eval.spell = spell
       eval[3].target = Obj.key
-      eval.exe = function(eval) return NeP.Protected["Cast"](eval.spell, eval.target) end
+      eval.exe = function(eva) return NeP.Protected["Cast"](eva.spell, eva.target) end
       return true
     end
   end
@@ -89,7 +91,7 @@ NeP.Actions:Add('ressdead', function(eval, spell)
       and UnitIsDeadOrGhost(Obj.key) and UnitPlayerOrPetInParty(Obj.key) then
       eval.spell = spell
       eval[3].target = Obj.key
-      eval.exe = function(eval) return NeP.Protected["Cast"](eval.spell, eval.target) end
+      eval.exe = function(eva) return NeP.Protected["Cast"](eva.spell, eva.target) end
       return true
     end
   end
