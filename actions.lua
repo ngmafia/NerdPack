@@ -33,8 +33,9 @@ end)
 -- Dispell all
 NeP.Actions:Add('dispelall', function(eval)
   for _, Obj in pairs(NeP.Healing:GetRoster()) do
-    for _,spellID, _,_,_,_, dispelType in LibDisp:IterateDispellableAuras(Obj.key) do
-      if dispelType then
+    for _,spellID, _,_,_,_, dispelType, duration, expires in LibDisp:IterateDispellableAuras(Obj.key) do
+      -- wait a random time before dispelling, makes it look less boot like...
+      if dispelType and (duration - expires) > math.random(.5, 1.5) then
         eval.spell = GetSpellInfo(spellID)
         eval[3].target = Obj.key
         eval.exe = function(eval) return NeP.Protected["Cast"](eval.spell, eval.target) end
