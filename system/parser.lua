@@ -115,7 +115,7 @@ function NeP.Parser.Target(eval)
 	-- Eval if the unit is valid
 	return UnitExists(eval.target) and UnitIsVisible(eval.target)
 	and NeP.Protected.LineOfSight('player', eval.target)
-	and NeP.Parser:Unit_Blacklist(eval.target)
+	and not NeP.Parser:Unit_Blacklist(eval.target)
 end
 
 --This is the actual Parser...
