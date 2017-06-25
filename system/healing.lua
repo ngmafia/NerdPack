@@ -19,7 +19,9 @@ local C_Timer 								= C_Timer
 
 local function Clean()
 	for GUID, Obj in pairs(Roster) do
-		if not Obj or not  UnitExists(Obj.key)
+		if not Obj
+		or not UnitExists(Obj.key)
+		or not UnitInPhase(Obj.key)
 		or Obj.distance > maxDistance
 		or UnitIsDeadOrGhost(Obj.key)
 		or GUID ~= UnitGUID(Obj.key) then
