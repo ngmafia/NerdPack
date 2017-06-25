@@ -75,6 +75,18 @@ local function _exe(eval, endtime, cname)
 	end
 end
 
+function NeP.Parser.Unit_Blacklist(_, unit)
+	local _bl = NeP.CR.CR.blacklist
+	if _bl[NeP.Core:UnitID(unit)] then return true end 
+	for i=1, #_bl.buff do
+		if NeP.DSL:Get('buff.any')(unit, _bl.buff[i]) then return true end
+	end
+	for i=1, #_bl.debuff do
+		if NeP.DSL:Get('debuff.any')(unit, _bl.buff[i]) then return true end
+	end
+end
+
+
 --This works on the current parser target.
 --This function takes care of psudo units (fakeunits).
 --Returns boolean (true if the target is valid).
@@ -84,6 +96,7 @@ function NeP.Parser.Target(eval)
 	-- Eval if the unit is valid
 	return UnitExists(eval.target) and UnitIsVisible(eval.target)
 	and NeP.Protected.LineOfSight('player', eval.target)
+	and NeP.Parser:Unit_Blacklist(eval.target)
 end
 
 --This is the actual Parser...
