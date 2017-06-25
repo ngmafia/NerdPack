@@ -23,7 +23,7 @@ local IsUsableSpell          = IsUsableSpell
 NeP.Actions:Add('dispelself', function(eval)
   for _,spellID, _,_,_,_, dispelType, duration, expires in LibDisp:IterateDispellableAuras('player') do
     -- wait a random time before dispelling, makes it look less boot like...
-    if dispelType and (duration - expires) > math.random(.5, 1.5) then
+    if dispelType --[[and (duration - expires) > math.random(.5, 1.5)]] then
       eval.spell = GetSpellInfo(spellID)
       eval[3].target = 'player'
       eval.exe = function(eva) return NeP.Protected["Cast"](eva.spell, eva.target) end
@@ -37,7 +37,7 @@ NeP.Actions:Add('dispelall', function(eval)
   for _, Obj in pairs(NeP.Healing:GetRoster()) do
     for _,spellID, _,_,_,_, dispelType, duration, expires in LibDisp:IterateDispellableAuras(Obj.key) do
       -- wait a random time before dispelling, makes it look less boot like...
-      if dispelType and (duration - expires) > math.random(.5, 1.5) then
+      if dispelType --[[and (duration - expires) > math.random(.5, 1.5)]] then
         eval.spell = GetSpellInfo(spellID)
         eval[3].target = Obj.key
         eval.exe = function(eva) return NeP.Protected["Cast"](eva.spell, eva.target) end
