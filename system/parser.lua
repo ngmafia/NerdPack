@@ -89,7 +89,7 @@ function NeP.Parser.Unit_Blacklist(_, unit)
 	for i=1, #_bl.debuff do
 		local _count = _bl.debuff[i].count
 		if _count then
-			NeP.DSL:Get('debuff.count.any')(unit, _bl.debuff[i]) >= _count then return true end
+			NeP.DSL:Get('debuff.count.any')(unit, _bl.debuff[i].name) >= _count then return true end
 		else
 			if NeP.DSL:Get('debuff.any')(unit, _bl.debuff[i]) then return true end
 		end
