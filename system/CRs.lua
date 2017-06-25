@@ -44,6 +44,12 @@ function NeP.CR.Add(_, SpecID, ...)
 	CRs[SpecID][ev.name].unload = ev.unload or noop
 	CRs[SpecID][ev.name][true] = ev.ic or {}
 	CRs[SpecID][ev.name][false] = ev.ooc or {}
+
+	--Blacklists
+	CRs[SpecID][ev.name].blacklist = ev.backlist or {}
+	CRs[SpecID][ev.name].blacklist.units = ev.backlist.units or {}
+	CRs[SpecID][ev.name].blacklist.buff = ev.backlist.buff or {}
+	CRs[SpecID][ev.name].blacklist.debuff = ev.backlist.debuff or {}
 end
 
 function NeP.CR:Set(Spec, Name)
