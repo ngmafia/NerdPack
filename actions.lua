@@ -23,7 +23,7 @@ NeP.Actions:Add('dispelself', function(eval)
     -- wait a random time before dispelling, makes it look less boot like...
     if dispelType and (duration - expires) > math.random(.5, 1.5) then
       eval.spell = GetSpellInfo(spellID)
-      eval.target = 'player'
+      eval[3].target = 'player'
       eval.exe = function(eval) return NeP.Protected["Cast"](eval.spell, eval.target) end
       return true
     end
@@ -36,7 +36,7 @@ NeP.Actions:Add('dispelall', function(eval)
     for _,spellID, _,_,_,_, dispelType in LibDisp:IterateDispellableAuras(Obj.key) do
       if dispelType then
         eval.spell = GetSpellInfo(spellID)
-        eval.target = Obj.key
+        eval[3].target = Obj.key
         eval.exe = function(eval) return NeP.Protected["Cast"](eval.spell, eval.target) end
         return true
       end
@@ -73,7 +73,7 @@ NeP.Actions:Add('taunt', function(eval, spell)
     local Threat = UnitThreatSituation("player", Obj.key)
     if Threat and Threat >= 0 and Threat < 3 and Obj.distance <= 30 then
       eval.spell = spell
-      eval.target = Obj.key
+      eval[3].target = Obj.key
       eval.exe = function(eval) return NeP.Protected["Cast"](eval.spell, eval.target) end
       return true
     end
@@ -87,7 +87,7 @@ NeP.Actions:Add('ressdead', function(eval, spell)
     if Obj.distance < 40 and UnitIsPlayer(Obj.Key)
       and UnitIsDeadOrGhost(Obj.key) and UnitPlayerOrPetInParty(Obj.key) then
       eval.spell = spell
-      eval.target = Obj.key
+      eval[3].target = Obj.key
       eval.exe = function(eval) return NeP.Protected["Cast"](eval.spell, eval.target) end
       return true
     end
