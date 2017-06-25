@@ -12,10 +12,11 @@ local UnitGetTotalHealAbsorbs = UnitGetTotalHealAbsorbs
 local UnitGetIncomingHeals    = UnitGetIncomingHeals
 local UnitGroupRolesAssigned  = UnitGroupRolesAssigned
 local UnitIsDeadOrGhost       = UnitIsDeadOrGhost
-local UnitInParty  						= UnitInParty
+local UnitInParty             = UnitInParty
 local UnitIsUnit              = UnitIsUnit
 local strsplit                = strsplit
-local C_Timer 								= C_Timer
+local UnitInPhase             = UnitInPhase
+local C_Timer                 = C_Timer
 
 local function Clean()
 	for GUID, Obj in pairs(Roster) do
