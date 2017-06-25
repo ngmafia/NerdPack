@@ -46,7 +46,8 @@ function NeP.CR.Add(_, SpecID, ...)
 	CRs[SpecID][ev.name][false] = ev.ooc or {}
 
 	--Blacklists
-	CRs[SpecID][ev.name].blacklist = ev.backlist or {}
+	ev.backlist = ev.backlist or {}
+	CRs[SpecID][ev.name].blacklist = ev.backlist
 	CRs[SpecID][ev.name].blacklist.units = ev.backlist.units or {}
 	CRs[SpecID][ev.name].blacklist.buff = ev.backlist.buff or {}
 	CRs[SpecID][ev.name].blacklist.debuff = ev.backlist.debuff or {}
