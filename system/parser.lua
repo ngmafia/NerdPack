@@ -79,13 +79,22 @@ function NeP.Parser.Unit_Blacklist(_, unit)
 	local _bl = NeP.CR.CR.blacklist
 	if _bl[NeP.Core:UnitID(unit)] then return true end 
 	for i=1, #_bl.buff do
-		if NeP.DSL:Get('buff.any')(unit, _bl.buff[i]) then return true end
+		local _count = _bl.buff[i].count
+		if _count then
+			NeP.DSL:Get('buff.count.any')(unit, _bl.buff[i]) >= _count then return true end
+		else
+			if NeP.DSL:Get('buff.any')(unit, _bl.buff[i]) then return true end
+		end
 	end
 	for i=1, #_bl.debuff do
-		if NeP.DSL:Get('debuff.any')(unit, _bl.buff[i]) then return true end
+		local _count = _bl.debuff[i].count
+		if _count then
+			NeP.DSL:Get('debuff.count.any')(unit, _bl.debuff[i]) >= _count then return true end
+		else
+			if NeP.DSL:Get('debuff.any')(unit, _bl.debuff[i]) then return true end
+		end
 	end
 end
-
 
 --This works on the current parser target.
 --This function takes care of psudo units (fakeunits).
