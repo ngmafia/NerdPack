@@ -40,6 +40,7 @@ local nPlates = {
 local function MergeTable(table, Obj, GUID)
 	if not table[GUID]
 	and UnitExists(Obj.key)
+	and UnitInPhase(Obj.key)
 	and GUID == UnitGUID(Obj.key) then
 		table[GUID] = Obj
 		Obj.distance = NeP.Protected.Distance('player', Obj.key)
@@ -63,6 +64,7 @@ function NeP.OM:Get(ref, want_plates)
 		for GUID, Obj in pairs(tb) do
 			-- remove invalid units
 			if not UnitExists(Obj.key)
+			or not UnitInPhase(Obj.key)
 			or GUID ~= UnitGUID(Obj.key)
 			or ref ~= 'Dead' and UnitIsDeadOrGhost(Obj.key) then
 				tb[GUID] = nil
