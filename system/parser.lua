@@ -74,7 +74,17 @@ local function _exe(eval, endtime, cname)
 		end
 	end
 end
-
+--[[
+	Ussage:
+	this is inserted into NeP.CR:Add...
+	----------------------------------
+	blacklist = {
+		units = {####, ####, ####},
+		buffs = {{name = ####, count = #}, ####, ####},
+		debuff = {####, ####, ####}
+	}
+	----------------------------------
+]]
 function NeP.Parser.Unit_Blacklist(_, unit)
 	local _bl = NeP.CR.CR.blacklist
 	if _bl[NeP.Core:UnitID(unit)] then return true end 
