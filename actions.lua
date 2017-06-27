@@ -57,6 +57,11 @@ NeP.Actions:Add('function', function()
   return true
 end)
 
+-- Executes a users lib
+NeP.Actions:Add('lib', function()
+  return true
+end)
+
 -- Cancel buff
 NeP.Actions:Add('cancelbuff', function(eval, buff)
   eval.exe = function() CancelUnitBuff('player', GetSpellInfo(buff)) end
