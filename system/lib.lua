@@ -22,7 +22,7 @@ function NeP.Library:Parse(strg, args)
 	end
 	local a, b = strsplit(".", strg, 2)
 	if type(args) == 'table' then
-		return libs[a][b](unpack(args))
+		return libs[a] and libs[a][b](unpack(args))
 	end
-	return libs[a][b](args)
+	return libs[a] and libs[a][b](args)
 end
