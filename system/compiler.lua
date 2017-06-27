@@ -165,6 +165,7 @@ function NeP.Compiler.Spell(eval, name)
 	if spell_type then
 		spell_type(eval, name)
 	else
+		_spell_types['nil'](eval, name)
 		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Spell cant be a', type(eval[1]))
 	end
 end
@@ -199,6 +200,7 @@ function NeP.Compiler.Target(eval)
 	if unit_type then
 		unit_type(eval, name, ref)
 	else
+		_target_types['nil'](eval, name, ref)
 		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Target cant be a', type(eval[3]))
 	end
 	eval[3] = ref
@@ -239,6 +241,7 @@ function NeP.Compiler.Conditions(eval, name)
 	if cond_type then
 		cond_type(eval, name)
 	else
+		_cond_types['nil'](eval, name)
 		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Condition cant be a', type(eval[2]))
 	end
 end
