@@ -135,14 +135,6 @@ local function spell_string(eval, name)
 end
 
 local _spell_types = {
-	['nil'] = function(eval, name)
-		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Spell cant be a', type(spell))
-		eval[1] = {
-			spell = 'fake',
-			token = 'spell_cast',
-		}
-		eval[2] = 'true'
-	end,
 	['table'] = function(eval, name)
 		eval[1].is_table = true
 		for k=1, #eval[1] do
@@ -165,8 +157,12 @@ function NeP.Compiler.Spell(eval, name)
 	if spell_type then
 		spell_type(eval, name)
 	else
-		_spell_types['nil'](eval, name)
 		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Spell cant be a', type(eval[1]))
+		eval[1] = {
+			spell = 'fake',
+			token = 'spell_cast',
+		}
+		eval[2] = 'true'
 	end
 end
 
@@ -200,8 +196,8 @@ function NeP.Compiler.Target(eval)
 	if unit_type then
 		unit_type(eval, name, ref)
 	else
-		_target_types['nil'](eval, name, ref)
 		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Target cant be a', type(eval[3]))
+		_target_types['nil'](eval, name, ref)
 	end
 	eval[3] = ref
 end
@@ -241,8 +237,8 @@ function NeP.Compiler.Conditions(eval, name)
 	if cond_type then
 		cond_type(eval, name)
 	else
-		_cond_types['nil'](eval, name)
 		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Condition cant be a', type(eval[2]))
+		_cond_types['nil'](eval, name)
 	end
 end
 
