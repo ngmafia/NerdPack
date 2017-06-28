@@ -3,6 +3,7 @@
 <p align = "center"><h1>NerdPack</h1></p>
 
 ![](https://github.com/MrTheSoulz/NerdPack/blob/master/docs/NeP_Show.jpg?raw=true)
+[![Build Status](https://travis-ci.org/MrTheSoulz/NerdPack.svg?branch=master)](https://travis-ci.org/MrTheSoulz/NerdPack)
 <img src="https://github.com/MrTheSoulz/NerdPack/blob/master/docs/NEPlogo.png?raw=true" width="450" height="250" align = "right" /></a>  
 
 ###Information:
