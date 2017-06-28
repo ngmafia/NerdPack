@@ -1,8 +1,9 @@
 <a href="http://goo.gl/yrctPO"><img src="https://github.com/MrTheSoulz/NerdPack/blob/master/docs/paypal.png?raw=true" alt="Donate" width="100" height="50" align = "right" /></a>
 <a href="https://discordapp.com/invite/XtSZbjM"><img src="http://i.imgur.com/fzomMAr.png" alt="Join us on discord!" width="150" height="50" align = "right" /></a>
+
+[![Build Status](https://travis-ci.org/MrTheSoulz/NerdPack.svg?branch=master)](https://travis-ci.org/MrTheSoulz/NerdPack)
 <p align = "center">
 	<h1>NerdPack</h1>
-	[![Build Status](https://travis-ci.org/MrTheSoulz/NerdPack.svg?branch=master)](https://travis-ci.org/MrTheSoulz/NerdPack)
 </p>
 
 ![](https://github.com/MrTheSoulz/NerdPack/blob/master/docs/NeP_Show.jpg?raw=true)
