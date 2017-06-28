@@ -21,7 +21,6 @@ build = {
   type = "builtin",
 
   modules = {
-    [ "foo.core" ] = "src/foo.c";
-    [ "foo"      ] = "src/lua/foo.lua";
+    [ "nep" ] = "NerdPack.lua";
   }
 }
