@@ -197,6 +197,21 @@ NeP.DSL:Register('spell.casttime', function(_, spell)
   return 0
 end)
 
+local _procs = {}
+NeP.Listener:Add('NeP_Procs_add', 'SPELL_ACTIVATION_OVERLAY_GLOW_SHOW', function(spellID)
+	_procs[spellID] = true
+	_procs[GetSpellInfo(spellID)] = true
+end)
+
+NeP.Listener:Add('NeP_Procs_rem', 'SPELL_ACTIVATION_OVERLAY_GLOW_HIDE', function(spellID)
+	_procs[spellID] = nil
+	_procs[GetSpellInfo(spellID)] = nil
+end)
+
+NeP.DSL:Register("spell.proc", function()
+	return _procs[spellID] ~= nil or _procs[GetSpellInfo(spellID)] ~= nil
+end)
+
 NeP.DSL:Register('combat.time', function(target)
   return NeP.CombatTracker:CombatTime(target)
 end)
