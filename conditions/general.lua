@@ -456,21 +456,7 @@ NeP.DSL:Register("isattacking", function()
 end)
 
 NeP.DSL:Register("role", function(target, role)
-  role = role:upper()
-  local damageAliases = { "DAMAGE", "DPS", "DEEPS" }
-  local targetRole = UnitGroupRolesAssigned(target)
-  if targetRole == role then return true
-  elseif role:find("HEAL") and targetRole == "HEALER" then
-    return true
-  else
-    for i = 1, #damageAliases do
-      if role == damageAliases[i] then
-        return true
-      end
-    end
-  end
-
-  return false
+  return role:upper() = UnitGroupRolesAssigned(target)
 end)
 
 NeP.DSL:Register("name", function (target, expectedName)
@@ -585,7 +571,7 @@ NeP.DSL:Register("deathin", function(target)
   return NeP.CombatTracker:TimeToDie(target)
 end)
 
-NeP.DSL:Register("ttd", function(target)
+NeP.DSL:Register({"ttd", "timetodie"}, function(target)
   return NeP.DSL:Get("deathin")(target)
 end)
 
