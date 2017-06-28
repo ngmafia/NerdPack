@@ -622,6 +622,10 @@ NeP.DSL:Register('isdummy', function(unit)
   return NeP.Tooltip:Unit(unit, matchs)
 end)
 
+NeP.DSL:Register('indoors', function()
+    return IsIndoors()
+end)
+
 --------------------------------------------SHARED CLASS------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 
