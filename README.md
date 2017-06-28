@@ -3,7 +3,7 @@
 <p align = "center"><h1>NerdPack</h1></p>
 
 ![](https://github.com/MrTheSoulz/NerdPack/blob/master/docs/NeP_Show.jpg?raw=true)
-<img src="http://nerdpackaddon.site/MTS/NeP_Logo.png?raw=true" width="450" height="250" align = "right" /></a>  
+<img src="http://nerdpackaddon.site/MTS/NePlogo.png?raw=true" width="450" height="250" align = "right" /></a>  
 
 ###Information:
 NerdPack is divided by 2 kind of modules: Core ("Legal") and Protected ("Ilegal").  
