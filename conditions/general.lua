@@ -209,7 +209,7 @@ NeP.Listener:Add('NeP_Procs_rem', 'SPELL_ACTIVATION_OVERLAY_GLOW_HIDE', function
 end)
 
 NeP.DSL:Register("spell.proc", function()
-	return _procs[spellID] ~= nil or _procs[GetSpellInfo(spellID)] ~= nil
+	return _procs[spellID] or _procs[GetSpellInfo(spellID)] or false
 end)
 
 NeP.DSL:Register('combat.time', function(target)
