@@ -456,7 +456,7 @@ NeP.DSL:Register("isattacking", function()
 end)
 
 NeP.DSL:Register("role", function(target, role)
-  return role:upper() = UnitGroupRolesAssigned(target)
+  return role:upper() == UnitGroupRolesAssigned(target)
 end)
 
 NeP.DSL:Register("name", function (target, expectedName)
