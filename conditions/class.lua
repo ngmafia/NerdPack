@@ -181,6 +181,8 @@ end)
 --This should be replaced by ids
 local minions = {
   count = 0,
+  empower = {},
+  empower_count = 0,
   ["Wild Imp"] = 12,
   Dreadstalker = 12,
   Imp = 25,
@@ -193,13 +195,40 @@ local minions = {
   Voidwalker = 25
 }
 
-NeP.Listener:Add('lock_P', 'COMBAT_LOG_EVENT_UNFILTERED', function(_, event, _,_, sName, _,_,_, dName)
-  if not (event == "SPELL_SUMMON" and sName == UnitName("player"))
+NeP.Listener:Add('lock_P', 'COMBAT_LOG_EVENT_UNFILTERED', function(_, event, _,_, sName, _,_, dGUID, dName, _,_, sid)
+  if not sName == UnitName("player")
   or not minions[dName] then return end
-  minions.count = minions.count + 1
-  C_Timer.After(minions[dName], function() minions.count = minions.count - 1 end)
+
+  -- Count active
+  if event == "SPELL_SUMMON" then
+    minions.count = minions.count + 1
+  end
+
+  -- Count units with Empower
+  if (event == "SPELL_AURA_APPLIED"
+  or event == "SPELL_AURA_REFRESH")
+  and sid == 193396 then
+    minions.empower_count = minions.empower_count + 1
+  end
+
+  -- removes the unit
+  C_Timer.After(minions[dName], function()
+    minions.count = minions.count - 1
+    if minions.empower[dGUID] then
+      minions.empower[dGUID] = nil
+      minions.empower_count = minions.empower_count - 1
+    end
+  end)
+
 end)
 
 NeP.DSL:Register('warlock.minions', function()
   return minions.count
+end)
+
+NeP.DSL:Register('warlock.empower', function()
+  return minions.empower_count
+end)
+NeP.DSL:Register('warlock.empower.missing', function()
+  return minions.count - minions.empower_count
 end)
