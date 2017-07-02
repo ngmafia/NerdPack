@@ -2,22 +2,22 @@ local _, NeP = ...
 
 -- locals
 local LibStub = LibStub
-local LibDisp                = LibStub('LibDispellable-1.0')
-local GetSpellInfo           = GetSpellInfo
-local UnitThreatSituation    = UnitThreatSituation
-local UnitIsPlayer           = UnitIsPlayer
-local IsUsableItem           = IsUsableItem
-local UnitIsDeadOrGhost      = UnitIsDeadOrGhost
+local LibDisp = LibStub('LibDispellable-1.0')
+local GetSpellInfo = GetSpellInfo
+local UnitThreatSituation = UnitThreatSituation
+local UnitIsPlayer = UnitIsPlayer
+local IsUsableItem = IsUsableItem
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost
 local UnitPlayerOrPetInParty = UnitPlayerOrPetInParty
-local GetItemCooldown        = GetItemCooldown
-local GetItemSpell           = GetItemSpell
-local GetItemCount           = GetItemCount
-local GetTime                = GetTime
-local CancelShapeshiftForm   = CancelShapeshiftForm
-local CancelUnitBuff         = CancelUnitBuff
-local GetSpellCooldown       = GetSpellCooldown
-local GetSpellBookItemInfo   = GetSpellBookItemInfo
-local IsUsableSpell          = IsUsableSpell
+local GetItemCooldown = GetItemCooldown
+local GetItemSpell = GetItemSpell
+local GetItemCount = GetItemCount
+local GetTime = GetTime
+local CancelShapeshiftForm = CancelShapeshiftForm
+local CancelUnitBuff = CancelUnitBuff
+local GetSpellCooldown = GetSpellCooldown
+local GetSpellBookItemInfo = GetSpellBookItemInfo
+local IsUsableSpell = IsUsableSpell
 
 -- DispelSelf
 NeP.Actions:Add('dispelself', function(eval)
@@ -104,8 +104,6 @@ end)
 
 -- Pause
 NeP.Actions:Add('pause', function(eval)
-  eval.type = 'Pause'
-  eval.target = nil
   eval.exe = function() return true end
   return true
 end)
