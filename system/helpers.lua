@@ -1,63 +1,103 @@
 local _, NeP 					= ...
 NeP.Helpers 					= {}
-local spellHasFailed 	= {}
 local UnitGUID 				= UnitGUID
 local UIErrorsFrame 	= UIErrorsFrame
-local wipe 						= wipe
 local C_Timer 				= C_Timer
 
+-- A full list can be found at:
+-- https://pastebin.com/auAsSL5W
+local ERR_SPELL_FAILED_S = LE_GAME_ERR_SPELL_FAILED_S
+local ERR_SPELL_OUT_OF_RANGE = LE_GAME_ERR_SPELL_OUT_OF_RANGE
+local ERR_SPELL_FAILED_ANOTHER_IN_PROGRESS = LE_GAME_ERR_SPELL_FAILED_ANOTHER_IN_PROGRESS
+local ERR_SPELL_COOLDOWN = LE_GAME_ERR_SPELL_COOLDOWN
+local ERR_ABILITY_COOLDOWN = LE_GAME_ERR_ABILITY_COOLDOWN
+local ERR_CANT_USE_ITEM = LE_GAME_ERR_CANT_USE_ITEM
+local ERR_ITEM_COOLDOWN = LE_GAME_ERR_ITEM_COOLDOWN
+local ERR_BADATTACKFACING = LE_GAME_ERR_BADATTACKFACING
+local ERR_NOT_WHILE_MOVING = LE_GAME_ERR_NOT_WHILE_MOVING
+
+local _Failed = {}
+UIErrorsFrame:UnregisterEvent("UI_ERROR_MESSAGE")
+
 local function addToData(GUID)
-	if not spellHasFailed[GUID] then
-		spellHasFailed[GUID] = {}
+	if not _Failed[GUID] then
+		_Failed[GUID] = {}
 	end
+end
+
+local function blackListSpell(GUID, spell)
+	_Failed[GUID][spell] =  true
+	C_Timer.After(0.5, (function()
+		_Failed[GUID][spell] =  nil
+	end), nil)
+end
+
+local function blackListInfront(GUID)
+	_Failed[GUID].infront = true
+	C_Timer.After(0.5, (function()
+		_Failed[GUID].infront = nil
+	end), nil)
 end
 
 local UI_Erros = {
-	-- infront / LoS
-	[50] = function(GUID, spell)
-		addToData(GUID)
-		spellHasFailed[GUID][spell] = ''
-		spellHasFailed[GUID].infront = false
+	[ERR_SPELL_FAILED_S] = function(GUID, spell)
+		blackListSpell(GUID, spell)
+		blackListInfront(GUID)
 	end,
-	-- SPELL_FAILED_OUT_OF_RANGE
-	[359] = function(GUID, spell)
-		addToData(GUID)
-		spellHasFailed[GUID][spell] = ''
+	[ERR_BADATTACKFACING] = function(GUID, spell)
+		blackListSpell(GUID, spell)
+		blackListInfront(GUID)
 	end,
-	-- Cant while moving
-	[220] = function(GUID, spell)
-		addToData(GUID)
-		spellHasFailed[GUID][spell] = ''
-	end
-	--[[ Item not ready FIX:ME wrong ID
-	[50] = function(GUID, spell)
-		addToData(GUID)
-		spellHasFailed[GUID][spell] = ''
-	end]]
+	[ERR_SPELL_OUT_OF_RANGE] = function(GUID, spell) blackListSpell(GUID, spell) end,
+	[ERR_NOT_WHILE_MOVING] = function(GUID, spell) blackListSpell(GUID, spell) end,
+	[ERR_SPELL_FAILED_ANOTHER_IN_PROGRESS] = function(GUID, spell) blackListSpell(GUID, spell) end,
+	[ERR_SPELL_COOLDOWN] = function(GUID, spell) blackListSpell(GUID, spell) end,
+	[ERR_ABILITY_COOLDOWN] = function(GUID, spell) blackListSpell(GUID, spell) end,
+	[ERR_CANT_USE_ITEM] = function(GUID, spell) blackListSpell(GUID, spell) end,
+	[ERR_ITEM_COOLDOWN] = function(GUID, spell) blackListSpell(GUID, spell) end,
 }
 
-function NeP.Helpers:Infront(target)
-	if not target then return end
-	local GUID = UnitGUID(target)
-	return GUID and spellHasFailed[GUID] and spellHasFailed[GUID].infront or true
+function NeP.Helpers.Infront(_, target, GUID)
+	GUID = GUID or UnitGUID(target)
+	if _Failed[GUID] then
+		 return not _Failed[GUID].infront
+	end
+	return true
+end
+
+function NeP.Helpers.Spell(_, spell, target, GUID)
+	GUID = GUID or UnitGUID(target)
+	if _Failed[GUID] then
+		 return not _Failed[GUID][spell]
+	end
+	return true
 end
 
 function NeP.Helpers:Check(spell, target)
-	if not target or not spell then return true end
+
+	-- Both MUST be strings
+	if type(spell) ~= 'string'
+	or type(target) ~= 'string' then
+		return true
+	end
+
 	local GUID = UnitGUID(target)
-	return GUID and spellHasFailed[GUID] and spellHasFailed[GUID][spell] == nil or true
+	if _Failed[GUID] then
+		return self:Spell(spell, target, GUID) and self:Infront(target, GUID)
+	end
+
+	return true
 end
 
 NeP.Listener:Add("NeP_Helpers", "UI_ERROR_MESSAGE", function(error)
 	if not UI_Erros[error] then return end
+
 	local unit, spell = NeP.Parser.LastTarget, NeP.Parser.LastCast
 	if not unit or not spell then return end
-	local GUID = UnitGUID(unit)
-	if not GUID then return end
-	UI_Erros[error](GUID, spell)
-	UIErrorsFrame:UnregisterEvent("UI_ERROR_MESSAGE")
-end)
 
-C_Timer.NewTicker(1, (function()
-	wipe(spellHasFailed)
-end), nil)
+	local GUID = UnitGUID(unit)
+	if GUID then
+		addToData(GUID)
+		UI_Erros[error](GUID, spell)
+	end
+end)
