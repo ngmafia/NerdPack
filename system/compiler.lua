@@ -1,102 +1,14 @@
 local _, NeP = ...
-local tonumber             = tonumber
-local GetInventorySlotInfo = GetInventorySlotInfo
-local GetInventoryItemID   = GetInventoryItemID
-local GetItemInfo          = GetItemInfo
-local GetSpellInfo         = GetSpellInfo
-local UnitExists           = ObjectExists or UnitExists
+local tonumber = tonumber
+local UnitExists = ObjectExists or UnitExists
 
 NeP.Compiler = {}
 
-local invItems = {
-	['head']		= 'HeadSlot',
-	['helm']		= 'HeadSlot',
-	['neck']		= 'NeckSlot',
-	['shoulder']	= 'ShoulderSlot',
-	['shirt']		= 'ShirtSlot',
-	['chest']		= 'ChestSlot',
-	['belt']		= 'WaistSlot',
-	['waist']		= 'WaistSlot',
-	['legs']		= 'LegsSlot',
-	['pants']		= 'LegsSlot',
-	['feet']		= 'FeetSlot',
-	['boots']		= 'FeetSlot',
-	['wrist']		= 'WristSlot',
-	['bracers']		= 'WristSlot',
-	['gloves']		= 'HandsSlot',
-	['hands']		= 'HandsSlot',
-	['finger1']		= 'Finger0Slot',
-	['finger2']		= 'Finger1Slot',
-	['trinket1']	= 'Trinket0Slot',
-	['trinket2']	= 'Trinket1Slot',
-	['back']		= 'BackSlot',
-	['cloak']		= 'BackSlot',
-	['mainhand']	= 'MainHandSlot',
-	['offhand']		= 'SecondaryHandSlot',
-	['weapon']		= 'MainHandSlot',
-	['weapon1']		= 'MainHandSlot',
-	['weapon2']		= 'SecondaryHandSlot',
-	['ranged']		= 'RangedSlot'
-}
+local tokens = {}
 
-local function _Items(eval, _, ref)
-	ref.spell = ref.spell:sub(2)
-	ref.token = 'item'
-	eval.nogcd = true
-	if invItems[ref.spell] then
-		local invItem = GetInventorySlotInfo(invItems[ref.spell])
-		ref.spell = GetInventoryItemID("player", invItem)
-	end
-	if not ref.spell then return end
-	local itemID = tonumber(ref.spell)
-	if not itemID then
-		itemID = NeP.Core:GetItemID(ref.spell)
-	end
-	if not tonumber(itemID) then return end
-	local itemName, itemLink, _,_,_,_,_,_,_, texture = GetItemInfo(itemID)
-	if not itemName then return end
-	ref.id = itemID
-	ref.spell = itemName
-	ref.icon = texture
-	ref.link = itemLink
-	eval.exe = function(eva) return NeP.Protected["UseItem"](eva.spell, eva.target) end
-end
-
-local function _Lib(eval, _, ref)
-	ref.spell = ref.spell:sub(2)
-	ref.token = 'lib'
-	eval.nogcd = true
-	eval.exe = function() return NeP.Library:Parse(ref.spell, ref.args) end
-end
-
-local function _Macro(eval, _, ref)
-	ref.token = 'macro'
-	eval.nogcd = true
-	eval.exe = function(eva) return NeP.Protected["Macro"](eva.spell, eva.target) end
-end
-
-local function _Spell(eval, name, ref)
-	ref.spell = NeP.Spells:Convert(ref.spell, name)
-	ref.icon = select(3,GetSpellInfo(ref.spell))
-	eval.exe = function(eva)
-		NeP.Parser.LastCast = eva.spell
-		NeP.Parser.LastGCD = (not eva.nogcd and eva.spell) or NeP.Parser.LastGCD
-		NeP.Parser.LastTarget = eva.target
-		return NeP.Protected["Cast"](eva.spell, eva.target)
-	end
-	ref.token = 'spell_cast'
-end
-
-local function _Clip(_, _, ref)
-	ref.interrupts = true
-	ref.bypass = true
-	ref.spell = ref.spell:sub(2)
-end
-
-local function _NoGCD(eval, _, ref)
-	ref.bypass = true
-	eval.nogcd = true
-	ref.spell = ref.spell:sub(2)
+-- DO NOT USE THIS UNLESS YOU KNOW WHAT YOUR DOING!
+function NeP.Compiler.RegisterToken(_, token, func)
+	tokens[token] = func
 end
 
 local function spell_string(eval, name)
@@ -106,31 +18,26 @@ local function spell_string(eval, name)
 	local arg1, args = ref.spell:match('(.+)%((.+)%)')
 	if args then ref.spell = arg1 end
 	ref.args = args
+	local token = ref.spell:sub(1)
 
 	-- Clip
 	if ref.spell:find('^!') then
-		_Clip(eval, name, ref)
+		ref.interrupts = true
+		ref.bypass = true
+		ref.spell = ref.spell:sub(2)
 	end
 	-- No GCD
 	if ref.spell:find('^&') then
-		_NoGCD(eval, name, ref)
+		ref.bypass = true
+		eval.nogcd = true
+		ref.spell = ref.spell:sub(2)
 	end
 
-	-- Macro
-	if ref.spell:find('^/') then
-		_Macro(eval, name, ref)
-	--Lib
-	elseif ref.spell:find('^@') then
-		_Lib(eval, name, ref)
-	--Actions
-	elseif ref.spell:find('^%%') then
-		ref.token = ref.spell:sub(2)
-	-- Items
-	elseif ref.spell:find('^#') then
-		_Items(eval, name, ref)
-	--Normal spell
+	-- RegisterToken
+	if tokens[token] then
+		tokens[token](eval, name, ref)
 	else
-		_Spell(eval, name, ref)
+		tokens["spell_cast"](eval, name, ref)
 	end
 
 	--replace with compiled
