@@ -11,7 +11,7 @@
 	<Script file="buffs.lua" />
 	<Script file="pull_timer.lua" />
 	<Script file="items.lua" />
-	<Script file="spells.lua" />
+	<Script file="spell.lua" />
 	<Script file="unit.lua" />
 	<Script file="class.lua" />
 
