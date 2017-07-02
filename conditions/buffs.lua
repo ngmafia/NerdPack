@@ -1,7 +1,7 @@
-local _, NeP       = ...
-local UnitBuff     = UnitBuff
-local UnitDebuff   = UnitDebuff
-local GetTime      = GetTime
+local _, NeP = ...
+local UnitBuff = UnitBuff
+local UnitDebuff = UnitDebuff
+local GetTime = GetTime
 
 local function UnitBuffL(target, spell, own)
   local name,_,_,count,_,_,expires,caster = UnitBuff(target, spell, nil, own)

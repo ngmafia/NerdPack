@@ -1,8 +1,8 @@
-local _, NeP       = ...
-local UnitExists   = UnitExists
-local UnitGUID     = UnitGUID
-local C_Timer      = C_Timer
-local wipe         = wipe
+local _, NeP = ...
+local UnitExists = ObjectExists or UnitExists
+local UnitGUID = UnitGUID
+local C_Timer = C_Timer
+local wipe = wipe
 
 local Cache = {
   Enemy              = {},

@@ -4,7 +4,7 @@ local UnitExists = ObjectExists or UnitExists
 local unpack     = unpack
 local strsplit   = strsplit
 
-function NeP.Core:string_split(string, delimiter)
+function NeP.Core.string_split(_, string, delimiter)
 	local result, from = {}, 1
 	local delim_from, delim_to = string.find(string, delimiter, from)
 	while delim_from do

@@ -1,8 +1,7 @@
-local _, NeP                = ...
---local GetNumSpecializations = GetNumSpecializations
-local GetTalentInfo         = GetTalentInfo
-local GetActiveSpecGroup    = GetActiveSpecGroup
-local GetTalentInfoByID     = GetTalentInfoByID
+local _, NeP = ...
+local GetTalentInfo = GetTalentInfo
+local GetActiveSpecGroup = GetActiveSpecGroup
+local GetTalentInfoByID = GetTalentInfoByID
 
 local talents = {}
 local rows = 7

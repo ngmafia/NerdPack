@@ -1,6 +1,4 @@
 local _, NeP = ...
-
--- Locals
 local tonumber             = tonumber
 local GetInventorySlotInfo = GetInventorySlotInfo
 local GetInventoryItemID   = GetInventoryItemID
@@ -41,7 +39,7 @@ local invItems = {
 	['ranged']		= 'RangedSlot'
 }
 
-local function _Items(eval, name, ref)
+local function _Items(eval, _, ref)
 	ref.spell = ref.spell:sub(2)
 	ref.token = 'item'
 	eval.nogcd = true
@@ -61,36 +59,36 @@ local function _Items(eval, name, ref)
 	ref.spell = itemName
 	ref.icon = texture
 	ref.link = itemLink
-	eval.exe = function(eval) return NeP.Protected["UseItem"](eval.spell, eval.target) end
+	eval.exe = function(eva) return NeP.Protected["UseItem"](eva.spell, eva.target) end
 end
 
-local function _Lib(eval, name, ref)
+local function _Lib(eval, _, ref)
 	ref.spell = ref.spell:sub(2)
 	ref.token = 'lib'
 	eval.nogcd = true
 	eval.exe = function() return NeP.Library:Parse(ref.spell, ref.args) end
 end
 
-local function _Macro(eval, name, ref)
+local function _Macro(eval, _, ref)
 	ref.token = 'macro'
 	eval.nogcd = true
-	eval.exe = function(eval) return NeP.Protected["Macro"](eval.spell, eval.target) end
+	eval.exe = function(eva) return NeP.Protected["Macro"](eva.spell, eva.target) end
 end
 
 local function _Spell(eval, name, ref)
 	ref.spell = NeP.Spells:Convert(ref.spell, name)
 	ref.icon = select(3,GetSpellInfo(ref.spell))
-	eval.exe = function(eval) return NeP.Protected["Cast"](eval.spell, eval.target) end
+	eval.exe = function(eva) return NeP.Protected["Cast"](eva.spell, eva.target) end
 	ref.token = 'spell_cast'
 end
 
-local function _Clip(eval, name, ref)
+local function _Clip(_, _, ref)
 	ref.interrupts = true
 	ref.bypass = true
 	ref.spell = ref.spell:sub(2)
 end
 
-local function _NoGCD(eval, name, ref)
+local function _NoGCD(eval, _, ref)
 	ref.bypass = true
 	eval.nogcd = true
 	ref.spell = ref.spell:sub(2)
@@ -98,7 +96,7 @@ end
 
 local function spell_string(eval, name)
 	local ref = { spell = eval[1] }
-	
+
 	--Arguments
 	local arg1, args = ref.spell:match('(.+)%((.+)%)')
 	if args then ref.spell = arg1 end
@@ -141,10 +139,10 @@ local _spell_types = {
 			NeP.Compiler.Compile(eval[1][k], name)
 		end
 	end,
-	['function'] = function(eval, name)
+	['function'] = function(eval)
 		local ref = {}
 		ref.token = 'function'
-		eval.exe = spell
+		eval.exe = eval[1]
 		eval.nogcd = true
 		eval[1] = ref
 	end,
@@ -169,29 +167,29 @@ end
 local function unit_ground(ref, eval)
 	if ref.target:find('.ground') then
 		ref.target = ref.target:sub(0,-8)
-		eval.exe = function(eval) return NeP.Protected["CastGround"](eval.spell, eval.target) end
+		eval.exe = function(eva) return NeP.Protected["CastGround"](eva.spell, eva.target) end
 		-- This is to alow casting at the cursor location where no unit exists
 		if ref.target:lower() == 'cursor' then ref.cursor = true end
 	end
 end
 
 local _target_types = {
-	['nil'] = function(eval, name, ref)
+	['nil'] = function(_, _, ref)
 		ref.target = function() return UnitExists('target') and 'target' or 'player' end
 	end,
-	['table'] = function(eval, name, ref)
+	['table'] = function(eval, _, ref)
 		ref.target = eval[3]
 	end,
-	['function'] = function(eval, name, ref)
+	['function'] = function(eval, _, ref)
 		ref.target = eval[3]
 	end,
-	['string'] = function(eval, name, ref)
+	['string'] = function(eval, _, ref)
 		ref.target = eval[3]
 		unit_ground(ref, eval)
 	end
 }
 
-function NeP.Compiler.Target(eval)
+function NeP.Compiler.Target(eval, name)
 	local ref, unit_type = {}, _target_types[type(eval[3])]
 	if unit_type then
 		unit_type(eval, name, ref)
@@ -202,24 +200,24 @@ function NeP.Compiler.Target(eval)
 	eval[3] = ref
 end
 
--- Remove whitespaces (_xspc_ needs to be unique so we dont 
+-- Remove whitespaces (_xspc_ needs to be unique so we dont
 -- end up replacing something we shouldn't)
 local function CondSpaces(cond)
-	return cond:gsub("%b()", function(s) 
+	return cond:gsub("%b()", function(s)
 		return s:gsub(" ", "_xspc_")
 	end):gsub("%s", ""):gsub("_xspc_", " ")
 end
 
 local _cond_types = {
-	['nil'] = function(eval, name)
+	['nil'] = function(eval)
 		eval[2] = 'true'
 	end,
-	['function'] = function(eval, name)
+	['function'] = function(eval)
 		local _func_name = tostring(eval[2])
 		_G[_func_name] = eval[2]
 		eval[2] = 'func='.._func_name
 	end,
-	['boolean'] = function(eval, name)
+	['boolean'] = function(eval)
 		eval[2] = tostring(eval[2])
 	end,
 	['string'] = function(eval, name)

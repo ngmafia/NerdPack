@@ -109,7 +109,8 @@ function NeP.Parser.Target(eval)
 	-- This is to alow casting at the cursor location where no unit exists
 	if eval[3].cursor then return true end
 	-- Eval if the unit is valid
-	return UnitExists(eval.target) and UnitIsVisible(eval.target)
+	return UnitExists(eval.target)
+	and UnitIsVisible(eval.target)
 	and NeP.Protected.LineOfSight('player', eval.target)
 	and not NeP.Parser:Unit_Blacklist(eval.target)
 end
@@ -141,22 +142,20 @@ end
 
 -- Delay until everything is ready
 NeP.Core:WhenInGame(function()
-
-C_Timer.NewTicker(0.1, (function()
-	--Hide Faceroll frame
-	NeP.Faceroll:Hide()
-	--Only run if mastertoggle is enabled, not dead and valid mount situation
-	if NeP.DSL:Get('toggle')(nil, 'mastertoggle')
-	and not UnitIsDeadOrGhost('player') and IsMountedCheck() then
-		--Run the Queue (If it returns true, end)
-		if NeP.Queuer:Execute() then return end
-		--Iterate the CR (If it returns true, end)
-		local table = NeP.CR.CR[InCombatLockdown()] or noop_t
-		for i=1, #table do
-			local res = NeP.Parser.Parse(table[i])
-			if res then return res end
+	C_Timer.NewTicker(0.1, (function()
+		--Hide Faceroll frame
+		NeP.Faceroll:Hide()
+		--Only run if mastertoggle is enabled, not dead and valid mount situation
+		if NeP.DSL:Get('toggle')(nil, 'mastertoggle')
+		and not UnitIsDeadOrGhost('player') and IsMountedCheck() then
+			--Run the Queue (If it returns true, end)
+			if NeP.Queuer:Execute() then return end
+			--Iterate the CR (If it returns true, end)
+			local table = NeP.CR.CR[InCombatLockdown()] or noop_t
+			for i=1, #table do
+				local res = NeP.Parser.Parse(table[i])
+				if res then return res end
+			end
 		end
-	end
-end), nil)
-
+	end), nil)
 end, 99)

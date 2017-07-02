@@ -1,4 +1,8 @@
 local _, NeP = ...
+local GetAverageItemLevel = GetAverageItemLevel
+local IsEquippedItem = IsEquippedItem
+local GetItemCount = GetItemCount
+local IsEquippedItemType = IsEquippedItemType
 
 NeP.DSL:Register({'equipped', 'item'}, function(_, item)
   return IsEquippedItem(item)

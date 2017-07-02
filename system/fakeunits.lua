@@ -58,7 +58,7 @@ local function add_tbl(unit, tbl)
 		end
 	end
 end
- 
+
 function NeP.FakeUnits.Filter(_,unit, tbl)
 	tbl = tbl or {}
 	-- Table (recursive)

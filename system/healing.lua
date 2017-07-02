@@ -66,7 +66,7 @@ local function Refresh(GUID, Obj)
 	temp.predicted_Raw = GetPredictedHealth(Obj.key)
 end
 
-function NeP.Healing:GetRoster()
+function NeP.Healing.GetRoster()
 	Clean()
 	return Roster
 end
