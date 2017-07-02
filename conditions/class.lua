@@ -202,23 +202,23 @@ NeP.Listener:Add('lock_P', 'COMBAT_LOG_EVENT_UNFILTERED', function(_, event, _,_
   -- Count active
   if event == "SPELL_SUMMON" then
     minions.count = minions.count + 1
+    -- removes the unit after it expires
+    C_Timer.After(minions[dName], function()
+      minions.count = minions.count - 1
+      if minions.empower[dGUID] then
+        minions.empower[dGUID] = nil
+        minions.empower_count = minions.empower_count - 1
+      end
+    end)
   end
 
   -- Count units with Empower
   if (event == "SPELL_AURA_APPLIED"
   or event == "SPELL_AURA_REFRESH")
   and sid == 193396 then
+    minions.empower[dGUID] = true
     minions.empower_count = minions.empower_count + 1
   end
-
-  -- removes the unit
-  C_Timer.After(minions[dName], function()
-    minions.count = minions.count - 1
-    if minions.empower[dGUID] then
-      minions.empower[dGUID] = nil
-      minions.empower_count = minions.empower_count - 1
-    end
-  end)
 
 end)
 
