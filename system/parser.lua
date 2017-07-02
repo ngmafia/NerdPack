@@ -58,10 +58,6 @@ local function _exe(eval, endtime, cname)
 					SpellStopCasting()
 				end
 			end
-			--Set vars
-			NeP.Parser.LastCast = eval.spell
-			NeP.Parser.LastGCD = (not eval.nogcd and eval.spell) or NeP.Parser.LastGCD
-			NeP.Parser.LastTarget = eval.target
 			--Update the actionlog and master toggle icon
 			NeP.ActionLog:Add(spell.token, eval.spell or "", spell.icon, eval.target)
 			NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
