@@ -18,7 +18,7 @@ local function spell_string(eval, name)
 	local arg1, args = ref.spell:match('(.+)%((.+)%)')
 	if args then ref.spell = arg1 end
 	ref.args = args
-	local token = ref.spell:sub(1)
+	local token = ref.spell:sub(1,1)
 
 	-- Clip
 	if ref.spell:find('^!') then
