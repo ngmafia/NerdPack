@@ -22,7 +22,7 @@ local GetInventoryItemID = GetInventoryItemID
 local GetItemInfo = GetItemInfo
 
 -- Regular actions
-NeP.Compiler:RegisterToken("%%", function(_, _, ref)
+NeP.Compiler:RegisterToken("%", function(_, _, ref)
   ref.token = ref.spell:sub(2)
 end)
 
