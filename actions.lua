@@ -1,6 +1,4 @@
 local _, NeP = ...
-
--- locals
 local LibStub = LibStub
 local LibDisp = LibStub('LibDispellable-1.0')
 local GetSpellInfo = GetSpellInfo
@@ -21,9 +19,34 @@ local GetInventorySlotInfo = GetInventorySlotInfo
 local GetInventoryItemID = GetInventoryItemID
 local GetItemInfo = GetItemInfo
 
+local funcs = {
+	noop = function() end,
+	Cast = function(eva)
+		NeP.Parser.LastCast = eva.spell
+		NeP.Parser.LastGCD = not eva.nogcd and eva.spell or NeP.Parser.LastGCD
+		NeP.Parser.LastTarget = eva.target
+		NeP.Protected["Cast"](eva.spell, eva.target)
+		return true
+	end,
+	Macro = function(eva) NeP.Protected["Macro"](eva.spell, eva.target); return true end,
+	Lib = function(eva) return NeP.Library:Parse(eva.spell, eva[1].args) end
+} 
+
+-- Clip
+NeP.Compiler:RegisterToken("!", function(_, _, ref)
+		ref.interrupts = true
+		ref.bypass = true
+end)
+
+-- No GCD
+NeP.Compiler:RegisterToken("&", function(_, _, ref)
+		ref.bypass = true
+		eval.nogcd = true
+end)
+
 -- Regular actions
 NeP.Compiler:RegisterToken("%", function(_, _, ref)
-  ref.token = ref.spell:sub(2)
+	eval.exe = funcs["noop"]
 end)
 
 -- DispelSelf
@@ -33,7 +56,7 @@ NeP.Actions:Add('dispelself', function(eval)
     if dispelType --[[and (duration - expires) > math.random(.5, 1.5)]] then
       eval.spell = GetSpellInfo(spellID)
       eval[3].target = 'player'
-      eval.exe = function(eva) return NeP.Protected["Cast"](eva.spell, eva.target) end
+      eval.exe = funcs["Cast"]
       return true
     end
   end
@@ -47,7 +70,7 @@ NeP.Actions:Add('dispelall', function(eval)
       if dispelType --[[and (duration - expires) > math.random(.5, 1.5)]] then
         eval.spell = GetSpellInfo(spellID)
         eval[3].target = Obj.key
-        eval.exe = function(eva) return NeP.Protected["Cast"](eva.spell, eva.target) end
+        eval.exe = funcs["Cast"]
         return true
       end
     end
@@ -58,7 +81,7 @@ end)
 NeP.Compiler:RegisterToken("/", function(eval, _, ref)
 	ref.token = 'macro'
 	eval.nogcd = true
-	eval.exe = function(eva) return NeP.Protected["Macro"](eva.spell, eva.target) end
+	eval.exe = funcs["Macro"]
 end)
 
 NeP.Actions:Add('macro', function()
@@ -72,10 +95,9 @@ end)
 
 -- Executes a users lib
 NeP.Compiler:RegisterToken("@", function(eval, _, ref)
-	ref.spell = ref.spell:sub(2)
 	ref.token = 'lib'
 	eval.nogcd = true
-	eval.exe = function() return NeP.Library:Parse(ref.spell, ref.args) end
+	eval.exe = funcs["lib"]
 end)
 
 NeP.Actions:Add('lib', function()
@@ -161,7 +183,6 @@ local invItems = {
 }
 
 NeP.Compiler:RegisterToken("#", function(eval, _, ref)
-	ref.spell = ref.spell:sub(2)
 	ref.token = 'item'
 	eval.nogcd = true
 	if invItems[ref.spell] then
@@ -198,12 +219,7 @@ end)
 NeP.Compiler:RegisterToken("spell_cast", function(eval, name, ref)
 	ref.spell = NeP.Spells:Convert(ref.spell, name)
 	ref.icon = select(3,GetSpellInfo(ref.spell))
-	eval.exe = function(eva)
-		NeP.Parser.LastCast = eva.spell
-		NeP.Parser.LastGCD = (not eva.nogcd and eva.spell) or NeP.Parser.LastGCD
-		NeP.Parser.LastTarget = eva.target
-		return NeP.Protected["Cast"](eva.spell, eva.target)
-	end
+	eval.exe = funcs["Cast"]
 	ref.token = 'spell_cast'
 end)
 

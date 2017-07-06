@@ -18,25 +18,17 @@ local function spell_string(eval, name)
 	local arg1, args = ref.spell:match('(.+)%((.+)%)')
 	if args then ref.spell = arg1 end
 	ref.args = args
-	local token = ref.spell:sub(1,1)
-
-	-- Clip
-	if ref.spell:find('^!') then
-		ref.interrupts = true
-		ref.bypass = true
-		ref.spell = ref.spell:sub(2)
-	end
-	-- No GCD
-	if ref.spell:find('^&') then
-		ref.bypass = true
-		eval.nogcd = true
-		ref.spell = ref.spell:sub(2)
-	end
 
 	-- RegisterToken
-	if tokens[token] then
+	local token = ref.spell:sub(1,1)
+	while tokens[token] do
 		tokens[token](eval, name, ref)
-	else
+		ref.spell = ref.spell:sub(2)
+		token = ref.spell:sub(1,1)
+	end
+
+	-- spell
+	if not eval.exe then
 		tokens["spell_cast"](eval, name, ref)
 	end
 
