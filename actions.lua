@@ -30,7 +30,7 @@ local funcs = {
 	end,
 	Macro = function(eva) NeP.Protected["Macro"](eva.spell, eva.target); return true end,
 	Lib = function(eva) return NeP.Library:Parse(eva.spell, eva[1].args) end
-} 
+}
 
 -- Clip
 NeP.Compiler:RegisterToken("!", function(_, _, ref)
@@ -39,13 +39,13 @@ NeP.Compiler:RegisterToken("!", function(_, _, ref)
 end)
 
 -- No GCD
-NeP.Compiler:RegisterToken("&", function(_, _, ref)
+NeP.Compiler:RegisterToken("&", function(eval, _, ref)
 		ref.bypass = true
 		eval.nogcd = true
 end)
 
 -- Regular actions
-NeP.Compiler:RegisterToken("%", function(_, _, ref)
+NeP.Compiler:RegisterToken("%", function(eval)
 	eval.exe = funcs["noop"]
 end)
 
