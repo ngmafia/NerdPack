@@ -1,5 +1,4 @@
 local _, NeP = ...
-local Compiler = NeP.Compiler
 local LibStub = LibStub
 local LibDisp = LibStub('LibDispellable-1.0')
 local GetSpellInfo = GetSpellInfo
@@ -29,6 +28,7 @@ local funcs = {
 		NeP.Protected["Cast"](eva.spell, eva.target)
 		return true
 	end,
+	UseItem = function(eva) return NeP.Protected["UseItem"](eva.spell, eva.target) end,
 	Macro = function(eva) NeP.Protected["Macro"]("/"..eva.spell, eva.target); return true end,
 	Lib = function(eva) return NeP.Library:Parse(eva.spell, eva[1].args) end
 }
@@ -98,7 +98,7 @@ end)
 NeP.Compiler:RegisterToken("@", function(eval, _, ref)
 	ref.token = 'lib'
 	eval.nogcd = true
-	eval.exe = funcs["lib"]
+	eval.exe = funcs["Lib"]
 end)
 
 NeP.Actions:Add('lib', function()
@@ -125,7 +125,7 @@ NeP.Actions:Add('taunt', function(eval, spell)
     if Threat and Threat >= 0 and Threat < 3 and Obj.distance <= 30 then
       eval.spell = spell
       eval[3].target = Obj.key
-      eval.exe = function(eva) return NeP.Protected["Cast"](eva.spell, eva.target) end
+      eval.exe = funcs["Cast"]
       return true
     end
   end
@@ -139,7 +139,7 @@ NeP.Actions:Add('ressdead', function(eval, spell)
       and UnitIsDeadOrGhost(Obj.key) and UnitPlayerOrPetInParty(Obj.key) then
       eval.spell = spell
       eval[3].target = Obj.key
-      eval.exe = function(eva) return NeP.Protected["Cast"](eva.spell, eva.target) end
+      eval.exe = funcs["Cast"]
       return true
     end
   end
@@ -185,16 +185,13 @@ local invItems = {
 
 NeP.Compiler:RegisterToken("#", function(eval, _, ref)
 	ref.token = 'item'
-	eval.nogcd = true
+	eval.bypass = true
 	if invItems[ref.spell] then
 		local invItem = GetInventorySlotInfo(invItems[ref.spell])
 		ref.spell = GetInventoryItemID("player", invItem)
 	end
 	if not ref.spell then return end
-	local itemID = tonumber(ref.spell)
-	if not itemID then
-		itemID = NeP.Core:GetItemID(ref.spell)
-	end
+	local itemID = tonumber(ref.spell) or NeP.Core:GetItemID(ref.spell)
 	if not tonumber(itemID) then return end
 	local itemName, itemLink, _,_,_,_,_,_,_, texture = GetItemInfo(itemID)
 	if not itemName then return end
@@ -202,7 +199,7 @@ NeP.Compiler:RegisterToken("#", function(eval, _, ref)
 	ref.spell = itemName
 	ref.icon = texture
 	ref.link = itemLink
-	eval.exe = function(eva) return NeP.Protected["UseItem"](eva.spell, eva.target) end
+	eval.exe = funcs["UseItem"]
 end)
 
 NeP.Actions:Add('item', function(eval)
