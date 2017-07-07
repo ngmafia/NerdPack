@@ -28,7 +28,7 @@ local funcs = {
 		NeP.Protected["Cast"](eva.spell, eva.target)
 		return true
 	end,
-	UseItem = function(eva) return NeP.Protected["UseItem"](eva.spell, eva.target) end,
+	UseItem = function(eva) NeP.Protected["UseItem"](eva.spell, eva.target); return true end,
 	Macro = function(eva) NeP.Protected["Macro"]("/"..eva.spell, eva.target); return true end,
 	Lib = function(eva) return NeP.Library:Parse(eva.spell, eva[1].args) end
 }
