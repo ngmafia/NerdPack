@@ -1,4 +1,5 @@
 local _, NeP = ...
+local Compiler = NeP.Compiler
 local LibStub = LibStub
 local LibDisp = LibStub('LibDispellable-1.0')
 local GetSpellInfo = GetSpellInfo
