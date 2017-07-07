@@ -30,7 +30,8 @@ local funcs = {
 	end,
 	UseItem = function(eva) NeP.Protected["UseItem"](eva.spell, eva.target); return true end,
 	Macro = function(eva) NeP.Protected["Macro"]("/"..eva.spell, eva.target); return true end,
-	Lib = function(eva) return NeP.Library:Parse(eva.spell, eva[1].args) end
+	Lib = function(eva) return NeP.Library:Parse(eva.spell, eva[1].args) end,
+	C_Buff = function(eva) CancelUnitBuff('player', GetSpellInfo(eva[1].args)) end
 }
 
 -- Clip
@@ -106,8 +107,8 @@ NeP.Actions:Add('lib', function()
 end)
 
 -- Cancel buff
-NeP.Actions:Add('cancelbuff', function(eval, buff)
-  eval.exe = function() CancelUnitBuff('player', GetSpellInfo(buff)) end
+NeP.Actions:Add('cancelbuff', function(eval)
+  eval.exe = funcs["C_Buff"]
   return true
 end)
 
@@ -118,12 +119,11 @@ NeP.Actions:Add('cancelform', function(eval)
 end)
 
 -- Automated tauting
-NeP.Actions:Add('taunt', function(eval, spell)
-  if not spell then return end
+NeP.Actions:Add('taunt', function(eval)
   for _, Obj in pairs(NeP.OM:Get('Enemy')) do
     local Threat = UnitThreatSituation("player", Obj.key)
     if Threat and Threat >= 0 and Threat < 3 and Obj.distance <= 30 then
-      eval.spell = spell
+      eval.spell = eval[1].args
       eval[3].target = Obj.key
       eval.exe = funcs["Cast"]
       return true
@@ -132,12 +132,12 @@ NeP.Actions:Add('taunt', function(eval, spell)
 end)
 
 -- Ress all dead
-NeP.Actions:Add('ressdead', function(eval, spell)
-  if not spell then return end
+NeP.Actions:Add('ressdead', function(eval)
   for _, Obj in pairs(NeP.OM:Get('Friendly')) do
     if Obj.distance < 40 and UnitIsPlayer(Obj.Key)
-      and UnitIsDeadOrGhost(Obj.key) and UnitPlayerOrPetInParty(Obj.key) then
-      eval.spell = spell
+    and UnitIsDeadOrGhost(Obj.key)
+		and UnitPlayerOrPetInParty(Obj.key) then
+      eval.spell = eval[1].args
       eval[3].target = Obj.key
       eval.exe = funcs["Cast"]
       return true
