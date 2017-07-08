@@ -88,11 +88,11 @@ function NeP.ActionLog:Refresh(event, spell, target)
 	end
 end
 
-function NeP.ActionLog:Add(event, spell, icon, target)
+function NeP.ActionLog.Add(_, event, spell, icon, target)
 	target = UnitExists(target) and UnitName(target) or target
 	event = event or 'Unknown'
 	icon = icon or 'Interface\\ICONS\\Inv_gizmo_02.png'
-	if self:Refresh(event, spell, target) then return end
+	if NeP.ActionLog:Refresh(event, spell, target) then return end
 	table.insert(Data, 1, {
 		event = event,
 		target = target,
@@ -104,7 +104,7 @@ function NeP.ActionLog:Add(event, spell, icon, target)
 	if delta > 0 and delta < #Data - log_items then
 		delta = delta + 1
 	end
-	self:Update()
+	NeP.ActionLog:Update()
 end
 
 function NeP.ActionLog.UpdateRow(_, row, a, b, c)
@@ -133,3 +133,8 @@ end
 NeP.Listener:Add('NeP_AL','PLAYER_REGEN_DISABLED', function()
 	wipe(Data)
 end)
+
+--Export global
+NeP.Globals.ActionLog = {
+	Add = NeP.ActionLog.Add,
+}
