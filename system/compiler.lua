@@ -22,8 +22,8 @@ local function spell_string(eval, name)
 	-- RegisterToken
 	local token = ref.spell:sub(1,1)
 	while tokens[token] do
-		tokens[token](eval, name, ref)
 		ref.spell = ref.spell:sub(2)
+		tokens[token](eval, name, ref)
 		token = ref.spell:sub(1,1)
 	end
 

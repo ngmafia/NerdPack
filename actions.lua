@@ -47,8 +47,9 @@ NeP.Compiler:RegisterToken("&", function(eval, _, ref)
 end)
 
 -- Regular actions
-NeP.Compiler:RegisterToken("%", function(eval)
+NeP.Compiler:RegisterToken("%", function(eval, _, ref)
 	eval.exe = funcs["noop"]
+	ref.token = ref.spell
 end)
 
 -- DispelSelf
