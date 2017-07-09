@@ -1,6 +1,6 @@
 local _, NeP = ...
 
-NeP.DSL:Register("isself" function(target)
+NeP.DSL:Register("isself", function(target)
   return self:Get("is")(target, 'player')
 end)
 
