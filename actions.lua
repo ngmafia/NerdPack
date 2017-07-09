@@ -190,11 +190,10 @@ NeP.Compiler:RegisterToken("#", function(eval, _, ref)
 	eval.bypass = true
 	if invItems[temp_spell] then
 		local invItem = GetInventorySlotInfo(invItems[temp_spell])
-		temp_spell = GetInventoryItemID("player", invItem)
+		temp_spell = GetInventoryItemID("player", invItem) or ref.spell
 	end
-	local itemID = tonumber(temp_spell) or NeP.Core:GetItemID(temp_spell) or fake_id
-	local itemName, itemLink, _,_,_,_,_,_,_, texture = GetItemInfo(itemID)
-	ref.id = itemID or fake_id
+	ref.id = tonumber(temp_spell) or NeP.Core:GetItemID(temp_spell) or fake_id
+	local itemName, itemLink, _,_,_,_,_,_,_, texture = GetItemInfo(ref.id)
 	ref.spell = itemName or ref.spell
 	ref.icon = texture or ""
 	ref.link = itemLink or ""
