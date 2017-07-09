@@ -104,7 +104,7 @@ end)
 NeP.DSL:Register("count.enemies.debuffs", function(_,debuff)
   local n1 = 0
   for _, Obj in pairs(NeP.OM:Get('Enemy')) do
-      if not NeP.DSL:Get('debuff')(Obj.key, debuff) then
+      if NeP.DSL:Get('debuff')(Obj.key, debuff) then
           n1 = n1 + 1
       end
   end
@@ -116,7 +116,7 @@ end)
 NeP.DSL:Register("count.friendly.debuffs", function(_,debuff)
   local n1 = 0
   for _, Obj in pairs(NeP.Healing:GetRoster()) do
-      if not NeP.DSL:Get('debuff')(Obj.key, debuff) then
+      if NeP.DSL:Get('debuff')(Obj.key, debuff) then
           n1 = n1 + 1
       end
   end
