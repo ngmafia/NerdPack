@@ -80,7 +80,7 @@ end)
 NeP.DSL:Register("count.enemies.buffs", function(_,buff)
   local n1 = 0
   for _, Obj in pairs(NeP.OM:Get('Enemy')) do
-      if not NeP.DSL:Get('buff')(Obj.key, buff) then
+      if NeP.DSL:Get('buff')(Obj.key, buff) then
           n1 = n1 + 1
       end
   end
@@ -92,7 +92,7 @@ end)
 NeP.DSL:Register("count.friendly.buffs", function(_,buff)
   local n1 = 0
   for _, Obj in pairs(NeP.Healing:GetRoster()) do
-      if not NeP.DSL:Get('buff')(Obj.key, buff) then
+      if NeP.DSL:Get('buff')(Obj.key, buff) then
           n1 = n1 + 1
       end
   end
