@@ -185,21 +185,19 @@ local invItems = {
 }
 
 NeP.Compiler:RegisterToken("#", function(eval, _, ref)
+	local temp_spell, fake_id = ref.spell, 09324
 	ref.token = 'item'
 	eval.bypass = true
-	if invItems[ref.spell] then
-		local invItem = GetInventorySlotInfo(invItems[ref.spell])
-		ref.spell = GetInventoryItemID("player", invItem)
+	if invItems[temp_spell] then
+		local invItem = GetInventorySlotInfo(invItems[temp_spell])
+		temp_spell = GetInventoryItemID("player", invItem)
 	end
-	if not ref.spell then return end
-	local itemID = tonumber(ref.spell) or NeP.Core:GetItemID(ref.spell)
-	if not tonumber(itemID) then return end
+	local itemID = tonumber(temp_spell) or NeP.Core:GetItemID(temp_spell) or fake_id
 	local itemName, itemLink, _,_,_,_,_,_,_, texture = GetItemInfo(itemID)
-	if not itemName then return end
-	ref.id = itemID
-	ref.spell = itemName
-	ref.icon = texture
-	ref.link = itemLink
+	ref.id = itemID or fake_id
+	ref.spell = itemName or ref.spell
+	ref.icon = texture or ""
+	ref.link = itemLink or ""
 	eval.exe = funcs["UseItem"]
 end)
 
