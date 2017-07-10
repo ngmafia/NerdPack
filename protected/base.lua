@@ -1,7 +1,18 @@
-local _, NeP        = ...
-local IsInRaid           = IsInRaid
+local _, NeP = ...
+local IsInRaid = IsInRaid
 local GetNumGroupMembers = GetNumGroupMembers
-local IsInGroup          = IsInGroup
+local IsInGroup = IsInGroup
+local UnitIsFriend = UnitIsFriend
+local UnitExists = UnitExists
+local UnitGUID = UnitGUID
+
+NeP.Protected = {}
+NeP.Globals.Protected = NeP.Protected
+NeP.OM.nPlates = {
+	Friendly = {},
+	Enemy = {},
+	Dead = {}
+}
 
 NeP.Protected.Cast = function(spell, target)
   NeP.Faceroll:Set(spell, target)
@@ -72,6 +83,18 @@ NeP.OM.Maker = function()
 			local object = ValidUnitsN[i]..k
 			NeP.OM:Add(object)
 			NeP.OM:Add(object..'target')
+		end
+	end
+  --nameplates
+	for i=1, 40 do
+		local Obj = 'nameplate'..i
+		if UnitExists(Obj) then
+			local GUID = UnitGUID(Obj) or '0'
+			if UnitIsFriend('player',Obj) then
+				NeP.OM:Insert(NeP.OM.nPlates['Friendly'], Obj, GUID)
+			else
+				NeP.OM:Insert(NeP.OM.nPlates['Enemy'], Obj, GUID)
+			end
 		end
 	end
 end

@@ -1,18 +1,18 @@
 local _, NeP = ...
 
 -- Local stuff for speed
-local UnitExists        = ObjectExists or UnitExists
+local UnitExists = ObjectExists or UnitExists
 local UnitIsDeadOrGhost = UnitIsDeadOrGhost
-local UnitCanAttack     = UnitCanAttack
-local UnitIsFriend      = UnitIsFriend
-local UnitGUID          = UnitGUID
-local UnitName          = UnitName
-local strsplit          = strsplit
-local select            = select
-local tonumber          = tonumber
-local pairs             = pairs
-local C_Timer 					= C_Timer
-local UnitInPhase 			= UnitInPhase
+local UnitCanAttack = UnitCanAttack
+local UnitIsFriend = UnitIsFriend
+local UnitGUID = UnitGUID
+local UnitName = UnitName
+local strsplit = strsplit
+local select = select
+local tonumber = tonumber
+local pairs = pairs
+local C_Timer = C_Timer
+local UnitInPhase = UnitInPhase
 
 --Advanced
 local ObjectIsType = ObjectIsType
@@ -26,13 +26,6 @@ local OM_c = {
 	Dead     = {},
 	Objects  = {}
 }
-
-local nPlates = {
-	Friendly = {},
-	Enemy = {},
-	Dead = {}
-}
-
 
 -- This cleans/updates the tables and then returns it
 -- Due to Generic OM, a unit can still exist (target) but no longer be the same unit,
@@ -50,9 +43,9 @@ end
 
 function NeP.OM.Get(_, ref, want_plates)
 	-- Hack for nameplates
-	if want_plates and nPlates then
+	if want_plates and NeP.OM.nPlates then
 		local temp = {}
-		for GUID, Obj in pairs(nPlates[ref]) do
+		for GUID, Obj in pairs(NeP.OM.nPlates[ref]) do
 			MergeTable(temp, Obj, GUID)
 		end
 		for GUID, Obj in pairs(OM_c[ref]) do
@@ -114,30 +107,9 @@ function NeP.OM.Add(_, Obj)
 end
 
 -- Regular
-C_Timer.NewTicker(1, (function()
+C_Timer.NewTicker(1, function()
 	NeP.OM.Maker()
-end), nil)
-
--- Nameplates (This gets killed once advanced)
-C_Timer.NewTicker(1, (function(self)
-	if not NeP.AdvancedOM then
-		for i=1, 40 do
-			local Obj = 'nameplate'..i
-			if UnitExists(Obj) then
-				local GUID = UnitGUID(Obj) or '0'
-				if UnitIsFriend('player',Obj) then
-					NeP.OM:Insert(nPlates['Friendly'], Obj, GUID)
-				else
-					NeP.OM:Insert(nPlates['Enemy'], Obj, GUID)
-				end
-			end
-		end
-	-- remove nameplates when advanced
-	elseif nPlates then
-		nPlates = nil
-		self:Cancel()
-	end
-end), nil)
+end, nil)
 
 -- Gobals
 NeP.Globals.OM = {
