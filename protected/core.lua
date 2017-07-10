@@ -35,16 +35,17 @@ function NeP.Protected.SetUnlocker(name, unlocker)
 end
 
 C_Timer.After(5, function ()
-	C_Timer.NewTicker(0.2, (function()
-		if NeP.Unlocked or not NeP.DSL:Get('toggle')(nil, 'mastertoggle') then return end
+	C_Timer.NewTicker(0.2, function(self)
+		if not NeP.DSL:Get('toggle')(nil, 'mastertoggle') then return end
 		for i=1, #unlockers do
 			local unlocker = unlockers[i]
 			if unlocker.test() then
 				NeP.Protected.SetUnlocker(unlocker.name, unlocker)
+				self:Cancel()
 				break
 			end
 		end
-	end), nil)
+	end, nil)
 end)
 
 NeP.Globals.AddUnlocker = NeP.Protected.AddUnlocker
