@@ -1,4 +1,4 @@
-local MAJOR, MINOR = "LibArtifactData-1.0", 16
+local MAJOR, MINOR = "LibArtifactData-1.0", 11
 
 assert(_G.LibStub, MAJOR .. " requires LibStub")
 local lib = _G.LibStub:NewLibrary(MAJOR, MINOR)
@@ -47,7 +47,7 @@ local GetNumRelicSlots                 = aUI.GetNumRelicSlots
 local GetPowerInfo                     = aUI.GetPowerInfo
 local GetPowers                        = aUI.GetPowers
 local GetRelicInfo                     = aUI.GetRelicInfo
-local GetRelicLockedReason             = aUI.GetRelicLockedReason
+local GetRelicSlotType                 = aUI.GetRelicSlotType
 local GetSpellInfo                     = _G.GetSpellInfo
 local HasArtifactEquipped              = _G.HasArtifactEquipped
 local IsAtForge                        = aUI.IsAtForge
@@ -88,8 +88,6 @@ local function PrepareForScan()
 	local ArtifactFrame = _G.ArtifactFrame
 	if ArtifactFrame and not ArtifactFrame:IsShown() then
 		ArtifactFrame:UnregisterEvent("ARTIFACT_UPDATE")
-		ArtifactFrame:UnregisterEvent("ARTIFACT_CLOSE")
-		ArtifactFrame:UnregisterEvent("ARTIFACT_MAX_RANKS_UPDATE")
 	end
 end
 
@@ -101,8 +99,6 @@ local function RestoreStateAfterScan()
 	if ArtifactFrame and not ArtifactFrame:IsShown() then
 		Clear()
 		ArtifactFrame:RegisterEvent("ARTIFACT_UPDATE")
-		ArtifactFrame:RegisterEvent("ARTIFACT_CLOSE")
-		ArtifactFrame:RegisterEvent("ARTIFACT_MAX_RANKS_UPDATE")
 	end
 end
 
@@ -132,10 +128,9 @@ local function InformTraitsChanged(artifactID)
 	lib.callbacks:Fire("ARTIFACT_TRAITS_CHANGED", artifactID, CopyTable(artifacts[artifactID].traits))
 end
 
-local function StoreArtifact(itemID, altItemID, name, icon, unspentPower, numRanksPurchased, numRanksPurchasable, power, maxPower, traits, relics, tier)
-	if not artifacts[itemID] then
-		artifacts[itemID] = {
-			altItemID = altItemID,
+local function StoreArtifact(artifactID, name, icon, unspentPower, numRanksPurchased, numRanksPurchasable, power, maxPower, traits, relics)
+	if not artifacts[artifactID] then
+		artifacts[artifactID] = {
 			name = name,
 			icon = icon,
 			unspentPower = unspentPower,
@@ -146,12 +141,11 @@ local function StoreArtifact(itemID, altItemID, name, icon, unspentPower, numRan
 			powerForNextRank = maxPower - power,
 			traits = traits,
 			relics = relics,
-			tier = tier,
 		}
-		Debug("ARTIFACT_ADDED", itemID, name)
-		lib.callbacks:Fire("ARTIFACT_ADDED", itemID)
+		Debug("ARTIFACT_ADDED", artifactID, name)
+		lib.callbacks:Fire("ARTIFACT_ADDED", artifactID)
 	else
-		local current = artifacts[itemID]
+		local current = artifacts[artifactID]
 		current.unspentPower = unspentPower
 		current.numRanksPurchased = numRanksPurchased -- numRanksPurchased does not include bonus traits from relics
 		current.numRanksPurchasable = numRanksPurchasable
@@ -160,7 +154,6 @@ local function StoreArtifact(itemID, altItemID, name, icon, unspentPower, numRan
 		current.powerForNextRank = maxPower - power
 		current.traits = traits
 		current.relics = relics
-		current.tier = tier
 	end
 end
 
@@ -170,23 +163,20 @@ local function ScanTraits(artifactID)
 
 	for i = 1, #powers do
 		local traitID = powers[i]
-		local info = GetPowerInfo(traitID)
-		local spellID = info.spellID
-		if (info.currentRank) > 0 then
+		local spellID, _, currentRank, maxRank, bonusRanks, _, _, _, isStart, isGold, isFinal = GetPowerInfo(traitID)
+		if currentRank > 0 then
 			local name, _, icon = GetSpellInfo(spellID)
 			traits[#traits + 1] = {
 				traitID = traitID,
 				spellID = spellID,
 				name = name,
 				icon = icon,
-				currentRank = info.currentRank,
-				maxRank = info.maxRank,
-				bonusRanks = info.bonusRanks,
-				isGold = info.isGoldMedal,
-				isStart = info.isStart,
-				isFinal = info.isFinal,
-				maxRanksFromTier = info.numMaxRankBonusFromTier,
-				tier = info.tier,
+				currentRank = currentRank,
+				maxRank = maxRank,
+				bonusRanks = bonusRanks,
+				isGold = isGold,
+				isStart = isStart,
+				isFinal = isFinal,
 			}
 		end
 	end
@@ -201,13 +191,14 @@ end
 local function ScanRelics(artifactID)
 	local relics = {}
 	for i = 1, GetNumRelicSlots() do
-		local isLocked, name, icon, slotType, link, itemID = GetRelicLockedReason(i) and true or false
-		if not isLocked then
-			name, icon, slotType, link = GetRelicInfo(i)
-			if link then
-				itemID = strmatch(link, "item:(%d+):")
-			end
+		local slotType = GetRelicSlotType(i)
+		local lockedReason, name, icon, link = GetRelicInfo(i)
+		local isLocked = lockedReason and true or false
+		local itemID
+		if name then
+			itemID = strmatch(link, "item:(%d+):")
 		end
+
 		relics[i] = { type = slotType, isLocked = isLocked, name = name, icon = icon, itemID = itemID, link = link }
 	end
 
@@ -219,7 +210,6 @@ local function ScanRelics(artifactID)
 end
 
 local function GetArtifactKnowledge()
-	if viewedID == 133755 then return end -- exclude Underlight Angler
 	local lvl = GetArtifactKnowledgeLevel()
 	local mult = GetArtifactKnowledgeMultiplier()
 	if artifacts.knowledgeMultiplier ~= mult or artifacts.knowledgeLevel ~= lvl then
@@ -231,24 +221,23 @@ local function GetArtifactKnowledge()
 end
 
 local function GetViewedArtifactData()
-	local itemID, altItemID, name, icon, unspentPower, numRanksPurchased, _, _, _, _, _, _, tier = GetArtifactInfo()
+	GetArtifactKnowledge()
+	local itemID, _, name, icon, unspentPower, numRanksPurchased = GetArtifactInfo() -- TODO: appearance stuff needed? altItemID ?
 	if not itemID then
 		Debug("|cffff0000ERROR:|r", "GetArtifactInfo() returned nil.")
 		return
 	end
 	viewedID = itemID
 	Debug("GetViewedArtifactData", name, itemID)
-	local numRanksPurchasable, power, maxPower = GetNumPurchasableTraits(numRanksPurchased, unspentPower, tier)
+	local numRanksPurchasable, power, maxPower = GetNumPurchasableTraits(numRanksPurchased, unspentPower)
 	local traits = ScanTraits()
 	local relics = ScanRelics()
-	StoreArtifact(itemID, altItemID, name, icon, unspentPower, numRanksPurchased, numRanksPurchasable, power, maxPower, traits, relics, tier)
+	StoreArtifact(itemID, name, icon, unspentPower, numRanksPurchased, numRanksPurchasable, power, maxPower, traits, relics)
 
 	if IsViewedArtifactEquipped() then
 		InformEquippedArtifactChanged(itemID)
 		InformActiveArtifactChanged(itemID)
 	end
-
-	GetArtifactKnowledge()
 end
 
 local function ScanEquipped()
@@ -368,8 +357,8 @@ end
 function private.ARTIFACT_XP_UPDATE(event)
 	-- at the forge the player can purchase traits even for unequipped artifacts
 	local GetInfo = IsAtForge() and GetArtifactInfo or GetEquippedArtifactInfo
-	local itemID, _, _, _, unspentPower, numRanksPurchased, _, _, _, _, _, _, tier = GetInfo() -- NOTE: 7.2 compat
-	local numRanksPurchasable, power, maxPower = GetNumPurchasableTraits(numRanksPurchased, unspentPower, tier)
+	local itemID, _, _, _, unspentPower, numRanksPurchased = GetInfo()
+	local numRanksPurchasable, power, maxPower = GetNumPurchasableTraits(numRanksPurchased, unspentPower)
 
 	local artifact = artifacts[itemID]
 	if not artifact then
@@ -496,7 +485,7 @@ function lib.GetAcquiredArtifactPower(_, artifactID)
 		total = total + data.unspentPower
 		local rank = 1
 		while rank < data.numRanksPurchased do
-			total = total + GetCostForPointAtRank(rank, data.tier)
+			total = total + GetCostForPointAtRank(rank)
 			rank = rank + 1
 		end
 
@@ -508,7 +497,7 @@ function lib.GetAcquiredArtifactPower(_, artifactID)
 			total = total + data.unspentPower
 			local rank = 1
 			while rank < data.numRanksPurchased do
-				total = total + GetCostForPointAtRank(rank, data.tier)
+				total = total + GetCostForPointAtRank(rank)
 				rank = rank + 1
 			end
 		end
