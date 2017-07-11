@@ -24,10 +24,10 @@ end
 
 local function process(unit)
 	-- Find and remove num and arg
-	local arg = unit:match('%((.+)%)')
-	local num = unit:match("%d+") or 1
-	local funit = unit:gsub(arg or '', ''):gsub(num or '', '')
-	return Units[funit] and Units[funit](tonumber(num), arg) or unit
+	local arg = unit:match('%((.+)%)') or ""
+	local num = tonumber(unit:match("%d+") or 1)
+	local funit = unit:gsub('%((.+)%)', ''):gsub("%d+", '')
+	return Units[funit] and Units[funit](num, arg) or unit
 end
 
 local function not_in_tbl(unit, tbl)
