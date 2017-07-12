@@ -22,9 +22,9 @@ function NeP.FakeUnits.Add(_, name, func)
 	end
 end
 
+-- /dump NeP.FakeUnits:Filter("lowest")
 local function process(unit)
-	-- Find and remove num and arg
-	local arg = unit:match('%((.+)%)') or ""
+	local arg = unit:match('%((.+)%)')
 	local num = tonumber(unit:match("%d+") or 1)
 	local funit = unit:gsub('%((.+)%)', ''):gsub("%d+", '')
 	return Units[funit] and Units[funit](num, arg) or unit
@@ -44,16 +44,16 @@ local function add_tbl(unit, tbl)
 	local unit_type = type(unit)
 	--table
 	if unit_type =='table' then
-		NeP.FakeUnits:Filter(unit, tbl)
+		for i=1, #unit do
+			NeP.FakeUnits:Filter(unit, tbl)
+		end
 	--function
 	elseif unit_type == 'function' then
 		NeP.FakeUnits:Filter(unit(), tbl)
 	--add
 	else
 		unit = process(unit)
-		if type(unit) ~= 'string' then
-			NeP.FakeUnits.Filter(_,unit, tbl)
-		elseif not_in_tbl(unit, tbl) then
+		if not_in_tbl(unit, tbl) then
 			tbl[#tbl+1] = unit
 		end
 	end
@@ -61,13 +61,6 @@ end
 
 function NeP.FakeUnits.Filter(_,unit, tbl)
 	tbl = tbl or {}
-	-- Table (recursive)
-	if type(unit) == 'table' then
-		for i=1, #unit do
-			add_tbl(unit[i], tbl)
-		end
-	else
-		add_tbl(unit, tbl)
-	end
+	add_tbl(unit, tbl)
 	return tbl
 end
