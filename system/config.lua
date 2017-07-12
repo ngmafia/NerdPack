@@ -18,3 +18,11 @@ function NeP.Config.Write(_, a, b, value)
 	if not Data[a] then Data[a] = {} end
 	Data[a][b] = value
 end
+
+function NeP.Config.Rest(_, a)
+	Data[a] = nil
+end
+
+function NeP.Config.Rest_all()
+	wipe(NePDATA)
+end

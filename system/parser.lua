@@ -138,20 +138,17 @@ end
 
 -- Delay until everything is ready
 NeP.Core:WhenInGame(function()
-	C_Timer.NewTicker(0.1, (function()
-		--Hide Faceroll frame
-		NeP.Faceroll:Hide()
-		--Only run if mastertoggle is enabled, not dead and valid mount situation
-		if NeP.DSL:Get('toggle')(nil, 'mastertoggle')
-		and not UnitIsDeadOrGhost('player') and IsMountedCheck() then
-			--Run the Queue (If it returns true, end)
-			if NeP.Queuer:Execute() then return end
-			--Iterate the CR (If it returns true, end)
-			local table = NeP.CR.CR[InCombatLockdown()] or noop_t
-			for i=1, #table do
-				local res = NeP.Parser.Parse(table[i])
-				if res then return res end
-			end
+
+C_Timer.NewTicker(0.1, (function()
+	NeP.Faceroll:Hide()
+	if NeP.DSL:Get('toggle')(nil, 'mastertoggle')
+	and not UnitIsDeadOrGhost('player') and IsMountedCheck() then
+		if NeP.Queuer:Execute() then return end
+		local table = NeP.CR.CR[InCombatLockdown()] or noop_t
+		for i=1, #table do
+			if NeP.Parser.Parse(table[i]) then break end
 		end
-	end), nil)
+	end
+end), nil)
+
 end, 99)
