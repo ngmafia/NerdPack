@@ -8,7 +8,7 @@ local UnitGUID = UnitGUID
 
 NeP.Protected = {}
 NeP.Globals.Protected = NeP.Protected
-NeP.OM.nPlates = {
+NeP.Protected.nPlates = {
 	Friendly = {},
 	Enemy = {},
 	Dead = {}
@@ -58,7 +58,7 @@ end
 local ValidUnits = {'player', 'mouseover', 'target', 'focus', 'pet',}
 local ValidUnitsN = {'boss', 'arena', 'arenapet'}
 
-NeP.OM.Maker = function()
+NeP.Protected.OM_Maker = function()
   -- If in Group scan frames...
   if IsInGroup() or IsInRaid() then
     local prefix = (IsInRaid() and 'raid') or 'party'
@@ -91,9 +91,9 @@ NeP.OM.Maker = function()
 		if UnitExists(Obj) then
 			local GUID = UnitGUID(Obj) or '0'
 			if UnitIsFriend('player',Obj) then
-				NeP.OM:Insert(NeP.OM.nPlates['Friendly'], Obj, GUID)
+				NeP.OM:Insert(NeP.Protected.nPlates['Friendly'], Obj, GUID)
 			else
-				NeP.OM:Insert(NeP.OM.nPlates['Enemy'], Obj, GUID)
+				NeP.OM:Insert(NeP.Protected.nPlates['Enemy'], Obj, GUID)
 			end
 		end
 	end

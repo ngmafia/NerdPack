@@ -43,9 +43,9 @@ end
 
 function NeP.OM.Get(_, ref, want_plates)
 	-- Hack for nameplates
-	if want_plates and NeP.OM.nPlates then
+	if want_plates and NeP.Protected.nPlates then
 		local temp = {}
-		for GUID, Obj in pairs(NeP.OM.nPlates[ref]) do
+		for GUID, Obj in pairs(NeP.Protected.nPlates[ref]) do
 			MergeTable(temp, Obj, GUID)
 		end
 		for GUID, Obj in pairs(OM_c[ref]) do
@@ -108,7 +108,7 @@ end
 
 -- Regular
 C_Timer.NewTicker(1, function()
-	NeP.OM.Maker()
+	NeP.Protected:OM_Maker()
 end, nil)
 
 -- Gobals
