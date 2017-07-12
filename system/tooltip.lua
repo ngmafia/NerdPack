@@ -8,10 +8,11 @@ local UnitName = UnitName
 local frame = CreateFrame('GameTooltip', 'NeP_ScanningTooltip', UIParent, 'GameTooltipTemplate')
 
 local function pPattern(text, pattern)
-	if type(pattern) == 'string' then
+	local pattern_tp = type(pattern)
+	if pattern_tp == 'string' then
 		local match = text:lower():match(pattern)
 		if match then return true end
-	elseif type(pattern) == 'table' then
+	elseif pattern_tp == 'table' then
 		for i=1, #pattern do
 			local match = text:lower():match(pattern[i])
 			if match then return true end
@@ -24,7 +25,7 @@ function NeP.Tooltip.Scan_Buff(_, target, pattern)
 		frame:SetOwner(UIParent, 'ANCHOR_NONE')
 		frame:SetUnitBuff(target, i)
 		local tooltipText = _G["NeP_ScanningTooltipTextLeft2"]:GetText()
-		if tooltipText and pPattern(tooltipText, pattern) then return end
+		if tooltipText and pPattern(tooltipText, pattern) then return true end
 	end
 	return false
 end
