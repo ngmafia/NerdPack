@@ -5,7 +5,7 @@ local Data = {}
 
 NeP.Listener:Add("NeP_Config", "ADDON_LOADED", function(addon)
 	if addon:lower() == n_name:lower() then
-		NePDAT = NePDATA or {}
+		NePDATA = NePDATA or {}
 		Data = NePDATA
 	end
 end)
