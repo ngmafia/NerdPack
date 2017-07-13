@@ -157,21 +157,21 @@ NeP.DSL:Register('movingfor', function(target)
       if not movingCache[guid].moving then
         movingCache[guid].last = GetTime()
         movingCache[guid].moving = (GetUnitSpeed(target) > 0)
-        return false
+        return 0
       elseif moving then
         return GetTime() - movingCache[guid].last
       elseif not moving then
         movingCache[guid].moving = false
-        return false
+        return 0
       end
     else
       movingCache[guid] = { }
       movingCache[guid].last = GetTime()
       movingCache[guid].moving = (GetUnitSpeed(target) > 0)
-      return false
+      return 0
     end
   end
-  return false
+  return 0
 end)
 
 NeP.DSL:Register('friend', function(target)
