@@ -54,18 +54,23 @@ local function _interrupt(eval, endtime, cname)
 end
 
 local function _exe(eval, endtime, cname)
-	if not NeP.Parser.Target(eval) then return end
-	local spell, cond = eval[1], eval[2]
-	-- Evaluate conditions
-	eval.spell = eval.spell or spell.spell
-	if NeP.DSL.Parse(cond, eval.spell, eval.target)
-	and NeP.Helpers:Check(eval.spell, eval.target)
-	and not _interrupt(eval, endtime, cname) then
-		--Update the actionlog and master toggle icon
-		NeP.ActionLog:Add(spell.token, eval.spell or "", spell.icon, eval.target)
-		NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
-		--Execute
-		return eval.exe(eval)
+	local spell, cond, target = eval[1], eval[2], eval[3]
+	local _target = NeP.FakeUnits:Filter(target.target)
+	for i=1, #_target do
+		eval.target = _target[i]
+		if NeP.Parser.Target(eval) then
+			-- Evaluate conditions
+			eval.spell = eval.spell or spell.spell
+			if NeP.DSL.Parse(cond, eval.spell, eval.target)
+			and NeP.Helpers:Check(eval.spell, eval.target)
+			and not _interrupt(eval, endtime, cname) then
+				--Update the actionlog and master toggle icon
+				NeP.ActionLog:Add(spell.token, eval.spell or "", spell.icon, eval.target)
+				NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
+				--Execute
+				return eval.exe(eval)
+			end
+		end
 	end
 end
 --[[
@@ -121,24 +126,16 @@ function NeP.Parser.Parse(eval)
 	local endtime, cname = castingTime()
 	-- Its a table
 	if spell.is_table then
-		local _target = NeP.FakeUnits:Filter(target.target)
-		for i=1, #_target do
-			eval.target = _target[i]
-			if NeP.DSL.Parse(cond, eval.target) then
-				for i=1, #spell do
-					local res = NeP.Parser.Parse(spell[i])
-					if res then return res end
-				end
+		if NeP.DSL.Parse(cond) then
+			for i=1, #spell do
+				local res = NeP.Parser.Parse(spell[i])
+				if res then return res end
 			end
 		end
 	-- Normal
 	elseif (spell.bypass or endtime == 0)
 	and NeP.Actions:Eval(spell.token)(eval) then
-		local _target = NeP.FakeUnits:Filter(target.target)
-		for i=1, #_target do
-			eval.target = _target[i]
-			if _exe(eval, endtime, cname) then return true end
-		end
+		return _exe(eval, endtime, cname)
 	end
 end
 
