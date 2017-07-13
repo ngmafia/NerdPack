@@ -44,7 +44,7 @@ local function castingTime()
 end
 
 local function _interrupt(eval, endtime, cname)
-	if spell.interrupts then
+	if eval[1].interrupts then
 		if cname == eval.spell then
 			return true
 		elseif endtime > 0 then
