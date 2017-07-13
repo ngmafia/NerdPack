@@ -37,10 +37,10 @@ local function spell_string(eval, name)
 end
 
 local _spell_types = {
-	['table'] = function(eval, name)
+	['table'] = function(eval, name, target)
 		eval[1].is_table = true
 		for k=1, #eval[1] do
-			NeP.Compiler.Compile(eval[1][k], name)
+			NeP.Compiler.Compile(eval[1][k], name, target)
 		end
 	end,
 	['function'] = function(eval)
@@ -54,10 +54,10 @@ local _spell_types = {
 }
 
 -- Takes a valid format for spell and produces a table in its place
-function NeP.Compiler.Spell(eval, name)
+function NeP.Compiler.Spell(eval, name, target)
 	local spell_type = _spell_types[type(eval[1])]
 	if spell_type then
-		spell_type(eval, name)
+		spell_type(eval, name, target)
 	else
 		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Spell cant be a', type(eval[1]))
 		eval[1] = {
@@ -82,13 +82,11 @@ local function unit_ground(ref, eval)
 	end
 end
 
+local noob_target = function() return UnitExists('target') and 'target' or 'player' end
+
 local _target_types = {
-	['nil'] = function(eval, _, ref)
-		if eval[1].is_table then
-			ref.target = 'player'
-		else
-			ref.target = function() return UnitExists('target') and 'target' or 'player' end
-		end
+	['nil'] = function(eval, _, ref, target)
+		ref.target = target or noob_target
 	end,
 	['table'] = function(eval, _, ref)
 		ref.target = eval[3]
@@ -153,16 +151,16 @@ function NeP.Compiler.Conditions(eval, name)
 	end
 end
 
-function NeP.Compiler.Compile(eval, name)
+function NeP.Compiler.Compile(eval, name, target)
 	-- check if this was already done
 	if eval[4] then return end
 	eval[4] = true
+	-- Target
+	NeP.Compiler.Target(eval, name, target)
 	--Spell
-	NeP.Compiler.Spell(eval, name)
+	NeP.Compiler.Spell(eval, name, target)
 	-- Conditions
 	NeP.Compiler.Conditions(eval, name)
-	-- Target
-	NeP.Compiler.Target(eval, name)
 end
 
 function NeP.Compiler.Iterate(_, eval, name)
