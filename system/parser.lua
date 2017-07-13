@@ -43,27 +43,29 @@ local function castingTime()
 	return (name and (endTime/1000)-time) or 0, name
 end
 
-local function _exe(eval, endtime, cname)
-	if NeP.Parser.Target(eval) then
-		local spell, cond = eval[1], eval[2]
-		-- Evaluate conditions
-		eval.spell = eval.spell or spell.spell
-		if NeP.DSL.Parse(cond, eval.spell, eval.target)
-		and NeP.Helpers:Check(eval.spell, eval.target) then
-			-- (!spell) this clips the spell
-			if spell.interrupts then
-				if cname == eval.spell then
-					return true
-				elseif endtime > 0 then
-					SpellStopCasting()
-				end
-			end
-			--Update the actionlog and master toggle icon
-			NeP.ActionLog:Add(spell.token, eval.spell or "", spell.icon, eval.target)
-			NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
-			--Execute
-			return eval.exe(eval)
+local function _interrupt(eval, endtime, cname)
+	if spell.interrupts then
+		if cname == eval.spell then
+			return true
+		elseif endtime > 0 then
+			SpellStopCasting()
 		end
+	end
+end
+
+local function _exe(eval, endtime, cname)
+	if not NeP.Parser.Target(eval) then return end
+	local spell, cond = eval[1], eval[2]
+	-- Evaluate conditions
+	eval.spell = eval.spell or spell.spell
+	if NeP.DSL.Parse(cond, eval.spell, eval.target)
+	and NeP.Helpers:Check(eval.spell, eval.target)
+	and not _interrupt(eval, endtime, cname) then
+		--Update the actionlog and master toggle icon
+		NeP.ActionLog:Add(spell.token, eval.spell or "", spell.icon, eval.target)
+		NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
+		--Execute
+		return eval.exe(eval)
 	end
 end
 --[[
