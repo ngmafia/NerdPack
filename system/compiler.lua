@@ -83,8 +83,12 @@ local function unit_ground(ref, eval)
 end
 
 local _target_types = {
-	['nil'] = function(_, _, ref)
-		ref.target = function() return UnitExists('target') and 'target' or 'player' end
+	['nil'] = function(eval, _, ref)
+		if eval[1].is_table then
+			ref.target = 'player'
+		else
+			ref.target = function() return UnitExists('target') and 'target' or 'player' end
+		end
 	end,
 	['table'] = function(eval, _, ref)
 		ref.target = eval[3]
