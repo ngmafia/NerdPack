@@ -37,10 +37,10 @@ local function spell_string(eval, name)
 end
 
 local _spell_types = {
-	['table'] = function(eval, name, target)
+	['table'] = function(eval, name)
 		eval[1].is_table = true
 		for k=1, #eval[1] do
-			NeP.Compiler.Compile(eval[1][k], name, target)
+			NeP.Compiler.Compile(eval[1][k], name, eval[3].target)
 		end
 	end,
 	['function'] = function(eval)
@@ -54,10 +54,10 @@ local _spell_types = {
 }
 
 -- Takes a valid format for spell and produces a table in its place
-function NeP.Compiler.Spell(eval, name, target)
+function NeP.Compiler.Spell(eval, name)
 	local spell_type = _spell_types[type(eval[1])]
 	if spell_type then
-		spell_type(eval, name, target)
+		spell_type(eval, name)
 	else
 		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Spell cant be a', type(eval[1]))
 		eval[1] = {
@@ -100,10 +100,10 @@ local _target_types = {
 	end
 }
 
-function NeP.Compiler.Target(eval, name)
+function NeP.Compiler.Target(eval, name, target)
 	local ref, unit_type = {}, _target_types[type(eval[3])]
 	if unit_type then
-		unit_type(eval, name, ref)
+		unit_type(eval, name, ref, target)
 	else
 		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Target cant be a', type(eval[3]))
 		_target_types['nil'](eval, name, ref)
@@ -158,7 +158,7 @@ function NeP.Compiler.Compile(eval, name, target)
 	-- Target
 	NeP.Compiler.Target(eval, name, target)
 	--Spell
-	NeP.Compiler.Spell(eval, name, target)
+	NeP.Compiler.Spell(eval, name)
 	-- Conditions
 	NeP.Compiler.Conditions(eval, name)
 end
