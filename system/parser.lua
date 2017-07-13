@@ -121,12 +121,16 @@ function NeP.Parser.Parse(eval)
 	local endtime, cname = castingTime()
 	-- Its a table
 	if spell.is_table then
-		if NeP.DSL.Parse(cond) then
-			for i=1, #spell do
-				local res = NeP.Parser.Parse(spell[i])
-				if res then return res end
+		local _target = NeP.FakeUnits:Filter(target.target)
+		for i=1, #_target do
+			eval.target = _target[i]
+			if NeP.DSL.Parse(cond, eval.target) then
+				for i=1, #spell do
+					local res = NeP.Parser.Parse(spell[i])
+					if res then return res end
+				end
 			end
-		end
+		emd
 	-- Normal
 	elseif (spell.bypass or endtime == 0)
 	and NeP.Actions:Eval(spell.token)(eval) then
