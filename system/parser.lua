@@ -130,7 +130,7 @@ function NeP.Parser.Parse(eval)
 					if res then return res end
 				end
 			end
-		emd
+		end
 	-- Normal
 	elseif (spell.bypass or endtime == 0)
 	and NeP.Actions:Eval(spell.token)(eval) then
