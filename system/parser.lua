@@ -100,6 +100,8 @@ function NeP.Parser.Unit_Blacklist(_, unit)
 	end
 end
 
+local noob_target = function() return UnitExists('target') and 'target' or 'player' end
+
 --This works on the current parser target.
 --This function takes care of psudo units (fakeunits).
 --Returns boolean (true if the target is valid).
@@ -121,12 +123,12 @@ function NeP.Parser.Parse(eval, tmp_target)
 	local endtime, cname = castingTime()
 	-- Its a table
 	if spell.is_table then
-		tmp_target = NeP.FakeUnits:Filter(target.target)
+		tmp_target = NeP.FakeUnits:Filter(target.target or noob_target())
 		for i=1, #tmp_target do
 			eval.target = tmp_target[i]
 			if NeP.DSL.Parse(cond, eval.target) then
 				for i=1, #spell do
-					local res = NeP.Parser.Parse(spell[i], tmp_target)
+					local res = NeP.Parser.Parse(spell[i], eval.target)
 					if res then return res end
 				end
 			end
@@ -137,9 +139,10 @@ function NeP.Parser.Parse(eval, tmp_target)
 		local spell, cond, target = eval[1], eval[2], eval[3]
 		--used to only filter target if it wasnt done already
 		if tmp_target then
+			eval.target = target.target or tmp_target or noob_target()
 			return _exe(eval, endtime, cname)
 		else
-			tmp_target = NeP.FakeUnits:Filter(target.target)
+			tmp_target = NeP.FakeUnits:Filter(target.target or noob_target())
 			for i=1, #tmp_target do
 				eval.target = tmp_target[i]
 				local res = _exe(eval, endtime, cname)
