@@ -116,40 +116,43 @@ function NeP.Parser.Target(eval)
 	and not NeP.Parser:Unit_Blacklist(eval.target)
 end
 
+function NeP.Parser.Parse2(eval, tmp_target, endtime, cname, func)
+	local res;
+	--used to only filter target if it wasnt done already
+	if not eval[3].target then
+		eval.target = tmp_target or noob_target()
+		return func(eval, endtime, cname)
+	end
+	tmp_target = NeP.FakeUnits:Filter(eval[3].target)
+	for i=1, #tmp_target do
+		eval.target = tmp_target[i]
+		res = func(eval, endtime, cname)
+		if res then return res end
+	end
+end
+
+function NeP.Parser.Parse3(eval, tmp_target, func)
+	local res;
+	if NeP.DSL.Parse(eval[2], eval.target) then
+		for i=1, #eval[1] do
+			res = NeP.Parser.Parse(eval[1][i], eval.target)
+			if res then return res end
+		end
+	end
+end
+
 --This is the actual Parser...
 --Reads and figures out what it should execute from the CR
 --The CR when it reaches this point must be already compiled and be ready to run.
 function NeP.Parser.Parse(eval, tmp_target)
-	local spell, cond, target = eval[1], eval[2], eval[3]
 	local endtime, cname = castingTime()
 	-- Its a table
-	if spell.is_table then
-		tmp_target = NeP.FakeUnits:Filter(target.target or noob_target())
-		for i=1, #tmp_target do
-			eval.target = tmp_target[i]
-			if NeP.DSL.Parse(cond, eval.target) then
-				for i=1, #spell do
-					local res = NeP.Parser.Parse(spell[i], eval.target)
-					if res then return res end
-				end
-			end
-		end
+	if eval[1].is_table then
+		return NeP.Parser.Parse2(eval, tmp_target, endtime, cname, NeP.Parser.Parse3)
 	-- Normal
-	elseif (spell.bypass or endtime == 0)
-	and NeP.Actions:Eval(spell.token)(eval) then
-		local spell, cond, target = eval[1], eval[2], eval[3]
-		--used to only filter target if it wasnt done already
-		if tmp_target then
-			eval.target = target.target or tmp_target or noob_target()
-			return _exe(eval, endtime, cname)
-		else
-			tmp_target = NeP.FakeUnits:Filter(target.target or noob_target())
-			for i=1, #tmp_target do
-				eval.target = tmp_target[i]
-				local res = _exe(eval, endtime, cname)
-				if res then return res end
-			end
-		end
+	elseif (eval[1].bypass or endtime == 0)
+	and NeP.Actions:Eval(eval[1].token)(eval) then
+		return NeP.Parser.Parse2(eval, tmp_target, endtime, cname, _exe)
 	end
 end
 
