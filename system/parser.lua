@@ -55,6 +55,7 @@ end
 
 local function _exe(eval, endtime, cname)
 	if NeP.Parser.Target(eval) then
+		local spell, cond, target = eval[1], eval[2], eval[3]
 		-- Evaluate conditions
 		eval.spell = eval.spell or spell.spell
 		if NeP.DSL.Parse(cond, eval.spell, eval.target)
