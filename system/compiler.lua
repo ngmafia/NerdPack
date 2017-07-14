@@ -83,9 +83,7 @@ local function unit_ground(ref, eval)
 end
 
 local _target_types = {
-	['nil'] = function(eval, _, ref, target)
-		ref.target = target
-	end,
+	['nil'] = function() end,
 	['table'] = function(eval, _, ref)
 		ref.target = eval[3]
 	end,
