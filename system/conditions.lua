@@ -12,6 +12,10 @@ function NeP.DSL.Get(_, Strg)
 	return noop
 end
 
+function NeP.DSL.Exists(_, Strg)
+	return conditions[Strg:lower()] ~= nil
+end
+
 local function _add(name, condition, overwrite)
 	name = name:lower()
 	if not conditions[name] or overwrite then
