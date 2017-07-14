@@ -16,12 +16,12 @@ function NeP.Core.string_split(_, string, delimiter)
 	return result
 end
 
-local function pArgs(Strg, Spell, Target)
+local function pArgs(Strg, Spell)
 	Strg = Strg or ""
 	local Args = Strg:match('%((.+)%)')
 	Strg = Strg:gsub('%((.+)%)', '')
 	--if Args then print('> '..Args) Args = DSL.Parse(Args, Spell, Target) print('<',Args) end
-	return Strg, Args, Spell, Target
+	return Strg, Args, Spell
 end
 
 local function FilerNumber(str)
@@ -98,18 +98,20 @@ local function Nest(Strg, Spell, Target)
 end
 
 local function ProcessCondition(Strg, Spell, Target)
-	-- Process Unit Stuff
-	local unitID, rest = strsplit('.', Strg, 2)
-	unitID =  NeP.FakeUnits:Filter(unitID)[1]
-	-- condition Target
-	if unitID and UnitExists(unitID) then
-		Target = unitID
-		Strg = rest
-	end
 	-- Condition arguments
-	local Strg, Args = pArgs(Strg, Spell, Target)
-	if not Args then Args = Spell end
-	Strg = Strg:gsub('%s', '')
+	local Strg, Args = pArgs(Strg, Spell)
+	Args = Args or Spell
+	-- Unit prefix
+	if not NeP.DSL:Exists(Strg) then
+		local unitID, rest = strsplit('.', Strg, 2)
+		unitID =  NeP.FakeUnits:Filter(unitID)[1]
+		-- condition Target
+		if unitID and UnitExists(unitID) then
+			Target = unitID
+			Strg = rest
+		end
+	end
+	--Strg = Strg:gsub('%s', '')
 	-- Process the Condition itself
 	local Condition = DSL:Get(Strg)
 	return Condition(Target or "player", Args)
