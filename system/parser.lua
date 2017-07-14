@@ -54,22 +54,17 @@ local function _interrupt(eval, endtime, cname)
 end
 
 local function _exe(eval, endtime, cname)
-	local spell, cond, target = eval[1], eval[2], eval[3]
-	local _target = NeP.FakeUnits:Filter(target.target)
-	for i=1, #_target do
-		eval.target = _target[i]
-		if NeP.Parser.Target(eval) then
-			-- Evaluate conditions
-			eval.spell = eval.spell or spell.spell
-			if NeP.DSL.Parse(cond, eval.spell, eval.target)
-			and NeP.Helpers:Check(eval.spell, eval.target)
-			and not _interrupt(eval, endtime, cname) then
-				--Update the actionlog and master toggle icon
-				NeP.ActionLog:Add(spell.token, eval.spell or "", spell.icon, eval.target)
-				NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
-				--Execute
-				return eval.exe(eval)
-			end
+	if NeP.Parser.Target(eval) then
+		-- Evaluate conditions
+		eval.spell = eval.spell or spell.spell
+		if NeP.DSL.Parse(cond, eval.spell, eval.target)
+		and NeP.Helpers:Check(eval.spell, eval.target)
+		and not _interrupt(eval, endtime, cname) then
+			--Update the actionlog and master toggle icon
+			NeP.ActionLog:Add(spell.token, eval.spell or "", spell.icon, eval.target)
+			NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
+			--Execute
+			return eval.exe(eval)
 		end
 	end
 end
@@ -121,21 +116,36 @@ end
 --This is the actual Parser...
 --Reads and figures out what it should execute from the CR
 --The CR when it reaches this point must be already compiled and be ready to run.
-function NeP.Parser.Parse(eval)
+function NeP.Parser.Parse(eval, tmp_target)
 	local spell, cond, target = eval[1], eval[2], eval[3]
 	local endtime, cname = castingTime()
 	-- Its a table
 	if spell.is_table then
-		if NeP.DSL.Parse(cond) then
-			for i=1, #spell do
-				local res = NeP.Parser.Parse(spell[i])
-				if res then return res end
+		tmp_target = NeP.FakeUnits:Filter(target.target)
+		for i=1, #tmp_target do
+			eval.target = tmp_target[i]
+			if NeP.DSL.Parse(cond, eval.target) then
+				for i=1, #spell do
+					local res = NeP.Parser.Parse(spell[i], tmp_target)
+					if res then return res end
+				end
 			end
 		end
 	-- Normal
 	elseif (spell.bypass or endtime == 0)
 	and NeP.Actions:Eval(spell.token)(eval) then
-		return _exe(eval, endtime, cname)
+		local spell, cond, target = eval[1], eval[2], eval[3]
+		--used to only filter target if it wasnt done already
+		if tmp_target then
+			return _exe(eval, endtime, cname)
+		else
+			tmp_target = NeP.FakeUnits:Filter(target.target)
+			for i=1, #tmp_target do
+				eval.target = tmp_target[i]
+				local res = _exe(eval, endtime, cname)
+				if res then return res end
+			end
+		end
 	end
 end
 
