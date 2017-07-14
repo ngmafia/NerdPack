@@ -52,23 +52,6 @@ local function _interrupt(eval, endtime, cname)
 		end
 	end
 end
-
-local function _exe(eval, endtime, cname)
-	if NeP.Parser.Target(eval) then
-		local spell, cond, target = eval[1], eval[2], eval[3]
-		-- Evaluate conditions
-		eval.spell = eval.spell or spell.spell
-		if NeP.DSL.Parse(cond, eval.spell, eval.target)
-		and NeP.Helpers:Check(eval.spell, eval.target)
-		and not _interrupt(eval, endtime, cname) then
-			--Update the actionlog and master toggle icon
-			NeP.ActionLog:Add(spell.token, eval.spell or "", spell.icon, eval.target)
-			NeP.Interface:UpdateIcon('mastertoggle', spell.icon)
-			--Execute
-			return eval.exe(eval)
-		end
-	end
-end
 --[[
 	Ussage:
 	this is inserted into NeP.CR:Add...
@@ -121,23 +104,35 @@ function NeP.Parser.Parse2(eval, tmp_target, endtime, cname, func)
 	--used to only filter target if it wasnt done already
 	if not eval[3].target then
 		eval.target = tmp_target or noob_target()
-		return func(eval, endtime, cname)
+		return func(eval, endtime, cname, tmp_target, func)
 	end
 	tmp_target = NeP.FakeUnits:Filter(eval[3].target)
 	for i=1, #tmp_target do
 		eval.target = tmp_target[i]
-		res = func(eval, endtime, cname)
+		res = func(eval, endtime, cname, tmp_target, func)
 		if res then return res end
 	end
 end
 
-function NeP.Parser.Parse3(eval, tmp_target, func)
+function NeP.Parser.Parse3(eval, _,_, tmp_target, func)
 	local res;
 	if NeP.DSL.Parse(eval[2], eval.target) then
 		for i=1, #eval[1] do
 			res = NeP.Parser.Parse(eval[1][i], eval.target)
 			if res then return res end
 		end
+	end
+end
+
+function NeP.Parser.Parse4(eval, endtime, cname)
+	if not NeP.Parser.Target(eval) then return end
+	eval.spell = eval.spell or eval[1].spell
+	if NeP.DSL.Parse(eval[2], eval.spell, eval.target)
+	and NeP.Helpers:Check(eval.spell, eval.target)
+	and not _interrupt(eval, endtime, cname) then
+		NeP.ActionLog:Add(eval[1].token, eval.spell or "", eval[1].icon, eval.target)
+		NeP.Interface:UpdateIcon('mastertoggle', eval[1].icon)
+		return eval.exe(eval)
 	end
 end
 
@@ -152,7 +147,7 @@ function NeP.Parser.Parse(eval, tmp_target)
 	-- Normal
 	elseif (eval[1].bypass or endtime == 0)
 	and NeP.Actions:Eval(eval[1].token)(eval) then
-		return NeP.Parser.Parse2(eval, tmp_target, endtime, cname, _exe)
+		return NeP.Parser.Parse2(eval, tmp_target, endtime, cname, NeP.Parser.Parse4)
 	end
 end
 
