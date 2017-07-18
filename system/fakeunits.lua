@@ -45,7 +45,7 @@ local function add_tbl(unit, tbl)
 	--table
 	if unit_type =='table' then
 		for i=1, #unit do
-			NeP.FakeUnits:Filter(unit, tbl)
+			NeP.FakeUnits:Filter(unit[i], tbl)
 		end
 	--function
 	elseif unit_type == 'function' then
