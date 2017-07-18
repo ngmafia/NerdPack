@@ -15,7 +15,7 @@ local InCombatLockdown     = InCombatLockdown
 local C_Timer              = C_Timer
 
 --Fake CR so the parser dosent error of no CR is selected
-local noop_t = {{(function() NeP.Core:Print("No CR Selected...") end)}}
+local noop_t = { {(function() NeP.Core:Print("No CR Selected...") end)} }
 NeP.Compiler:Iterate(noop_t, "FakeCR")
 
 --This is used by the ticker
@@ -29,7 +29,7 @@ local function IsMountedCheck()
 			return true
 		end
 	end
-	--return boolean (true if mounted)
+	--return boolean (true if not mounted)
 	return (SecureCmdOptionParse("[overridebar][vehicleui][possessbar,@vehicle,exists][mounted]true")) ~= "true"
 end
 
@@ -38,57 +38,42 @@ end
 --Also used by the parser for (!spell) if order to figure out if we should clip
 local function castingTime()
 	local time = GetTime()
-	local name, _,_,_,_, endTime = UnitCastingInfo("player")
-	if not name then name, _,_,_,_, endTime = UnitChannelInfo("player") end
+	local name, _,_,_,_, endTime = UnitCastingInfo("player") or UnitChannelInfo("player")
 	return (name and (endTime/1000)-time) or 0, name
 end
 
 local function _interrupt(eval, endtime, cname)
 	if eval[1].interrupts then
-		if cname == eval.spell then
-			return true
-		elseif endtime > 0 then
+		if cname == eval.spell or endtime < 1 then
+			return false
+		else
 			SpellStopCasting()
 		end
 	end
+	return true
 end
---[[
-	Ussage:
-	this is inserted into NeP.CR:Add...
-	----------------------------------
-	blacklist = {
-		units = {####, ####, ####},
-		buffs = {{name = ####, count = #}, ####, ####},
-		debuff = {####, ####, ####}
-	}
-	----------------------------------
-]]
-function NeP.Parser.Unit_Blacklist(_, unit)
-	local _bl = NeP.CR.CR.blacklist
-	if _bl[NeP.Core:UnitID(unit)] then return true end
-	for i=1, #_bl.buff do
-		local _count = _bl.buff[i].count
+
+local function tst(tbl, _type)
+	if not tbl then return end
+	for i=1, #tbl do
+		local _count = tbl[i].count
 		if _count then
-			if NeP.DSL:Get('buff.count.any')(unit, _bl.buff[i].name) >= _count then return true end
+			if NeP.DSL:Get(_type..'.count.any')(unit, tbl[i].name) >= _count then return true end
 		else
-			if NeP.DSL:Get('buff.any')(unit, _bl.buff[i]) then return true end
-		end
-	end
-	for i=1, #_bl.debuff do
-		local _count = _bl.debuff[i].count
-		if _count then
-			if NeP.DSL:Get('debuff.count.any')(unit, _bl.debuff[i].name) >= _count then return true end
-		else
-			if NeP.DSL:Get('debuff.any')(unit, _bl.debuff[i]) then return true end
+			if NeP.DSL:Get(_type..'.any')(unit, tbl[i]) then return true end
 		end
 	end
 end
 
-local noob_target = function() return UnitExists('target') and 'target' or 'player' end
+function NeP.Parser.Unit_Blacklist(_, unit)
+	local bl = NeP.CR.CR.blacklist
+	return bl[NeP.Core:UnitID(unit)] or tst(bl.buff, "buff") or tst(bl.debuff, "debuff")
+end
 
 --This works on the current parser target.
 --This function takes care of psudo units (fakeunits).
 --Returns boolean (true if the target is valid).
+local noob_target = function() return UnitExists('target') and 'target' or 'player' end
 function NeP.Parser.Target(eval)
 	-- This is to alow casting at the cursor location where no unit exists
 	if eval[3].cursor then return true end
@@ -129,7 +114,7 @@ function NeP.Parser.Parse4(eval, endtime, cname)
 	eval.spell = eval.spell or eval[1].spell
 	if NeP.DSL.Parse(eval[2], eval.spell, eval.target)
 	and NeP.Helpers:Check(eval.spell, eval.target)
-	and not _interrupt(eval, endtime, cname) then
+	and _interrupt(eval, endtime, cname) then
 		NeP.ActionLog:Add(eval[1].token, eval.spell or "", eval[1].icon, eval.target)
 		NeP.Interface:UpdateIcon('mastertoggle', eval[1].icon)
 		return eval.exe(eval)
