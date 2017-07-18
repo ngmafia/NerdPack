@@ -1,6 +1,5 @@
 local _, NeP = ...
 local tonumber = tonumber
-local UnitExists = ObjectExists or UnitExists
 local noop = function() end
 
 NeP.Compiler = {}
@@ -41,7 +40,7 @@ local _spell_types = {
 	['table'] = function(eval, name)
 		eval[1].is_table = true
 		for k=1, #eval[1] do
-			NeP.Compiler.Compile(eval[1][k], name, eval[3].target)
+			NeP.Compiler.Compile(eval[1][k], name)
 		end
 	end,
 	['function'] = function(eval)
@@ -90,11 +89,11 @@ local _target_types = {
 	['string'] = function(eval, _, ref) unit_ground(ref, eval) end
 }
 
-function NeP.Compiler.Target(eval, name, target)
+function NeP.Compiler.Target(eval, name)
 	local ref, unit_type = {}, _target_types[type(eval[3])]
 	if unit_type then
 		ref.target = eval[3]
-		unit_type(eval, name, ref, target)
+		unit_type(eval, name, ref)
 	else
 		NeP.Core:Print('Found a issue compiling: ', name, '\n-> Target cant be a', type(eval[3]))
 		_target_types['nil'](eval, name, ref)
@@ -142,14 +141,14 @@ function NeP.Compiler.Conditions(eval, name)
 	end
 end
 
-function NeP.Compiler.Compile(eval, name, target)
+function NeP.Compiler.Compile(eval, name)
 	-- check if this was already done
 	if eval[4] then return end
 	eval[4] = true
 	--Spell
 	NeP.Compiler.Spell(eval, name)
 	-- Target
-	NeP.Compiler.Target(eval, name, target)
+	NeP.Compiler.Target(eval, name)
 	-- Conditions
 	NeP.Compiler.Conditions(eval, name)
 end
