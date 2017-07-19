@@ -24,10 +24,10 @@ end
 
 -- /dump NeP.FakeUnits:Filter("lowest")
 local function process(unit)
-	local arg = unit:match('%((.+)%)')
+	local arg = unit:match('%((.-)%)')
 	local num = tonumber(unit:match("%d+") or 1)
-	local funit = unit:gsub('%((.+)%)', ''):gsub("%d+", '')
-	return Units[funit] and Units[funit](num, arg) or unit
+	unit = unit:gsub('%((.-)%)', ''):gsub("%d+", '')
+	return Units[unit] and Units[unit](num, arg) or unit
 end
 
 local function not_in_tbl(unit, tbl)

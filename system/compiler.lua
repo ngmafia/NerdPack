@@ -15,9 +15,8 @@ local function spell_string(eval, name)
 	local ref = { spell = eval[1] }
 
 	--Arguments
-	local arg1, args = ref.spell:match('(.+)%((.+)%)')
-	if args then ref.spell = arg1 end
-	ref.args = args
+	ref.args = ref.spell:match('%((.-)%)')
+	ref.spell = ref.spell:gsub('%((.-)%)')
 
 	-- RegisterToken
 	local token = ref.spell:sub(1,1)
