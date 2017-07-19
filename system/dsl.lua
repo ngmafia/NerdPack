@@ -117,14 +117,13 @@ local function ProcessCondition(Strg, Spell, Target)
 	return Condition(Target or "player", Args)
 end
 
-local fOps = {['!='] = '~=',['='] = '=='}
 local function Comperatores(Strg, Spell, Target)
-	local OP = ''
+	local OP;
 	for Token in Strg:gmatch('[><=~]') do OP = OP..Token end
-	if Strg:find('!=') then OP = '!=' end
+	if Strg:find('!=') then OP = '~=' end --tmp hack beacuse of the !
 	local arg1, arg2 = unpack(NeP.Core:string_split(Strg, OP))
 	arg1, arg2 = DSL.Parse(arg1, Spell, Target), DSL.Parse(arg2, Spell, Target)
-	return DoMath(arg1, arg2, (fOps[OP] or OP))
+	return DoMath(arg1, arg2, OP)
 end
 
 local function StringMath(Strg, Spell, Target)
