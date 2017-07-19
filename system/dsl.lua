@@ -119,8 +119,7 @@ end
 
 local function Comperatores(Strg, Spell, Target)
 	local OP = ''
-	for Token in Strg:gmatch('[><=~]') do OP = OP..Token end
-	if Strg:find('!=') then OP = '~=' end --tmp hack beacuse of the !
+	for Token in Strg:gmatch('[><=~!]') do OP = OP..Token end
 	local arg1, arg2 = unpack(NeP.Core:string_split(Strg, OP))
 	arg1, arg2 = DSL.Parse(arg1, Spell, Target), DSL.Parse(arg2, Spell, Target)
 	return DoMath(arg1, arg2, OP)
@@ -160,7 +159,7 @@ function NeP.DSL.Parse(Strg, Spell, Target)
 	elseif Strg:find("func=") then
 		Strg = Strg:sub(6);
 		return ExeFunc(Strg)
-	elseif Strg:find('[><=~]') or Strg:find('!=') then
+	elseif Strg:find('[><=~!]') then
 		return Comperatores(Strg, Spell, Target)
 	elseif Strg:find("[/%*%+%-]") then
 		return StringMath(Strg, Spell, Target)
