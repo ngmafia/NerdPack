@@ -47,8 +47,9 @@ local OPs = {
 	['@']     = function(arg1) return NeP.Library:Parse(pArgs(arg1)) end,
 }
 
--- alias
+-- alias (LEGACY)
 OPs['!='] = OPs['~=']
+OPs['='] = OPs['==']
 
 local function DoMath(arg1, arg2, token)
 	arg1, arg2 = FilerNumber(arg1), FilerNumber(arg2)
