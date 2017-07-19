@@ -158,14 +158,10 @@ function NeP.DSL.Parse(Strg, Spell, Target)
 	elseif Strg:find("func=") then
 		Strg = Strg:sub(6);
 		return ExeFunc(Strg)
-	elseif Strg:find('[><=~]') then
-		return Comperatores(Strg, Spell, Target)
-	elseif Strg:find('!=') then
+	elseif Strg:find('[><=~]') or Strg:find('!=') then
 		return Comperatores(Strg, Spell, Target)
 	elseif Strg:find("[/%*%+%-]") then
 		return StringMath(Strg, Spell, Target)
-	elseif OPs[Strg] then
-		return OPs[Strg](Strg, Spell, Target)
 	elseif Strg:find('%a') then
 		return ProcessCondition(Strg, Spell, Target)
 	end
