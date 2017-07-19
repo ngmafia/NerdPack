@@ -20,7 +20,6 @@ local function pArgs(Strg, Spell)
 	Strg = Strg or ""
 	local Args = Strg:match('%((.+)%)')
 	Strg = Strg:gsub('%((.+)%)', '')
-	--if Args then print('> '..Args) Args = DSL.Parse(Args, Spell, Target) print('<',Args) end
 	return Strg, Args, Spell
 end
 
@@ -38,6 +37,7 @@ local OPs = {
 	['<=']    = function(arg1, arg2) return arg1 <= arg2 end,
 	['==']    = function(arg1, arg2) return arg1 == arg2 end,
 	['~=']    = function(arg1, arg2) return arg1 ~= arg2 end,
+	['!=']    = function(arg1, arg2) return arg1 ~= arg2 end,
 	['>']     = function(arg1, arg2) return arg1 > arg2 end,
 	['<']     = function(arg1, arg2) return arg1 < arg2 end,
 	['+']     = function(arg1, arg2) return arg1 + arg2 end,
