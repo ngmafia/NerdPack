@@ -37,7 +37,7 @@ local OPs = {
 	['<=']    = function(arg1, arg2) return arg1 <= arg2 end,
 	['==']    = function(arg1, arg2) return arg1 == arg2 end,
 	['~=']    = function(arg1, arg2) return arg1 ~= arg2 end,
-	['!=']    = function(arg1, arg2) return arg1 ~= arg2 end,
+	['!=']    = self['~='],
 	['>']     = function(arg1, arg2) return arg1 > arg2 end,
 	['<']     = function(arg1, arg2) return arg1 < arg2 end,
 	['+']     = function(arg1, arg2) return arg1 + arg2 end,
