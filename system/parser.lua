@@ -38,13 +38,14 @@ end
 --Also used by the parser for (!spell) if order to figure out if we should clip
 local function castingTime()
 	local time = GetTime()
-	local name, _,_,_,_, endTime = UnitCastingInfo("player") or UnitChannelInfo("player")
+	local name, _,_,_,_, endTime = UnitCastingInfo("player")
+	if not name then name, _,_,_,_, endTime = UnitChannelInfo("player") end
 	return (name and (endTime/1000)-time) or 0, name
 end
 
 local function _interrupt(eval, endtime, cname)
 	if eval[1].interrupts then
-		if cname == eval.spell then
+		if cname == eval.spell or endtime < 1 then
 			return false
 		else
 			SpellStopCasting()
