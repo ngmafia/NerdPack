@@ -44,7 +44,7 @@ end
 
 local function _interrupt(eval, endtime, cname)
 	if eval[1].interrupts then
-		if cname == eval.spell or endtime < 1 then
+		if cname == eval.spell then
 			return false
 		else
 			SpellStopCasting()
