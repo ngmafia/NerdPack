@@ -14,10 +14,6 @@ local SecureCmdOptionParse = SecureCmdOptionParse
 local InCombatLockdown     = InCombatLockdown
 local C_Timer              = C_Timer
 
---Fake CR so the parser dosent error of no CR is selected
-local noop_t = { {(function() NeP.Core:Print("No CR Selected...") end)} }
-NeP.Compiler:Iterate(noop_t, "FakeCR")
-
 --This is used by the ticker
 --Its used to determin if we should iterate or not
 --Returns true if we're not mounted or in a castable mount
@@ -54,7 +50,8 @@ local function _interrupt(eval, endtime, cname)
 	return true
 end
 
-local function tst(tbl, _type)
+local function tst(_type)
+	local tbl = NeP.CR.CR.blacklist[_type]
 	if not tbl then return end
 	for i=1, #tbl do
 		local _count = tbl[i].count
@@ -67,8 +64,7 @@ local function tst(tbl, _type)
 end
 
 function NeP.Parser.Unit_Blacklist(_, unit)
-	local bl = NeP.CR.CR.blacklist
-	return bl[NeP.Core:UnitID(unit)] or tst(bl.buff, "buff") or tst(bl.debuff, "debuff")
+	return NeP.CR.CR.blacklist.units[NeP.Core:UnitID(unit)] or tst("buff") or tst("debuff")
 end
 
 --This works on the current parser target.
@@ -145,7 +141,8 @@ C_Timer.NewTicker(0.1, (function()
 	if NeP.DSL:Get('toggle')(nil, 'mastertoggle')
 	and not UnitIsDeadOrGhost('player') and IsMountedCheck() then
 		if NeP.Queuer:Execute() then return end
-		local table = NeP.CR.CR[InCombatLockdown()] or noop_t
+		local table = NeP.CR.CR[InCombatLockdown()]
+		if not table then return end
 		for i=1, #table do
 			if NeP.Parser.Parse(table[i]) then break end
 		end

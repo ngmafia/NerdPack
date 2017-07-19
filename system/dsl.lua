@@ -50,7 +50,7 @@ local OPs = {
 
 local function DoMath(arg1, arg2, token)
 	arg1, arg2 = FilerNumber(arg1), FilerNumber(arg2)
-	return (arg1 and arg2) and OPs[token](arg1, arg2)
+	return OPs[token](arg1 or 1, arg2 or 1)
 end
 
 local function _AND(Strg, Spell, Target)
@@ -116,7 +116,7 @@ local function ProcessCondition(Strg, Spell, Target)
 end
 
 local function Comperatores(Strg, Spell, Target)
-	local OP;
+	local OP = ''
 	for Token in Strg:gmatch('[><=~]') do OP = OP..Token end
 	if Strg:find('!=') then OP = '~=' end --tmp hack beacuse of the !
 	local arg1, arg2 = unpack(NeP.Core:string_split(Strg, OP))
