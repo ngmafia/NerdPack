@@ -2,6 +2,7 @@ local _, NeP = ...
 
 NeP.ClassTable = {
 	{ -- Warrior
+		class = 'Warrior',
 		hex = 'c79c6e',
 		rgb = {0.78,0.61,0.43},
 		[71] = {
@@ -21,6 +22,7 @@ NeP.ClassTable = {
 		}
 	},
 	{  -- Paladin
+		class = 'Paladin',
 		hex = 'f58cba',
 		rgb = {0.96,0.55,0.73},
 		[65] = {
@@ -40,6 +42,7 @@ NeP.ClassTable = {
 		}
 	},
 	{ -- Hunter
+		class = 'Hunter',
 		hex = 'abd473',
 		rgb = {0.67,0.83,0.45},
 		[253] = {
@@ -59,6 +62,7 @@ NeP.ClassTable = {
 		}
 	},
 	{ -- Rogue
+		class = 'Rogue',
 		hex = 'fff569',
 		rgb = {1,0.96,0.41},
 		[259] = {
@@ -78,6 +82,7 @@ NeP.ClassTable = {
 		}
 	},
 	{  -- Priest
+		class = 'Priest',
 		hex = 'ffffff',
 		rgb = {1,1,1},
 		[256] = {
@@ -97,6 +102,7 @@ NeP.ClassTable = {
 		}
 	},
 	{ -- DeathKnight
+		class = 'DeathKnight',
 		hex = 'c41f3b',
 		rgb = {0.77,0.12,0.23},
 		[250] = {
@@ -116,6 +122,7 @@ NeP.ClassTable = {
 		}
 	},
 	{  -- Shaman
+		class = 'Shaman',
 		hex = '0070de',
 		rgb = {0,0.44,0.87},
 		[262] = {
@@ -135,6 +142,7 @@ NeP.ClassTable = {
 		}
 	},
 	{  -- Mage
+		class = 'Mage',
 		hex = '69ccf0',
 		rgb = {0.41,0.8,0.94},
 		[62] = {
@@ -154,6 +162,7 @@ NeP.ClassTable = {
 		}
 	},
 	{ -- Warlock
+		class = 'Warlock',
 		hex = '9482c9',
 		rgb = {0.58,0.51,0.79},
 		[265] = {
@@ -173,6 +182,7 @@ NeP.ClassTable = {
 		}
 	},
 	{ -- Monk
+		class = 'Monk',
 		hex = '00ff96',
 		rgb = {0,1,0.59},
 		[268] = {
@@ -192,6 +202,7 @@ NeP.ClassTable = {
 		}
 	},
 	{ -- Druid
+		class = 'Druid',
 		hex = 'ff7d0a',
 		rgb = {1,0.49,0.04},
 		[102] = {
@@ -216,6 +227,7 @@ NeP.ClassTable = {
 		}
 	},
 	{ -- Demon Hunter
+		class = 'Demon Hunter',
 		hex = 'A330C9',
 		rgb = {0.64,0.19,0.79},
 		[577] = {

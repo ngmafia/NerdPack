@@ -2,6 +2,16 @@ local n_name, NeP = ...
 local L           = NeP.Locale
 local DiesalStyle = LibStub("DiesalStyle-1.0")
 
+local color_list = {
+  {text = 'White', key = 'FFFFFF'},
+  {text = 'Black', key = '000000'},
+  {text = 'Class Color', key = 'CLASS'},
+}
+
+for i=1, #NeP.ClassTable do
+  color_list[#color_list+1] = {text = NeP.ClassTable[i].class, key = NeP.ClassTable[i].hex}
+end
+
 local config = {
     key = n_name..'_Settings',
     title = n_name,
@@ -15,27 +25,10 @@ local config = {
       { type = 'spinner', text = L:TA('Settings', 'brow'), key = 'brow', step = 1, min = 1, max = 20, default = 10},
 
       { type = 'spacer' },{ type = 'ruler' },
-      --outline_color
-      { type = 'dropdown', text = 'outline_color', key = 'outline_color', list ={
-        {text = 'White', key = 'FFFFFF'},
-        {text = 'Black', key = '000000'},
-        {text = 'Class Color', key = 'CLASS'},
-      }, default = 'CLASS'},
-      --tittle_color
-      { type = 'dropdown', text = 'tittle_color', key = 'tittle_color', list ={
-        {text = 'White', key = 'FFFFFF'},
-        {text = 'Black', key = '000000'},
-        {text = 'Class Color', key = 'CLASS'},
-      }, default = '000000'},
-      -- tittle_alpha
+      { type = 'dropdown', text = 'outline_color', key = 'outline_color', list = color_list, default = 'CLASS'},
+      { type = 'dropdown', text = 'tittle_color', key = 'tittle_color', list =color_list, default = '000000'},
       { type = 'spinner', text = 'tittle_alpha', key = 'tittle_alpha', step = .05, min = 0, max = 1, default = .75},
-      --content_color
-      { type = 'dropdown', text = 'content_color', key = 'content_color', list ={
-        {text = 'White', key = 'FFFFFF'},
-        {text = 'Black', key = '000000'},
-        {text = 'Class Color', key = 'CLASS'},
-      }, default = '000000'},
-      -- content_alpha
+      { type = 'dropdown', text = 'content_color', key = 'content_color', list =color_list, default = '000000'},
       { type = 'spinner', text = 'content_alpha', key = 'content_alpha', step = .05, min = 0, max = 1, default = .85},
 
       { type = 'spacer' },{ type = 'ruler' },
