@@ -41,12 +41,13 @@ function NeP.CR.Add(_, SpecID, ...)
 
 	-- if no table for the spec, create it
 	if not CRs[SpecID] then CRs[SpecID] = {} end
-	
+
 	-- Legacy stuff
 	local ev = legacy_PE(...)
 
 	-- do not load cr that dont have names
 	if not ev.name then return end
+	if CRs[SpecID][ev.name] then return end
 
 	-- This compiles the CR
 	NeP.Compiler:Iterate(ev.ic, ev.name)
