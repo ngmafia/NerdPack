@@ -108,6 +108,23 @@ local function CondSpaces(cond)
 	end):gsub("%s", ""):gsub("_xspc_", " ")
 end
 
+function NeP.Compiler.Cond_Legacy_PE(cond)
+	local str = '{'
+	for k=1, #cond do
+		local tmp = cond[k]
+		if type(tmp) == 'table' then
+			str = NeP.Compiler.Cond_Legacy_PE(cond)
+		elseif tmp:lower() == 'or' then
+			str = str .. '||' .. tmp
+		elseif k ~= 1 then
+			str = str .. '&' .. tmp
+		else
+			str = str .. tmp
+		end
+	end
+	return str..'}'
+end
+
 local _cond_types = {
 	['nil'] = function(eval)
 		eval[2] = 'true'
@@ -127,7 +144,12 @@ local _cond_types = {
 			if tonumber(s) then return '('..s..')' end
 			return '('..NeP.Spells:Convert(s, name)..')'
 		end)
-	end
+	end,
+	['table'] = function(eval, name)
+		-- convert everything into a string so we can then process it
+		eval[2] = Cond_Legacy_PR(cond)
+		NeP.Compiler.Conditions(eval, name)
+        end
 }
 
 function NeP.Compiler.Conditions(eval, name)
