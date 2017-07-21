@@ -92,14 +92,15 @@ function NeP.Interface:TestCreated(eval)
 	local test = type(eval) == 'string' and eval or eval.key
 	if self.usedGUIs[test] then
 		self.usedGUIs[test].parent:Show()
-		return true
+		return self.usedGUIs[test].parent
 	end
 end
 
 function NeP.Interface:BuildGUI(eval)
 
 	--Tests
-	if NeP.Interface:TestCreated(eval) then return end
+	local gui_test = NeP.Interface:TestCreated(eval)
+	if gui_test then return gui_test end
 	if not eval.key then return end
 
 	-- Create a new parent
