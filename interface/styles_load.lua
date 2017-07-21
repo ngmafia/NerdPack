@@ -2,31 +2,39 @@ local n_name, NeP          = ...
 
 function NeP.Interface:UpdateStyles()
 	local ClassColor = NeP.Core:ClassColor('player', 'hex')
+	local tmp1;
 	--outline_color
-	local outline_default = self.WindowStyleSheet['frame-outline'].color
-	local outline = NeP.Config:Read(n_name..'_Settings', 'outline_color', outline_default)
-	if outline == 'CLASS' then outline = ClassColor end
-	self.WindowStyleSheet['frame-outline'].color = outline
+	tmp1 = self.WindowStyleSheet['frame-outline'].color
+	tmp1 = NeP.Config:Read(n_name..'_Settings', 'outline_color', tmp1)
+	if tmp1 == 'CLASS' then tmp1 = ClassColor end
+	self.WindowStyleSheet['frame-outline'].color = tmp1
+	NeP.Interface:SetElementColor(tmp1)
 	--tittle_color
-	local tittle_default = self.WindowStyleSheet['titleBar-color'].color
-	local tittle = NeP.Config:Read(n_name..'_Settings', 'tittle_color', tittle_default)
-	if tittle == 'CLASS' then tittle = ClassColor end
-	self.WindowStyleSheet['titleBar-color'].color = tittle
+	tmp1 = self.WindowStyleSheet['titleBar-color'].color
+	tmp1 = NeP.Config:Read(n_name..'_Settings', 'tittle_color', tmp1)
+	if tmp1 == 'CLASS' then tmp1 = ClassColor end
+	self.WindowStyleSheet['titleBar-color'].color = tmp1
 	--tittle_alpha
-	local tittle_alpha_default = self.WindowStyleSheet['titleBar-color'].alpha
-	local tittle_alpha = NeP.Config:Read(n_name..'_Settings', 'tittle_alpha', tittle_alpha_default)
-	self.WindowStyleSheet['titleBar-color'].alpha = tittle_alpha
+	tmp1 = self.WindowStyleSheet['titleBar-color'].alpha
+	tmp1 = NeP.Config:Read(n_name..'_Settings', 'tittle_alpha', tmp1)
+	self.WindowStyleSheet['titleBar-color'].alpha = tmp1
 	--content_color
-	local content_default = self.WindowStyleSheet['content-background'].color
-	local content = NeP.Config:Read(n_name..'_Settings', 'content_color', content_default)
-	if content == 'CLASS' then content = ClassColor end
-	self.WindowStyleSheet['content-background'].color = content
+	tmp1 = self.WindowStyleSheet['content-background'].color
+	tmp1 = NeP.Config:Read(n_name..'_Settings', 'content_color', tmp1)
+	if tmp1 == 'CLASS' then tmp1 = ClassColor end
+	self.WindowStyleSheet['content-background'].color = tmp1
 	--content_alpha
-	local content_alpha_default = self.WindowStyleSheet['content-background'].alpha
-	local content_alpha = NeP.Config:Read(n_name..'_Settings', 'content_alpha', content_alpha_default)
-	self.WindowStyleSheet['content-background'].alpha = content_alpha
-	--Loop
-	for _,v in pairs(self.usedGUIs) do
-		v.parent:SetStylesheet(self.WindowStyleSheet)
+	tmp1 = self.WindowStyleSheet['content-background'].alpha
+	tmp1 = NeP.Config:Read(n_name..'_Settings', 'content_alpha', tmp1)
+	self.WindowStyleSheet['content-background'].alpha = tmp1
+	--Loop to update existing guis
+	for _,gui in pairs(self.usedGUIs) do
+		gui.parent:SetStylesheet(self.WindowStyleSheet)
+		for _, element in pairs(gui.elements) do
+			if element.style then
+				element.parent:SetStylesheet(element.style)
+				element.parent:ApplySettings()
+			end
+		end
 	end
 end
