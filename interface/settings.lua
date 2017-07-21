@@ -25,11 +25,11 @@ local config = {
       { type = 'spinner', text = L:TA('Settings', 'brow'), key = 'brow', step = 1, min = 1, max = 20, default = 10},
 
       { type = 'spacer' },{ type = 'ruler' },
-      { type = 'dropdown', text = 'outline_color', key = 'outline_color', list = color_list, default = 'CLASS'},
-      { type = 'dropdown', text = 'tittle_color', key = 'tittle_color', list =color_list, default = '000000'},
-      { type = 'spinner', text = 'tittle_alpha', key = 'tittle_alpha', step = .05, min = 0, max = 1, default = .75},
-      { type = 'dropdown', text = 'content_color', key = 'content_color', list =color_list, default = '000000'},
-      { type = 'spinner', text = 'content_alpha', key = 'content_alpha', step = .05, min = 0, max = 1, default = .85},
+      { type = 'dropdown', text = L:TA('Settings', 'outline_color'), key = 'outline_color', list = color_list, default = 'CLASS'},
+      { type = 'dropdown', text = L:TA('Settings', 'tittle_color'), key = 'tittle_color', list = color_list, default = '000000'},
+      { type = 'spinner', text = L:TA('Settings', 'tittle_alpha'), key = 'tittle_alpha', step = .05, min = 0, max = 1, default = .75},
+      { type = 'dropdown', text = L:TA('Settings', 'content_color'), key = 'content_color', list = color_list, default = '000000'},
+      { type = 'spinner', text = L:TA('Settings', 'content_alpha'), key = 'content_alpha', step = .05, min = 0, max = 1, default = .85},
 
       { type = 'spacer' },{ type = 'ruler' },
 			{ type = 'button', text = L:TA('Settings', 'apply_bt'), callback = function()

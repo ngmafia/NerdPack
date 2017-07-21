@@ -40,7 +40,12 @@ NeP.Locale.enUS = {
     bsize = 'Button size',
     bpad = 'Button padding',
     brow = 'Maximum bottoms peer row',
-    apply_bt = 'Apply'
+    apply_bt = 'Apply',
+    outline_color = 'Outline color',
+    tittle_color = 'Title Color',
+    tittle_alpha = 'Title Alpha',
+    content_color = 'Content Color',
+    content_alpha = 'Contente Alpha'
   },
   States = {
     charm        = {'^charmed'},
