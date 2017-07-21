@@ -147,7 +147,7 @@ local _cond_types = {
 	end,
 	['table'] = function(eval, name)
 		-- convert everything into a string so we can then process it
-		eval[2] = Cond_Legacy_PR(cond)
+		eval[2] = NeP.Compiler.Cond_Legacy_PE(eval[2])
 		NeP.Compiler.Conditions(eval, name)
         end
 }
