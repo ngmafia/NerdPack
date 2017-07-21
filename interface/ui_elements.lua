@@ -16,19 +16,11 @@ function NeP.Interface:Header(element, parent, offset, table)
 	tmp = tmp.fontString
 	tmp:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset)
 	tmp:SetText('|cff'..table.color..element.text)
-	if element.justify then
-		tmp:SetJustifyH(element.justify)
-	else
-		tmp:SetJustifyH('LEFT')
-	end
+	tmp:SetJustifyH(element.justify or 'LEFT')
 	tmp:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 13)
 	tmp:SetWidth(parent.content:GetWidth()-10)
-	if element.align then
-		tmp:SetJustifyH(strupper(element.align))
-	end
-	if element.key then
-		self.usedGUIs[table.key].elements[element.key] = tmp
-	end
+	if element.align then tmp:SetJustifyH(strupper(element.align)) end
+	self.usedGUIs[table.key].elements[element.key] = {parent = tmp, type = element.type}
 end
 
 function NeP.Interface:Text(element, parent, offset, table)
@@ -42,15 +34,9 @@ function NeP.Interface:Text(element, parent, offset, table)
 	tmp:SetJustifyH('LEFT')
 	tmp:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), element.size or 10)
 	tmp:SetWidth(parent.content:GetWidth()-10)
-	if not element.offset then
-		element.offset = tmp:GetStringHeight()
-	end
-	if element.align then
-		tmp:SetJustifyH(strupper(element.align))
-	end
-	if element.key then
-		self.usedGUIs[table.key].elements[element.key] = tmp
-	end
+	element.offset = element.offset or tmp:GetStringHeight()
+	if element.align then tmp:SetJustifyH(strupper(element.align)) end
+	self.usedGUIs[table.key].elements[element.key] = {parent = tmp, type = element.type}
 end
 
 function NeP.Interface:Rule(element, parent, offset, table)
@@ -59,9 +45,7 @@ function NeP.Interface:Rule(element, parent, offset, table)
 	tmp:SetParent(parent.content)
 	tmp.frame:SetPoint('TOPLEFT', parent.content, 'TOPLEFT', 5, offset-3)
 	tmp.frame:SetPoint('BOTTOMRIGHT', parent.content, 'BOTTOMRIGHT', -5, offset-3)
-	if element.key then
-		self.usedGUIs[table.key].elements[element.key] = tmp
-	end
+	self.usedGUIs[table.key].elements[element.key] = {parent = tmp, type = element.type}
 end
 
 function NeP.Interface:Texture(element, parent, offset, table)
@@ -78,9 +62,7 @@ function NeP.Interface:Texture(element, parent, offset, table)
 	tmp.texture = tmp:CreateTexture()
 	tmp.texture:SetTexture(element.texture)
 	tmp.texture:SetAllPoints(tmp)
-	if element.key then
-		self.usedGUIs[table.key].elements[element.key] = tmp
-	end
+	self.usedGUIs[table.key].elements[element.key] = {parent = tmp, type = element.type}
 end
 
 function NeP.Interface:Checkbox(element, parent, offset, table)
@@ -92,197 +74,166 @@ function NeP.Interface:Checkbox(element, parent, offset, table)
 		NeP.Config:Write(table.key, element.key, checked)
 	end)
 	tmp:SetChecked(NeP.Config:Read(table.key, element.key, element.default or false))
-	local tmp_text = DiesalGUI:Create("FontString")
-	tmp_text:SetParent(parent.content)
-	parent:AddChild(tmp_text)
-	tmp_text = tmp_text.fontString
-	tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 20, offset-1)
-	tmp_text:SetText(element.text)
-	tmp_text:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 10)
+	tmp.text = DiesalGUI:Create("FontString")
+	tmp.text:SetParent(parent.content)
+	parent:AddChild(tmp.text)
+	tmp.text = tmp.text.fontString
+	tmp.text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 20, offset-1)
+	tmp.text:SetText(element.text)
+	tmp.text:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 10)
 	if element.desc then
-		local tmp_desc = DiesalGUI:Create("FontString")
-		tmp_desc:SetParent(parent.content)
-		parent:AddChild(tmp_desc)
-		tmp_desc = tmp_desc.fontString
-		tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-15)
-		tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-15)
-		tmp_desc:SetText(element.desc)
-		tmp_desc:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 9)
-		tmp_desc:SetWidth(parent.content:GetWidth()-10)
-		tmp_desc:SetJustifyH('LEFT')
-		element.push = tmp_desc:GetStringHeight() + 5
+		tmp.desc = DiesalGUI:Create("FontString")
+		tmp.desc:SetParent(parent.content)
+		parent:AddChild(tmp.desc)
+		tmp.desc = tmp.desc.fontString
+		tmp.desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-15)
+		tmp.desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-15)
+		tmp.desc:SetText(element.desc)
+		tmp.desc:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 9)
+		tmp.desc:SetWidth(parent.content:GetWidth()-10)
+		tmp.desc:SetJustifyH('LEFT')
+		element.push = tmp.desc:GetStringHeight() + 5
 	end
-	if element.key then
-		self.usedGUIs[table.key].elements[element.key..'Text'] = tmp_text
-		self.usedGUIs[table.key].elements[element.key] = tmp
-	end
+	self.usedGUIs[table.key].elements[element.key] = {parent = tmp, type = element.type}
 end
 
 function NeP.Interface:Spinner(element, parent, offset, table)
-	local tmp_spin = DiesalGUI:Create('Spinner')
-	parent:AddChild(tmp_spin)
-	tmp_spin:SetParent(parent.content)
-	tmp_spin:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset)
-	tmp_spin:SetNumber(
-		NeP.Config:Read(table.key, element.key, element.default)
-	)
-	if element.width then
-		tmp_spin.settings.width = element.width
-	end
-	if element.min then
-		tmp_spin.settings.min = element.min
-	end
-	if element.max then
-		tmp_spin.settings.max = element.max
-	end
-	if element.step then
-		tmp_spin.settings.step = element.step
-	end
-	if element.shiftStep then
-		tmp_spin.settings.shiftStep = element.shiftStep
-	end
-	tmp_spin:ApplySettings()
-	tmp_spin:SetStylesheet(self.spinnerStyleSheet)
-	tmp_spin:SetEventListener('OnValueChanged', function(_, _, userInput, number)
+	local tmp = DiesalGUI:Create('Spinner')
+	parent:AddChild(tmp)
+	tmp:SetParent(parent.content)
+	tmp:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset)
+	tmp:SetNumber(NeP.Config:Read(table.key, element.key, element.default))
+
+	--Settings
+	tmp.settings.width = element.width or tmp.settings.width
+	tmp.settings.min = tmp.settings.min or element.min
+	tmp.settings.max = element.max or tmp.settings.max
+	tmp.settings.step = element.step or tmp.settings.step
+	tmp.settings.shiftStep = element.shiftStep or tmp.settings.shiftStep
+
+	tmp:ApplySettings()
+	tmp:SetStylesheet(self.spinnerStyleSheet)
+	tmp:SetEventListener('OnValueChanged', function(_, _, userInput, number)
 		if not userInput then return end
 		NeP.Config:Write(table.key, element.key, number)
 	end)
-	local tmp_text = DiesalGUI:Create("FontString")
-	tmp_text:SetParent(parent.content)
-	parent:AddChild(tmp_text)
-	tmp_text = tmp_text.fontString
-	tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-4)
-	tmp_text:SetText(element.text)
-	tmp_text:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 10)
-	tmp_text:SetJustifyH('LEFT')
-	tmp_text:SetWidth(parent.content:GetWidth()-10)
+	tmp.text = DiesalGUI:Create("FontString")
+	tmp.text:SetParent(parent.content)
+	parent:AddChild(tmp.text)
+	tmp.text = tmp.text.fontString
+	tmp.text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-4)
+	tmp.text:SetText(element.text)
+	tmp.text:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 10)
+	tmp.text:SetJustifyH('LEFT')
+	tmp.text:SetWidth(parent.content:GetWidth()-10)
 	if element.desc then
-		local tmp_desc = DiesalGUI:Create("FontString")
-		tmp_desc:SetParent(parent.content)
-		parent:AddChild(tmp_desc)
-		tmp_desc = tmp_desc.fontString
-		tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-18)
-		tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-18)
-		tmp_desc:SetText(element.desc)
-		tmp_desc:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 9)
-		tmp_desc:SetWidth(parent.content:GetWidth()-10)
-		tmp_desc:SetJustifyH('LEFT')
-		element.push = tmp_desc:GetStringHeight() + 5
+		tmp.desc = DiesalGUI:Create("FontString")
+		tmp.desc:SetParent(parent.content)
+		parent:AddChild(tmp.desc)
+		tmp.desc = tmp.desc.fontString
+		tmp.desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-18)
+		tmp.desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-18)
+		tmp.desc:SetText(element.desc)
+		tmp.desc:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 9)
+		tmp.desc:SetWidth(parent.content:GetWidth()-10)
+		tmp.desc:SetJustifyH('LEFT')
+		element.push = tmp.desc:GetStringHeight() + 5
 	end
-	if element.key then
-		self.usedGUIs[table.key].elements[element.key..'Text'] = tmp_text
-		self.usedGUIs[table.key].elements[element.key] = tmp_spin
-	end
+	self.usedGUIs[table.key].elements[element.key] = {parent = tmp, type = element.type, style = self.spinnerStyleSheet}
 end
 
 function NeP.Interface:Checkspin(element, parent, offset, table)
-	local tmp_spin = DiesalGUI:Create('Spinner')
-	parent:AddChild(tmp_spin)
-	tmp_spin:SetParent(parent.content)
-	tmp_spin:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset)
-	if element.width then
-		tmp_spin.settings.width = element.width
-	end
-	if element.min then
-		tmp_spin.settings.min = element.min
-	end
-	if element.max then
-		tmp_spin.settings.max = element.max
-	end
-	if element.step then
-		tmp_spin.settings.step = element.step
-	end
-	if element.shiftStep then
-		tmp_spin.settings.shiftStep = element.shiftStep
-	end
-	tmp_spin:SetNumber(
-		NeP.Config:Read(table.key, element.key..'_spin', element.default_spin or 0)
-	)
-	tmp_spin:SetStylesheet(self.spinnerStyleSheet)
-	tmp_spin:ApplySettings()
-	tmp_spin:SetEventListener('OnValueChanged', function(_, _, userInput, number)
+	local tmp = DiesalGUI:Create('Spinner')
+	parent:AddChild(tmp)
+	tmp:SetParent(parent.content)
+	tmp:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset)
+
+	--settings
+	tmp.settings.width = element.width or tmp.settings.width
+	tmp.settings.min = element.min or tmp.settings.min
+	tmp.settings.max = element.max or tmp.settings.max
+	tmp.settings.step = element.step or tmp.settings.step
+	tmp.settings.shiftStep = element.shiftStep or tmp.settings.shiftStep
+
+	tmp:SetNumber(NeP.Config:Read(table.key, element.key..'_spin', element.default_spin or 0))
+	tmp:SetStylesheet(self.spinnerStyleSheet)
+	tmp:ApplySettings()
+	tmp:SetEventListener('OnValueChanged', function(_, _, userInput, number)
 		if not userInput then return end
 		NeP.Config:Write(table.key, element.key..'_spin', number)
 	end)
-	local tmp_check = DiesalGUI:Create('CheckBox')
-	parent:AddChild(tmp_check)
-	tmp_check:SetParent(parent.content)
-	tmp_check:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-2)
-	tmp_check:SetEventListener('OnValueChanged', function(_, _, checked)
+	tmp.check = DiesalGUI:Create('CheckBox')
+	parent:AddChild(tmp.check)
+	tmp.check:SetParent(parent.content)
+	tmp.check:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-2)
+	tmp.check:SetEventListener('OnValueChanged', function(_, _, checked)
 		NeP.Config:Write(table.key, element.key..'_check', checked)
 	end)
-	tmp_check:SetChecked(NeP.Config:Read(table.key, element.key..'_check', element.default_check or false))
-	local tmp_text = DiesalGUI:Create("FontString")
-	tmp_text:SetParent(parent.content)
-	parent:AddChild(tmp_text)
-	tmp_text = tmp_text.fontString
-	tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 20, offset-4)
-	tmp_text:SetText(element.text)
-	tmp_text:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 10)
-	tmp_text:SetJustifyH('LEFT')
-	tmp_text:SetWidth(parent.content:GetWidth()-10)
+	tmp.check:SetChecked(NeP.Config:Read(table.key, element.key..'_check', element.default_check or false))
+	tmp.text = DiesalGUI:Create("FontString")
+	tmp.text:SetParent(parent.content)
+	parent:AddChild(tmp.text)
+	tmp.text = tmp.text.fontString
+	tmp.text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 20, offset-4)
+	tmp.text:SetText(element.text)
+	tmp.text:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 10)
+	tmp.text:SetJustifyH('LEFT')
+	tmp.text:SetWidth(parent.content:GetWidth()-10)
 	if element.desc then
-		local tmp_desc = DiesalGUI:Create("FontString")
-		tmp_desc:SetParent(parent.content)
-		parent:AddChild(tmp_desc)
-		tmp_desc = tmp_desc.fontString
-		tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-18)
-		tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-18)
-		tmp_desc:SetText(element.desc)
-		tmp_desc:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 9)
-		tmp_desc:SetWidth(parent.content:GetWidth()-10)
-		tmp_desc:SetJustifyH('LEFT')
-		element.push = tmp_desc:GetStringHeight() + 5
+		tmp.desc = DiesalGUI:Create("FontString")
+		tmp.desc:SetParent(parent.content)
+		parent:AddChild(tmp.desc)
+		tmp.desc = tmp.desc.fontString
+		tmp.desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-18)
+		tmp.desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-18)
+		tmp.desc:SetText(element.desc)
+		tmp.desc:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 9)
+		tmp.desc:SetWidth(parent.content:GetWidth()-10)
+		tmp.desc:SetJustifyH('LEFT')
+		element.push = tmp.desc:GetStringHeight() + 5
 	end
-	if element.key then
-		self.usedGUIs[table.key].elements[element.key..'Text'] = tmp_text
-		self.usedGUIs[table.key].elements[element.key..'Check'] = tmp_check
-		self.usedGUIs[table.key].elements[element.key..'Spin'] = tmp_spin
-	end
+	self.usedGUIs[table.key].elements[element.key] = {parent = tmp, type = element.type, style = self.spinnerStyleSheet}
 end
 
 function NeP.Interface:Combo(element, parent, offset, table)
-	local tmp_list = DiesalGUI:Create('Dropdown')
-	parent:AddChild(tmp_list)
-	tmp_list:SetParent(parent.content)
-	tmp_list:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset)
+	local tmp = DiesalGUI:Create('Dropdown')
+	parent:AddChild(tmp)
+	tmp:SetParent(parent.content)
+	tmp:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset)
 	local orderdKeys = { }
 	local list = { }
 	for i, value in pairs(element.list) do
 		orderdKeys[i] = value.key
 		list[value.key] = value.text
 	end
-	tmp_list:SetList(list, orderdKeys)
-	tmp_list:SetEventListener('OnValueChanged', function(_, _, value)
+	tmp:SetList(list, orderdKeys)
+	tmp:SetEventListener('OnValueChanged', function(_, _, value)
 		NeP.Config:Write(table.key, element.key, value)
 	end)
-	tmp_list:SetValue(NeP.Config:Read(table.key, element.key, element.default))
-	local tmp_text = DiesalGUI:Create("FontString")
-	tmp_text:SetParent(parent.content)
-	parent:AddChild(tmp_text)
-	tmp_text = tmp_text.fontString
-	tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-3)
-	tmp_text:SetText(element.text)
-	tmp_text:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 10)
-	tmp_text:SetJustifyH('LEFT')
-	tmp_text:SetWidth(parent.content:GetWidth()-10)
+	tmp:SetValue(NeP.Config:Read(table.key, element.key, element.default))
+	tmp.text = DiesalGUI:Create("FontString")
+	tmp.text:SetParent(parent.content)
+	parent:AddChild(tmp.text)
+	tmp.text = tmp.text.fontString
+	tmp.text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-3)
+	tmp.text:SetText(element.text)
+	tmp.text:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 10)
+	tmp.text:SetJustifyH('LEFT')
+	tmp.text:SetWidth(parent.content:GetWidth()-10)
 	if element.desc then
-		local tmp_desc = DiesalGUI:Create("FontString")
-		tmp_desc:SetParent(parent.content)
-		parent:AddChild(tmp_desc)
-		tmp_desc = tmp_desc.fontString
-		tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-18)
-		tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-18)
-		tmp_desc:SetText(element.desc)
-		tmp_desc:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 9)
-		tmp_desc:SetWidth(parent.content:GetWidth()-10)
-		tmp_desc:SetJustifyH('LEFT')
-		element.push = tmp_desc:GetStringHeight() + 5
+		tmp.desc = DiesalGUI:Create("FontString")
+		tmp.desc:SetParent(parent.content)
+		parent:AddChild(tmp.desc)
+		tmp.desc = tmp.desc.fontString
+		tmp.desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-18)
+		tmp.desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-18)
+		tmp.desc:SetText(element.desc)
+		tmp.desc:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 9)
+		tmp.desc:SetWidth(parent.content:GetWidth()-10)
+		tmp.desc:SetJustifyH('LEFT')
+		element.push = tmp.desc:GetStringHeight() + 5
 	end
-	if element.key then
-		self.usedGUIs[table.key].elements[element.key..'Text'] = tmp_text
-		self.usedGUIs[table.key].elements[element.key] = tmp_list
-	end
+	self.usedGUIs[table.key].elements[element.key] = {parent = tmp, type = element.type}
 end
 
 function NeP.Interface:Button(element, parent, offset, table)
@@ -295,17 +246,17 @@ function NeP.Interface:Button(element, parent, offset, table)
 	tmp:SetStylesheet(self.buttonStyleSheet)
 	tmp:SetEventListener("OnClick", element.callback)
 	if element.desc then
-		local tmp_desc = DiesalGUI:Create("FontString")
-		tmp_desc:SetParent(parent.content)
-		parent:AddChild(tmp_desc)
-		tmp_desc = tmp_desc.fontString
-		tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-element.height-3)
-		tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-element.height-3)
-		tmp_desc:SetText(element.desc)
-		tmp_desc:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 9)
-		tmp_desc:SetWidth(parent.content:GetWidth()-10)
-		tmp_desc:SetJustifyH('LEFT')
-		element.push = tmp_desc:GetStringHeight() + 5
+		tmp.desc = DiesalGUI:Create("FontString")
+		tmp.desc:SetParent(parent.content)
+		parent:AddChild(tmp.desc)
+		tmp.desc = tmp.desc.fontString
+		tmp.desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-element.height-3)
+		tmp.desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-element.height-3)
+		tmp.desc:SetText(element.desc)
+		tmp.desc:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 9)
+		tmp.desc:SetWidth(parent.content:GetWidth()-10)
+		tmp.desc:SetJustifyH('LEFT')
+		element.push = tmp.desc:GetStringHeight() + 5
 	end
 	if element.align then
 		local loc = element.align
@@ -313,65 +264,50 @@ function NeP.Interface:Button(element, parent, offset, table)
 	else
 		tmp:SetPoint("TOP", parent.content, 0, offset)
 	end
-	if element.key then
-		self.usedGUIs[table.key].elements[element.key] = tmp
-	end
+	self.usedGUIs[table.key].elements[element.key] = {parent = tmp, type = element.type, style = self.buttonStyleSheet}
 end
 
 function NeP.Interface:Input(element, parent, offset, table)
-	local tmp_input = DiesalGUI:Create('Input')
-	parent:AddChild(tmp_input)
-	tmp_input:SetParent(parent.content)
-	tmp_input:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset)
-	if element.width then
-		tmp_input:SetWidth(element.width)
-	end
-	tmp_input:SetText(NeP.Config:Read(table.key, element.key, element.default or ''))
-	tmp_input:SetEventListener('OnEditFocusLost', function(this)
+	local tmp = DiesalGUI:Create('Input')
+	parent:AddChild(tmp)
+	tmp:SetParent(parent.content)
+	tmp:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset)
+	if element.width then tmp:SetWidth(element.width) end
+	tmp:SetText(NeP.Config:Read(table.key, element.key, element.default or ''))
+	tmp:SetEventListener('OnEditFocusLost', function(this)
 		NeP.Config:Write(table.key, element.key, this:GetText())
 	end)
-	local tmp_text = DiesalGUI:Create("FontString")
-	tmp_text:SetParent(parent.content)
-	parent:AddChild(tmp_text)
-	tmp_text = tmp_text.fontString
-	tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-3)
-	tmp_text:SetText(element.text)
-	tmp_text:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 10)
-	tmp_text:SetJustifyH('LEFT')
+	tmp.text = DiesalGUI:Create("FontString")
+	tmp.text:SetParent(parent.content)
+	parent:AddChild(tmp.text)
+	tmp.text = tmp.text.fontString
+	tmp.text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-3)
+	tmp.text:SetText(element.text)
+	tmp.text:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 10)
+	tmp.text:SetJustifyH('LEFT')
 	if element.desc then
-		local tmp_desc = DiesalGUI:Create("FontString")
-		tmp_desc:SetParent(parent.content)
-		parent:AddChild(tmp_desc)
-		tmp_desc = tmp_desc.fontString
-		tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-18)
-		tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-18)
-		tmp_desc:SetText(element.desc)
-		tmp_desc:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 9)
-		tmp_desc:SetWidth(parent.content:GetWidth()-10)
-		tmp_desc:SetJustifyH('LEFT')
-		element.push = tmp_desc:GetStringHeight() + 5
+		tmp.desc = DiesalGUI:Create("FontString")
+		tmp.desc:SetParent(parent.content)
+		parent:AddChild(tmp.desc)
+		tmp.desc = tmp.desc.fontString
+		tmp.desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-18)
+		tmp.desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-18)
+		tmp.desc:SetText(element.desc)
+		tmp.desc:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 9)
+		tmp.desc:SetWidth(parent.content:GetWidth()-10)
+		tmp.desc:SetJustifyH('LEFT')
+		element.push = tmp.desc:GetStringHeight() + 5
 	end
-	if element.key then
-		self.usedGUIs[table.key].elements[element.key..'Text'] = tmp_text
-		self.usedGUIs[table.key].elements[element.key] = tmp_input
-	end
+	self.usedGUIs[table.key].elements[element.key] = {parent = tmp, type = element.type}
 end
 
 function NeP.Interface:Statusbar(element, parent, _, table)
-	local tmp_statusbar = DiesalGUI:Create('StatusBar')
-	parent:AddChild(tmp_statusbar)
-	tmp_statusbar:SetParent(parent.content)
-	tmp_statusbar.frame:SetStatusBarColor(DiesalTools:GetColor(element.color))
-	if element.value then
-		tmp_statusbar:SetValue(element.value)
-	end
-	if element.textLeft then
-		tmp_statusbar.frame.Left:SetText(element.textLeft)
-	end
-	if element.textRight then
-		tmp_statusbar.frame.Right:SetText(element.textRight)
-	end
-	if element.key then
-		self.usedGUIs[table.key].elements[element.key] = tmp_statusbar
-	end
+	local tmp = DiesalGUI:Create('StatusBar')
+	parent:AddChild(tmp)
+	tmp:SetParent(parent.content)
+	tmp.frame:SetStatusBarColor(DiesalTools:GetColor(element.color))
+	if element.value then tmp:SetValue(element.value) end
+	if element.textLeft then tmp.frame.Left:SetText(element.textLeft) end
+	if element.textRight then tmp.frame.Right:SetText(element.textRight) end
+	self.usedGUIs[table.key].elements[element.key] = {parent = tmp, type = element.type}
 end

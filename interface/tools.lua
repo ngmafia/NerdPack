@@ -27,9 +27,9 @@ local _Elements = {
 
 function NeP.Interface:BuildElements(table, parent)
 	local offset = -5
-	self.usedGUIs[table.key].elements = {}
 	for _, element in ipairs(table.config) do
 		local push, pull = 0, 0
+
 		-- Create defaults
 		if element.key and not NeP.Config:Read(table.key, element.key) then
 			if element.default then
@@ -39,12 +39,15 @@ function NeP.Interface:BuildElements(table, parent)
 				NeP.Config:Write(table.key, element.key, element.default_Spin)
 			end
 		end
+
+		--build element
 		if _Elements[element.type] then
-			local func = _Elements[element.type].func
-			local _offset = _Elements[element.type].offset
-			self[func](self, element, parent, offset, table)
-			offset = offset + _offset
+			element.key = element.key or "fake"
+			self[_Elements[element.type].func](self, element, parent, offset, table)
+			offset = offset + _Elements[element.type].offset
 		end
+
+		--offsetS
 		if element.type == 'texture' then
 			offset = offset + -(element.offset or 0)
 		elseif element.type == "text" then
@@ -58,6 +61,7 @@ function NeP.Interface:BuildElements(table, parent)
       pull = pull + element.pull
       offset = offset + pull
     end
+
 	end
 end
 
@@ -65,14 +69,22 @@ function NeP.Interface:GetElement(key, element)
 	return self.usedGUIs[key].elements[element]
 end
 
-function NeP.Interface:Body(eval, parent)
+function NeP.Interface:SetElementColor(color)
+	self.spinnerStyleSheet['bar-background']['color'] = color
+	self.buttonStyleSheet['frame-color']['color'] = color
+end
+
+function NeP.Interface.Body(_, eval, parent)
 	local left, top = unpack(NeP.Config:Read(eval.key, 'Location', {500, 500}))
 	parent.settings.left = left
 	parent.settings.top = top
 	parent:UpdatePosition()
+
+	--Colors
 	if not eval.color then eval.color = NeP.Color end
 	if type(eval.color) == 'function' then eval.color = eval.color() end
-	self.spinnerStyleSheet['bar-background']['color'] = eval.color
+	NeP.Interface:SetElementColor(eval.color)
+
 	if eval.title then
 		parent:SetTitle("|cff"..eval.color..eval.title.."|r", eval.subtitle)
 	end
@@ -81,8 +93,6 @@ function NeP.Interface:Body(eval, parent)
 		parent:AddChild(window)
 		window:SetParent(parent.content)
 		window:SetAllPoints(parent.content)
-		window.elements = { }
-		eval.window = window
 		NeP.Interface:BuildElements(eval, window)
 	end
 end
@@ -96,17 +106,18 @@ function NeP.Interface:TestCreated(eval)
 	end
 end
 
-function NeP.Interface:BuildGUI(eval)
-
+function NeP.Interface.BuildGUI(_, eval)
 	--Tests
 	local gui_test = NeP.Interface:TestCreated(eval)
 	if gui_test then return gui_test end
 	if not eval.key then return end
 
 	-- Create a new parent
-	NeP.Interface.usedGUIs[eval.key] = {}
 	local parent = DiesalGUI:Create('Window')
+	NeP.Interface.usedGUIs[eval.key] = {}
 	NeP.Interface.usedGUIs[eval.key].parent = parent
+	NeP.Interface.usedGUIs[eval.key].elements = {}
+
 	parent:SetWidth(eval.width or 200)
 	parent:SetHeight(eval.height or 300)
 	parent.frame:SetClampedToScreen(true)
