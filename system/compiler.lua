@@ -112,14 +112,16 @@ function NeP.Compiler.Cond_Legacy_PE(cond)
 	local str = '{'
 	for k=1, #cond do
 		local tmp, tmp_type = cond[k], type(cond[k])
-		if tmp_type == 'table' then
+		if not tmp then
+			str = 'true'
+		elseif tmp_type == 'table' then
 			str = NeP.Compiler.Cond_Legacy_PE(cond)
 		elseif tmp_type == 'boolean' then
 			str = tostring(tmp):lower()
 		elseif tmp_type == 'function' then
 			-- FIXME: this shouldnt go to globals we need a table with these
 			local name = tostring(tmp)
-			_G[name] = name
+			_G[name] = tmp
 			str = 'func='..name
 		elseif tmp:lower() == 'or' then
 			str = str .. '||' .. tmp
