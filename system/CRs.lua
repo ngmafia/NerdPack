@@ -19,13 +19,31 @@ function NeP.CR.AddGUI(_, key, eval)
 	NeP.Interface:AddCR_ST(key)
 end
 
+local function legacy_PE(...)
+	local ev, InCombat, OutCombat, ExeOnLoad, GUI = ...
+	if type(...) == 'string' then
+		return {
+			name = ev,
+			ic = InCombat,
+			ooc = OutCombat,
+			load = ExeOnLoad,
+			gui = GUI
+		}
+	else
+		return ...
+	end
+end
+
 function NeP.CR.Add(_, SpecID, ...)
-	local ev, classIndex = ..., select(3, UnitClass('player'))
+	local classIndex = select(3, UnitClass('player'))
 	-- This only allows crs we can use to be registered
 	if classIndex ~= SpecID and not NeP.ClassTable[classIndex][SpecID] then return end
 
 	-- if no table for the spec, create it
 	if not CRs[SpecID] then CRs[SpecID] = {} end
+	
+	-- Legacy stuff
+	local ev = legacy_PE(...)
 
 	-- do not load cr that dont have names
 	if not ev.name then return end
