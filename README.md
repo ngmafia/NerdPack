@@ -1,8 +1,6 @@
 <a href="http://goo.gl/yrctPO"><img src="https://github.com/MrTheSoulz/NerdPack/blob/master/docs/paypal.png?raw=true" alt="Donate" width="100" height="50" align = "right" /></a>
 <a href="https://discordapp.com/invite/XtSZbjM"><img src="http://i.imgur.com/fzomMAr.png" alt="Join us on discord!" width="150" height="50" align = "right" /></a>
-
-![](https://github.com/MrTheSoulz/NerdPack/blob/master/docs/NeP_Show.jpg?raw=true)
-<img src="https://github.com/MrTheSoulz/NerdPack/blob/master/docs/NEPlogo.png?raw=true" width="450" height="250" align = "right" /></a>  
+<img src="https://github.com/MrTheSoulz/NerdPack/blob/master/docs/NEPlogo.png?raw=true" width="450" height="250" align = "left" /></a>  
 
 ### Information:
 NerdPack is divided by 2 kind of modules: Core ("Legal") and Protected ("Ilegal").  
