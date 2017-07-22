@@ -135,6 +135,10 @@ function NeP.Core.WhenInGame(_, func, prio)
 	end
 end
 
+function NeP.Core.HexToRGB(_, hex)
+	return tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6))
+end
+
 NeP.Listener:Add("NeP_CR2", "PLAYER_LOGIN", function()
 	NeP.Color = NeP.Core:ClassColor('player', 'hex')
 	for i=1, #Run_Cache do
