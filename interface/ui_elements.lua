@@ -133,7 +133,7 @@ function NeP.Interface:Combo(element, parent, offset, table)
 		NeP.Config:Write(table.key, element.key, value)
 	end)
 	tmp:SetValue(NeP.Config:Read(table.key, element.key, element.default))
-	tmp.text = self:Text(element, parent, offset-3)
+	tmp.text2 = self:Text(element, parent, offset-3)
 	if element.desc then
 		element.text=element.desc
 		tmp.desc = self:Text(element, parent, offset-18)
