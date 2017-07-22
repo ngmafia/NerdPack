@@ -121,6 +121,8 @@ end
 local function Comperatores(Strg, Spell, Target)
 	local OP = ''
 	for Token in Strg:gmatch('[><=~!]') do OP = OP..Token end
+	--Need to scan for != seperately otherwise we get false positives by spells with "!" in them
+	if Strg:find('!=') then OP = '!=' end
 	local arg1, arg2 = unpack(NeP.Core:string_split(Strg, OP))
 	arg1, arg2 = DSL.Parse(arg1, Spell, Target), DSL.Parse(arg2, Spell, Target)
 	return DoMath(arg1, arg2, OP)
