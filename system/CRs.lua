@@ -103,7 +103,6 @@ function NeP.CR.GetList(_, Spec)
 	-- Specs
 	if CRs[Spec] then
 		for k in pairs(CRs[Spec]) do
-			print(k)
 			result[#result+1] = k
 		end
 	end
