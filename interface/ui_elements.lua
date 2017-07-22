@@ -2,18 +2,18 @@ local _, NeP          = ...
 local LibStub     = LibStub
 local strupper    = strupper
 local CreateFrame = CreateFrame
-local DiesalGUI   = LibStub("DiesalGUI-1.0")
-local DiesalTools = LibStub("DiesalTools-1.0")
-local SharedMedia = LibStub("LibSharedMedia-3.0")
+local DiesalGUI   = LibStub('DiesalGUI-1.0')
+local DiesalTools = LibStub('DiesalTools-1.0')
+local SharedMedia = LibStub('LibSharedMedia-3.0')
 
 function NeP.Interface.Text(_, element, parent, offset)
-	local tmp = DiesalGUI:Create("FontString")
+	local tmp = DiesalGUI:Create('FontString')
 	tmp:SetParent(parent.content)
 	parent:AddChild(tmp)
 	tmp = tmp.fontString
-	tmp:SetPoint("TOPLEFT", parent.content, "TOPLEFT", element.text_offset1 or 5, offset)
-	tmp:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset)
-	tmp:SetText(element.text)
+	tmp:SetPoint('TOPLEFT', parent.content, 'TOPLEFT', element.text_offset1 or 5, offset)
+	tmp:SetPoint('TOPRIGHT', parent.content, 'TOPRIGHT', -5, offset)
+	tmp:SetText((element.color and '|cff'..element.color or '')..element.text)
 	tmp:SetJustifyH('LEFT')
 	tmp:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), element.size or 10)
 	tmp:SetWidth(parent.content:GetWidth()-10)
@@ -24,6 +24,7 @@ function NeP.Interface.Text(_, element, parent, offset)
 end
 
 function NeP.Interface:Header(element, parent, offset)
+	element.color = element.table_color
 	local tmp = self:Text(element, parent, offset)
 	tmp:SetJustifyH(element.justify or 'CENTER')
 	element.size = element.size or 13
@@ -60,7 +61,7 @@ function NeP.Interface:Checkbox(element, parent, offset, table)
 	local tmp = DiesalGUI:Create('CheckBox')
 	parent:AddChild(tmp)
 	tmp:SetParent(parent.content)
-	tmp:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset)
+	tmp:SetPoint('TOPLEFT', parent.content, 'TOPLEFT', 5, offset)
 	tmp:SetEventListener('OnValueChanged', function(_, _, checked)
 		NeP.Config:Write(table.key, element.key, checked)
 	end)
@@ -79,7 +80,7 @@ function NeP.Interface:Spinner(element, parent, offset, table)
 	local tmp = DiesalGUI:Create('Spinner')
 	parent:AddChild(tmp)
 	tmp:SetParent(parent.content)
-	tmp:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset)
+	tmp:SetPoint('TOPRIGHT', parent.content, 'TOPRIGHT', -5, offset)
 	tmp:SetNumber(NeP.Config:Read(table.key, element.key, element.default))
 
 	--Settings
@@ -121,7 +122,7 @@ function NeP.Interface:Combo(element, parent, offset, table)
 	local tmp = DiesalGUI:Create('Dropdown')
 	parent:AddChild(tmp)
 	tmp:SetParent(parent.content)
-	tmp:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset)
+	tmp:SetPoint('TOPRIGHT', parent.content, 'TOPRIGHT', -5, offset)
 	local orderdKeys = { }
 	local list = { }
 	for i, value in pairs(element.list) do
@@ -143,14 +144,14 @@ function NeP.Interface:Combo(element, parent, offset, table)
 end
 
 function NeP.Interface:Button(element, parent, offset)
-	local tmp = DiesalGUI:Create("Button")
+	local tmp = DiesalGUI:Create('Button')
 	parent:AddChild(tmp)
 	tmp:SetParent(parent.content)
 	tmp:SetText(element.text)
 	tmp:SetWidth(element.width or parent.content:GetWidth()-10)
 	tmp:SetHeight(element.height or 20)
 	tmp:SetStylesheet(self.buttonStyleSheet)
-	tmp:SetEventListener("OnClick", element.callback)
+	tmp:SetEventListener('OnClick', element.callback)
 	if element.desc then
 		element.text=element.desc
 		tmp.desc = self:Text(element, parent, offset-18)
@@ -160,7 +161,7 @@ function NeP.Interface:Button(element, parent, offset)
 		local loc = element.align
 		tmp:SetPoint(loc, parent.content, 0, offset)
 	else
-		tmp:SetPoint("TOP", parent.content, 0, offset)
+		tmp:SetPoint('TOP', parent.content, 0, offset)
 	end
 	return tmp, self.buttonStyleSheet
 end
@@ -169,7 +170,7 @@ function NeP.Interface:Input(element, parent, offset, table)
 	local tmp = DiesalGUI:Create('Input')
 	parent:AddChild(tmp)
 	tmp:SetParent(parent.content)
-	tmp:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset)
+	tmp:SetPoint('TOPRIGHT', parent.content, 'TOPRIGHT', -5, offset)
 	if element.width then tmp:SetWidth(element.width) end
 	tmp:SetText(NeP.Config:Read(table.key, element.key, element.default or ''))
 	tmp:SetEventListener('OnEditFocusLost', function(this)
