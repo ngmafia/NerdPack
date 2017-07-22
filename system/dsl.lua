@@ -160,7 +160,8 @@ function NeP.DSL.Parse(Strg, Spell, Target)
 	elseif Strg:find("func=") then
 		Strg = Strg:sub(6);
 		return ExeFunc(Strg)
-	elseif Strg:find('[><=~!]') then
+	-- != needs to be seperate otherwise we end up with false positives
+	elseif Strg:find('[><=~]') or Strg:find('!=') then
 		return Comperatores(Strg, Spell, Target)
 	elseif Strg:find("[/%*%+%-]") then
 		return StringMath(Strg, Spell, Target)
