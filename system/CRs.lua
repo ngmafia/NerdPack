@@ -49,6 +49,11 @@ function NeP.CR.Add(_, SpecID, ...)
 	if not ev.name then return end
 	if CRs[SpecID][ev.name] then return end
 
+	-- Import SpellIDs from the cr
+	if ev.ids then
+		NeP.Spells:Add(ev.ids)
+	end
+
 	-- This compiles the CR
 	NeP.Compiler:Iterate(ev.ic, ev.name)
 	NeP.Compiler:Iterate(ev.ooc, ev.name)
