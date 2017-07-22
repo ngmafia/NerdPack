@@ -43,8 +43,9 @@ function NeP.Interface:BuildElements(table, parent)
 		--build element
 		if _Elements[element.type] then
 			element.key = element.key or "fake"
-			self[_Elements[element.type].func](self, element, parent, offset, table)
+			local tmp, style = self[_Elements[element.type].func](self, element, parent, offset, table)
 			offset = offset + _Elements[element.type].offset
+			self.usedGUIs[table.key].elements[element.key] = {parent = tmp, type = element.type, style = style}
 		end
 
 		--offsetS
