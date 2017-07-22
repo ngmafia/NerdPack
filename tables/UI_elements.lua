@@ -1,12 +1,13 @@
-local n_name, NeP = ...
+local _, NeP = ...
 local LibStub = LibStub
---local DiesalGUI   = LibStub("DiesalGUI-1.0")
+local DiesalGUI   = LibStub("DiesalGUI-1.0")
 --local DiesalTools = LibStub("DiesalTools-1.0")
---local SharedMedia = LibStub("LibSharedMedia-3.0")
+local SharedMedia = LibStub("LibSharedMedia-3.0")
 local DiesalStyle = LibStub("DiesalStyle-1.0")
 local Colors = DiesalStyle.Colors
-
-
+local UIParent = UIParent
+local Type = Type
+local CreateFrame = CreateFrame
 NeP.Interface = {}
 
 NeP.Interface.WindowStyleSheet = {
@@ -204,55 +205,57 @@ NeP.Interface.statusBarStylesheet = {
   }
 }
 
-local DiesalGUI = LibStub("DiesalGUI-1.0")
-local SharedMedia = LibStub("LibSharedMedia-3.0")
+NeP.Interface.RuleStyle = {
+	color = 'FFFFFF'
+}
 
 DiesalGUI:RegisterObjectConstructor("FontString", function()
-  local self 		= DiesalGUI:CreateObjectBase(Type)
+  local slf 		= DiesalGUI:CreateObjectBase(Type)
   local frame		= CreateFrame('Frame',nil,UIParent)
   local fontString = frame:CreateFontString(nil, "OVERLAY", 'DiesalFontNormal')
-  self.frame		= frame
-  self.fontString = fontString
-  self.SetParent = function(self, parent)
+  slf.frame		= frame
+  slf.fontString = fontString
+  slf.SetParent = function(self, parent)
     self.frame:SetParent(parent)
   end
-  self.OnRelease = function(self)
+  slf.OnRelease = function(self)
     self.fontString:SetText('')
   end
-  self.OnAcquire = function(self)
+  slf.OnAcquire = function(self)
     self:Show()
   end
-  self.type = "FontString"
-  return self
+  slf.type = "FontString"
+  return slf
 end, 1)
 
 DiesalGUI:RegisterObjectConstructor("Rule", function()
-  local self 		= DiesalGUI:CreateObjectBase(Type)
+  local slf 		= DiesalGUI:CreateObjectBase(Type)
   local frame		= CreateFrame('Frame',nil,UIParent)
-  self.frame		= frame
+  slf.frame		= frame
   frame:SetHeight(1)
   frame.texture = frame:CreateTexture()
-  frame.texture:SetColorTexture(1,1,1,1)
+	local r,g,b = NeP.Core:HexToRGB(NeP.Interface.RuleStyle.color)
+  frame.texture:SetColorTexture(r,g,b,1)
   frame.texture:SetAllPoints(frame)
-  self.SetParent = function(self, parent)
+  slf.SetParent = function(self, parent)
     self.frame:SetParent(parent)
   end
-  self.OnRelease = function(self)
+  slf.OnRelease = function(self)
     self:Hide()
   end
-  self.OnAcquire = function(self)
+  slf.OnAcquire = function(self)
     self:Show()
   end
-  self.type = "Rule"
-  return self
+  slf.type = "Rule"
+  return slf
 end, 1)
 
 DiesalGUI:RegisterObjectConstructor("StatusBar", function()
-  local self  = DiesalGUI:CreateObjectBase(Type)
+  local slf  = DiesalGUI:CreateObjectBase(Type)
   local frame = CreateFrame('StatusBar',nil,UIParent)
-  self.frame  = frame
+  slf.frame  = frame
 
-  self:SetStylesheet(NeP.Interface.statusBarStylesheet)
+  slf:SetStylesheet(NeP.Interface.statusBarStylesheet)
 
   frame.Left = frame:CreateFontString()
   frame.Left:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 14)
@@ -270,10 +273,10 @@ DiesalGUI:RegisterObjectConstructor("StatusBar", function()
   frame:SetMinMaxValues(0, 100)
   frame:SetHeight(16)
 
-  self.SetValue = function(self, value)
+  slf.SetValue = function(self, value)
     self.frame:SetValue(value)
   end
-  self.SetParent = function(self, parent)
+  slf.SetParent = function(self, parent)
     self.parent = parent
     self.frame:SetParent(parent)
     self.frame:SetPoint("LEFT", parent, "LEFT")
@@ -281,12 +284,12 @@ DiesalGUI:RegisterObjectConstructor("StatusBar", function()
     self.frame.Right:SetPoint("RIGHT", self.frame, "RIGHT", -2, 2)
     self.frame.Left:SetPoint("LEFT", self.frame, "LEFT", 2, 2)
   end
-  self.OnRelease = function(self)
+  slf.OnRelease = function(self)
     self:Hide()
   end
-  self.OnAcquire = function(self)
+  slf.OnAcquire = function(self)
     self:Show()
   end
-  self.type = "StatusBar"
-  return self
+  slf.type = "StatusBar"
+  return slf
 end, 1)
