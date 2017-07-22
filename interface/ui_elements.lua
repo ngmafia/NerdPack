@@ -115,39 +115,15 @@ function NeP.Interface:Spinner(element, parent, offset, table)
 end
 
 function NeP.Interface:Checkspin(element, parent, offset, table)
-	local tmp = DiesalGUI:Create('Spinner')
-	parent:AddChild(tmp)
-	tmp:SetParent(parent.content)
-	tmp:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset)
-
-	--settings
-	tmp.settings.width = element.width or tmp.settings.width
-	tmp.settings.min = element.min or tmp.settings.min
-	tmp.settings.max = element.max or tmp.settings.max
-	tmp.settings.step = element.step or tmp.settings.step
-	tmp.settings.shiftStep = element.shiftStep or tmp.settings.shiftStep
-
-	tmp:SetNumber(NeP.Config:Read(table.key, element.key..'_spin', element.default_spin or 0))
-	tmp:SetStylesheet(self.spinnerStyleSheet)
-	tmp:ApplySettings()
-	tmp:SetEventListener('OnValueChanged', function(_, _, userInput, number)
-		if not userInput then return end
-		NeP.Config:Write(table.key, element.key..'_spin', number)
-	end)
-	tmp.check = DiesalGUI:Create('CheckBox')
-	parent:AddChild(tmp.check)
-	tmp.check:SetParent(parent.content)
-	tmp.check:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-2)
-	tmp.check:SetEventListener('OnValueChanged', function(_, _, checked)
-		NeP.Config:Write(table.key, element.key..'_check', checked)
-	end)
-	tmp.check:SetChecked(NeP.Config:Read(table.key, element.key..'_check', element.default_check or false))
-	tmp.text = self:Text(element, parent, offset-3)
-	if element.desc then
-		element.text=element.desc
-		tmp.desc = self:Text(element, parent, offset-18)
-		element.push = tmp.desc:GetStringHeight() + 10
-	end
+	local original_key = element.key
+	element.key = original_key..'_check'
+	element.default = element.check
+	local tmp = self:Checkbox(element, parent, offset, table)
+	element.text = ''
+	element.desc = nil
+	element.key = original_key..'_spin'
+	element.default = element.spin
+	tmp.spin = self:Spinner(element, parent, offset, table)
 	return tmp, self.spinnerStyleSheet
 end
 
