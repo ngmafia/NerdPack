@@ -1,29 +1,12 @@
 local _, NeP          = ...
-
--- Locals
 local LibStub     = LibStub
 local strupper    = strupper
 local CreateFrame = CreateFrame
-
 local DiesalGUI   = LibStub("DiesalGUI-1.0")
 local DiesalTools = LibStub("DiesalTools-1.0")
 local SharedMedia = LibStub("LibSharedMedia-3.0")
 
-function NeP.Interface:Header(element, parent, offset, table)
-	local tmp = DiesalGUI:Create("FontString")
-	tmp:SetParent(parent.content)
-	parent:AddChild(tmp)
-	tmp = tmp.fontString
-	tmp:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset)
-	tmp:SetText('|cff'..table.color..element.text)
-	tmp:SetJustifyH(element.justify or 'LEFT')
-	tmp:SetFont(SharedMedia:Fetch('font', 'Calibri Bold'), 13)
-	tmp:SetWidth(parent.content:GetWidth()-10)
-	if element.align then tmp:SetJustifyH(strupper(element.align)) end
-	return tmp
-end
-
-function NeP.Interface:Text(element, parent, offset)
+function NeP.Interface.Text(_, element, parent, offset)
 	local tmp = DiesalGUI:Create("FontString")
 	tmp:SetParent(parent.content)
 	parent:AddChild(tmp)
@@ -40,7 +23,14 @@ function NeP.Interface:Text(element, parent, offset)
 	return tmp
 end
 
-function NeP.Interface:Rule(_, parent, offset)
+function NeP.Interface:Header(element, parent, offset)
+	local tmp = self:Text(element, parent, offset)
+	tmp:SetJustifyH(element.justify or 'CENTER')
+	element.size = element.size or 13
+	return tmp
+end
+
+function NeP.Interface.Rule(_,_, parent, offset)
 	local tmp = DiesalGUI:Create('Rule')
 	parent:AddChild(tmp)
 	tmp:SetParent(parent.content)
@@ -49,7 +39,7 @@ function NeP.Interface:Rule(_, parent, offset)
 	return tmp
 end
 
-function NeP.Interface:Texture(element, parent, offset)
+function NeP.Interface.Texture(_, element, parent, offset)
 	local tmp = CreateFrame('Frame')
 	tmp:SetParent(parent.content)
 	if element.center then
@@ -194,7 +184,7 @@ function NeP.Interface:Input(element, parent, offset, table)
 	return tmp
 end
 
-function NeP.Interface:Statusbar(element, parent)
+function NeP.Interface.Statusbar(_, element, parent)
 	local tmp = DiesalGUI:Create('StatusBar')
 	parent:AddChild(tmp)
 	tmp:SetParent(parent.content)
