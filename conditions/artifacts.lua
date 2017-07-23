@@ -8,6 +8,29 @@ local LAD = LibStub("LibArtifactData-1.0")
 --------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------
 ]]
+NeP.Artifact = {}
+NeP.Globals.Artifact = NeP.Artifact
+
+function NeP.Artifact.Update()
+    LAD.ForceUpdate()
+end
+
+function NeP.Artifact.Traits(_, artifactID)
+    artifactID = LAD.GetArtifactTraits(artifactID)
+    return LAD.GetArtifactTraits(artifactID)
+end
+
+function NeP.Artifact:TraitInfo(spell)
+  local artifactID = NeP.DSL:Get('artifact.active_id')()
+  if not artifactID then self:Update() end
+  local _, traits = self:Traits(artifactID)
+  if not traits then return end
+  for _,v in ipairs(traits) do
+    if v.name == spell then
+      return v.isGold, v.bonusRanks, v.maxRank, v.traitID, v.isStart, v.icon, v.isFinal, v.name, v.currentRank, v.spellID
+    end
+  end
+end
 
 NeP.DSL:Register('artifact.acquired_power', function(artifactID)
   return LAD.GetAcquiredArtifactPower(artifactID)
@@ -31,4 +54,8 @@ end)
 
 NeP.DSL:Register('artifact.num_obtained', function()
   return LAD.GetNumObtainedArtifacts()
+end)
+
+NeP.DSL:Register('artifact.enabled', function(_, spell)
+    return not not select(10,NeP.Artifact:TraitInfo(spell))
 end)
