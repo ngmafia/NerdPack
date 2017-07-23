@@ -41,6 +41,10 @@ end)
 
 -- lowest with certain buff
 NeP.FakeUnits:Add({'lowestbuff', 'lbuff'}, function(num, args)
+	if not type(args)=='string' then
+		print('lowestbuff: incorrect usage, args', args,'-', type(args))
+		return
+	end
   local buff, role = strsplit(',', args, 2)
     local tempTable = {}
     for _, Obj in pairs(NeP.Healing:GetRoster()) do
@@ -57,6 +61,10 @@ end)
 
 -- lowets without certain buff
 NeP.FakeUnits:Add({'lowestnotbuff', 'lnbuff'}, function(num, args)
+	if not type(args)=='string' then
+		print('lowestnotbuff: incorrect usage, args', args,'-', type(args))
+		return
+	end
 		local buff, role = strsplit(',', args, 2)
     local tempTable = {}
     for _, Obj in pairs(NeP.Healing:GetRoster()) do
@@ -73,6 +81,10 @@ end)
 
 -- lowest with certain buff
 NeP.FakeUnits:Add({'lowestdebuff', 'ldebuff'}, function(num, args)
+	if not type(args)=='string' then
+		print('lowestdebuff: incorrect usage, args', args,'-', type(args))
+		return
+	end
 		local buff, role = strsplit(',', args, 2)
     local tempTable = {}
     for _, Obj in pairs(NeP.Healing:GetRoster()) do
@@ -89,6 +101,10 @@ end)
 
 -- lowets without certain buff
 NeP.FakeUnits:Add({'lowestnotdebuff', 'lndebuff'}, function(num, args)
+	if not type(args)=='string' then
+		print('lowestnotdebuff: incorrect usage, args', args,'-', type(args))
+		return
+	end
 		local buff, role = strsplit(',', args, 2)
     local tempTable = {}
     for _, Obj in pairs(NeP.Healing:GetRoster()) do
