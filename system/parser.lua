@@ -39,9 +39,9 @@ local function castingTime()
 	return (name and (endTime/1000)-time) or 0, name
 end
 
-local function _interrupt(eval, endtime, cname)
+local function _interrupt(eval, _, cname)
 	if eval[1].interrupts then
-		if cname == eval.spell or endtime < 1 then
+		if cname == eval.spell then
 			return false
 		else
 			SpellStopCasting()
