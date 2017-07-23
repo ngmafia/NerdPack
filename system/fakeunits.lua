@@ -24,7 +24,7 @@ end
 
 -- /dump NeP.FakeUnits:Filter("lowest")
 local function process(unit)
-	local arg = unit:match('%((.+)%)')
+	local arg = unit:match('%((.+)%)') or ''
 	local num = tonumber(unit:match("%d+") or 1)
 	unit = unit:gsub('%((.+)%)', ''):gsub("%d+", '')
 	return Units[unit] and Units[unit](num, arg) or unit
