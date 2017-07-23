@@ -112,7 +112,6 @@ local function ProcessCondition(Strg, Spell, Target)
 			Strg = rest
 		end
 	end
-	--Strg = Strg:gsub('%s', '')
 	-- Process the Condition itself
 	local Condition = DSL:Get(Strg)
 	return Condition(Target or "player", Args)
