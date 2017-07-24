@@ -114,7 +114,7 @@ local function ProcessCondition(Strg, Spell, Target)
 	end
 	-- Condition arguments
 	Args = Strg:match("%((.-)%)") or Spell
-	Strg = Strg:sub("%((.-)%)", "")
+	Strg = Strg:gsub("%((.-)%)", "")
 	-- Process the Condition itself
 	local Condition = DSL:Get(Strg)
 	return Condition(Target or "player", Args)
