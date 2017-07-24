@@ -39,9 +39,9 @@ local function castingTime()
 	return (name and (endTime/1000)-time) or 0, name
 end
 
-local function _interrupt(eval, _, cname)
+local function _interrupt(eval)
 	if eval[1].interrupts then
-		if cname == eval.spell then
+		if eval.cname == eval.spell then
 			return false
 		else
 			SpellStopCasting()
@@ -70,7 +70,6 @@ end
 --This works on the current parser target.
 --This function takes care of psudo units (fakeunits).
 --Returns boolean (true if the target is valid).
-local noob_target = function() return UnitExists('target') and 'target' or 'player' end
 function NeP.Parser.Target(eval)
 	-- This is to alow casting at the cursor location where no unit exists
 	if eval[3].cursor then return true end
@@ -81,37 +80,32 @@ function NeP.Parser.Target(eval)
 	and not NeP.Parser:Unit_Blacklist(eval.target)
 end
 
-function NeP.Parser.Parse2(eval, tmp_target, endtime, cname, func)
+function NeP.Parser.Parse2(eval, func)
 	local res;
-	--used to only filter target if it wasnt done already
-	if not eval[3].target then
-		eval.target = tmp_target or noob_target()
-		return func(eval, endtime, cname, tmp_target, func)
-	end
-	tmp_target = NeP.FakeUnits:Filter(eval[3].target)
+	local tmp_target = NeP.FakeUnits:Filter(eval[3].target)
 	for i=1, #tmp_target do
 		eval.target = tmp_target[i]
-		res = func(eval, endtime, cname, tmp_target, func)
+		res = func(eval, eval.endtime, eval.cname, func)
 		if res then return res end
 	end
 end
 
-function NeP.Parser.Parse3(eval, _,_, tmp_target, func)
+function NeP.Parser.Parse3(eval)
 	local res;
 	if NeP.DSL.Parse(eval[2], eval.target) then
 		for i=1, #eval[1] do
-			res = NeP.Parser.Parse(eval[1][i], eval.target)
+			res = NeP.Parser.Parse(eval[1][i])
 			if res then return res end
 		end
 	end
 end
 
-function NeP.Parser.Parse4(eval, endtime, cname)
+function NeP.Parser.Parse4(eval)
 	if not NeP.Parser.Target(eval) then return end
 	eval.spell = eval.spell or eval[1].spell
 	if NeP.DSL.Parse(eval[2], eval.spell, eval.target)
 	and NeP.Helpers:Check(eval.spell, eval.target)
-	and _interrupt(eval, endtime, cname) then
+	and _interrupt(eval, eval.endtime, eval.cname) then
 		NeP.ActionLog:Add(eval[1].token, eval.spell or "", eval[1].icon, eval.target)
 		NeP.Interface:UpdateIcon('mastertoggle', eval[1].icon)
 		return eval.exe(eval)
@@ -121,15 +115,15 @@ end
 --This is the actual Parser...
 --Reads and figures out what it should execute from the CR
 --The CR when it reaches this point must be already compiled and be ready to run.
-function NeP.Parser.Parse(eval, tmp_target)
-	local endtime, cname = castingTime()
+function NeP.Parser.Parse(eval)
+	eval.endtime, eval.cname = castingTime()
 	-- Its a table
 	if eval[1].is_table then
-		return NeP.Parser.Parse2(eval, tmp_target, endtime, cname, NeP.Parser.Parse3)
+		return NeP.Parser.Parse2(eval, NeP.Parser.Parse3)
 	-- Normal
-	elseif (eval[1].bypass or endtime == 0)
+elseif (eval[1].bypass or eval.endtime == 0)
 	and NeP.Actions:Eval(eval[1].token)(eval) then
-		return NeP.Parser.Parse2(eval, tmp_target, endtime, cname, NeP.Parser.Parse4)
+		return NeP.Parser.Parse2(eval, NeP.Parser.Parse4)
 	end
 end
 

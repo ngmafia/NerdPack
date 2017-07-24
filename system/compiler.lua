@@ -1,6 +1,7 @@
 local _, NeP = ...
 local tonumber = tonumber
 local noop = function() end
+local UnitExists = UnitExists
 
 NeP.Compiler = {}
 
@@ -81,8 +82,9 @@ local function unit_ground(ref, eval)
 	end
 end
 
+local noob_target = function() return UnitExists('target') and 'target' or 'player' end
 local _target_types = {
-	['nil'] = noop,
+	['nil'] = function(eval, _, ref) ref.target = noob_target end,
 	['table'] = noop,
 	['function'] = noop,
 	['string'] = function(eval, _, ref) unit_ground(ref, eval) end
