@@ -27,8 +27,8 @@ end
 local function process(unit)
 	local arg = unit:match('%((.+)%)')
 	local num = tonumber(unit:match("%d+") or 1)
-	unit = unit:gsub('%((.+)%)', ''):gsub("%d+", '')
-	return Units[unit] and Units[unit](num, arg) or UnitExists(unit) and unit
+	local tunit = unit:gsub('%((.+)%)', ''):gsub("%d+", '')
+	return Units[tunit] and Units[tunit](num, arg) or UnitExists(unit) and unit
 end
 
 local function not_in_tbl(unit, tbl)
