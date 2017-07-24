@@ -100,7 +100,7 @@ end
 
 local function ProcessCondition(Strg, Spell, Target)
 	-- Unit prefix
-	if not NeP.DSL:Exists(Strg:sub("%((.-)%)", "")) then
+	if not NeP.DSL:Exists(Strg:gsub("%((.-)%)", "")) then
 		local unitID, rest = strsplit('.', Strg, 2)
 		unitID =  NeP.FakeUnits:Filter(unitID)[1]
 		-- condition Target
