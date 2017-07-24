@@ -27,7 +27,7 @@ local function process(unit)
 	local arg = unit:match('%((.+)%)')
 	local num = tonumber(unit:match("%d+") or 1)
 	unit = unit:gsub('%((.+)%)', ''):gsub("%d+", '')
-	return Units[unit] and Units[unit](num, arg) or unit
+	return Units[unit] and Units[unit](num, arg)
 end
 
 local function not_in_tbl(unit, tbl)
@@ -54,7 +54,7 @@ local function add_tbl(unit, tbl)
 	--add
 	elseif unit_type == 'string' then
 		unit = process(unit)
-		if not_in_tbl(unit, tbl) then
+		if unit and not_in_tbl(unit, tbl) then
 			tbl[#tbl+1] = unit
 		end
 	end
