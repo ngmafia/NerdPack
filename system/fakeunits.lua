@@ -1,5 +1,4 @@
 local _, NeP = ...
-local UnitExists = ObjectExists or UnitExists
 
 NeP.FakeUnits = {}
 NeP.Globals.FakeUnits = NeP.FakeUnits
@@ -28,7 +27,7 @@ local function process(unit)
 	local arg = unit:match('%((.+)%)')
 	local num = tonumber(unit:match("%d+") or 1)
 	local tunit = unit:gsub('%((.+)%)', ''):gsub("%d+", '')
-	return Units[tunit] and Units[tunit](num, arg) or UnitExists(unit) and unit
+	return Units[tunit] and Units[tunit](num, arg) or unit
 end
 
 local function not_in_tbl(unit, tbl)
