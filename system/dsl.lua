@@ -99,19 +99,22 @@ local function Nest(Strg, Spell, Target)
 end
 
 local function ProcessCondition(Strg, Spell, Target)
-	-- Condition arguments
-	local Strg, Args = pArgs(Strg, Spell)
-	Args = Args or Spell
 	-- Unit prefix
-	if not NeP.DSL:Exists(Strg) then
+	if not NeP.DSL:Exists(Strg:sub("%((.-)%)", "")) then
 		local unitID, rest = strsplit('.', Strg, 2)
 		unitID =  NeP.FakeUnits:Filter(unitID)[1]
 		-- condition Target
 		if unitID and UnitExists(unitID) then
 			Target = unitID
 			Strg = rest
+		else
+			--escape early if the unit dosent exist
+			return false
 		end
 	end
+	-- Condition arguments
+	Args = Strg:match("%((.-)%)") or Spell
+	Strg = Strg:sub("%((.-)%)", "")
 	-- Process the Condition itself
 	local Condition = DSL:Get(Strg)
 	return Condition(Target or "player", Args)
