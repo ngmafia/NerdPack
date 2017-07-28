@@ -1,60 +1,44 @@
 local _, NeP     = ...
 local DSL        = NeP.DSL
 local UnitExists = ObjectExists or UnitExists
-local unpack     = unpack
 local strsplit   = strsplit
 
-function NeP.Core.string_split(_, string, delimiter)
-	local result, from = {}, 1
-	local delim_from, delim_to = string.find(string, delimiter, from)
-	while delim_from do
-		table.insert( result, string.sub(string, from , delim_from-1))
-		from = delim_to + 1
-		delim_from, delim_to = string.find(string, delimiter, from)
-	end
-	table.insert(result, string.sub(string, from))
-	return result
-end
-
-local function pArgs(Strg, Spell)
-	Strg = Strg or ""
-	local Args = Strg:match('%((.+)%)')
-	Strg = Strg:gsub('%((.+)%)', '')
-	return Strg, Args, Spell
-end
-
-local function FilerNumber(str)
-	if type(str) ~= 'string' then
+local function FilterNum(str)
+	local type_X = type(str)
+	if type_X == 'string' then
+		return tonumber(str) or 0
+	elseif type_X == 'boolean' then
+		return str and 1 or 0
+	elseif type_X == 'number' then
 		return str
-	elseif str:find('^%d') then
-		return tonumber(str)
 	end
-	return str
+	return 0
 end
 
-local OPs = {
-	['>=']    = function(arg1, arg2) return arg1 >= arg2 end,
-	['<=']    = function(arg1, arg2) return arg1 <= arg2 end,
-	['==']    = function(arg1, arg2) return arg1 == arg2 end,
-	['~=']    = function(arg1, arg2) return arg1 ~= arg2 end,
-	['>']     = function(arg1, arg2) return arg1 > arg2 end,
-	['<']     = function(arg1, arg2) return arg1 < arg2 end,
-	['+']     = function(arg1, arg2) return arg1 + arg2 end,
-	['-']     = function(arg1, arg2) return arg1 - arg2 end,
-	['/']     = function(arg1, arg2) return arg1 / arg2 end,
-	['*']     = function(arg1, arg2) return arg1 * arg2 end,
-	['!']     = function(arg1, arg2, Target) return not DSL.Parse(arg1, arg2, Target) end,
-	['@']     = function(arg1) return NeP.Library:Parse(pArgs(arg1)) end,
+local comperatores_OP = {
+	['>='] = function(arg1, arg2) return arg1 >= arg2 end,
+	['<='] = function(arg1, arg2) return arg1 <= arg2 end,
+	['=='] = function(arg1, arg2) return arg1 == arg2 end,
+	['~='] = function(arg1, arg2) return arg1 ~= arg2 end,
+	['>']  = function(arg1, arg2) return arg1 > arg2 end,
+	['<']  = function(arg1, arg2) return arg1 < arg2 end
 }
 
 -- alias (LEGACY)
-OPs['!='] = OPs['~=']
-OPs['='] = OPs['==']
+comperatores_OP['!='] = comperatores_OP['~=']
+comperatores_OP['='] 	= comperatores_OP['==']
 
-local function DoMath(arg1, arg2, token)
-	arg1, arg2 = FilerNumber(arg1), FilerNumber(arg2)
-	return OPs[token](arg1 or 1, arg2 or 1)
-end
+local math_OP = {
+	['+']  = function(arg1, arg2) return arg1 + arg2 end,
+	['-']  = function(arg1, arg2) return arg1 - arg2 end,
+	['/']  = function(arg1, arg2) return arg1 / arg2 end,
+	['*']  = function(arg1, arg2) return arg1 * arg2 end,
+}
+
+local DSL_OP = {
+	['!']  = function(arg1, arg2, Target) return not DSL.Parse(arg1, arg2, Target) end,
+	['@']  = function(arg1) return NeP.Library:Parse(arg1) end,
+}
 
 local function _AND(Strg, Spell, Target)
 	local Arg1, Arg2 = Strg:match('(.*)&(.*)')
@@ -113,7 +97,7 @@ local function ProcessCondition(Strg, Spell, Target)
 		end
 	end
 	-- Condition arguments
-	Args = Strg:match("%((.-)%)") or Spell
+	local Args = Strg:match("%((.-)%)") or Spell
 	Strg = Strg:gsub("%((.-)%)", "")
 	-- Process the Condition itself
 	local Condition = DSL:Get(Strg)
@@ -122,26 +106,28 @@ end
 
 local function Comperatores(Strg, Spell, Target)
 	local OP = ''
-	for Token in Strg:gmatch('[><=~!]') do OP = OP..Token end
 	--Need to scan for != seperately otherwise we get false positives by spells with "!" in them
-	if Strg:find('!=') then OP = '!=' end
-	local arg1, arg2 = unpack(NeP.Core:string_split(Strg, OP))
+	if Strg:find('!=') then
+		OP = '!='
+	else
+		for Token in Strg:gmatch('[><=~!]') do OP = OP..Token end
+	end
+	--escape early if invalid token
+	local func = comperatores_OP[OP]
+	if not func then return false end
+	--actual process
+	local arg1, arg2 = Strg:match("(.*)"..OP.."(.*)")
 	arg1, arg2 = DSL.Parse(arg1, Spell, Target), DSL.Parse(arg2, Spell, Target)
-	return DoMath(arg1, arg2, OP)
+	arg1, arg2 = FilterNum(arg1), FilterNum(arg2)
+	return func(arg1 or 1, arg2 or 1)
 end
 
 local function StringMath(Strg, Spell, Target)
-	local OP, total = Strg:match('[/%*%+%-]'), 0
-	local tempT = NeP.Core:string_split(Strg, OP)
-	for i=1, #tempT do
-		Strg = DSL.Parse(tempT[i], Spell, Target)
-		if total == 0 then
-			total = Strg
-		else
-			total = DoMath(total, Strg, OP)
-		end
-	end
-	return total
+	local tokens = "[/%*%+%-]"
+	local OP = Strg:match(tokens)
+	local arg1, arg2 = strsplit(OP, Strg, 2)
+	arg1, arg2 = DSL.Parse(arg1, Spell, Target), DSL.Parse(arg2, Spell, Target)
+	return math_OP[OP](arg1, arg2)
 end
 
 local function ExeFunc(Strg)
@@ -158,9 +144,9 @@ function NeP.DSL.Parse(Strg, Spell, Target)
 		return _OR(Strg, Spell, Target)
 	elseif Strg:find('&') then
 		return _AND(Strg, Spell, Target)
-	elseif OPs[pX] then
+	elseif DSL_OP[pX] then
 		Strg = Strg:sub(2);
-		return OPs[pX](Strg, Spell, Target)
+		return DSL_OP[pX](Strg, Spell, Target)
 	elseif Strg:find("func=") then
 		Strg = Strg:sub(6);
 		return ExeFunc(Strg)

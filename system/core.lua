@@ -139,6 +139,18 @@ function NeP.Core.HexToRGB(_, hex)
 	return tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6))
 end
 
+function NeP.Core.string_split(_, string, delimiter)
+	local result, from = {}, 1
+	local delim_from, delim_to = string.find(string, delimiter, from)
+	while delim_from do
+		table.insert( result, string.sub(string, from , delim_from-1))
+		from = delim_to + 1
+		delim_from, delim_to = string.find(string, delimiter, from)
+	end
+	table.insert(result, string.sub(string, from))
+	return result
+end
+
 NeP.Listener:Add("NeP_CR2", "PLAYER_LOGIN", function()
 	NeP.Color = NeP.Core:ClassColor('player', 'hex')
 	for i=1, #Run_Cache do
