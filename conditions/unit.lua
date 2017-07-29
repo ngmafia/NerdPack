@@ -182,10 +182,12 @@ NeP.DSL:Register('enemy', function(target)
   return UnitExists(target) and UnitCanAttack('player', target)
 end)
 
--- usage: UNIT1.distance(UNIT2) > #
--- UNIT2 is optional and fallsback to player if not provided
-NeP.DSL:Register({'distance', 'range'}, function(unit1, unit2)
-  return NeP.Protected.UnitCombatRange(unit2 or 'player', unit1)
+NeP.DSL:Register({'distance', 'range'}, function(unit)
+  return NeP.Protected.UnitCombatRange('player', unit)
+end)
+
+NeP.DSL:Register({'distancefrom', 'rangefrom'}, function(unit, unit2)
+  return NeP.Protected.UnitCombatRange(unit2, unit)
 end)
 
 NeP.DSL:Register('level', function(target)
