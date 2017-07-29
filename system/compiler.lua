@@ -48,6 +48,7 @@ local _spell_types = {
 		ref.token = 'function'
 		eval.exe = eval[1]
 		eval.nogcd = true
+		ref.spell = tostring(eval[1])
 		eval[1] = ref
 	end,
 	['string'] = spell_string
