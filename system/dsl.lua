@@ -137,6 +137,7 @@ local function StringMath(Strg, Spell, Target)
 	local OP = Strg:match(tokens)
 	local arg1, arg2 = strsplit(OP, Strg, 2)
 	arg1, arg2 = DSL.Parse(arg1, Spell, Target), DSL.Parse(arg2, Spell, Target)
+	arg1, arg2 = FilterNum(arg1), FilterNum(arg2)
 	return math_OP[OP](arg1, arg2)
 end
 
