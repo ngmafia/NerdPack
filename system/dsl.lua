@@ -82,6 +82,9 @@ local function Nest(Strg, Spell, Target)
 	return DSL.Parse(Strg, Spell, Target)
 end
 
+NeP.DSL.Cache = {}
+local C = NeP.DSL.Cache
+
 local function ProcessCondition(Strg, Spell, Target)
 	-- Unit prefix
 	if not NeP.DSL:Exists(Strg:gsub("%((.-)%)", "")) then
@@ -99,9 +102,16 @@ local function ProcessCondition(Strg, Spell, Target)
 	-- Condition arguments
 	local Args = Strg:match("%((.-)%)") or Spell
 	Strg = Strg:gsub("%((.-)%)", "")
-	-- Process the Condition itself
-	local Condition = DSL:Get(Strg)
-	return Condition(Target or "player", Args)
+	Target = Target or 'player'
+
+	C[Strg] = C[Strg] or {}
+	C[Strg][Target] = C[Strg][Target] or {}
+
+	if not C[Strg][Target][Args] then
+		local Condition = DSL:Get(Strg)
+		C[Strg][Target][Args] = Condition(Target, Args)
+	end
+	return C[Strg][Target][Args]
 end
 
 local function Comperatores(Strg, Spell, Target)

@@ -132,6 +132,7 @@ NeP.Core:WhenInGame(function()
 
 C_Timer.NewTicker(0.1, (function()
 	NeP.Faceroll:Hide()
+	wipe(NeP.DSL.Cache)
 	if NeP.DSL:Get('toggle')(nil, 'mastertoggle')
 	and not UnitIsDeadOrGhost('player') and IsMountedCheck() then
 		if NeP.Queuer:Execute() then return end
