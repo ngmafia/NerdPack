@@ -13,6 +13,7 @@ local UnitIsDeadOrGhost    = UnitIsDeadOrGhost
 local SecureCmdOptionParse = SecureCmdOptionParse
 local InCombatLockdown     = InCombatLockdown
 local C_Timer              = C_Timer
+local wipe 								 = wipe
 
 --This is used by the ticker
 --Its used to determin if we should iterate or not
