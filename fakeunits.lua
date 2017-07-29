@@ -2,13 +2,6 @@ local _, NeP = ...
 
 local UnitIsUnit 	= UnitIsUnit
 local strsplit 		= strsplit
---[[
-local Roles = {
-	['TANK'] = 1,
-	['HEALER'] = 1,
-	['DAMAGER'] = 1,
-	['NONE'] = 1
-}]]
 
 -- Lowest
 NeP.FakeUnits:Add('lowest', function(num, role)
@@ -119,16 +112,22 @@ NeP.FakeUnits:Add({'lowestnotdebuff', 'lndebuff'}, function(num, args)
     return tempTable[num] and tempTable[num].key
 end)
 
+
+local Roles = {
+	['TANK'] = 1.2,
+	['HEALER'] = 1,
+	['DAMAGER'] = 1,
+	['NONE'] = 1
+}
+
 -- Tank
 NeP.FakeUnits:Add('tank', function(num)
 	local tempTable = {}
 	for _, Obj in pairs(NeP.Healing:GetRoster()) do
-		if Obj.role == 'TANK' and not UnitIsUnit('player', Obj.key) then
-			tempTable[#tempTable+1] = {
-				key = Obj.key,
-				prio = Obj.healthMax
-			}
-		end
+		tempTable[#tempTable+1] = {
+			key = Obj.key,
+			prio = Obj.healthMax * Roles[Obj.role]
+		}
 	end
 	table.sort( tempTable, function(a,b) return a.prio > b.prio end )
 	return tempTable[num] and tempTable[num].key
