@@ -50,7 +50,7 @@ local function _interrupt(eval)
 	return true
 end
 
-local function tst(_type)
+local function tst(_type, unit)
 	local tbl = NeP.CR.CR.blacklist[_type]
 	if not tbl then return end
 	for i=1, #tbl do
@@ -64,7 +64,7 @@ local function tst(_type)
 end
 
 function NeP.Parser.Unit_Blacklist(_, unit)
-	return NeP.CR.CR.blacklist.units[NeP.Core:UnitID(unit)] or tst("buff") or tst("debuff")
+	return NeP.CR.CR.blacklist.units[NeP.Core:UnitID(unit)] or tst("buff", unit) or tst("debuff", unit)
 end
 
 --This works on the current parser target.
