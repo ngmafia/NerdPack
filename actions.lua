@@ -219,11 +219,17 @@ NeP.Compiler:RegisterToken("spell_cast", function(eval, name, ref)
 	ref.token = 'spell_cast'
 end)
 
+local C = NeP.DSL.Cache
+
 NeP.Actions:Add('spell_cast', function(eval)
+	-- cached
+	if C[eval[1].spell] then return C[eval[1].spell] end
   local skillType = GetSpellBookItemInfo(eval[1].spell)
 	local isUsable, notEnoughMana = IsUsableSpell(eval[1].spell)
 	if skillType ~= 'FUTURESPELL' and isUsable and not notEnoughMana then
-		local GCD = NeP.DSL:Get('gcd')()
-		return GetSpellCooldown(eval[1].spell) <= GCD
+		C[eval[1].spell] = GetSpellCooldown(eval[1].spell) <= NeP.DSL:Get('gcd')()
+	else
+		C[eval[1].spell] = false
 	end
+	return C[eval[1].spell]
 end)
