@@ -6,7 +6,7 @@ NeP.DSL:Register("area.enemies", function(unit, distance)
   if not UnitExists(unit) then return 0 end
   local total = 0
   for _, Obj in pairs(NeP.OM:Get('Enemy', true)) do
-    if NeP.DSL:Get('combat')(unit) or Obj.isdummy
+    if (NeP.DSL:Get('combat')(unit) or Obj.isdummy)
     and NeP.Protected.Distance(unit, Obj.key) < tonumber(distance) then
       total = total +1
     end
@@ -19,7 +19,7 @@ NeP.DSL:Register("area.enemies.infront", function(unit, distance)
   if not UnitExists(unit) then return 0 end
   local total = 0
   for _, Obj in pairs(NeP.OM:Get('Enemy', true)) do
-    if NeP.DSL:Get('combat')(unit) or Obj.isdummy
+    if (NeP.DSL:Get('combat')(unit) or Obj.isdummy)
     and NeP.Protected.Distance(unit, Obj.key) < tonumber(distance)
     and NeP.Protected.Infront(unit, Obj.key) then
       total = total +1
