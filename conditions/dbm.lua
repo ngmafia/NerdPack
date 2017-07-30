@@ -1,9 +1,11 @@
-if not DBM then return end
-print("test")
 local _, NeP = ...
-local C_Timer = C_Timer
 local DBM = DBM
+
+if not DBM then return end
+
+local C_Timer = C_Timer
 local Timers = { ["Pull in"] = {timer = 999} }
+local fake_timer = 999
 
 C_Timer.NewTicker(0.1, function()
   for bar in pairs(DBM.Bars.bars) do
@@ -14,19 +16,16 @@ C_Timer.NewTicker(0.1, function()
   end
 end)
 
---[[
-RegisterAddonMessagePrefix('D4')
-NeP.Listener:Add('DBM_LISTNER', 'CHAT_MSG_ADDON', function (prefix, arg)
-  if prefix ~= 'D4' then return end
-  local kind, seconds = strsplit('\t', arg or '')
-  if kind == 'PT' then
-    NeP.DBM.pullTimer = GetTime() + tonumber(seconds)
-  end
-end)]]
+NeP.DSL:Register('dbm', function(_, event)
+  local T = Timers[event]
+  if not T then return fake_timer end
+  T.timer = (T.timer > 0) and T.timer or fake_timer
+  return T.timer
+end)
 
 NeP.DSL:Register('pull_timer', function()
   local T = Timers["Pull in"]
-  T.timer = (T.timer > 0) and T.timer or 999
+  T.timer = (T.timer > 0) and T.timer or fake_timer
   return T.timer
 end)
 
