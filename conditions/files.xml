@@ -9,7 +9,7 @@
 	<Script file="area.lua" />
 	<Script file="talents.lua" />
 	<Script file="buffs.lua" />
-	<Script file="pull_timer.lua" />
+	<Script file="dbm.lua" />
 	<Script file="items.lua" />
 	<Script file="spell.lua" />
 	<Script file="unit.lua" />
