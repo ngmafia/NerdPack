@@ -42,19 +42,26 @@ local function MergeTable(table, Obj, GUID)
 end
 
 function NeP.OM.Get(_, ref, want_plates)
+	local tb = OM_c[ref]
+	if ref == 'Objects' then
+		for GUID, Obj in pairs(tb) do
+			if not UnitExists(Obj.key)
+			or GUID ~= UnitGUID(Obj.key) then
+				tb[GUID] = nil
+			end
+		end
 	-- Hack for nameplates
-	if want_plates and NeP.Protected.nPlates then
+	elseif want_plates and NeP.Protected.nPlates then
 		local temp = {}
 		for GUID, Obj in pairs(NeP.Protected.nPlates[ref]) do
 			MergeTable(temp, Obj, GUID)
 		end
-		for GUID, Obj in pairs(OM_c[ref]) do
+		for GUID, Obj in pairs(tb) do
 			MergeTable(temp, Obj, GUID)
 		end
 		return temp
 	-- Normal
 	else
-		local tb = OM_c[ref]
 		for GUID, Obj in pairs(tb) do
 			-- remove invalid units
 			if not UnitExists(Obj.key)
@@ -64,8 +71,8 @@ function NeP.OM.Get(_, ref, want_plates)
 				tb[GUID] = nil
 			end
 		end
-		return tb
 	end
+	return tb
 end
 
 function NeP.OM.Insert(_, Tbl, Obj, GUID)
@@ -76,11 +83,10 @@ function NeP.OM.Insert(_, Tbl, Obj, GUID)
 	-- Add
 	else
 		local ObjID = select(6, strsplit('-', GUID))
-		local distance = NeP.Protected.Distance('player', Obj)
 		Tbl[GUID] = {
 			key = Obj,
 			name = UnitName(Obj),
-			distance = distance,
+			distance = NeP.Protected.Distance('player', Obj),
 			id = tonumber(ObjID or 0),
 			guid = GUID,
 			isdummy = NeP.DSL:Get('isdummy')(Obj)
@@ -89,17 +95,20 @@ function NeP.OM.Insert(_, Tbl, Obj, GUID)
 end
 
 function NeP.OM.Add(_, Obj)
-	if not UnitExists(Obj) or not UnitInPhase(Obj) then return end
+	if not UnitExists(Obj) then return end
 	local GUID = UnitGUID(Obj) or '0'
-	-- Dead Units
-	if UnitIsDeadOrGhost(Obj) then
-		NeP.OM:Insert(OM_c['Dead'], Obj, GUID)
-	-- Friendly
-	elseif UnitIsFriend('player', Obj) then
-		NeP.OM:Insert(OM_c['Friendly'], Obj, GUID)
-	-- Enemie
-	elseif UnitCanAttack('player', Obj) then
-		NeP.OM:Insert(OM_c['Enemy'], Obj, GUID)
+	--units
+	if UnitInPhase(Obj) then
+		-- Dead Units
+		if UnitIsDeadOrGhost(Obj) then
+			NeP.OM:Insert(OM_c['Dead'], Obj, GUID)
+		-- Friendly
+		elseif UnitIsFriend('player', Obj) then
+			NeP.OM:Insert(OM_c['Friendly'], Obj, GUID)
+		-- Enemie
+		elseif UnitCanAttack('player', Obj) then
+			NeP.OM:Insert(OM_c['Enemy'], Obj, GUID)
+		end
 	-- Objects
 	elseif ObjectIsType and ObjectIsType(Obj, ObjectTypes.GameObject) then
 		NeP.OM:Insert(OM_c['Objects'], Obj, GUID)
