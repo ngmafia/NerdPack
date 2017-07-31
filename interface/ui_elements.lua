@@ -58,14 +58,16 @@ function NeP.Interface.Texture(_, element, parent, offset)
 end
 
 function NeP.Interface:Checkbox(element, parent, offset, table)
+	local key = element.key_check or element.key
+	local default = element.default_check or element.default
 	local tmp = DiesalGUI:Create('CheckBox')
 	parent:AddChild(tmp)
 	tmp:SetParent(parent.content)
 	tmp:SetPoint('TOPLEFT', parent.content, 'TOPLEFT', 5, offset)
 	tmp:SetEventListener('OnValueChanged', function(_, _, checked)
-		NeP.Config:Write(table.key, element.key, checked)
+		NeP.Config:Write(table.key, key, checked)
 	end)
-	tmp:SetChecked(NeP.Config:Read(table.key, element.key, element.default or false))
+	tmp:SetChecked(NeP.Config:Read(table.key, key, default or false))
 	element.text_offset1 = 20
 	tmp.text = self:Text(element, parent, offset-3)
 	if element.desc then
@@ -77,11 +79,13 @@ function NeP.Interface:Checkbox(element, parent, offset, table)
 end
 
 function NeP.Interface:Spinner(element, parent, offset, table)
+	local key = element.key_spin or element.key
+	local default = element.default_spin or element.default
 	local tmp = DiesalGUI:Create('Spinner')
 	parent:AddChild(tmp)
 	tmp:SetParent(parent.content)
 	tmp:SetPoint('TOPRIGHT', parent.content, 'TOPRIGHT', -5, offset)
-	tmp:SetNumber(NeP.Config:Read(table.key, element.key, element.default))
+	tmp:SetNumber(NeP.Config:Read(table.key, key, default))
 
 	--Settings
 	tmp.settings.width = element.width or tmp.settings.width
@@ -94,7 +98,7 @@ function NeP.Interface:Spinner(element, parent, offset, table)
 	tmp:SetStylesheet(self.spinnerStyleSheet)
 	tmp:SetEventListener('OnValueChanged', function(_, _, userInput, number)
 		if not userInput then return end
-		NeP.Config:Write(table.key, element.key, number)
+		NeP.Config:Write(table.key, key, number)
 	end)
 	tmp.text = self:Text(element, parent, offset-3)
 	if element.desc then
@@ -106,14 +110,13 @@ function NeP.Interface:Spinner(element, parent, offset, table)
 end
 
 function NeP.Interface:Checkspin(element, parent, offset, table)
-	local original_key = element.key
-	element.key = original_key..'_check'
-	element.default = element.check
+	element.key_check = element.key..'_check'
+	element.default_check = element.check or element.default_check
+	element.key_spin = element.key..'_spin'
+	element.default_spin = element.spin or element.default_spin
 	local tmp = self:Checkbox(element, parent, offset, table)
 	element.text = ''
 	element.desc = nil
-	element.key = original_key..'_spin'
-	element.default = element.spin
 	tmp.spin = self:Spinner(element, parent, offset, table)
 	return tmp, self.spinnerStyleSheet
 end
