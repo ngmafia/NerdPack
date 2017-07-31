@@ -11,7 +11,7 @@ NeP.Interface.MainFrame = NeP.Interface:BuildGUI({
 	height = 60,
 	title = logo..n_name,
 	subtitle = 'v:'..NeP.Version..' - '..NeP.Branch
-})
+}).parent
 NeP.Interface.MainFrame:SetEventListener('OnClose', function()
 	NeP.Core:Print(L:TA('Any', 'NeP_Show'))
 end)

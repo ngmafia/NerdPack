@@ -13,30 +13,32 @@ local L = NeP.Locale
 local statusBars = {}
 local statusBarsUsed = {}
 
-local parent = NeP.Interface:BuildGUI({
+local OM_GUI = NeP.Interface:BuildGUI({
 	key = 'NePOMgui',
 	width = 500,
 	height = 250,
 	title = 'ObjectManager GUI'
 })
+local parent = OM_GUI.parent
 parent:Hide()
 NeP.Interface:Add(L:TA('OM', 'Option'), function() parent:Show() end)
 
 local dOM = 'Enemy'
 local bt = {
-	ENEMIE = {a = 'TOPLEFT', b = 'Enemy'},
-	FRIENDLY = {a = 'TOP', b = 'Friendly'},
-	DEAD = {a = 'TOPRIGHT', b = 'Dead'}
+	{a = 'TOPLEFT', 	b = 'Enemy'},
+	{a = 'TOP', 			b = 'Friendly'},
+	{a = 'TOPRIGHT', 	b = 'Dead'}
 }
-for k,v in pairs(bt) do
-	bt[k] = DiesalGUI:Create("Button")
-	parent:AddChild(bt[k])
-	bt[k]:SetParent(parent.content)
-	bt[k]:SetPoint(v.a, parent.content, v.a, 0, 0)
-	bt[k].frame:SetSize(parent.content:GetWidth()/3, 30)
-	bt[k]:SetStylesheet(NeP.Interface.buttonStyleSheet)
-	bt[k]:SetEventListener("OnClick", function() dOM = v.b end)
-	bt[k]:SetText(L:TA('OM', v.b))
+for i=1, #bt do
+	local tmp = DiesalGUI:Create("Button")
+	parent:AddChild(tmp)
+	tmp:SetParent(parent.content)
+	tmp:SetPoint(bt[i].a, parent.content, bt[i].a, 0, 0)
+	--bt[k]:SetStylesheet(NeP.Interface.buttonStyleSheet)
+	tmp:SetEventListener("OnClick", function() dOM = bt[i].b end)
+	tmp:SetText(L:TA('OM', bt[i].b))
+	OM_GUI.elements[bt[i].b] = {parent = tmp, type = "button", style = NeP.Interface.buttonStyleSheet}
+	tmp.frame:SetSize(parent.content:GetWidth()/3, 30)
 end
 
 local ListWindow = DiesalGUI:Create('ScrollFrame')
@@ -66,10 +68,19 @@ local function recycleStatusBars()
 	end
 end
 
+local function GetTable()
+	local tmp = {}
+	for _, Obj in pairs(NeP.OM:Get(dOM, true)) do
+		tmp[#tmp+1] = Obj
+	end
+	table.sort( tmp, function(a,b) return a.distance < b.distance end )
+	return tmp
+end
+
 local function RefreshGUI()
 	local offset = -5
 	recycleStatusBars()
-	for _, Obj in pairs(NeP.OM:Get(dOM, true)) do
+	for _, Obj in pairs(GetTable()) do
 		local Health = math.floor(((UnitHealth(Obj.key) or 1) / (UnitHealthMax(Obj.key) or 1)) * 100)
 		local SB = getStatusBar()
 		local distance = NeP.Core:Round(Obj.distance or 0)

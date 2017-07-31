@@ -39,7 +39,7 @@ local function elements_style()
     for _, element in pairs(gui.elements) do
       if element.style then
         element.parent:SetStylesheet(element.style)
-        element.parent:ApplySettings()
+        --element.parent:ApplySettings()
       end
     end
   end
@@ -84,5 +84,5 @@ title = n_name,
 }
 
 NeP.STs = NeP.Interface:BuildGUI(config)
-NeP.Interface:Add(n_name..' '..L('option'), function() NeP.STs:Show() end)
-NeP.STs:Hide()
+NeP.Interface:Add(n_name..' '..L('option'), function() NeP.STs.parent:Show() end)
+NeP.STs.parent:Hide()

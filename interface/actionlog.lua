@@ -22,7 +22,7 @@ local NeP_AL = NeP.Interface:BuildGUI({
 	width = 460,
 	title = L:TA('AL', 'Option'),
 	height = abs_height
-})
+}).parent
 NeP.Interface:Add(L:TA('AL', 'Option'), function() NeP_AL:Show() end)
 NeP_AL:Hide()
 

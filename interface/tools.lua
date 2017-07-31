@@ -68,7 +68,7 @@ function NeP.Interface:BuildElements(table, parent)
 end
 
 function NeP.Interface:GetElement(key, element)
-	return self.usedGUIs[key].elements[element]
+	return self.usedGUIs[key].elements[element].parent
 end
 
 function NeP.Interface:SetElementColor(color)
@@ -104,7 +104,7 @@ function NeP.Interface:TestCreated(eval)
 	local test = type(eval) == 'string' and eval or eval.key
 	if self.usedGUIs[test] then
 		self.usedGUIs[test].parent:Show()
-		return self.usedGUIs[test].parent
+		return self.usedGUIs[test]
 	end
 end
 
@@ -134,7 +134,7 @@ function NeP.Interface.BuildGUI(_, eval)
 		NeP.Interface:Body(eval, parent)
 	end)
 
-	return parent
+	return NeP.Interface.usedGUIs[eval.key]
 end
 
 -- Gobals

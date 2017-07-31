@@ -15,7 +15,7 @@ function NeP.CR.AddGUI(_, key, eval)
 		height = 300,
 		config = eval
 	}
-	NeP.Interface:BuildGUI(temp):Hide()
+	NeP.Interface:BuildGUI(temp).parent:Hide()
 	NeP.Interface:AddCR_ST(key)
 end
 
