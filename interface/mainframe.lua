@@ -2,8 +2,10 @@ local n_name, NeP = ...
 local logo = '|T'..NeP.Media..'logo.blp:10:10|t'
 local L = NeP.Locale
 
-local EasyMenu 		= EasyMenu
+local EasyMenu = EasyMenu
 local CreateFrame = CreateFrame
+local GetSpecializationInfo = GetSpecializationInfo
+local GetSpecialization = GetSpecialization
 
 NeP.Interface.MainFrame = NeP.Interface:BuildGUI({
 	key = 'NePMFrame',
@@ -28,13 +30,21 @@ local DropMenu = {
 
 function NeP.Interface.ResetCRs()
 	DropMenu[2].menuList = {}
+	DropMenu[3].menuList = {}
+	local spec = GetSpecializationInfo(GetSpecialization())
+	for _,v in pairs(NeP.CR:GetList(spec)) do
+		NeP.Interface:AddCR(v)
+		NeP.Interface:AddCR_ST(v.name)
+	end
 end
 
-function NeP.Interface.SetCheckedCR(_, Name)
+function NeP.Interface.UpdateCRs()
+	local spec = GetSpecializationInfo(GetSpecialization())
+	local last = NeP.Config:Read('SELECTED', spec)
 	for _,v in pairs(DropMenu[2].menuList) do
-		v.checked = Name == v.text
+		v.checked = last == v.name
 	end
-	NeP.Core:Print(L:TA('mainframe', 'ChangeCR'), Name)
+	NeP.Core:Print(L:TA('mainframe', 'ChangeCR'), last)
 end
 
 function NeP.Interface:AddCR_ST(Name)
@@ -47,12 +57,13 @@ function NeP.Interface:AddCR_ST(Name)
 	})
 end
 
-function NeP.Interface.AddCR(_, Spec, Name, checked)
+function NeP.Interface.AddCR(_, ev)
+	local text = ev.name..'|cff0F0F0F <->|r ['..ev.wow_ver..'-'..ev.nep_ver..']'
 	table.insert(DropMenu[2].menuList, {
-		text = Name,
-		checked = checked,
+		text = text,
+		name = ev.name,
 		func = function()
-			NeP.CR:Set(Spec, Name)
+			NeP.CR:Set(ev.spec, ev.name)
 		end
 	})
 end
@@ -68,5 +79,14 @@ function NeP.Interface.Add(_, name, func)
 		notCheckable = 1
 	})
 end
+
+----------------------------EVENTS
+NeP.Listener:Add("NeP_CR_interface", "PLAYER_LOGIN", function()
+	NeP.Interface.ResetCRs()
+end)
+NeP.Listener:Add("NeP_CR_interface", "PLAYER_SPECIALIZATION_CHANGED", function(unitID)
+	if unitID ~= 'player' then return end
+	NeP.Interface:ResetCRs()
+end)
 
 NeP.Globals.Interface.Add = NeP.Interface.Add

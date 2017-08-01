@@ -16,6 +16,7 @@ NeP.Interface:AddToggle({
         NeP.Interface:DropMenu()
       end
     end
+    NeP.Interface:UpdateCRs()
   end,
   nohide = true
 })
