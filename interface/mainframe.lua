@@ -45,7 +45,6 @@ function NeP.Interface.UpdateCRs()
 	for _,v in pairs(DropMenu[2].menuList) do
 		v.checked = last == v.name
 	end
-	NeP.Core:Print(L:TA('mainframe', 'ChangeCR'), last)
 end
 
 function NeP.Interface:AddCR_ST(Name)
@@ -72,6 +71,8 @@ function NeP.Interface.AddCR(_, ev)
 				if not tostring(NeP.Version..NeP.Branch):find('^'..tostring(ev.nep_ver)) then
 					NeP.Core:Print(ev.name, "|rwas not built for "..n_name..':', NeP.Version..NeP.Branch, "\nThis might cause problems!")
 				end
+				NeP.Core:Print(L:TA('mainframe', 'ChangeCR'), ev.name)
+				NeP.Interface.UpdateCRs()
 		end
 	})
 end
