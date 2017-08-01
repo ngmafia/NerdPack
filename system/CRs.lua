@@ -100,7 +100,6 @@ end
 function NeP.CR:Set(Spec, Name)
 	Spec = Spec or GetSpecializationInfo(GetSpecialization())
 	Name = Name or NeP.Config:Read('SELECTED', Spec)
-	print(Spec, Name)
 	-- execute the previous unload
 	if self.CR and self.CR.unload then self.CR.unload() end
 	self.CR = CRs[Spec][Name]
