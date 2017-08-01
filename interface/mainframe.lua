@@ -67,10 +67,10 @@ function NeP.Interface.AddCR(_, ev)
 		func = function()
 			NeP.CR:Set(ev.spec, ev.name)
 				if not wow_ver:find('^'..tostring(ev.wow_ver)) then
-					NeP.Core:Print(ev.name, "was not built for WoW:", wow_ver, "this might cause problems!")
+					NeP.Core:Print(ev.name, "|rwas not built for WoW:", wow_ver, "\nThis might cause problems!")
 				end
 				if not tostring(NeP.Version..NeP.Branch):find('^'..tostring(ev.nep_ver)) then
-					NeP.Core:Print(ev.name, "was not built for "..n_name..':', NeP.Version..NeP.Branch, "this might cause problems!")
+					NeP.Core:Print(ev.name, "|rwas not built for "..n_name..':', NeP.Version..NeP.Branch, "\nThis might cause problems!")
 				end
 		end
 	})
