@@ -6,6 +6,7 @@ local EasyMenu = EasyMenu
 local CreateFrame = CreateFrame
 local GetSpecializationInfo = GetSpecializationInfo
 local GetSpecialization = GetSpecialization
+local GetBuildInfo = GetBuildInfo
 
 NeP.Interface.MainFrame = NeP.Interface:BuildGUI({
 	key = 'NePMFrame',
@@ -59,11 +60,18 @@ end
 
 function NeP.Interface.AddCR(_, ev)
 	local text = ev.name..'|cff0F0F0F <->|r ['..ev.wow_ver..'-'..ev.nep_ver..']'
+	local wow_ver = GetBuildInfo()
 	table.insert(DropMenu[2].menuList, {
 		text = text,
 		name = ev.name,
 		func = function()
 			NeP.CR:Set(ev.spec, ev.name)
+				if not wow_ver:find('^'..tostring(ev.wow_ver)) then
+					NeP.Core:Print(ev.name, "was not built for", wow_ver, "this might cause problems!")
+				end
+				if not tostring(NeP.Version..NeP.Branch):find('^'..tostring(ev.nep_ver)) then
+					NeP.Core:Print(ev.name, "was not built for", NeP.Version..NeP.Branch, "this might cause problems!")
+				end
 		end
 	})
 end
