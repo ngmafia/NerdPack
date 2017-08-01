@@ -153,8 +153,10 @@ end
 
 NeP.Listener:Add("NeP_CR2", "PLAYER_LOGIN", function()
 	NeP.Color = NeP.Core:ClassColor('player', 'hex')
-	for i=1, #Run_Cache do
-		Run_Cache[i].func()
-	end
-	Run_Cache = nil
+	C_Timer.After(5, function()
+		for i=1, #Run_Cache do
+			Run_Cache[i].func()
+		end
+		Run_Cache = nil
+	end)
 end)
