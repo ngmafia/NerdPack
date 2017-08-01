@@ -59,7 +59,7 @@ function NeP.Interface:AddCR_ST(Name)
 end
 
 function NeP.Interface.AddCR(_, ev)
-	local text = ev.name..'|cff0F0F0F <->|r ['..ev.wow_ver..'-'..ev.nep_ver..']'
+	local text = ev.name..'|cff0F0F0F <->|r [WoW: '..ev.wow_ver..' NeP: '..ev.nep_ver..']'
 	local wow_ver = GetBuildInfo()
 	table.insert(DropMenu[2].menuList, {
 		text = text,
