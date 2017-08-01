@@ -87,7 +87,7 @@ local C = NeP.DSL.Cache
 
 local function ProcessCondition(Strg, Spell, Target)
 	-- Unit prefix
-	if not NeP.DSL:Exists(Strg:gsub("%((.-)%)", "")) then
+	if not NeP.DSL:Exists(Strg:gsub("%((.+)%)", "")) then
 		local unitID, rest = strsplit('.', Strg, 2)
 		unitID =  NeP.FakeUnits:Filter(unitID)[1]
 		-- condition Target
@@ -100,8 +100,8 @@ local function ProcessCondition(Strg, Spell, Target)
 		end
 	end
 	-- Condition arguments
-	local Args = Strg:match("%((.-)%)") or Spell
-	Strg = Strg:gsub("%((.-)%)", "")
+	local Args = Strg:match("%((.+)%)") or Spell
+	Strg = Strg:gsub("%((.+)%)", "")
 	Target = Target or 'player'
 
 	C[Strg] = C[Strg] or {}
