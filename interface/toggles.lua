@@ -57,8 +57,8 @@ end
 
 local function CreateToggle(eval)
 	eval.key = eval.key:lower()
-	Toggles[eval.key] = CreateFrame("CheckButton", eval.key, mainframe.content)
-	local temp = Toggles[eval.key]
+	Toggles[#Toggles+1] = CreateFrame("CheckButton", eval.key, mainframe.content)
+	local temp = Toggles[#Toggles]
 	temp:SetFrameStrata("high")
 	temp:SetFrameLevel(1)
 	temp.key = eval.key
@@ -94,8 +94,8 @@ end
 function NeP.Interface.RefreshToggles()
 	local tcount, row_count, maxed = 0, 0, 0
 
-	for k in pairs(Toggles) do
-		if Toggles[k]:IsShown() then
+	for i=1, #Toggles do
+		if Toggles[i]:IsShown() then
 
 			-- This is to handle rows
 			local n1 = NeP.Config:Read(n_name..'_Settings', 'brow', 10)
@@ -107,9 +107,9 @@ function NeP.Interface.RefreshToggles()
 
 			tcount = tcount + 1
 			local pos = (NeP.ButtonsSize*tcount)+(tcount*NeP.ButtonsPadding)-(NeP.ButtonsSize+NeP.ButtonsPadding)
-			Toggles[k]:SetSize(NeP.ButtonsSize, NeP.ButtonsSize)
-			Toggles[k]:SetPoint("TOPLEFT", mainframe.content, pos, -(row_count*NeP.ButtonsSize))
-			Toggles[k]:SetChecked(Toggles[k].actv)
+			Toggles[i]:SetSize(NeP.ButtonsSize, NeP.ButtonsSize)
+			Toggles[i]:SetPoint("TOPLEFT", mainframe.content, pos, -(row_count*NeP.ButtonsSize))
+			Toggles[i]:SetChecked(Toggles[i].actv)
 		end
 	end
 
@@ -137,9 +137,9 @@ function NeP.Interface.RefreshToggles()
 end
 
 function NeP.Interface.ResetToggles()
-	for k, v in pairs(Toggles) do
-		if not v.nohide then
-			Toggles[k]:Hide()
+	for i=1, #Toggles do
+		if not Toggles[i].nohide then
+			Toggles[i]:Hide()
 		end
 	end
 	NeP.Interface:RefreshToggles()
