@@ -118,6 +118,6 @@ end)
 
 NeP.DSL:Register('ui', function(_, args)
   local key, UI_key = strsplit(",", args, 2)
-  UI_key = UI_key or NeP.CR.CR.Name
+  UI_key = UI_key or NeP.CR.CR.name
   return NeP.Config:Read(UI_key, key)
 end)
