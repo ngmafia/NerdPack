@@ -41,7 +41,6 @@ end
 -- to merge it, EX: {tank, enemies}
 -- tank is a single unit while enemie is a table
 local function add_tbl(unit, tbl)
-	if not unit then return end
 	local unit_type = type(unit)
 	--table
 	if unit_type =='table' then
@@ -53,7 +52,11 @@ local function add_tbl(unit, tbl)
 		NeP.FakeUnits:Filter(unit(), tbl)
 	--add
 	elseif unit_type == 'string' then
-		if unit and not_in_tbl(unit, tbl) then
+		unit = process(unit)
+		if not unit then return end
+		if type(unit) ~= 'string' then
+			NeP.FakeUnits:Filter(unit, tbl)
+		elseif not_in_tbl(unit, tbl) then
 			tbl[#tbl+1] = unit
 		end
 	end
@@ -61,7 +64,6 @@ end
 
 function NeP.FakeUnits.Filter(_,unit, tbl)
 	tbl = tbl or {}
-	unit = process(unit)
 	add_tbl(unit, tbl)
 	return tbl
 end
