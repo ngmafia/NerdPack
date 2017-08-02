@@ -39,16 +39,14 @@ end
 local _spell_types = {
 	['table'] = function(eval, name)
 		eval[1].is_table = true
-		for k=1, #eval[1] do
-			NeP.Compiler.Compile(eval[1][k], name)
-		end
+		eval[1].master = eval.master
+		NeP.Compiler.Compile(eval[1], name)
 	end,
 	['function'] = function(eval)
 		local ref = {}
 		ref.token = 'function'
 		eval.exe = eval[1]
 		eval.nogcd = true
-		ref.spell = tostring(eval[1])
 		eval[1] = ref
 	end,
 	['string'] = spell_string
@@ -67,6 +65,7 @@ function NeP.Compiler.Spell(eval, name)
 		}
 		eval[2] = 'true'
 	end
+	eval[1].spell = eval[1].spell or type(eval[1].spell)
 end
 
 local function unit_ground(ref, eval)
@@ -161,7 +160,7 @@ local _cond_types = {
 		-- convert everything into a string so we can then process it
 		eval[2] = NeP.Compiler.Cond_Legacy_PE(eval[2])
 		NeP.Compiler.Conditions(eval, name)
-        end
+  end
 }
 
 function NeP.Compiler.Conditions(eval, name)
@@ -175,22 +174,22 @@ function NeP.Compiler.Conditions(eval, name)
 end
 
 function NeP.Compiler.Compile(eval, name)
-	-- check if this was already done
-	if eval[4] then return end
-	eval[4] = true
-	--Spell
-	NeP.Compiler.Spell(eval, name)
-	-- Target
-	NeP.Compiler.Target(eval, name)
-	-- Conditions
-	NeP.Compiler.Conditions(eval, name)
+	eval.master = eval.master or eval
+	for i=1, #eval do
+		-- check if this was already done
+		if not eval[i][4] then
+			eval[i][4] = true
+			eval[i].master = eval.master
+			NeP.Compiler.Spell(eval[i], name)
+			NeP.Compiler.Target(eval[i], name)
+			NeP.Compiler.Conditions(eval[i], name)
+		end
+	end
 end
 
 function NeP.Compiler.Iterate(_, eval, name)
 	if not eval then return end
 	NeP.Core:WhenInGame(function()
-		for i=1, #eval do
-			NeP.Compiler.Compile(eval[i], name)
-		end
+			NeP.Compiler.Compile(eval, name)
 	end)
 end

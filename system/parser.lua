@@ -43,7 +43,7 @@ end
 
 local function _interrupt(eval)
 	if eval[1].interrupts then
-		if eval.cname == eval.spell then
+		if eval.master.cname == eval.spell then
 			return false
 		else
 			SpellStopCasting()
@@ -85,6 +85,7 @@ end
 function NeP.Parser.Parse2(eval, func)
 	local res;
 	local tmp_target = NeP.FakeUnits:Filter(eval[3].target)
+	--tmp_target = NeP.FakeUnits:Filter(tmp_target)
 	for i=1, #tmp_target do
 		eval.target = tmp_target[i]
 		res = func(eval)
@@ -107,7 +108,7 @@ function NeP.Parser.Parse4(eval)
 	eval.spell = eval.spell or eval[1].spell
 	if NeP.DSL.Parse(eval[2], eval.spell, eval.target)
 	and NeP.Helpers:Check(eval.spell, eval.target)
-	and _interrupt(eval, eval.endtime, eval.cname) then
+	and _interrupt(eval) then
 		NeP.ActionLog:Add(eval[1].token, eval.spell or "", eval[1].icon, eval.target)
 		NeP.Interface:UpdateIcon('mastertoggle', eval[1].icon)
 		return eval.exe(eval)
@@ -118,12 +119,11 @@ end
 --Reads and figures out what it should execute from the CR
 --The CR when it reaches this point must be already compiled and be ready to run.
 function NeP.Parser.Parse(eval)
-	eval.endtime, eval.cname = castingTime()
 	-- Its a table
 	if eval[1].is_table then
 		return NeP.Parser.Parse2(eval, NeP.Parser.Parse3)
 	-- Normal
-	elseif (eval[1].bypass or eval.endtime == 0)
+	elseif (eval[1].bypass or eval.master.endtime == 0)
 	and NeP.Actions:Eval(eval[1].token)(eval) then
 		return NeP.Parser.Parse2(eval, NeP.Parser.Parse4)
 	end
@@ -140,9 +140,11 @@ C_Timer.NewTicker(0.1, (function()
 		if NeP.Queuer:Execute() then return end
 		local table = c.CR and c.CR[InCombatLockdown()]
 		if not table then return end
+		table.endtime, table.cname = castingTime()
 		for i=1, #table do
 			if NeP.Parser.Parse(table[i]) then break end
 		end
+		NeP.Parser.Parse(table)
 	end
 end), nil)
 
