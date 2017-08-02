@@ -87,7 +87,6 @@ function NeP.Parser.Parse2(eval, func)
 	local tmp_target = NeP.FakeUnits:Filter(eval[3].target)
 	for i=1, #tmp_target do
 		eval.target = tmp_target[i]
-		print(eval.target)
 		res = func(eval)
 		if res then return res end
 	end
