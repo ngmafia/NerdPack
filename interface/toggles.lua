@@ -80,10 +80,17 @@ function NeP.Interface.UpdateIcon(_, key, icon)
 	Toggles[key].texture:SetTexture(icon)
 end
 
+local function GetToggle(key)
+	for i=1, #Toggles do
+		if Toggles[i].key == key then return Toggles[i] end
+	end
+end
+
 function NeP.Interface.AddToggle(_, eval)
 	NeP.Core:WhenInGame(function()
-		if Toggles[eval.key] then
-			Toggles[eval.key]:Show()
+		local test = GetToggle(eval.key)
+		if test then
+			test:Show()
 		else
 			CreateToggle(eval)
 		end
@@ -146,7 +153,7 @@ function NeP.Interface.ResetToggles()
 end
 
 function NeP.Interface.toggleToggle(_, key, state)
-	local tmp = Toggles[key:lower()]
+	local tmp = GetToggle(key)
 	if not tmp then return end
 	tmp.actv = state or not tmp.actv
 	tmp:SetChecked(tmp.actv)
