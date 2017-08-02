@@ -47,6 +47,7 @@ local function add(ev)
 	cr.blacklist.units = ev.blacklist.units or {}
 	cr.blacklist.buff = ev.blacklist.buff or {}
 	cr.blacklist.debuff = ev.blacklist.debuff or {}
+	CRs[ev.id] = CRs[ev.id] or {}
 	CRs[ev.id][ev.name] = cr
 end
 
@@ -67,13 +68,9 @@ function NeP.CR.Add(_, SpecID, ...)
 	local classIndex = select(3, UnitClass('player'))
 	-- This only allows crs we can use to be registered
 	if classIndex ~= SpecID and not NeP.ClassTable[classIndex][SpecID] then return end
-	-- if no table for the spec, create it
-	if not CRs[SpecID] then CRs[SpecID] = {} end
 	-- Legacy stuff
 	local ev = legacy_PE(...)
-	-- do not load cr that dont have names
-	if not ev.name then return end
-	if CRs[SpecID][ev.name] then return end
+	--refs
 	refs(ev, SpecID)
 	-- Import SpellIDs from the cr
 	if ev.ids then
