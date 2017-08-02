@@ -107,7 +107,7 @@ function NeP.CR:Set(Spec, Name)
 end
 
 function NeP.CR.GetList(_, Spec)
-	return CRs[Spec]
+	return CRs[Spec] or {}
 end
 
 ----------------------------EVENTS
