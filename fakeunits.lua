@@ -231,17 +231,9 @@ NeP.FakeUnits:Add('boss', function()
 end)
 
 NeP.FakeUnits:Add('enemies', function()
-	local tempTable = {}
-	for _, Obj in pairs(NeP.OM:Get('Enemy')) do
-		tempTable[#tempTable+1] = Obj.key
-	end
-	return tempTable
+	return NeP.OM:Get('Enemy')
 end)
 
 NeP.FakeUnits:Add('friendly', function()
-	local tempTable = {}
-	for _, Obj in pairs(NeP.Healing:GetRoster()) do
-		tempTable[#tempTable+1] = Obj.key
-	end
-	return tempTable
+	return NeP.Healing:GetRoster()
 end)
