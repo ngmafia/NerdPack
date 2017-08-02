@@ -46,14 +46,13 @@ local function add_tbl(unit, tbl)
 	--table
 	if unit_type =='table' then
 		for i=1, #unit do
-			NeP.FakeUnits.Filter(_, unit[i], tbl)
+			NeP.FakeUnits:Filter(unit[i], tbl)
 		end
 	--function
 	elseif unit_type == 'function' then
 		NeP.FakeUnits:Filter(unit(), tbl)
 	--add
 	elseif unit_type == 'string' then
-		unit = process(unit)
 		if unit and not_in_tbl(unit, tbl) then
 			tbl[#tbl+1] = unit
 		end
@@ -62,6 +61,7 @@ end
 
 function NeP.FakeUnits.Filter(_,unit, tbl)
 	tbl = tbl or {}
+	unit = process(unit)
 	add_tbl(unit, tbl)
 	return tbl
 end

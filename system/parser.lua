@@ -1,5 +1,6 @@
 local _, NeP = ...
 NeP.Parser   = {}
+local c = NeP.CR
 
 -- Local stuff for speed
 local GetTime              = GetTime
@@ -52,7 +53,7 @@ local function _interrupt(eval)
 end
 
 local function tst(_type, unit)
-	local tbl = NeP.CR.CR.blacklist[_type]
+	local tbl = c.CR.blacklist[_type]
 	if not tbl then return end
 	for i=1, #tbl do
 		local _count = tbl[i].count
@@ -65,7 +66,7 @@ local function tst(_type, unit)
 end
 
 function NeP.Parser.Unit_Blacklist(_, unit)
-	return NeP.CR.CR.blacklist.units[NeP.Core:UnitID(unit)] or tst("buff", unit) or tst("debuff", unit)
+	return c.CR.blacklist.units[NeP.Core:UnitID(unit)] or tst("buff", unit) or tst("debuff", unit)
 end
 
 --This works on the current parser target.
@@ -86,7 +87,8 @@ function NeP.Parser.Parse2(eval, func)
 	local tmp_target = NeP.FakeUnits:Filter(eval[3].target)
 	for i=1, #tmp_target do
 		eval.target = tmp_target[i]
-		res = func(eval, eval.endtime, eval.cname, func)
+		print(eval.target)
+		res = func(eval)
 		if res then return res end
 	end
 end
@@ -122,7 +124,7 @@ function NeP.Parser.Parse(eval)
 	if eval[1].is_table then
 		return NeP.Parser.Parse2(eval, NeP.Parser.Parse3)
 	-- Normal
-elseif (eval[1].bypass or eval.endtime == 0)
+	elseif (eval[1].bypass or eval.endtime == 0)
 	and NeP.Actions:Eval(eval[1].token)(eval) then
 		return NeP.Parser.Parse2(eval, NeP.Parser.Parse4)
 	end
@@ -137,7 +139,7 @@ C_Timer.NewTicker(0.1, (function()
 	if NeP.DSL:Get('toggle')(nil, 'mastertoggle')
 	and not UnitIsDeadOrGhost('player') and IsMountedCheck() then
 		if NeP.Queuer:Execute() then return end
-		local table = NeP.CR.CR and NeP.CR.CR[InCombatLockdown()]
+		local table = c.CR and c.CR[InCombatLockdown()]
 		if not table then return end
 		for i=1, #table do
 			if NeP.Parser.Parse(table[i]) then break end
