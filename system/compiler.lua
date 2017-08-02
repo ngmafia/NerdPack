@@ -40,11 +40,13 @@ local _spell_types = {
 	['table'] = function(eval, name)
 		eval[1].is_table = true
 		eval[1].master = eval.master
+		eval[1].spell = type(eval[1].spell)
 		NeP.Compiler.Compile(eval[1], name)
 	end,
 	['function'] = function(eval)
 		local ref = {}
 		ref.token = 'function'
+		ref.spell = type(eval[1].spell)
 		eval.exe = eval[1]
 		eval.nogcd = true
 		eval[1] = ref
@@ -65,7 +67,6 @@ function NeP.Compiler.Spell(eval, name)
 		}
 		eval[2] = 'true'
 	end
-	eval[1].spell = eval[1].spell or type(eval[1].spell)
 end
 
 local function unit_ground(ref, eval)
@@ -84,7 +85,7 @@ end
 
 local noob_target = function() return UnitExists('target') and 'target' or 'player' end
 local _target_types = {
-	['nil'] = function(eval, _, ref) ref.target = noob_target end,
+	['nil'] = function(_,_, ref) ref.target = noob_target end,
 	['table'] = noop,
 	['function'] = noop,
 	['string'] = function(eval, _, ref) unit_ground(ref, eval) end

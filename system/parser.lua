@@ -144,7 +144,6 @@ C_Timer.NewTicker(0.1, (function()
 		for i=1, #table do
 			if NeP.Parser.Parse(table[i]) then break end
 		end
-		NeP.Parser.Parse(table)
 	end
 end), nil)
 
