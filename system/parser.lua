@@ -101,7 +101,7 @@ end
 
 function NeP.Parser:Parse3(eval, nest_unit)
 	local res;
-	if NeP.DSL.Parse(eval[2], eval.target) then
+	if NeP.DSL.Parse(eval[2], eval[1].spell, eval.target) then
 		for i=1, #eval[1] do
 			res = self:Parse(eval[1][i], nest_unit)
 			if res then return res end
