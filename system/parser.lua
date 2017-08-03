@@ -82,7 +82,7 @@ function NeP.Parser.Target(eval)
 	and not NeP.Parser:Unit_Blacklist(eval.target)
 end
 
-function NeP.Parser.Parse2(eval, func)
+function NeP.Parser.Parse2(_, eval, func)
 	local res;
 	local tmp_target = NeP.FakeUnits:Filter(eval[3].target)
 	--tmp_target = NeP.FakeUnits:Filter(tmp_target)
@@ -97,7 +97,8 @@ function NeP.Parser.Parse3(eval)
 	local res;
 	if NeP.DSL.Parse(eval[2], eval.target) then
 		for i=1, #eval[1] do
-			res = NeP.Parser.Parse(eval[1][i])
+			--print("================", eval[1][i].is_table and "NEST" or "SPELL", i)
+			res = NeP.Parser:Parse(eval[1][i])
 			if res then return res end
 		end
 	end
@@ -118,14 +119,16 @@ end
 --This is the actual Parser...
 --Reads and figures out what it should execute from the CR
 --The CR when it reaches this point must be already compiled and be ready to run.
-function NeP.Parser.Parse(eval)
+function NeP.Parser:Parse(eval)
+	--print(eval[1].spell, eval[1].bypass, eval.master.endtime)
 	-- Its a table
 	if eval[1].is_table then
-		return NeP.Parser.Parse2(eval, NeP.Parser.Parse3)
+		return self:Parse2(eval, self.Parse3)
 	-- Normal
 	elseif (eval[1].bypass or eval.master.endtime == 0)
 	and NeP.Actions:Eval(eval[1].token)(eval) then
-		return NeP.Parser.Parse2(eval, NeP.Parser.Parse4)
+		--print("PARSE NORMAL", eval[1].spell, eval[2], eval[3].target)
+		return self:Parse2(eval, self.Parse4)
 	end
 end
 
@@ -140,9 +143,10 @@ C_Timer.NewTicker(0.1, (function()
 		if NeP.Queuer:Execute() then return end
 		local table = c.CR and c.CR[InCombatLockdown()]
 		if not table then return end
-		table.endtime, table.cname = castingTime()
+		table.master.endtime, table.master.cname = castingTime()
 		for i=1, #table do
-			if NeP.Parser.Parse(table[i]) then break end
+			--print('============= Table',i, table[i].master.endtime)
+			if NeP.Parser:Parse(table[i]) then break end
 		end
 	end
 end), nil)

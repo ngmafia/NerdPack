@@ -35,19 +35,19 @@ local funcs = {
 }
 
 -- Clip
-NeP.Compiler:RegisterToken("!", function(_, _, ref)
+NeP.Compiler:RegisterToken("!", function(_, ref)
 		ref.interrupts = true
 		ref.bypass = true
 end)
 
 -- No GCD
-NeP.Compiler:RegisterToken("&", function(eval, _, ref)
+NeP.Compiler:RegisterToken("&", function(eval, ref)
 		ref.bypass = true
 		eval.nogcd = true
 end)
 
 -- Regular actions
-NeP.Compiler:RegisterToken("%", function(eval, _, ref)
+NeP.Compiler:RegisterToken("%", function(eval, ref)
 	eval.exe = funcs["noop"]
 	ref.token = ref.spell
 end)
@@ -81,7 +81,7 @@ NeP.Actions:Add('dispelall', function(eval)
 end)
 
 -- Executes a users macro
-NeP.Compiler:RegisterToken("/", function(eval, _, ref)
+NeP.Compiler:RegisterToken("/", function(eval, ref)
 	ref.token = 'macro'
 	eval.nogcd = true
 	eval.exe = funcs["Macro"]
@@ -97,7 +97,7 @@ NeP.Actions:Add('function', function()
 end)
 
 -- Executes a users lib
-NeP.Compiler:RegisterToken("@", function(eval, _, ref)
+NeP.Compiler:RegisterToken("@", function(eval, ref)
 	ref.token = 'lib'
 	eval.nogcd = true
 	eval.exe = funcs["Lib"]
@@ -184,7 +184,7 @@ local invItems = {
 	['ranged']		= 'RangedSlot'
 }
 
-NeP.Compiler:RegisterToken("#", function(eval, _, ref)
+NeP.Compiler:RegisterToken("#", function(eval, ref)
 	local temp_spell, fake_id = ref.spell, 09324
 	ref.token = 'item'
 	eval.bypass = true
@@ -212,8 +212,8 @@ NeP.Actions:Add('item', function(eval)
 end)
 
 -- regular spell
-NeP.Compiler:RegisterToken("spell_cast", function(eval, name, ref)
-	ref.spell = NeP.Spells:Convert(ref.spell, name)
+NeP.Compiler:RegisterToken("spell_cast", function(eval, ref)
+	ref.spell = NeP.Spells:Convert(ref.spell, eval.master.name)
 	ref.icon = select(3,GetSpellInfo(ref.spell))
 	eval.exe = funcs["Cast"]
 	ref.token = 'spell_cast'

@@ -74,12 +74,13 @@ function NeP.CR.Add(_, SpecID, ...)
 	--refs
 	refs(ev, SpecID)
 	-- Import SpellIDs from the cr
-	if ev.ids then
-		NeP.Spells:Add(ev.ids)
-	end
+	if ev.ids then NeP.Spells:Add(ev.ids) end
 	-- This compiles the CR
-	NeP.Compiler:Iterate(ev.ic, ev.name)
-	NeP.Compiler:Iterate(ev.ooc, ev.name)
+	local master_cr = { name = ev.name}
+	ev.ic.master = master_cr
+	ev.ooc.master = master_cr
+	NeP.Compiler:Iterate(ev.ic)
+	NeP.Compiler:Iterate(ev.ooc)
 	--Create user GUI
 	if ev.gui then NeP.CR:AddGUI(ev) end
 	-- Class Cr (gets added to all specs whitin that clas)
