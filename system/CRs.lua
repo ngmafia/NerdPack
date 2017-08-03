@@ -60,8 +60,9 @@ local function refs(ev, SpecID)
 	ev.load = ev.load or noop
 	ev.unload = ev.unload or noop
 	ev.blacklist = ev.blacklist or {}
-	ev.ic = ev.ic or {}
-	ev.ic = ev.ic or {}
+	ev.blacklist.units = ev.blacklist.units or {}
+	ev.blacklist.buff = ev.blacklist.buff or {}
+	ev.blacklist.debuff = ev.blacklist.debuff or {}
 end
 
 function NeP.CR.Add(_, SpecID, ...)
