@@ -72,40 +72,45 @@ end
 --This works on the current parser target.
 --This function takes care of psudo units (fakeunits).
 --Returns boolean (true if the target is valid).
-function NeP.Parser.Target(eval)
+function NeP.Parser:Target(eval)
 	-- This is to alow casting at the cursor location where no unit exists
 	if eval[3].cursor then return true end
 	-- Eval if the unit is valid
 	return UnitExists(eval.target)
 	and UnitIsVisible(eval.target)
 	and NeP.Protected.LineOfSight('player', eval.target)
-	and not NeP.Parser:Unit_Blacklist(eval.target)
+	and not self:Unit_Blacklist(eval.target)
 end
 
-function NeP.Parser.Parse2(_, eval, func)
+local function noob_target() return UnitExists('target') and 'target' or 'player' end
+
+function NeP.Parser:Parse2(eval, func, nest_unit)
 	local res;
-	local tmp_target = NeP.FakeUnits:Filter(eval[3].target)
+	--target is target, nest target or fallback
+	local tmp_target = eval[3].target or nest_unit or noob_target
+	tmp_target = NeP.FakeUnits:Filter(tmp_target)
 	--tmp_target = NeP.FakeUnits:Filter(tmp_target)
 	for i=1, #tmp_target do
 		eval.target = tmp_target[i]
-		res = func(eval)
-		if res then return res end
+		nest_unit = eval.target
+		res = func(self, eval, nest_unit)
+		if res then break end
 	end
+	return res
 end
 
-function NeP.Parser.Parse3(eval)
+function NeP.Parser:Parse3(eval, nest_unit)
 	local res;
 	if NeP.DSL.Parse(eval[2], eval.target) then
 		for i=1, #eval[1] do
-			--print("================", eval[1][i].is_table and "NEST" or "SPELL", i)
-			res = NeP.Parser:Parse(eval[1][i])
+			res = self:Parse(eval[1][i], nest_unit)
 			if res then return res end
 		end
 	end
 end
 
-function NeP.Parser.Parse4(eval)
-	if not NeP.Parser.Target(eval) then return end
+function NeP.Parser:Parse4(eval)
+	if not self:Target(eval) then return end
 	eval.spell = eval.spell or eval[1].spell
 	if NeP.DSL.Parse(eval[2], eval.spell, eval.target)
 	and NeP.Helpers:Check(eval.spell, eval.target)
@@ -119,16 +124,14 @@ end
 --This is the actual Parser...
 --Reads and figures out what it should execute from the CR
 --The CR when it reaches this point must be already compiled and be ready to run.
-function NeP.Parser:Parse(eval)
-	--print(eval[1].spell, eval[1].bypass, eval.master.endtime)
+function NeP.Parser:Parse(eval, nest_unit)
 	-- Its a table
 	if eval[1].is_table then
-		return self:Parse2(eval, self.Parse3)
+		return self:Parse2(eval, self.Parse3, nest_unit)
 	-- Normal
 	elseif (eval[1].bypass or eval.master.endtime == 0)
 	and NeP.Actions:Eval(eval[1].token)(eval) then
-		--print("PARSE NORMAL", eval[1].spell, eval[2], eval[3].target)
-		return self:Parse2(eval, self.Parse4)
+		return self:Parse2(eval, self.Parse4, nest_unit)
 	end
 end
 
@@ -145,7 +148,6 @@ C_Timer.NewTicker(0.1, (function()
 		if not table then return end
 		table.master.endtime, table.master.cname = castingTime()
 		for i=1, #table do
-			--print('============= Table',i, table[i].master.endtime)
 			if NeP.Parser:Parse(table[i]) then break end
 		end
 	end

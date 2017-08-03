@@ -83,9 +83,9 @@ local function unit_ground(ref, eval)
 	end
 end
 
-local noob_target = function() return UnitExists('target') and 'target' or 'player' end
+
 local _target_types = {
-	['nil'] = function(_, ref) ref.target = noob_target end,
+	['nil'] = noop,
 	['table'] = noop,
 	['function'] = noop,
 	['string'] = function(eval, ref) unit_ground(ref, eval) end
