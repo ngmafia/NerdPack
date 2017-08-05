@@ -35,7 +35,7 @@ function NeP.Interface.ResetCRs()
 	local spec = GetSpecializationInfo(GetSpecialization())
 	for _,v in pairs(NeP.CR:GetList(spec)) do
 		NeP.Interface:AddCR(v)
-		NeP.Interface:AddCR_ST(v.name)
+		if v.has_gui then NeP.Interface:AddCR_ST(v.name) end
 	end
 end
 

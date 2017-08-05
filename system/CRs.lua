@@ -15,7 +15,8 @@ function NeP.CR.AddGUI(_, ev)
 		height = 300,
 		config = ev.gui
 	}
-	NeP.Interface:BuildGUI(temp).parent:Hide()
+	local ok, gui = pcall(NeP.Interface.BuildGUI, _, temp)
+	if ok then ev.gui = true; gui.parent:Hide() end
 end
 
 local function legacy_PE(...)
@@ -44,6 +45,7 @@ local function add(ev)
 	cr.wow_ver = ev.wow_ver
 	cr.nep_ver = ev.nep_ver
 	cr.blacklist = ev.blacklist
+	cr.has_gui = ev.gui
 	cr.blacklist.units = ev.blacklist.units or {}
 	cr.blacklist.buff = ev.blacklist.buff or {}
 	cr.blacklist.debuff = ev.blacklist.debuff or {}

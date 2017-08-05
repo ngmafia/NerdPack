@@ -59,9 +59,8 @@ end
 
 local function Refresh(GUID, Obj)
 	local temp = Roster[GUID]
-	local healthRaw = UnitHealth(temp.key)
-	temp.health = (healthRaw / UnitHealthMax(temp.key)) * 100
-	temp.healthRaw = healthRaw
+	temp.health = healthPercent(Obj.key)
+	temp.healthRaw = UnitHealth(temp.key)
 	temp.predicted = GetPredictedHealth_Percent(Obj.key)
 	temp.predicted_Raw = GetPredictedHealth(Obj.key)
 end
