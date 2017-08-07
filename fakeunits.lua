@@ -124,10 +124,12 @@ local Roles = {
 NeP.FakeUnits:Add('tank', function(num)
 	local tempTable = {}
 	for _, Obj in pairs(NeP.Healing:GetRoster()) do
-		tempTable[#tempTable+1] = {
-			key = Obj.key,
-			prio = Obj.healthMax * Roles[Obj.role]
-		}
+		if Obj.role == 'TANK' then
+			tempTable[#tempTable+1] = {
+				key = Obj.key,
+				prio = Obj.healthMax * Roles[Obj.role]
+			}
+		end
 	end
 	table.sort( tempTable, function(a,b) return a.prio > b.prio end )
 	return tempTable[num] and tempTable[num].key
