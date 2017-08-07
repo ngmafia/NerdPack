@@ -153,7 +153,7 @@ function NeP.Interface.ResetToggles()
 end
 
 function NeP.Interface.toggleToggle(_, key, state)
-	local tmp = GetToggle(key)
+	local tmp = GetToggle(key:lower())
 	if not tmp then return end
 	tmp.actv = state or not tmp.actv
 	tmp:SetChecked(tmp.actv)

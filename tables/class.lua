@@ -54,12 +54,12 @@ NeP.ClassTable = {
 		rgb = {0.67,0.83,0.45},
 		specs = {253, 254, 255},
 		[253] = {
-			range = rangex["melee"],
+			range = rangex["ranged"],
 			name = 'Beast Mastery',
 			role = 'DPS'
 		},
 		[254] = {
-			range = rangex["melee"],
+			range = rangex["ranged"],
 			name = 'Marksmanship',
 			role = 'DPS'
 		},
