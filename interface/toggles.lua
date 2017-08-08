@@ -75,15 +75,16 @@ local function CreateToggle(eval)
 	temp:SetScript("OnLeave", function() GameTooltip:Hide() end)
 end
 
-function NeP.Interface.UpdateIcon(_, key, icon)
-	if not icon or not Toggles[key] then return end
-	Toggles[key].texture:SetTexture(icon)
-end
-
 local function GetToggle(key)
 	for i=1, #Toggles do
 		if Toggles[i].key == key then return Toggles[i] end
 	end
+end
+
+function NeP.Interface.UpdateIcon(_, key, icon)
+	local test = GetToggle(key)
+	if not icon or not test then return end
+	test.texture:SetTexture(icon)
 end
 
 function NeP.Interface.AddToggle(_, eval)
