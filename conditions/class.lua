@@ -50,6 +50,7 @@ NeP.DSL:Register('insanity', function(target)
 end)
 
 NeP.DSL:Register('petrange', function(target)
+	if not UnitExists('pet') then return false end
   return target and NeP.Protected.Distance('pet', target) or 0
 end)
 
