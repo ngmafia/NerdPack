@@ -157,42 +157,6 @@ NeP.Interface.spinnerStyleSheet = {
   },
 }
 
-NeP.Interface.createButtonStyle = {
-  type			= 'texture',
-  texFile		= 'DiesalGUIcons',
-  texCoord		= {1,6,16,256,128},
-  alpha 		= .7,
-  offset		= {-2,nil,-2,nil},
-  width			= 16,
-  height		= 16,
-}
-
-NeP.Interface.deleteButtonStyle = {
-  type			= 'texture',
-  texFile		='DiesalGUIcons',
-  texCoord		= {2,6,16,256,128},
-  alpha 		= .7,
-  offset		= {-2,nil,-2,nil},
-  width			= 16,
-  height		= 16,
-}
-
-NeP.Interface.ButtonNormal = {
-  type			= 'texture',
-  texColor		= 'ffffff',
-  alpha 		= .7,
-}
-
-NeP.Interface.ButtonOver = {
-  type			= 'texture',
-  alpha 		= 1,
-}
-
-NeP.Interface.ButtonClicked = {
-  type			= 'texture',
-  alpha 		= .3,
-}
-
 NeP.Interface.statusBarStylesheet = {
   ['frame-texture'] = {
     type		= 'texture',
