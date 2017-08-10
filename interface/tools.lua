@@ -97,6 +97,8 @@ function NeP.Interface:BuildGUI_Del(table, parent)
 	tmp:SetText('D')
 	tmp:SetStylesheet(self.buttonStyleSheet)
 	tmp:SetEventListener('OnClick', function()
+		-- we cant delete the default, it hangs wow for some reason...
+		if table.selected_profile == 'default' then return end
 		for i,p in ipairs(table.av_profiles) do
 			if p.key == table.selected_profile then
 				table.av_profiles[i] = nil
@@ -106,6 +108,7 @@ function NeP.Interface:BuildGUI_Del(table, parent)
 				parent:Release()
 				NeP.Interface.usedGUIs[table.key] = nil
 				NeP.Interface:BuildGUI(table)
+				break
 			end
 		end
 	end)
