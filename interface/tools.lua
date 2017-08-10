@@ -26,7 +26,7 @@ local _Elements = {
 }
 
 local default_profiles = {{key='default',text='Default'}}
-local new_prof_Name = "\"New Profile Name\""
+local new_prof_Name = "New Profile Name"
 
 local Crt_PrFl_Frame = DiesalGUI:Create('Window')
 Crt_PrFl_Frame:SetTitle("Create Profile")
@@ -68,15 +68,14 @@ function NeP.Interface:BuildGUI_New(table, parent)
 		profileButton:SetEventListener('OnClick', function()
 			local profileName = profileInput:GetText()
 			if profileName == '' or profileName == new_prof_Name then return end
-			local profiles = NeP.Config:Read(table.key, 'profiles', default_profiles)
-			for _,p in ipairs(profiles) do
+			for _,p in ipairs(table.av_profiles) do
 				if p.key == profileName then
 					return profileButton:SetText('Profile with that name exists!')
 				end
 			end
-			_G.table.insert(profiles, {key = profileName, text = profileName})
-			NeP.Config:Write(table.key, 'profiles', profiles)
-			NeP.Config:Write(table.key, 'profile', profileName)
+			_G.table.insert(table.av_profiles, {key = profileName, text = profileName})
+			NeP.Config:Write(table.key, 'av_profiles', table.av_profiles)
+			NeP.Config:Write(table.key, 'selected_profile', profileName)
 			Crt_PrFl_Frame:Hide()
 			parent:Hide()
 			parent:Release()
@@ -98,13 +97,11 @@ function NeP.Interface:BuildGUI_Del(table, parent)
 	tmp:SetText('D')
 	tmp:SetStylesheet(self.buttonStyleSheet)
 	tmp:SetEventListener('OnClick', function()
-		local selectedProfile = NeP.Config:Read(table.key, 'profile', 'Default Profile')
-		local profiles = NeP.Config:Read(table.key, 'profiles', default_profiles)
-		for i,p in ipairs(profiles) do
-			if p.key == selectedProfile then
-				profiles[i] = nil
-				NeP.Config:Write(table.key, 'profiles', profiles)
-				NeP.Config:Write(table.key, 'profile', 'default')
+		for i,p in ipairs(table.av_profiles) do
+			if p.key == table.selected_profile then
+				table.av_profiles[i] = nil
+				NeP.Config:Write(table.key, 'av_profiles', table.av_profiles)
+				NeP.Config:Write(table.key, 'selected_profile', 'default')
 				parent:Hide()
 				parent:Release()
 				NeP.Interface.usedGUIs[table.key] = nil
@@ -116,8 +113,6 @@ function NeP.Interface:BuildGUI_Del(table, parent)
 end
 
 function NeP.Interface:BuildGUI_Combo(table, parent)
-		local profiles = NeP.Config:Read(table.key, 'profiles', default_profiles)
-		local selectedProfile = NeP.Config:Read(table.key, 'slctd_profile', 'default')
 		local dropdown = DiesalGUI:Create('Dropdown')
 		parent:AddChild(dropdown)
 		dropdown:SetParent(parent.footer)
@@ -125,26 +120,26 @@ function NeP.Interface:BuildGUI_Combo(table, parent)
 		dropdown:SetPoint("BOTTOMLEFT", parent.footer, "BOTTOMLEFT", 40, 0)
 		local orderdKeys = {}
 		local list = {}
-		for i, value in pairs(profiles) do
+		for i, value in pairs(table.av_profiles) do
 			orderdKeys[i] = value.key
 			list[value.key] = value.text
 		end
 		dropdown:SetList(list, orderdKeys)
 		dropdown:SetEventListener('OnValueChanged', function(_,_, value)
-			if selectedProfile == value then return end
-			NeP.Config:Write(table.key, 'slctd_profile', value)
+			if table.selected_profile == value then return end
+			NeP.Config:Write(table.key, 'selected_profile', value)
 			parent:Hide()
 			parent:Release()
 			self.usedGUIs[table.key] = nil
 			self:BuildGUI(table)
 		end)
-		dropdown:SetValue(selectedProfile)
+		dropdown:SetValue(table.selected_profile)
 end
 
 function NeP.Interface:BuildElements(table, parent)
 	local offset = -5
-	for _, element in ipairs(table.config) do
-		local push, pull = 0, 0
+	for i=1, #table.config do
+		local element, push, pull = table.config[i], 0, 0
 
 		-- Create defaults
 		if element.key and not NeP.Config:Read(table.key, element.key) then
@@ -187,28 +182,6 @@ function NeP.Interface:GetElement(key, element)
 	return self.usedGUIs[key].elements[element].parent
 end
 
-function NeP.Interface.Body(_, eval, parent)
-	local left, top = unpack(NeP.Config:Read(eval.key, 'Location', {500, 500}))
-	parent.settings.left = left
-	parent.settings.top = top
-	parent:UpdatePosition()
-
-	--Colors
-	if not eval.color then eval.color = NeP.Color end
-	if type(eval.color) == 'function' then eval.color = eval.color() end
-
-	if eval.title then
-		parent:SetTitle("|cff"..eval.color..eval.title.."|r", eval.subtitle)
-	end
-	if eval.config then
-		local window = DiesalGUI:Create('ScrollFrame')
-		parent:AddChild(window)
-		window:SetParent(parent.content)
-		window:SetAllPoints(parent.content)
-		NeP.Interface:BuildElements(eval, window)
-	end
-end
-
 -- This opens a existing GUI instead of creating another
 function NeP.Interface:TestCreated(table)
 	local test = type(table) == 'string' and table or table.key
@@ -230,27 +203,48 @@ function NeP.Interface.BuildGUI(_, table)
 	self.usedGUIs[table.key] = {}
 	self.usedGUIs[table.key].parent = parent
 	self.usedGUIs[table.key].elements = {}
-
 	parent:SetWidth(table.width or 200)
 	parent:SetHeight(table.height or 300)
 	parent.frame:SetClampedToScreen(true)
 	parent:SetStylesheet(self.WindowStyleSheet)
 
 	--Save Location after dragging
-	parent:SetEventListener('OnDragStop', function(_,_, left, top)
-		NeP.Config:Write(table.key, 'Location', {left, top})
+	parent:SetEventListener('OnDragStop', function(_,_, l, t)
+		NeP.Config:Write(table.key, 'Location', {l, t})
 	end)
 
 	-- Only build the body after we'r done loading configs
 	NeP.Core:WhenInGame(function()
-		self:Body(table, parent)
+		--Colors
+		if not table.color then table.color = NeP.Color end
+		if type(table.color) == 'function' then table.color = table.color() end
+		-- load Location
+		local left, top = unpack(NeP.Config:Read(table.key, 'Location', {500, 500}))
+		parent.settings.left = left
+		parent.settings.top = top
+		parent:UpdatePosition()
+		--Title
+		if table.title then
+			parent:SetTitle("|cff"..table.color..table.title.."|r", table.subtitle)
+		end
+		-- Build elements
+		if table.config then
+			local window = DiesalGUI:Create('ScrollFrame')
+			parent:AddChild(window)
+			window:SetParent(parent.content)
+			window:SetAllPoints(parent.content)
+			self:BuildElements(table, window)
+		end
+		-- Build Profiles
 		if table.profiles then
 			parent.settings.footer = true
+			table.selected_profile = NeP.Config:Read(table.key, 'selected_profile', 'default')
+			table.av_profiles = NeP.Config:Read(table.key, 'av_profiles', default_profiles)
 			self:BuildGUI_Combo(table, parent)
 			self:BuildGUI_Del(table, parent)
 			self:BuildGUI_New(table, parent)
-			parent:ApplySettings()
 		end
+		parent:ApplySettings()
 	end)
 
 	return self.usedGUIs[table.key]
