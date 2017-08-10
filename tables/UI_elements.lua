@@ -237,6 +237,10 @@ NeP.Interface.spinnerStyleSheet = {
     layer			= 'BORDER',
     color			= 'ee2200',
   },
+	['editBox-font'] = {
+    type = 'Font',
+    color = Colors.UI_TEXT,
+  },
 }
 
 NeP.Interface.statusBarStylesheet = {

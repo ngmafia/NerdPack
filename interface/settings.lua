@@ -55,6 +55,16 @@ function NeP.Interface:UpdateStyles()
   n1, n2, n3 = "comboBoxStyleSheet", 'dropdown-background', "color"
   self[n1][n2][n3] = outline_color
 
+  if outline_color == "000000" then
+    self["buttonStyleSheet"]["text-color"]["color"] = "FFFFFF"
+    self["comboBoxStyleSheet"]["editBox-font"]["color"] = "FFFFFF"
+    self["spinnerStyleSheet"]["editBox-font"]["color"] = "FFFFFF"
+  else
+    self["buttonStyleSheet"]["text-color"]["color"] = "000000"
+    self["comboBoxStyleSheet"]["editBox-font"]["color"] = "000000"
+    self["spinnerStyleSheet"]["editBox-font"]["color"] = "000000"
+  end
+
   for _,gui in pairs(NeP.Interface.usedGUIs) do
     gui.parent:SetStylesheet(NeP.Interface.WindowStyleSheet)
     for _, element in pairs(gui.elements) do
@@ -87,7 +97,7 @@ title = n_name,
     { type = 'spinner', text = L('brow'), key = 'brow', step = 1, min = 1, max = 20, default = 10},
 
     { type = 'spacer' },{ type = 'ruler' },
-    { type = 'dropdown', text = L('outline_color'), key = 'WindowStyleSheetframe-outlinecolor', list = CL, default = 'CLASS'},
+    { type = 'dropdown', text = L('outline_color'), key = 'WindowStyleSheetframe-outlinecolor', list = CL, default = '000000'},
     { type = 'dropdown', text = L('tittle_color'), key = 'WindowStyleSheettitleBar-colorcolor', list = CL, default = '000000'},
     { type = 'spinner', text = L('tittle_alpha'), key = 'WindowStyleSheettitleBar-coloralpha', step = .05, max = 1, default = .8},
     { type = 'dropdown', text = L('content_color'), key = 'WindowStyleSheetcontent-backgroundcolor', list = CL, default = '000000'},
