@@ -13,7 +13,8 @@ function NeP.CR.AddGUI(_, ev)
 		key = ev.name,
 		width = 200,
 		height = 300,
-		config = ev.gui
+		config = ev.gui,
+		profiles = true
 	}
 	local ok, gui = pcall(NeP.Interface.BuildGUI, _, temp)
 	if ok then ev.gui = true; gui.parent:Hide() end

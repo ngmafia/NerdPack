@@ -33,13 +33,14 @@ local function window_styles()
 end
 
 local function elements_style()
-  NeP.Interface:SetElementColor(NeP.Interface.WindowStyleSheet['frame-outline'].color)
+  local color = NeP.Interface.WindowStyleSheet['frame-outline'].color
+  NeP.Interface.spinnerStyleSheet['bar-background']['color'] = color
+	NeP.Interface.buttonStyleSheet['frame-color']['color'] = color
   for _,gui in pairs(NeP.Interface.usedGUIs) do
     gui.parent:SetStylesheet(NeP.Interface.WindowStyleSheet)
     for _, element in pairs(gui.elements) do
       if element.style then
         element.parent:SetStylesheet(element.style)
-        --element.parent:ApplySettings()
       end
     end
   end
