@@ -149,6 +149,88 @@ NeP.Interface.buttonStyleSheet = {
   },
 }
 
+NeP.Interface.comboBoxStyleSheet = {
+  ['frame-background'] = {
+    type  = 'texture',
+    layer = 'BACKGROUND',
+    color = '000000',
+    alpha = .7,
+  },
+	['frame-inline'] = {
+		type	= 'outline',
+		layer	= 'BORDER',
+		color	= '000000',
+    alpha = .7,
+	},
+  ['frame-outline'] = {
+    type  = 'outline',
+    layer = 'BORDER',
+    color = 'FFFFFF',
+    alpha = .02,
+    position = 1,
+	},
+	['button-background'] = {
+		type		 = 'texture',
+		layer		 = 'BACKGROUND',
+    gradient = {'VERTICAL',Colors.UI_500_GR[1],Colors.UI_500_GR[2]},
+	},
+	['button-outline'] = {
+    type  = 'outline',
+    layer = 'ARTWORK',
+    color = '000000',
+    alpha = .9,
+	},
+	['button-inline'] = {
+    type = 'outline',
+    layer = 'BORDER',
+    gradient = {'VERTICAL','FFFFFF','FFFFFF'},
+    alpha = {.07,.02},
+		position	= -1,
+	},
+	['button-hover'] = {
+		type			= 'texture',
+		layer			= 'HIGHLIGHT',
+		color			= 'ffffff',
+		alpha			= .05,
+	},
+	['button-arrow'] = {
+		type			= 'texture',
+		layer			= 'BORDER',
+    image     = {'DiesalGUIcons',{2,1,16,256,128}},
+		alpha 		= .5,
+		position	= {nil,-4,-5,nil},
+		height		= 4,
+		width			= 5,
+	},
+	['editBox-hover'] = {
+		type			= 'texture',
+		layer			= 'HIGHLIGHT',
+		color			= 'ffffff',
+		alpha 		= .1,
+		position		= {-1,0,-1,-1},
+	},
+	['editBox-font'] = {
+		type			= 'Font',
+		color			= Colors.UI_TEXT,
+	},
+	['dropdown-background'] = {
+		type	= 'texture',
+		layer	= 'BACKGROUND',
+		color	= Colors.UI_100,
+    alpha = .95,
+	},
+	['dropdown-inline'] = {
+		type			= 'outline',
+		layer			= 'BORDER',
+		color			= 'ffffff',
+		alpha 		= .02,
+		position		= -1,
+	},
+	['dropdown-shadow'] = {
+		type			= 'shadow',
+	},
+}
+
 NeP.Interface.spinnerStyleSheet = {
   ['bar-background'] = {
     type			= 'texture',

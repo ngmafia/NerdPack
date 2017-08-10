@@ -12,30 +12,49 @@ for i=1, #NeP.ClassTable do
   CL[#CL+1] = {text = NeP.ClassTable[i].class, key = NeP.ClassTable[i].hex}
 end
 
-
-local n = {
-	['frame-outline'] = {'color'},
-	['titleBar-color'] = {'color', 'alpha'},
-	['content-background'] = {'color', 'alpha'}
-}
-
-local function window_styles()
+function NeP.Interface:UpdateStyles()
   local ClassColor = NeP.Core:ClassColor('player', 'hex')
-	local tmp1;
-  for k1, k2 in pairs(n) do
-    for i=1, #k2 do
-      tmp1 = NeP.Interface.WindowStyleSheet[k1][k2[i]]
-      tmp1 = NeP.Config:Read(n_name..'_Settings', k1..k2[i], tmp1)
-      if tmp1 == 'CLASS' then tmp1 = ClassColor end
-      NeP.Interface.WindowStyleSheet[k1][k2[i]] = tmp1
-    end
-  end
-end
+  local tmp, n1, n2, n3;
 
-local function elements_style()
-  local color = NeP.Interface.WindowStyleSheet['frame-outline'].color
-  NeP.Interface.spinnerStyleSheet['bar-background']['color'] = color
-	NeP.Interface.buttonStyleSheet['frame-color']['color'] = color
+  n1, n2, n3 = "WindowStyleSheet", 'frame-outline', "color"
+  tmp = NeP.Config:Read(n_name..'_Settings', n1..n2..n3, self[n1][n2][n3])
+  if tmp == 'CLASS' then tmp = ClassColor end
+  self[n1][n2][n3] = tmp
+
+  n1, n2, n3 = "WindowStyleSheet", 'titleBar-color', "color"
+  tmp = NeP.Config:Read(n_name..'_Settings', n1..n2..n3, self[n1][n2][n3])
+  if tmp == 'CLASS' then tmp = ClassColor end
+  self[n1][n2][n3] = tmp
+
+  n1, n2, n3 = "WindowStyleSheet", 'titleBar-color', "alpha"
+  tmp = NeP.Config:Read(n_name..'_Settings', n1..n2..n3, self[n1][n2][n3])
+  if tmp == 'CLASS' then tmp = ClassColor end
+  self[n1][n2][n3] = tmp
+
+  n1, n2, n3 = "WindowStyleSheet", 'content-background', "color"
+  tmp = NeP.Config:Read(n_name..'_Settings', n1..n2..n3, self[n1][n2][n3])
+  if tmp == 'CLASS' then tmp = ClassColor end
+  self[n1][n2][n3] = tmp
+
+  n1, n2, n3 = "WindowStyleSheet", 'content-background', "alpha"
+  tmp = NeP.Config:Read(n_name..'_Settings', n1..n2..n3, self[n1][n2][n3])
+  if tmp == 'CLASS' then tmp = ClassColor end
+  self[n1][n2][n3] = tmp
+
+  local outline_color = NeP.Interface.WindowStyleSheet['frame-outline'].color
+
+  n1, n2, n3 = "spinnerStyleSheet", 'bar-background', "color"
+  self[n1][n2][n3] = outline_color
+
+  n1, n2, n3 = "buttonStyleSheet", 'frame-color', "color"
+  self[n1][n2][n3] = outline_color
+
+  n1, n2, n3 = "comboBoxStyleSheet", 'frame-background', "color"
+  self[n1][n2][n3] = outline_color
+
+  n1, n2, n3 = "comboBoxStyleSheet", 'dropdown-background', "color"
+  self[n1][n2][n3] = outline_color
+
   for _,gui in pairs(NeP.Interface.usedGUIs) do
     gui.parent:SetStylesheet(NeP.Interface.WindowStyleSheet)
     for _, element in pairs(gui.elements) do
@@ -44,11 +63,7 @@ local function elements_style()
       end
     end
   end
-end
 
-function NeP.Interface.UpdateStyles()
-  window_styles()
-  elements_style()
   NeP.ButtonsSize = NeP.Config:Read(n_name..'_Settings', 'bsize', 40)
   NeP.ButtonsPadding = NeP.Config:Read(n_name..'_Settings', 'bpad', 2)
   NeP.Interface:RefreshToggles()
@@ -72,14 +87,14 @@ title = n_name,
     { type = 'spinner', text = L('brow'), key = 'brow', step = 1, min = 1, max = 20, default = 10},
 
     { type = 'spacer' },{ type = 'ruler' },
-    { type = 'dropdown', text = L('outline_color'), key = 'frame-outlinecolor', list = CL, default = 'CLASS'},
-    { type = 'dropdown', text = L('tittle_color'), key = 'titleBar-colorcolor', list = CL, default = '000000'},
-    { type = 'spinner', text = L('tittle_alpha'), key = 'titleBar-coloralpha', step = .05, max = 1, default = .8},
-    { type = 'dropdown', text = L('content_color'), key = 'content-backgroundcolor', list = CL, default = '000000'},
-    { type = 'spinner', text = L('content_alpha'), key = 'content-backgroundalpha', step = .05, max = 1, default = .7},
+    { type = 'dropdown', text = L('outline_color'), key = 'WindowStyleSheetframe-outlinecolor', list = CL, default = 'CLASS'},
+    { type = 'dropdown', text = L('tittle_color'), key = 'WindowStyleSheettitleBar-colorcolor', list = CL, default = '000000'},
+    { type = 'spinner', text = L('tittle_alpha'), key = 'WindowStyleSheettitleBar-coloralpha', step = .05, max = 1, default = .8},
+    { type = 'dropdown', text = L('content_color'), key = 'WindowStyleSheetcontent-backgroundcolor', list = CL, default = '000000'},
+    { type = 'spinner', text = L('content_alpha'), key = 'WindowStyleSheetcontent-backgroundalpha', step = .05, max = 1, default = .7},
 
     { type = 'spacer' },{ type = 'ruler' },
-		{ type = 'button', text = L('apply_bt'), callback = NeP.Interface.UpdateStyles },
+		{ type = 'button', text = L('apply_bt'), callback = function() NeP.Interface:UpdateStyles() end },
 
 	}
 }

@@ -126,6 +126,7 @@ function NeP.Interface:Combo(element, parent, offset, table)
 	parent:AddChild(tmp)
 	tmp:SetParent(parent.content)
 	tmp:SetPoint('TOPRIGHT', parent.content, 'TOPRIGHT', -5, offset)
+	tmp:SetStylesheet(self.comboBoxStyleSheet)
 	local orderdKeys = { }
 	local list = { }
 	for i, value in pairs(element.list) do
@@ -143,7 +144,7 @@ function NeP.Interface:Combo(element, parent, offset, table)
 		tmp.desc = self:Text(element, parent, offset-18)
 		element.push = tmp.desc:GetStringHeight() + 10
 	end
-	return tmp
+	return tmp, self.comboBoxStyleSheet
 end
 
 function NeP.Interface:Button(element, parent, offset)

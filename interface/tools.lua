@@ -116,19 +116,20 @@ function NeP.Interface:BuildGUI_Del(table, parent)
 end
 
 function NeP.Interface:BuildGUI_Combo(table, parent)
-		local dropdown = DiesalGUI:Create('Dropdown')
-		parent:AddChild(dropdown)
-		dropdown:SetParent(parent.footer)
-		dropdown:SetPoint("TOPRIGHT", parent.footer, "TOPRIGHT", 0, 0)
-		dropdown:SetPoint("BOTTOMLEFT", parent.footer, "BOTTOMLEFT", 40, 0)
+		local tmp = DiesalGUI:Create('Dropdown')
+		parent:AddChild(tmp)
+		tmp:SetParent(parent.footer)
+		tmp:SetPoint("TOPRIGHT", parent.footer, "TOPRIGHT", 0, 0)
+		tmp:SetPoint("BOTTOMLEFT", parent.footer, "BOTTOMLEFT", 40, 0)
+		tmp:SetStylesheet(self.comboBoxStyleSheet)
 		local orderdKeys = {}
 		local list = {}
 		for i, value in pairs(table.av_profiles) do
 			orderdKeys[i] = value.key
 			list[value.key] = value.text
 		end
-		dropdown:SetList(list, orderdKeys)
-		dropdown:SetEventListener('OnValueChanged', function(_,_, value)
+		tmp:SetList(list, orderdKeys)
+		tmp:SetEventListener('OnValueChanged', function(_,_, value)
 			if table.selected_profile == value then return end
 			NeP.Config:Write(table.key, 'selected_profile', value)
 			parent:Hide()
@@ -136,7 +137,8 @@ function NeP.Interface:BuildGUI_Combo(table, parent)
 			self.usedGUIs[table.key] = nil
 			self:BuildGUI(table)
 		end)
-		dropdown:SetValue(table.selected_profile)
+		tmp:SetValue(table.selected_profile)
+		self.usedGUIs[table.key].elements["prof_combo_bt"] = {parent = tmp, type = "Combo", style = self.comboBoxStyleSheet}
 end
 
 function NeP.Interface:BuildElements(table, parent)
